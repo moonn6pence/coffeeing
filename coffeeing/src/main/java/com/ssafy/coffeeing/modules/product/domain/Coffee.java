@@ -2,13 +2,11 @@ package com.ssafy.coffeeing.modules.product.domain;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -35,6 +33,7 @@ public class Coffee extends BaseEntity {
     private String description;
 
     @OneToMany(mappedBy = "coffee", targetEntity = CoffeeReview.class, fetch = FetchType.LAZY)
-    private List<CoffeeReview> coffeeReview;
+    @Builder.Default
+    private List<CoffeeReview> coffeeReview=new ArrayList<>();
 
 }
