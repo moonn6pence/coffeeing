@@ -1,0 +1,89 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.15'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	// querydsl 플러그인 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+ext {
+	// QueryDsl Version
+	queryDslVersion = "5.0.0"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//	Spring Cloud AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// query dsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+bootJar {
+	// querydsl 사용할 경로 지정
+	def querydslDir = "build/generated"
+
+	// JPA 사용여부 및 사용 경로 설정
+	querydsl {
+		jpa = true
+		querydslSourcesDir = querydslDir
+	}
+
+	// build시 사용할 sourceSet 추가 설정
+	sourceSets {
+		main.java.srcDir querydslDir
+	}
+
+
+	// querydsl 컴파일 시 사용할 옵션 설정
+	compileQuerydsl {
+		options.annotationProcessorPath = configurations.querydsl
+	}
+
+	// querydsl이 compileClassPath를 상속하도록 설정
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+		querydsl.extendsFrom compileClasspath
+	}
+}
