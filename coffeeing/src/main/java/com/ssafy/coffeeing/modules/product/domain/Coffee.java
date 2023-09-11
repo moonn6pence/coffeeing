@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.product.domain;
 
+import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,14 +22,8 @@ public class Coffee extends BaseEntity {
     @Column(length = 64, nullable = false)
     private String coffeeName;
 
-    @Column
-    private Double roasting;
-
-    @Column
-    private Double body;
-
-    @Column
-    private Double acidity;
+    @Embedded
+    private CoffeeCriteria coffeeCriteria;
 
     @Column
     private String aroma;
