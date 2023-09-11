@@ -1,41 +1,45 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
+import InputField from "components/InputField";
+import Button from "components/Button";
 
-function SignupPage(){
-  const [email, setEmail] = useState('');
-  const [pw1, setPw1] = useState('');
-  const [pw2,setPw2] = useState('');
+function SignupPage() {
+  const [email, setEmail] = useState("");
+  const [pw1, setPw1] = useState("");
+  const [pw2, setPw2] = useState("");
+  const handleSubmit = (e:React.MouseEvent) =>{
+    e.preventDefault();
+    console.log('회원가입 처리하기')
+  }
 
-  return(
+  return (
     <div className="flex flex-col gap-5 items-center">
+      <div>{email}</div>
       <div className="text-4xl font-bold">회원가입</div>
       <div className="flex flex-row">
-        <p>이미 회원이신가요?</p> <p >로그인</p>
+        <p>이미 회원이신가요?</p> <p>로그인</p>
       </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-base text-gray-800 font-medium">이메일</label>
-        <input 
-          className="w-96 h-14 border border-gray-400 pl-4 rounded-xl" 
-          type="text" 
-          placeholder="이메일을 입력해주세요." 
-          />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-base text-gray-800 font-medium">비밀번호</label>
-        <input 
-          className="w-96 h-14 border border-gray-400 pl-4 rounded-xl" 
-          type="text" 
-          placeholder="비밀번호를 입력해주세요." 
-          />
-      </div>
-      <div className="flex flex-col gap-1">
-        <label className="text-base text-gray-800 font-medium">비밀번호 확인</label>
-        <input 
-          className="w-96 h-14 border border-gray-400 pl-4 rounded-xl" 
-          type="text" 
-          placeholder="비밀번호를 다시 입력해주세요." />
-      </div>
+
+      <InputField
+        label="이메일"
+        placeholder="이메일을 입력해주세요."
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <InputField
+        label="비밀번호"
+        placeholder="비밀번호를 입력해주세요."
+        value={pw1}
+        onChange={(e) => setPw1(e.target.value)}
+      />
+      <InputField
+        label="비밀번호 확인"
+        placeholder="비밀번호를 다시 입력해주세요."
+        value={pw2}
+        onChange={(e) => setPw2(e.target.value)}
+      />
+      <Button placeholder="회원가입" handleSubmit={handleSubmit} />
     </div>
-  )
+  );
 }
 
 export default SignupPage;
