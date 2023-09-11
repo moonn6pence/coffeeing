@@ -7,9 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -18,4 +17,29 @@ import javax.persistence.Entity;
 @AttributeOverride(name = "id", column = @Column(name = "coffee_id"))
 @Entity
 public class Coffee extends BaseEntity {
+
+    @Column(length = 64, nullable = false)
+    private String coffeeName;
+
+    @Column
+    private Double roasting;
+
+    @Column
+    private Double body;
+
+    @Column
+    private Double acidity;
+
+    @Column
+    private String aroma;
+    
+    @Column(columnDefinition = "text")
+    private String imagePath;
+
+    @Column(columnDefinition = "text")
+    private String description;
+
+    @OneToMany(mappedBy = "coffee", targetEntity = CoffeeReview.class, fetch = FetchType.LAZY)
+    private List<CoffeeReview> coffeeReview;
+
 }
