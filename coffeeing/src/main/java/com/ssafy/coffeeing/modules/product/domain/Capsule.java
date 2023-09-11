@@ -41,8 +41,7 @@ public class Capsule extends BaseEntity {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "capsule")
-    @JoinColumn(name = "capsule_id")
+    @OneToMany(mappedBy = "capsule", fetch = FetchType.LAZY)
     @Builder.Default
     private List<CapsuleReview> capsuleReviews = new ArrayList<>();
 }
