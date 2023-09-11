@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.member.domain;
 
+import com.ssafy.coffeeing.modules.global.embedded.CoffeeEvaluationFactor;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,10 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 @Getter
 @SuperBuilder
@@ -18,4 +22,17 @@ import javax.persistence.Entity;
 @AttributeOverride(name = "id", column = @Column(name = "preference_id"))
 @Entity
 public class Preference extends BaseEntity {
+
+	@Column(nullable = false)
+	private Long memberId;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.ORDINAL)
+	private ProductType productType;
+
+	@Enumerated(EnumType.ORDINAL)
+	private MachineType machineType;
+
+	@Embedded
+	private CoffeeEvaluationFactor coffeeEvaluationFactor;
 }
