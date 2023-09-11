@@ -1,15 +1,13 @@
 package com.ssafy.coffeeing.modules.product.domain;
 
+import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -18,4 +16,33 @@ import javax.persistence.Entity;
 @AttributeOverride(name = "id", column = @Column(name = "capsule_id"))
 @Entity
 public class Capsule extends BaseEntity {
+
+    @Column
+    private String brandKr;
+
+    @Column
+    private String brandEng;
+
+    @Column
+    private String capsuleName;
+
+    @Embedded
+    private CoffeeCriteria coffeeCriteria;
+
+    @Column
+    private String aroma;
+
+    @Column
+    private Integer machineType;
+
+    @Column
+    private String imageUrl;
+
+    @Column
+    private String description;
+
+    @OneToMany(mappedBy = "capsule")
+    @JoinColumn(name = "capsule_id")
+    @Builder.Default
+    private List<CapsuleReview> capsuleReviews = new ArrayList<>();
 }

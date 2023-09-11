@@ -34,11 +34,9 @@ public class Member extends BaseEntity {
 	@Column(length = 16)
 	private String nickname;
 
-	@Column(length = 1)
 	@Enumerated(EnumType.ORDINAL)
 	private Gender gender;
 
-	@Column
 	@Enumerated(EnumType.ORDINAL)
 	private Age age;
 
