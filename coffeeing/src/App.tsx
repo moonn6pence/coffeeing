@@ -2,7 +2,6 @@ import React from 'react';
 import {Routes,Route,useNavigate} from 'react-router-dom'
 import SignupPage from 'pages/SignupPage';
 
-
 function App() {
   return (
     <div>
