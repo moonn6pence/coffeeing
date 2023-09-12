@@ -8,7 +8,6 @@ import com.ssafy.coffeeing.modules.feed.dto.PresignedUrlResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,25 +34,28 @@ public class AWSS3Service {
     public PresignedUrlResponse getPresignedUrlWithImagePath() {
         try {
             String imagePath = makeObjectKey();
-            String presignedUrl = generatePresignedUrlRequest(imagePath);
+            GeneratePresignedUrlRequest generatePresignedUrlRequest = createGeneratePresignedUrlRequestInstance(imagePath);
+            String presignedUrl = generatePresignedUrlRequest(generatePresignedUrlRequest);
             return new PresignedUrlResponse(imagePath, presignedUrl);
         } catch (SdkClientException e) {
             throw new RuntimeException();
         }
     }
 
-    private String generatePresignedUrlRequest(String imagePath) throws SdkClientException {
+    private GeneratePresignedUrlRequest createGeneratePresignedUrlRequestInstance(String imagePath) {
         Date expiration = new Date();
         long expirationInMs = expiration.getTime();
         expirationInMs += Long.parseLong(expiredIn);
         expiration.setTime(expirationInMs);
 
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, imagePath)
+        return new GeneratePresignedUrlRequest(bucket, imagePath)
                 .withMethod(HttpMethod.PUT)
                 .withExpiration(expiration);
+    }
 
-        URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
-        return url.toString();
+    private String generatePresignedUrlRequest(GeneratePresignedUrlRequest generatePresignedUrlRequest)
+            throws SdkClientException {
+        return amazonS3.generatePresignedUrl(generatePresignedUrlRequest).toString();
     }
 
     private String makeObjectKey() {
