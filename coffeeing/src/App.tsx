@@ -1,6 +1,7 @@
 import React from 'react';
-import {Routes,Route,useNavigate} from 'react-router-dom'
+import {Routes,Route} from 'react-router-dom'
 import SignupPage from 'pages/SignupPage';
+import LoginPage from 'pages/LoginPage';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       {/* Routes */}
       <Routes>
         <Route path='/signup' element={<SignupPage/>}></Route>
+        <Route path='/login' element={<LoginPage/>}></Route>
       </Routes>
     </div>
   );
