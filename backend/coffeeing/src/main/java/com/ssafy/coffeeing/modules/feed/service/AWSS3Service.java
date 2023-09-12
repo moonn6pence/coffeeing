@@ -17,7 +17,7 @@ public class AWSS3Service {
 
     private final AmazonS3 amazonS3;
     private final String bucket;
-    private final String expireIn;
+    private final String expiredIn;
     private final String objectKey;
 
     public AWSS3Service(
@@ -27,7 +27,7 @@ public class AWSS3Service {
             AmazonS3 amazonS3
     ) {
         this.bucket = bucket;
-        this.expireIn = expiredIn;
+        this.expiredIn = expiredIn;
         this.objectKey = objectKey;
         this.amazonS3 = amazonS3;
     }
@@ -45,7 +45,7 @@ public class AWSS3Service {
     private String generatePresignedUrlRequest(String imagePath) throws SdkClientException {
         Date expiration = new Date();
         long expirationInMs = expiration.getTime();
-        expirationInMs += Long.parseLong(expireIn);
+        expirationInMs += Long.parseLong(expiredIn);
         expiration.setTime(expirationInMs);
 
         GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucket, imagePath)
