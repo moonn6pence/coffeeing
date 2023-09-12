@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.auth.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,9 @@ public class AuthService {
 			.build();
 
 		memberRepository.save(member);
-		return new SignUpResponse(member.getId(), member.getEmail());
+
+		String accessToken = jwtUtils.generateAccessToken(new UsernamePasswordAuthenticationToken(member.getEmail(), null));
+		String refreshToken = jwtUtils.generateRefreshToken();
+		return new SignUpResponse(member.getId(), member.getEmail(), accessToken, refreshToken, GRANT_TYPE);
 	}
 }
