@@ -30,6 +30,12 @@ public class AWSS3Service {
         this.objectKey = objectKey;
         this.amazonS3 = amazonS3;
     }
+
+    public PresignedUrlResponse getPresignedUrlWithImagePath() {
+        String imagePath = makeObjectKey();
+        String presignedUrl = generatePresignedUrlRequest(imagePath);
+        return new PresignedUrlResponse(imagePath, presignedUrl);
+    }
     
     private String generatePresignedUrlRequest(String imagePath) {
         Date expiration = new Date();
