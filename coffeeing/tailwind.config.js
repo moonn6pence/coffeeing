@@ -7,9 +7,16 @@ module.exports = {
         // capsule card 용 w, h
         70.5: '17.625rem',
         94: '23.5rem',
+        // navbar 용
+        '22px': '22px',
+        // 120px
+        30: '7.5rem',
       },
       colors: {
         'font-gray': '#4D4D4D',
+        'light-roasting': '#B78C5F',
+        'cinamon-roasting': '#986E3F',
+        light: '#F9F6F0',
       },
     },
   },
