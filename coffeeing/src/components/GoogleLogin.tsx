@@ -2,6 +2,7 @@ import React,{MouseEvent} from "react";
 import googleLogo from '../assets/google_logo.png'
 
 
+
 function GoogleLoginBtn(){
 
   // 구글 로그인 처리 function
@@ -12,9 +13,9 @@ function GoogleLoginBtn(){
 
   return(
     <button 
-        className="w-96 h-14 bg-white border border-gray-300 rounded-3xl shadow-md px-6 py-2 
+        className="w-96 h-14 bg-white border border-gray-300 rounded-3xl px-6 py-2 
         flex items-center justify-center gap-2
-        hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 "
+        hover:bg-gray-200 "
         onClick={handleGoogleLogin}
         >
         <img className="h-7" src={googleLogo}/> 
