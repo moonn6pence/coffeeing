@@ -36,9 +36,10 @@ public class AWSS3Service {
     public PresignedUrlResponse getPresignedUrlWithImagePath() {
         try {
             String imagePath = makeObjectKey();
+            String imageUrl = getImageUrl(imagePath);
             GeneratePresignedUrlRequest generatePresignedUrlRequest = createGeneratePresignedUrlRequestInstance(imagePath);
             String presignedUrl = generatePresignedUrlRequest(generatePresignedUrlRequest);
-            return new PresignedUrlResponse(imagePath, presignedUrl);
+            return new PresignedUrlResponse(imagePath, imageUrl, presignedUrl);
         } catch (SdkClientException e) {
             throw new BusinessException(FeedErrorInfo.AWS_S3_CLIENT_EXCEPTION);
         }
@@ -62,5 +63,9 @@ public class AWSS3Service {
 
     private String makeObjectKey() {
         return new StringBuffer().append(objectKey).append("/").append(UUID.randomUUID()).toString();
+    }
+
+    private String getImageUrl(String imagePath) {
+        return amazonS3.getUrl(bucket,imagePath).toString();
     }
 }

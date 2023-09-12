@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 class AWSS3ServiceTest {
@@ -29,6 +30,7 @@ class AWSS3ServiceTest {
 
         //then
         assertThat(presignedUrlResponse.imagePath()).contains("test");
+        assertThat(presignedUrlResponse.imageUrl()).contains("test");
         assertThat(presignedUrlResponse.presignedUrl()).contains("test");
     }
 }
