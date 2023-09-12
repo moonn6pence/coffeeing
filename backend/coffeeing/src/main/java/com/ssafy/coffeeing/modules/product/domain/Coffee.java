@@ -32,6 +32,12 @@ public class Coffee extends BaseEntity {
     @Column(columnDefinition = "text")
     private String description;
 
+    @Column
+    private Double totalScore;
+
+    @Column
+    private Integer totalReviewer;
+
     @OneToMany(mappedBy = "coffee", targetEntity = CoffeeReview.class, fetch = FetchType.LAZY)
     @Builder.Default
     private List<CoffeeReview> coffeeReview=new ArrayList<>();
