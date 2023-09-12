@@ -5,6 +5,8 @@ import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.ssafy.coffeeing.modules.feed.dto.PresignedUrlResponse;
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,7 @@ public class AWSS3Service {
             String presignedUrl = generatePresignedUrlRequest(generatePresignedUrlRequest);
             return new PresignedUrlResponse(imagePath, presignedUrl);
         } catch (SdkClientException e) {
-            throw new RuntimeException();
+            throw new BusinessException(FeedErrorInfo.AWS_S3_CLIENT_EXCEPTION);
         }
     }
 
