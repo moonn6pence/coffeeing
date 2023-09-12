@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.ssafy.coffeeing.modules.feed.dto.PresignedUrlResponse;
@@ -32,12 +33,16 @@ public class AWSS3Service {
     }
 
     public PresignedUrlResponse getPresignedUrlWithImagePath() {
-        String imagePath = makeObjectKey();
-        String presignedUrl = generatePresignedUrlRequest(imagePath);
-        return new PresignedUrlResponse(imagePath, presignedUrl);
+        try {
+            String imagePath = makeObjectKey();
+            String presignedUrl = generatePresignedUrlRequest(imagePath);
+            return new PresignedUrlResponse(imagePath, presignedUrl);
+        } catch (SdkClientException e) {
+            throw new RuntimeException();
+        }
     }
-    
-    private String generatePresignedUrlRequest(String imagePath) {
+
+    private String generatePresignedUrlRequest(String imagePath) throws SdkClientException {
         Date expiration = new Date();
         long expirationInMs = expiration.getTime();
         expirationInMs += Long.parseLong(expireIn);
