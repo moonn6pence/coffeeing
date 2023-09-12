@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CapsuleService {
 
     private final CapsuleRepository capsuleRepository;
+
     public CapsuleResponse getDetail(Long id) {
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
