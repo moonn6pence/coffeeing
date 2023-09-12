@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.auth.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,7 @@ public class AuthController {
 	private final AuthenticationManager authenticationManager;
 
 	@PostMapping("/sign-in")
-	public BaseResponse<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
+	public BaseResponse<SignInResponse> signIn(@Valid @RequestBody SignInRequest signInRequest) {
 		Authentication authentication = authenticationManager.authenticate(signInRequest.getMemberEmailAndPasswordAuthentication());
 
 		return BaseResponse.<SignInResponse>builder()
