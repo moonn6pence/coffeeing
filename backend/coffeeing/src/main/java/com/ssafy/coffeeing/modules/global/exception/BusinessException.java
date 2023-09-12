@@ -10,4 +10,8 @@ import lombok.Getter;
 public class BusinessException extends RuntimeException{
 
     private ErrorInfo info;
+
+    public BusinessException(ErrorInfo info){
+        this.info = info;
+    }
 }
