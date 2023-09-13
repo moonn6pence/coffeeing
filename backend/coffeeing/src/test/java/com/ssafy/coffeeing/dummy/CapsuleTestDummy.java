@@ -3,7 +3,7 @@ package com.ssafy.coffeeing.dummy;
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 
-public class CapsuleDummy {
+public class CapsuleTestDummy {
 
     private static Capsule createCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
                                   String aroma, Integer machineType, String imageUrl, String description,

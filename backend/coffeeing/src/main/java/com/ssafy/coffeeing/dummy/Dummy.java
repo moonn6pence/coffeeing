@@ -22,8 +22,6 @@ public class Dummy implements CommandLineRunner {
     private void flushAndClear(){
         em.flush();
         em.clear();
-
-
     }
 
     @Override
