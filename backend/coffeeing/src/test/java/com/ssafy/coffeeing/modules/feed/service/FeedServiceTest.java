@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
@@ -57,6 +58,41 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getId()).isPositive(),
                 () -> assertThat(response.getLikeCount()).isEqualTo(0L)
         );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+
+    @DisplayName("피드 삭제 요청 시, 삭제에 성공한다.")
+    @Test
+    void Given_DeleteFeedRequest_When_DeleteFeed_Then_Success() {
+        //given
+        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        //when, then
+        feedService.deleteFeedById(feed.getId());
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("피드 내용 수정 요청 시, 수정에 성공한다.")
+    @Test
+    void Given_UpdateFeedRequest_When_UpdateFeed_Then_Success() {
+        //given
+        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+
+        //when
+        feedService.updateFeedContentById(feed.getId(), updateFeedRequest);
+
+        //then
+        assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
