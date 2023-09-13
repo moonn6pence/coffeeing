@@ -2,11 +2,10 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleReviewResponse;
-import com.ssafy.coffeeing.modules.product.dto.SimilarCapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
@@ -41,7 +40,7 @@ public class CapsuleService {
         return null;
     }
 
-    public SimilarCapsuleResponse getSimilarCapsules(Long id) {
+    public SimilarProductResponse getSimilarCapsules(Long id) {
         return null;
     }
 }

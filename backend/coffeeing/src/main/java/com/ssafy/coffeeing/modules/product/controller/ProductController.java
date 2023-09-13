@@ -60,15 +60,15 @@ public class ProductController {
     }
 
     @GetMapping("/capsule/similar/{id}")
-    public BaseResponse<SimilarCapsuleResponse> getSimilarCapsules(@PathVariable @NumberFormat Long id){
-        return BaseResponse.<SimilarCapsuleResponse>builder()
+    public BaseResponse<SimilarProductResponse> getSimilarCapsules(@PathVariable @NumberFormat Long id){
+        return BaseResponse.<SimilarProductResponse>builder()
                 .data(capsuleService.getSimilarCapsules(id))
                 .build();
     }
 
     @GetMapping("/coffee/similar/{id}")
-    public BaseResponse<SimilarCoffeeResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id){
-        return BaseResponse.<SimilarCoffeeResponse>builder()
+    public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id){
+        return BaseResponse.<SimilarProductResponse>builder()
                 .data(coffeeService.getSimilarCapsules(id))
                 .build();
     }

@@ -2,7 +2,7 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeReviewResponse;
-import com.ssafy.coffeeing.modules.product.dto.SimilarCoffeeResponse;
+import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +21,7 @@ public class CoffeeService {
         return null;
     }
 
-    public SimilarCoffeeResponse getSimilarCapsules(Long id) {
+    public SimilarProductResponse getSimilarCapsules(Long id) {
         return null;
     }
 }

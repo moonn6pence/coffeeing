@@ -1,6 +1,6 @@
 package com.ssafy.coffeeing.modules.product.dto;
 
-public record SimilarCoffeeElement(
+public record SimpleProductElement(
         Long id,
         String brand,
         String name,
