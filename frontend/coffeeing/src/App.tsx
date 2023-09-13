@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import SignupPage from 'pages/SignupPage';
 import LoginPage from 'pages/LoginPage';
 import { NavBarBody } from 'components/NavBar/NavBarBody';
+import { RecSurveyPage } from 'pages/RecSurveyPage';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
+        <Route path='/recommend-survey' element={<RecSurveyPage/>}></Route>
       </Routes>
     </div>
   );
