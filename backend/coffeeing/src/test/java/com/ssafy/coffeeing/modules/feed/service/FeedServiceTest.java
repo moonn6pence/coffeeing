@@ -2,8 +2,10 @@ package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
@@ -14,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -23,6 +26,9 @@ class FeedServiceTest extends ServiceTest {
 
     @Autowired
     private FeedService feedService;
+
+    @Autowired
+    private FeedRepository feedRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -42,9 +48,15 @@ class FeedServiceTest extends ServiceTest {
         //when
         UploadFeedResponse uploadFeedResponse = feedService
                 .uploadFeedByMember(uploadFeedRequest);
+        Feed response = feedRepository.getReferenceById(uploadFeedResponse.feedId());
 
         //then
-        assertThat(uploadFeedResponse.feedId()).isPositive();
+        assertAll(
+                () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
+                () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
+                () -> assertThat(response.getId()).isPositive(),
+                () -> assertThat(response.getLikeCount()).isEqualTo(0L)
+        );
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
