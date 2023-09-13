@@ -44,7 +44,7 @@ export const RoastingSelect = () =>{
               <img
                 className={`w-52 h-52 origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
                 src={src}
-                onClick={()=>handleRoastSelect(num)}
+                onClick={()=>{handleRoastSelect(num);setIsSelected(!isSelected)}}
               />
               <p>{label}</p>
             </div>
