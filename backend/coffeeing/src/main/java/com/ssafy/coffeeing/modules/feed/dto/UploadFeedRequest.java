@@ -1,15 +1,10 @@
 package com.ssafy.coffeeing.modules.feed.dto;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-
+import javax.validation.constraints.Size;
 import java.util.List;
 
 public record UploadFeedRequest(
+        @Size(min = 1, max = 10)
         List<ImageElement> images,
         String content
-) {
-    @JsonAnyGetter
-    public List<ImageElement> getImages() {
-        return images;
-    }
-}
+) { }
