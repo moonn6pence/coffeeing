@@ -31,7 +31,19 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String HEADER_NAME;
 	private final String GRANT_TYPE;
 	private final JWTUtils jwtUtils;
-	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth","/product");
+	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth",
+			"/product",
+			"/v1/api-docs",
+			"/v2/api-docs",
+			"/swagger-resources",
+			"/swagger-resources/**",
+			"/configuration/ui",
+			"/configuration/security",
+			"/swagger-ui.html",
+			"/webjars/**",
+			/* swagger v3 */
+			"/v3/api-docs",
+			"/swagger-ui");
 
 	public JWTFilter(@Value("${jwt.header}") String header,
 		@Value("${jwt.grant-type}") String tokenType, @Autowired JWTUtils jwtUtils) {
