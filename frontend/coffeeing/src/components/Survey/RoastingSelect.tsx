@@ -1,9 +1,10 @@
-import React,{useState} from 'react';
+import React,{Dispatch, SetStateAction, useState} from 'react';
 import lightRoast from '../../assets/survey/lightRoast.png'
 import mediumRoast from '../../assets/survey/mediumRoast.png'
 import darkRoast from '../../assets/survey/darkRoast.png'
 import unknownRoast from '../../assets/survey/unknownRoast.png'
 import { NextButton } from './NextButton';
+import { isStringLiteral } from 'typescript';
 
 export const RoastingSelect = () =>{
   const [selectedLight, setSelectedLight] = useState(false)
@@ -19,10 +20,16 @@ export const RoastingSelect = () =>{
     {src:darkRoast, label:'라이트 로스팅', isSelected:selectedDark,setIsSelected:setSelectedDark,num:2},
     {src:unknownRoast, label:'라이트 로스팅', isSelected:selectedUnknown,setIsSelected:setSelectedUnknown,num:3},
   ]
-
-  const handleRoastSelect = (num:number)=>{
+  // 이미지 클릭 시
+  const handleRoastSelect = (num:number,isSelected:boolean,setIsSelected:Dispatch<SetStateAction<boolean>>)=>{
     if(myRoast===0){
       setMyRoast(num)
+      setIsSelected(!isSelected)
+    } else if (myRoast===num) {
+      setMyRoast(0)
+      setIsSelected(!isSelected)
+    } else {
+      alert('하나만 선택해주세요')
     }
   }
 
@@ -44,7 +51,7 @@ export const RoastingSelect = () =>{
               <img
                 className={`w-52 h-52 origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
                 src={src}
-                onClick={()=>{handleRoastSelect(num);setIsSelected(!isSelected)}}
+                onClick={()=>handleRoastSelect(num,isSelected,setIsSelected)}
               />
               <p>{label}</p>
             </div>
