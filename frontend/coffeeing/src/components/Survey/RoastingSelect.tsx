@@ -1,12 +1,17 @@
 import React,{Dispatch, SetStateAction, useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import lightRoast from '../../assets/survey/lightRoast.png'
 import mediumRoast from '../../assets/survey/mediumRoast.png'
 import darkRoast from '../../assets/survey/darkRoast.png'
 import unknownRoast from '../../assets/survey/unknownRoast.png'
+import { AppDispatch, RootState } from 'store/store';
+import { addCurrentPage, saveRoasting } from 'store/surveySlice';
 import { NextButton } from './NextButton';
-import { isStringLiteral } from 'typescript';
+
 
 export const RoastingSelect = () =>{
+  const survey = useSelector((state:RootState)=>state.survey)
+  const dispatch = useDispatch<AppDispatch>();
   const [selectedLight, setSelectedLight] = useState(false)
   const [selectedMedium, setSelectedMedium] = useState(false)
   const [selectedDark, setSelectedDark] = useState(false)
@@ -32,12 +37,21 @@ export const RoastingSelect = () =>{
       alert('하나만 선택해주세요')
     }
   }
+  // 다음 버튼 클릭 시
+  const handleRoastSubmit = ()=>{
+    if (myRoast===0) {
+      alert('선호하는 로스팅 단계를 하나 선택해주세요')
+    } else {
+      dispatch(addCurrentPage())
+      dispatch(saveRoasting(myRoast))
+    }
+  }
 
   return(
     <div className='flex flex-col items-center gap-10'>
       {/* 설문 상단 */}
       <div className='flex flex-col items-center gap-2'>
-        <p>1/5</p>
+        <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='font-bold'>로스팅 단계 선택</p>
         <p className='w-560px h-2.5 rounded-lg bg-process-bar'></p>
       </div>
@@ -61,7 +75,7 @@ export const RoastingSelect = () =>{
 
       </div>
       {/* 버튼 */}
-      <NextButton/>
+      <NextButton handleClick={handleRoastSubmit} />
     </div>
   )
 }
