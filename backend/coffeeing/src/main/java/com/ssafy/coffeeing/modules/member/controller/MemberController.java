@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.member.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,10 +32,10 @@ public class MemberController {
 	}
 
 	@PostMapping("/onboard")
-	public BaseResponse<OnboardResponse> insertAdditionalMemberInfo(Authentication authentication, @Valid @RequestBody OnboardRequest onboardRequest) {
+	public BaseResponse<OnboardResponse> insertAdditionalMemberInfo(@Valid @RequestBody OnboardRequest onboardRequest) {
 
 		return BaseResponse.<OnboardResponse>builder()
-			.data(memberService.insertAdditionalMemberInfo(authentication.getName(), onboardRequest))
+			.data(memberService.insertAdditionalMemberInfo(onboardRequest))
 			.build();
 	}
 }
