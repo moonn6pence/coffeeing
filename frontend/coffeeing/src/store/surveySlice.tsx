@@ -1,4 +1,5 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
+import { stat } from 'fs';
 import { SurveyType } from 'types/StoreTypes';
 
 
@@ -20,9 +21,14 @@ const surveySlice = createSlice({
   reducers:{
     addCurrentPage(state){
       state.currentPage += 1
-    }
+      console.log('current page', state.currentPage)
+    },
+    saveRoasting(state, action:PayloadAction<number>){
+      state.roasting = action.payload
+      console.log('roasting',state.roasting)
+    },
   },
 })
 
 export default surveySlice.reducer;
-export const {addCurrentPage} = surveySlice.actions;
+export const {addCurrentPage,saveRoasting} = surveySlice.actions;
