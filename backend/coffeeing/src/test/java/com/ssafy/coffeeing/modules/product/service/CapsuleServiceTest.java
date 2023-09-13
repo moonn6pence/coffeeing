@@ -6,6 +6,7 @@ import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -22,6 +23,9 @@ class CapsuleServiceTest extends ServiceTest {
     @Autowired
     private CapsuleRepository capsuleRepository;
 
+    @Autowired
+    private CapsuleBookmarkRepository capsuleBookmarkRepository;
+
     @Test
     @DisplayName("캡슐 아이디를 통해 캡슐 상세 정보를 조회한다.")
     void Given_ValidCapsuleId_When_GetDetails_Then_Success() {
@@ -29,7 +33,7 @@ class CapsuleServiceTest extends ServiceTest {
         // given
         Capsule capsule = CapsuleTestDummy.createMockCapsule1();
         capsuleRepository.save(capsule);
-        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseBy(capsule);
+        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseBy(capsule, false);
 
         // when
         CapsuleResponse actual = capsuleService.getDetail(capsule.getId());

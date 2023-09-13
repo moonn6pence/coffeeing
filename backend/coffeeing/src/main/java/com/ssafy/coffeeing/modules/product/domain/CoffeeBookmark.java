@@ -14,15 +14,16 @@ import javax.persistence.*;
 @SuperBuilder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "capsule_like_id"))
+@AttributeOverride(name = "id", column = @Column(name = "coffee_bookmark_id"))
 @Entity
-public class CapsuleLike extends BaseEntity {
+public class CoffeeBookmark extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "capsule_id", nullable = false)
-    private Capsule capsule;
+    @ManyToOne
+    @JoinColumn(name = "coffee_id", nullable = false)
+    private Coffee coffee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
 }

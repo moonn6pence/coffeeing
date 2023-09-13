@@ -7,11 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-    public static CapsuleResponse supplyCapsuleResponseBy(Capsule capsule) {
+    public static CapsuleResponse supplyCapsuleResponseBy(Capsule capsule, Boolean isBookmarked) {
 
-        return new CapsuleResponse(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getAroma(),
-                capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
+        return new CapsuleResponse(
+                capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl(),
+                capsule.getAroma(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getAcidity(), capsule.getDescription(),
-                capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer());
+                capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer(),
+                isBookmarked);
     }
 }
