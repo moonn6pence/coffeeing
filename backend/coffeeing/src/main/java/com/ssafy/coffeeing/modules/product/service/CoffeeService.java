@@ -1,7 +1,7 @@
 package com.ssafy.coffeeing.modules.product.service;
 
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
-import com.ssafy.coffeeing.modules.product.dto.CoffeeReviewResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,7 @@ public class CoffeeService {
         return null;
     }
 
-    public Boolean toggleBookmark(Long id) {
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    public CoffeeReviewResponse getCoffeeReviews(Long id) {
+    public ToggleResponse toggleBookmark(Long id) {
         return null;
     }
 

@@ -1,10 +1,10 @@
 package com.ssafy.coffeeing.modules.product.service;
 
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
-import com.ssafy.coffeeing.modules.product.dto.CapsuleReviewResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
@@ -34,12 +34,7 @@ public class CapsuleService {
         return ProductMapper.supplyCapsuleResponseBy(capsule, false);
     }
 
-    public Boolean toggleBookmark(Long id) {
-        return null;
-    }
-
-    @Transactional(readOnly = true)
-    public CapsuleReviewResponse getCapsuleReviews(Long id) {
+    public ToggleResponse toggleBookmark(Long id) {
         return null;
     }
 

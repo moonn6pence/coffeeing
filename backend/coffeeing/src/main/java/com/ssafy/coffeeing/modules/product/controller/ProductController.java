@@ -1,7 +1,10 @@
 package com.ssafy.coffeeing.modules.product.controller;
 
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.product.dto.*;
+import com.ssafy.coffeeing.modules.product.service.CapsuleReviewService;
 import com.ssafy.coffeeing.modules.product.service.CapsuleService;
+import com.ssafy.coffeeing.modules.product.service.CoffeeReviewService;
 import com.ssafy.coffeeing.modules.product.service.CoffeeService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,10 @@ public class ProductController {
     private final CapsuleService capsuleService;
 
     private final CoffeeService coffeeService;
+
+    private final CapsuleReviewService capsuleReviewService;
+
+    private final CoffeeReviewService coffeeReviewService;
 
     @GetMapping("/capsule/{id}")
     public BaseResponse<CapsuleResponse> getCapsuleDetail(@PathVariable @NumberFormat Long id){
@@ -32,15 +39,15 @@ public class ProductController {
     }
 
     @PostMapping("/capsule/bookmark/{id}")
-    public BaseResponse<Boolean> toggleCapsuleBookmark(@PathVariable @NumberFormat Long id) {
-        return BaseResponse.<Boolean>builder()
+    public BaseResponse<ToggleResponse> toggleCapsuleBookmark(@PathVariable @NumberFormat Long id) {
+        return BaseResponse.<ToggleResponse>builder()
                 .data(capsuleService.toggleBookmark(id))
                 .build();
     }
 
     @PostMapping("/coffee/bookmark/{id}")
-    public BaseResponse<Boolean> toggleCoffeeBookmark(@PathVariable @NumberFormat Long id) {
-        return BaseResponse.<Boolean>builder()
+    public BaseResponse<ToggleResponse> toggleCoffeeBookmark(@PathVariable @NumberFormat Long id) {
+        return BaseResponse.<ToggleResponse>builder()
                 .data(coffeeService.toggleBookmark(id))
                 .build();
     }
@@ -48,14 +55,14 @@ public class ProductController {
     @GetMapping("/capsule/review/{id}")
     public BaseResponse<CapsuleReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id){
         return BaseResponse.<CapsuleReviewResponse>builder()
-                .data(capsuleService.getCapsuleReviews(id))
+                .data(capsuleReviewService.getCapsuleReviews(id))
                 .build();
     }
 
     @GetMapping("/coffee/review/{id}")
     public BaseResponse<CoffeeReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long id){
         return BaseResponse.<CoffeeReviewResponse>builder()
-                .data(coffeeService.getCoffeeReviews(id))
+                .data(coffeeReviewService.getCoffeeReviews(id))
                 .build();
     }
 
