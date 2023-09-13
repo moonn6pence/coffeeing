@@ -20,4 +20,18 @@ public class MemberTestDummy {
                 .profileImage(null)
                 .build();
     }
+
+    public static Member createBeforeResearchMember() {
+        return Member.builder()
+                .id(2L)
+                .email("test@naver.com")
+                .age(Age.TWENTY)
+                .gender(Gender.WOMEN)
+                .nickname("testNickname1")
+                .password("testPassword1")
+                .state(MemberState.BEFORE_RESEARCH)
+                .oauthIdentifier(null)
+                .profileImage(null)
+                .build();
+    }
 }
