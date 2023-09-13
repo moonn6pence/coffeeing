@@ -1,10 +1,9 @@
 package com.ssafy.coffeeing.modules.product.dto;
 
-public record CapsuleResponse(
+public record CoffeeResponse(
         Long id,
-        String brand,
+        String brandKr,
         String name,
-        String imageUrl,
         String aroma,
         Double roast,
         Double acidity,
