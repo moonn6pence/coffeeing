@@ -12,6 +12,6 @@ public class FeedTestDummy {
     }
 
     public static List<ImageElement> createImageElement() {
-        return List.of(new ImageElement("https://image1.png"), new ImageElement("https://image2.png"));
+        return List.of(new ImageElement("https://image1.webp"), new ImageElement("https://image2.webp"));
     }
 }
