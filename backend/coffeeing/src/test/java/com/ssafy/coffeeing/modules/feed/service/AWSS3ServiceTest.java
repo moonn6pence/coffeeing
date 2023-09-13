@@ -1,16 +1,14 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.modules.feed.dto.PresignedUrlResponse;
+import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.util.ReflectionTestUtils;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
-class AWSS3ServiceTest {
+class AWSS3ServiceTest extends ServiceTest {
 
     @SpyBean
     private AWSS3Service awss3Service;

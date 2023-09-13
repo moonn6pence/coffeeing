@@ -17,12 +17,22 @@ import javax.persistence.EntityManager;
 public class Dummy implements CommandLineRunner {
 
     private final EntityManager em;
+    private final CapsuleDummy capsuleDummy;
+
+    private void flushAndClear(){
+        em.flush();
+        em.clear();
+    }
+
     @Override
     public void run(String... args) throws Exception {
 
         log.info("dummy insertion start");
         
         // dummy 객체 생성 및 저장
+        capsuleDummy.create5NespressoCapsules();
+
+        flushAndClear();
         
         log.info("dummy insertion finished");
     }
