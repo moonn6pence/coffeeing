@@ -3,6 +3,8 @@ package com.ssafy.coffeeing.modules.member.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.domain.MemberState;
@@ -27,6 +29,9 @@ public class MemberService {
 
 	@Transactional
 	public OnboardResponse insertAdditionalMemberInfo(final OnboardRequest onboardRequest) {
+		if(checkDuplicateNickname(onboardRequest.nickname()).exist()) {
+			throw new BusinessException(MemberErrorInfo.PRE_EXIST_NICKNAME);
+		}
 		Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 		member.updateMemberState(MemberState.BEFORE_RESEARCH);
 		member.updateByOnboardResult(onboardRequest.nickname(), onboardRequest.ageIdx(), onboardRequest.genderIdx());
