@@ -1,11 +1,8 @@
 package com.ssafy.coffeeing.modules.auth.dto;
 
-public record SignUpResponse(
-	Long memberId,
+public record ReissueResponse(
 	String email,
 	String accessToken,
-	String refreshToken,
-
 	String grantType
 ) {
 }

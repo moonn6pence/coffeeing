@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.auth.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -7,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssafy.coffeeing.modules.auth.dto.ReissueRequest;
+import com.ssafy.coffeeing.modules.auth.dto.ReissueResponse;
 import com.ssafy.coffeeing.modules.auth.dto.SignInRequest;
 import com.ssafy.coffeeing.modules.auth.dto.SignInResponse;
 import com.ssafy.coffeeing.modules.auth.dto.SignUpRequest;
@@ -25,7 +29,7 @@ public class AuthController {
 	private final AuthenticationManager authenticationManager;
 
 	@PostMapping("/sign-in")
-	public BaseResponse<SignInResponse> signIn(@RequestBody SignInRequest signInRequest) {
+	public BaseResponse<SignInResponse> signIn(@Valid @RequestBody SignInRequest signInRequest) {
 		Authentication authentication = authenticationManager.authenticate(signInRequest.getMemberEmailAndPasswordAuthentication());
 
 		return BaseResponse.<SignInResponse>builder()
@@ -37,6 +41,13 @@ public class AuthController {
 	public BaseResponse<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
 		return BaseResponse.<SignUpResponse>builder()
 			.data(authService.signUp(signUpRequest))
+			.build();
+	}
+
+	@PostMapping("/reissue")
+	public BaseResponse<ReissueResponse> reissueAccessToken(@RequestBody ReissueRequest reissueRequest) {
+		return BaseResponse.<ReissueResponse>builder()
+			.data(authService.reissueAccessToken(reissueRequest))
 			.build();
 	}
 }

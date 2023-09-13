@@ -45,4 +45,14 @@ public class Member extends BaseEntity {
 
 	@Column(length = 512)
 	private String oauthIdentifier;
+
+	public void updateByOnboardResult(String nickname, int ageIdx, int genderIdx) {
+		this.nickname = nickname;
+		this.age = Age.values()[ageIdx];
+		this.gender = Gender.values()[genderIdx];
+	}
+
+	public void updateMemberState(MemberState state) {
+		this.state = state;
+	}
 }
