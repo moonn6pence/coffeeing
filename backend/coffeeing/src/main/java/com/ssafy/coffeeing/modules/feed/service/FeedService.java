@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
@@ -42,7 +43,17 @@ public class FeedService {
 
         Feed feed = feedRepository.findByIdAndMember(feedId, member)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
-        
+
         feedRepository.delete(feed);
+    }
+
+    @Transactional
+    public void updateFeedContentById(Long feedId, UpdateFeedRequest updateFeedRequest) {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        Feed feed = feedRepository.findByIdAndMember(feedId, member)
+                .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+
+        feed.updateContent(updateFeedRequest.content());
     }
 }
