@@ -11,6 +11,7 @@ import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +21,7 @@ public class CapsuleService {
 
     private final CapsuleBookmarkRepository capsuleBookmarkRepository;
 
+    @Transactional(readOnly = true)
     public CapsuleResponse getDetail(Long id) {
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
@@ -36,10 +38,12 @@ public class CapsuleService {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public CapsuleReviewResponse getCapsuleReviews(Long id) {
         return null;
     }
 
+    @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCapsules(Long id) {
         return null;
     }
