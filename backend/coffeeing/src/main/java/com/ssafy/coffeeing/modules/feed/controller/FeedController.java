@@ -22,7 +22,7 @@ public class FeedController {
     @PostMapping
     public BaseResponse<UploadFeedResponse> uploadFeedRequest(@Valid @RequestBody UploadFeedRequest uploadFeedRequest) {
         return BaseResponse.<UploadFeedResponse>builder()
-                .data(feedService.uploadFeedByMember(1L, uploadFeedRequest.content(), uploadFeedRequest.images()))
+                .data(feedService.uploadFeedByMember(uploadFeedRequest))
                 .build();
     }
 }

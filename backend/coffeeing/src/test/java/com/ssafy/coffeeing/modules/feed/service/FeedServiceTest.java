@@ -10,8 +10,15 @@ import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 
 class FeedServiceTest extends ServiceTest {
@@ -19,21 +26,24 @@ class FeedServiceTest extends ServiceTest {
     @Autowired
     private FeedService feedService;
 
-    @Autowired
+    @SpyBean
     private MemberRepository memberRepository;
 
     @DisplayName("피드 업로드 요청 시, 업로드에 성공한다.")
     @Test
     void Given_UploadFeedRequest_When_SaveFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        given(memberRepository.findById(any())).willReturn(Optional.of(MemberTestDummy.createGeneralMember()));
         UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
 
         //when
         UploadFeedResponse uploadFeedResponse = feedService
-                .uploadFeedByMember(member.getId(), uploadFeedRequest.content(), uploadFeedRequest.images());
+                .uploadFeedByMember(uploadFeedRequest);
 
         //then
         assertThat(uploadFeedResponse.feedId()).isPositive();
+
+        //verify
+        verify(memberRepository, times(1)).findById(any());
     }
 }
