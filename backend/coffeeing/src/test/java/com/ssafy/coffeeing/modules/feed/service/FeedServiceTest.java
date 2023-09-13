@@ -4,6 +4,7 @@ import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -25,12 +26,12 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UploadFeedRequest_When_SaveFeed_Then_Success() {
         //given
-        memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
         UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
 
         //when
         UploadFeedResponse uploadFeedResponse = feedService
-                .uploadFeedByMember(uploadFeedRequest.content(), uploadFeedRequest.images());
+                .uploadFeedByMember(member.getId(), uploadFeedRequest.content(), uploadFeedRequest.images());
 
         //then
         assertThat(uploadFeedResponse.feedId()).isPositive();

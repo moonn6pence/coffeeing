@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
 import java.util.List;
 
-public record CreateFeedRequest(
+public record UploadFeedRequest(
         List<ImageElement> images,
         String content
 ) {
