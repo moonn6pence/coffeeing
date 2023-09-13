@@ -5,6 +5,7 @@ import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
@@ -28,13 +29,13 @@ class CapsuleServiceTest extends ServiceTest {
         // given
         Capsule capsule = CapsuleTestDummy.createMockCapsule1();
         capsuleRepository.save(capsule);
-        Long expectedId = capsule.getId();
+        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseBy(capsule);
 
         // when
         CapsuleResponse actual = capsuleService.getDetail(capsule.getId());
 
         // then
-        assertEquals(expectedId, actual.id());
+        assertEquals(expected, actual);
     }
 
     @Test
