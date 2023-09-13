@@ -31,7 +31,7 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String HEADER_NAME;
 	private final String GRANT_TYPE;
 	private final JWTUtils jwtUtils;
-	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth");
+	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth","/product");
 
 	public JWTFilter(@Value("${jwt.header}") String header,
 		@Value("${jwt.grant-type}") String tokenType, @Autowired JWTUtils jwtUtils) {

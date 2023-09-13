@@ -12,6 +12,6 @@ public class ProductMapper {
         return new CapsuleResponse(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getAroma(),
                 capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getAcidity(), capsule.getDescription(),
-                capsule.getTotalScore() / capsule.getTotalReviewer());
+                capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer());
     }
 }
