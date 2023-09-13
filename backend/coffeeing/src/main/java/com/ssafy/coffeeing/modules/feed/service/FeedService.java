@@ -35,4 +35,14 @@ public class FeedService {
             throw new BusinessException(FeedErrorInfo.FEED_IMAGES_TO_JSON_STRING_ERROR);
         }
     }
+
+    @Transactional
+    public void deleteFeedById(Long feedId) {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        Feed feed = feedRepository.findByIdAndMember(feedId, member)
+                .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+        
+        feedRepository.delete(feed);
+    }
 }
