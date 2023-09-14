@@ -3,7 +3,10 @@ package com.ssafy.coffeeing.modules.product.service;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
+import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
+import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CapsuleService {
 
+    private final SecurityContextUtils securityContextUtils;
+
     private final CapsuleRepository capsuleRepository;
 
     private final CapsuleBookmarkRepository capsuleBookmarkRepository;
@@ -26,16 +31,44 @@ public class CapsuleService {
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
-//        Member member = null;
-//        Boolean isBookmarked = capsuleBookmarkRepository.existsByCapsuleAndMember(capsule, member);
-//
-//        return ProductMapper.supplyCapsuleResponseBy(capsule, isBookmarked);
+        Boolean isBookmarked = Boolean.FALSE;
 
-        return ProductMapper.supplyCapsuleResponseBy(capsule, false);
+        Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
+
+        if (member != null) {
+
+            isBookmarked = capsuleBookmarkRepository.existsByCapsuleAndMember(capsule, member);
+        }
+
+        return ProductMapper.supplyCapsuleResponseBy(capsule, isBookmarked);
     }
 
     public ToggleResponse toggleBookmark(Long id) {
-        return null;
+
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        Capsule capsule = capsuleRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        CapsuleBookmark bookmark = capsuleBookmarkRepository.findByCapsuleAndMember(capsule, member);
+
+        // 찜 등록
+        if (bookmark == null) {
+            bookmark = CapsuleBookmark
+                    .builder()
+                    .capsule(capsule)
+                    .member(member)
+                    .build();
+
+            capsuleBookmarkRepository.save(bookmark);
+
+            return new ToggleResponse(Boolean.TRUE);
+        }
+
+        // 찜 해제
+        capsuleBookmarkRepository.delete(bookmark);
+
+        return new ToggleResponse(Boolean.FALSE);
     }
 
     @Transactional(readOnly = true)

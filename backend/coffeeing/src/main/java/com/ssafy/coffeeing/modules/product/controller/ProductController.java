@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.product.controller;
 
+import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.product.dto.*;
 import com.ssafy.coffeeing.modules.product.service.CapsuleReviewService;
@@ -76,7 +77,44 @@ public class ProductController {
     @GetMapping("/coffee/similar/{id}")
     public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id){
         return BaseResponse.<SimilarProductResponse>builder()
-                .data(coffeeService.getSimilarCapsules(id))
+                .data(coffeeService.getSimilarCoffees(id))
                 .build();
     }
+
+    @PostMapping("/capsule/review/{id}")
+    public BaseResponse<CreationResponse> createCapsuleReview(@RequestBody ReviewRequest reviewRequest){
+
+        return BaseResponse.<CreationResponse>builder().build();
+    }
+
+    @PostMapping("/coffee/review/{id}")
+    public BaseResponse<CreationResponse> createCoffeeReview(@RequestBody ReviewRequest reviewRequest){
+
+        return BaseResponse.<CreationResponse>builder().build();
+    }
+
+    @PutMapping("/capsule/review/{id}")
+    public BaseResponse<Void> editCapsuleReview(@RequestBody ReviewRequest reviewRequest){
+
+        return BaseResponse.<Void>builder().build();
+    }
+
+    @PutMapping("/coffee/review/{id}")
+    public BaseResponse<Void> editCoffeeReview(@RequestBody ReviewRequest reviewRequest){
+
+        return BaseResponse.<Void>builder().build();
+    }
+
+    @DeleteMapping("/capsule/review/{id}")
+    public BaseResponse<Void> deleteCapsuleReview(@PathVariable @NumberFormat Long id){
+
+        return BaseResponse.<Void>builder().build();
+    }
+
+    @DeleteMapping("/coffee/review/{id}")
+    public BaseResponse<Void> deleteCoffeeReview(@PathVariable @NumberFormat Long id){
+
+        return BaseResponse.<Void>builder().build();
+    }
+
 }

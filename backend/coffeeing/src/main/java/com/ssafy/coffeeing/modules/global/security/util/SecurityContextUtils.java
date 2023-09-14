@@ -32,10 +32,9 @@ public class SecurityContextUtils {
 	 * 조건부로 토큰이 필요한 API에서 만약 로그인한 유저의 접근이라면 ID값을 return 합니다.
 	 * @return null or memberId
 	 * */
-	public Long getMemberIdByTokenOptionalRequest() {
+	public Member getMemberIdByTokenOptionalRequest() {
 		try {
-			Member member = getMemberBySecurityContext();
-			return member.getId();
+			return getMemberBySecurityContext();
 		} catch(BusinessException e) {
 			return null;
 		}

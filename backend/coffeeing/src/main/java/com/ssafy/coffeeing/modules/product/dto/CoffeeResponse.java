@@ -2,8 +2,8 @@ package com.ssafy.coffeeing.modules.product.dto;
 
 public record CoffeeResponse(
         Long id,
-        String brandKr,
         String name,
+        String imageUrl,
         String aroma,
         Double roast,
         Double acidity,

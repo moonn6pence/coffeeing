@@ -1,8 +1,17 @@
 package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
+import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
+import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
+import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,17 +20,61 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CoffeeService {
 
+    private final SecurityContextUtils securityContextUtils;
+
+    private final CoffeeRepository coffeeRepository;
+
+    private final CoffeeBookmarkRepository coffeeBookmarkRepository;
+
     @Transactional(readOnly = true)
     public CoffeeResponse getDetail(Long id) {
-        return null;
+
+        Coffee coffee = coffeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        Boolean isBookmarked = Boolean.FALSE;
+
+        Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
+
+        if (member != null) {
+
+            isBookmarked = coffeeBookmarkRepository.existsByCoffeeAndMember(coffee, member);
+        }
+
+        return ProductMapper.supplyCoffeeResponseBy(coffee, isBookmarked);
     }
 
     public ToggleResponse toggleBookmark(Long id) {
-        return null;
+
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        Coffee coffee = coffeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        CoffeeBookmark bookmark = coffeeBookmarkRepository.findByCoffeeAndMember(coffee, member);
+
+        // 찜 등록
+        if (bookmark == null) {
+            bookmark = CoffeeBookmark
+                    .builder()
+                    .coffee(coffee)
+                    .member(member)
+                    .build();
+
+            coffeeBookmarkRepository.save(bookmark);
+
+            return new ToggleResponse(Boolean.TRUE);
+        }
+
+        // 찜 해제
+        coffeeBookmarkRepository.delete(bookmark);
+
+        return new ToggleResponse(Boolean.FALSE);
     }
 
+
     @Transactional(readOnly = true)
-    public SimilarProductResponse getSimilarCapsules(Long id) {
+    public SimilarProductResponse getSimilarCoffees(Long id) {
         return null;
     }
 }

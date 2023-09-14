@@ -20,6 +20,19 @@ public class MemberTestDummy {
                 .build();
     }
 
+    public static Member createMemberSean() {
+        return Member.builder()
+                .email("seanbryan@gmail.com")
+                .age(Age.TEENAGER)
+                .gender(Gender.MEN)
+                .nickname("Sean")
+                .password("general")
+                .state(MemberState.NORMAL)
+                .oauthIdentifier(null)
+                .profileImage(null)
+                .build();
+    }
+
     public static Member createBeforeResearchMember(String nickname, String password, String email) {
         return Member.builder()
                 .email(email)

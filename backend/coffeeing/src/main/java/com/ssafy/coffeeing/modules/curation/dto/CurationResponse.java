@@ -6,6 +6,7 @@ import java.util.List;
 
 public record CurationResponse(
         String curationTitle,
+        Boolean isCapsule,
         List<SimpleProductElement> products
 ) {
 }

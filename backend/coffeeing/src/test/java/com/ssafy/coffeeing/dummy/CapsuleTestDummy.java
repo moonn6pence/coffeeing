@@ -5,7 +5,7 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 
 public class CapsuleTestDummy {
 
-    private static Capsule createCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
+    private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
                                   String aroma, Integer machineType, String imageUrl, String description,
                                   Double totalScore, Integer totalReviewer) {
 
@@ -23,7 +23,7 @@ public class CapsuleTestDummy {
                 .build();
     }
 
-    public static Capsule createMockCapsule1() {
+    public static Capsule createMockCapsuleRoma() {
 
         return Capsule.builder()
                 .brandKr("네스프레소")
@@ -38,7 +38,7 @@ public class CapsuleTestDummy {
                 .totalReviewer(10)
                 .build();
     }
-    public static Capsule createMockCapsule2() {
+    public static Capsule createMockCapsuleNapoli() {
 
         return Capsule.builder()
                 .brandKr("네스프레소")

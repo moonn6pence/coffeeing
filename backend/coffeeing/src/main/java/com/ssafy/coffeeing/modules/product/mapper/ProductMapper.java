@@ -1,7 +1,9 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,8 +14,18 @@ public class ProductMapper {
         return new CapsuleResponse(
                 capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl(),
                 capsule.getAroma(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
-                capsule.getCoffeeCriteria().getAcidity(), capsule.getDescription(),
+                capsule.getCoffeeCriteria().getBody(), capsule.getDescription(),
                 capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer(),
+                isBookmarked);
+    }
+
+    public static CoffeeResponse supplyCoffeeResponseBy(Coffee coffee, Boolean isBookmarked) {
+
+        return new CoffeeResponse(
+                coffee.getId(), coffee.getCoffeeName(), coffee.getImageUrl(),
+                coffee.getAroma(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
+                coffee.getCoffeeCriteria().getBody(), coffee.getDescription(),
+                coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / coffee.getTotalReviewer(),
                 isBookmarked);
     }
 }
