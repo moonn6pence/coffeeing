@@ -3,9 +3,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
@@ -18,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -207,6 +206,51 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(toggleResponse.result()).isFalse(),
                 () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount - 1),
                 () -> assertThat(result.isEmpty()).isTrue()
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("나의 피드 조회 시, 최대 10개의 피드들을 조회하는데 성공한다")
+    @Test
+    void Given_MyFeedsRequest_When_RequestMyFeeds_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        List<Feed> feeds = FeedTestDummy.createFeeds(generalMember);
+        feedRepository.saveAll(feeds);
+        MyFeedsRequest myFeedsRequest = FeedTestDummy.createMyFeedsRequest(null, null);
+
+        //when
+        MyFeedsResponse myFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
+
+        //then
+        assertAll(
+                () -> assertThat(myFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("다른 멤버의 피드 조회 시, 최대 10개의 피드들을 조회하는데 성공한다.")
+    @Test
+    void Given_MemberFeedsRequest_When_RequestMemberFeeds_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        MemberFeedsRequest memberFeedsRequest = FeedTestDummy
+                .createMemberFeedsRequest(beforeResearchMember.getId(), null, null);
+        feedRepository.saveAll(feeds);
+
+        //when
+        MemberFeedsResponse memberFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
+
+        //then
+        assertAll(
+                () -> assertThat(memberFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
         );
 
         //verify
