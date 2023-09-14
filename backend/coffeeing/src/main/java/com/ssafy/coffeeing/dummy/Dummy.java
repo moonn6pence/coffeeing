@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.dummy;
 
+import com.ssafy.coffeeing.modules.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -33,8 +35,8 @@ public class Dummy implements CommandLineRunner {
         
         // dummy 객체 생성 및 저장
         capsuleDummy.create5NespressoCapsules();
-        memberDummy.createMemberDummies();
-
+        List<Member> members = memberDummy.createMemberDummies();
+        feedDummy.createFeedDummies(members);
         flushAndClear();
         
         log.info("dummy insertion finished");
