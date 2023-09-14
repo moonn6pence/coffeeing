@@ -1,9 +1,9 @@
 package com.ssafy.coffeeing.modules.event.listener;
 
 import com.ssafy.coffeeing.modules.event.eventer.EventRecord;
-import com.ssafy.coffeeing.modules.member.domain.Experience;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.member.util.MemberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
