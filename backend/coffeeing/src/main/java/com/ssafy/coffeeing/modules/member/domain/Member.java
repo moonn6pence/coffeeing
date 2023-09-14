@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
 
 	@Column
 	@Builder.Default
-	private Integer level = 0;
+	private Integer memberLevel = 0;
 
 	public void updateByOnboardResult(String nickname, int ageIdx, int genderIdx) {
 		this.nickname = nickname;

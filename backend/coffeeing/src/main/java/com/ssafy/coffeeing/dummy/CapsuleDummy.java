@@ -72,7 +72,7 @@ public class CapsuleDummy {
                 .aroma(aroma)
                 .machineType(machineType)
                 .imageUrl(imageUrl)
-                .description(description)
+                .productDescription(description)
                 .totalScore(totalScore)
                 .totalReviewer(totalReviewer)
                 .build();
