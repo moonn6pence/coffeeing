@@ -18,6 +18,10 @@ const surveySlice = createSlice({
   name:'surveySlice',
   initialState,
   reducers:{
+    setTotalPage(state, action:PayloadAction<number>){
+      state.totalPage=action.payload
+      console.log('total page', state.totalPage)
+    },
     addCurrentPage(state){
       state.currentPage += 1
       console.log('current page', state.currentPage)
@@ -34,4 +38,4 @@ const surveySlice = createSlice({
 })
 
 export default surveySlice.reducer;
-export const {addCurrentPage,saveRoasting,saveAcidity} = surveySlice.actions;
+export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity} = surveySlice.actions;
