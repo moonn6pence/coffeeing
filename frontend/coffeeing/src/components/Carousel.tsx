@@ -70,6 +70,7 @@ export default class Carousel extends Component {
       ],
     };
 
+    // 더미데이터, 나중에 실제 데이터 받아와서 연결해줘야함
     const capsuleList = [
       { name: '아르페지오', brand: '네스프레소', capsule_id: 1, imgLink: '/' },
       { name: '니카라과', brand: '네스프레소', capsule_id: 2, imgLink: '/' },
