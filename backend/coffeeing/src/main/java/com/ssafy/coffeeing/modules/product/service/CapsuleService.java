@@ -5,7 +5,6 @@ import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
