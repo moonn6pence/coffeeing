@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.util;
 
 import com.google.common.base.CaseFormat;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Profile("test")
 public class DatabaseCleaner implements InitializingBean {
 
     @PersistenceContext
