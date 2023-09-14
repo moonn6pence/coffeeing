@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	// querydsl 플러그인 추가
 	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id "org.sonarqube" version "4.3.1.3277"
 }
 
 group = 'com.ssafy'
@@ -66,6 +67,18 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sonar {
+	properties {
+		property 'sonar.sources', 'src'
+		property 'sonar.language', 'java'
+		property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.java.binaries', 'build/classes'
+		property 'sonar.test.inclusions', '**/*Test.java'
+		property 'sonar.exclusions', '**/test/**, **/Q*.java, **/resources/**'
+	}
 }
 
 bootJar {
