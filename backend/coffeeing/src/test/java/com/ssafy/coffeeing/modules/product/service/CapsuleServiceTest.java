@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
@@ -19,7 +20,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 class CapsuleServiceTest extends ServiceTest {
@@ -78,5 +84,53 @@ class CapsuleServiceTest extends ServiceTest {
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class, () -> capsuleService.getDetail(invalidId)).getInfo());
+    }
+
+    @Test
+    @DisplayName("캡슐 아이디를 통해 캡슐을 찜한다.")
+    void Given_CapsuleId_When_BookmarkingByToggleBookmark_Then_Success() {
+
+        // given
+        Capsule capsule = CapsuleTestDummy.createMockCapsuleRoma();
+        capsuleRepository.save(capsule);
+
+        Member member = MemberTestDummy.createMemberSean();
+        memberRepository.save(member);
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        ToggleResponse actual = capsuleService.toggleBookmark(capsule.getId());
+
+        // then
+        assertTrue(actual.result());
+        assertNotNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule,member));
+    }
+
+    @Test
+    @DisplayName("캡슐 아이디를 통해 캡슐을 찜 해제한다.")
+    void Given_CapsuleId_When_CancellingBookmarkByToggleBookmark_Then_Success() {
+
+        // given
+        Capsule capsule = CapsuleTestDummy.createMockCapsuleRoma();
+        capsuleRepository.save(capsule);
+
+        Member member = MemberTestDummy.createMemberSean();
+        memberRepository.save(member);
+
+        CapsuleBookmark bookmark = CapsuleBookmark.builder()
+                .capsule(capsule)
+                .member(member)
+                .build();
+        capsuleBookmarkRepository.save(bookmark);
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        ToggleResponse actual = capsuleService.toggleBookmark(capsule.getId());
+
+        // then
+        assertFalse(actual.result());
+        assertNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule,member));
     }
 }

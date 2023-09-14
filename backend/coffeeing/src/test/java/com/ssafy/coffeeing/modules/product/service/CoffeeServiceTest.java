@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
@@ -20,7 +21,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
 public class CoffeeServiceTest extends ServiceTest {
@@ -45,7 +50,7 @@ public class CoffeeServiceTest extends ServiceTest {
     void Given_ValidCoffeeId_When_GetDetails_Then_Success() {
 
         // given
-        Coffee coffee = CoffeeTestDummy.createMockCoffeeWiltonBenitezGeisha();
+        Coffee coffee = CoffeeTestDummy.createMockCoffeeKenyaAA();
         Member member = MemberTestDummy.createMemberSean();
         CoffeeBookmark bookmark = CoffeeBookmark.builder()
                 .coffee(coffee)
@@ -79,5 +84,53 @@ public class CoffeeServiceTest extends ServiceTest {
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class, () -> coffeeService.getDetail(invalidId)).getInfo());
+    }
+
+    @Test
+    @DisplayName("원두 아이디를 통해 원두를 찜한다.")
+    void Given_CoffeeId_When_BookmarkingByToggleBookmark_Then_Success() {
+
+        // given
+        Coffee coffee = CoffeeTestDummy.createMockCoffeeKenyaAA();
+        coffeeRepository.save(coffee);
+
+        Member member = MemberTestDummy.createMemberSean();
+        memberRepository.save(member);
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        ToggleResponse actual = coffeeService.toggleBookmark(coffee.getId());
+
+        // then
+        assertTrue(actual.result());
+        assertNotNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee,member));
+    }
+
+    @Test
+    @DisplayName("원두 아이디를 통해 원두를 찜 해제한다.")
+    void Given_CoffeeId_When_CancellingBookmarkByToggleBookmark_Then_Success() {
+
+        // given
+        Coffee coffee = CoffeeTestDummy.createMockCoffeeKenyaAA();
+        coffeeRepository.save(coffee);
+
+        Member member = MemberTestDummy.createMemberSean();
+        memberRepository.save(member);
+
+        CoffeeBookmark bookmark = CoffeeBookmark.builder()
+                .coffee(coffee)
+                .member(member)
+                .build();
+        coffeeBookmarkRepository.save(bookmark);
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        ToggleResponse actual = coffeeService.toggleBookmark(coffee.getId());
+
+        // then
+        assertFalse(actual.result());
+        assertNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee,member));
     }
 }
