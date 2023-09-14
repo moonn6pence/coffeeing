@@ -43,7 +43,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UploadFeedRequest_When_SaveFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("testNickname", "test123", "test1@test.com"));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(member);
         UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
@@ -70,7 +71,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteFeedRequest_When_DeleteFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("paul", "test", "test2@naver.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
 
@@ -85,7 +87,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeedRequest_When_UpdateFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("testNickname", "123", "amico@naver.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
@@ -104,7 +107,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeed_With_InValidID_When_UpdateFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("paul", "test1", "amico1@test.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
@@ -121,8 +125,10 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeed_With_InValidMember_When_UpdateFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
-        Member other = memberRepository.save(MemberTestDummy.createBeforeResearchMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("james", "testPassword", "test1@naver.com"));
+        Member other = memberRepository.save(MemberTestDummy
+                .createBeforeResearchMember("paul", "testPassword", "zase@naver.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
@@ -140,7 +146,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteRequest_When_DeleteFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("shawn", "testPassword", "test10@naver.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
 
@@ -156,8 +163,10 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteRequest_With_InvalidMember_When_DeleteFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
-        Member other = memberRepository.save(MemberTestDummy.createBeforeResearchMember());
+        Member member = memberRepository.save(MemberTestDummy
+                .createGeneralMember("shawnMendes", "srerwe", "test1@naver.com"));
+        Member other = memberRepository.save(MemberTestDummy
+                .createBeforeResearchMember("wony", "zserwe", "test2@naver.com"));
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(other);
