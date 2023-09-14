@@ -2,7 +2,7 @@ export type SurveyType = {
   currentPage:number;
   totalPage:number;
   roasting:number;
-  acid:number;
+  acidity:number;
   body:number;
   userId:number;
   machine:number;

@@ -8,7 +8,7 @@ export const NavBarLinkList = () => {
 
   const navigation = [
     { name: '원두/캡슐', href: '/beans' },
-    { name: '추천', href: '/recommend' },
+    { name: '추천', href: '/recommend-main' },
     { name: '피드', href: '/feed' },
     { name: '검색', href: '/search' },
   ];
