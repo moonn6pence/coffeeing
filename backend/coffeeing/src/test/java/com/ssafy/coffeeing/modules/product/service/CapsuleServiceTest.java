@@ -45,7 +45,7 @@ class CapsuleServiceTest extends ServiceTest {
 
         // given
         Capsule capsule = CapsuleTestDummy.createMockCapsule1();
-        Member member = MemberTestDummy.createGeneralMember();
+        Member member = MemberTestDummy.createMemberSean();
         CapsuleBookmark bookmark = CapsuleBookmark.builder()
                 .capsule(capsule)
                 .member(member)
