@@ -77,7 +77,7 @@ public class ProductController {
     @GetMapping("/coffee/similar/{id}")
     public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id){
         return BaseResponse.<SimilarProductResponse>builder()
-                .data(coffeeService.getSimilarCapsules(id))
+                .data(coffeeService.getSimilarCoffees(id))
                 .build();
     }
 
