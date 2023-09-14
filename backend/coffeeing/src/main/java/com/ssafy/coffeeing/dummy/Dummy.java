@@ -18,6 +18,8 @@ public class Dummy implements CommandLineRunner {
 
     private final EntityManager em;
     private final CapsuleDummy capsuleDummy;
+    private final FeedDummy feedDummy;
+    private final MemberDummy memberDummy;
 
     private void flushAndClear(){
         em.flush();
@@ -31,6 +33,7 @@ public class Dummy implements CommandLineRunner {
         
         // dummy 객체 생성 및 저장
         capsuleDummy.create5NespressoCapsules();
+        memberDummy.createMemberDummies();
 
         flushAndClear();
         
