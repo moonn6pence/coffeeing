@@ -4,6 +4,7 @@ import SignupPage from 'pages/SignupPage';
 import LoginPage from 'pages/LoginPage';
 import { NavBarBody } from 'components/NavBar/NavBarBody';
 import { RecSurveyPage } from 'pages/RecSurveyPage';
+import { ListPage } from 'pages/ListPage';
 
 function App() {
   return (
@@ -14,7 +15,8 @@ function App() {
       <Routes>
         <Route path="/signup" element={<SignupPage />}></Route>
         <Route path="/login" element={<LoginPage />}></Route>
-        <Route path='/recommend-survey' element={<RecSurveyPage/>}></Route>
+        <Route path="/recommend-survey" element={<RecSurveyPage />}></Route>
+        <Route path="/beans" element={<ListPage />}></Route>
       </Routes>
     </div>
   );
