@@ -41,7 +41,7 @@ public class CoffeeService {
             isBookmarked = coffeeBookmarkRepository.existsByCoffeeAndMember(coffee, member);
         }
 
-        return ProductMapper.supplyCoffeeResponseBy(coffee, isBookmarked);
+        return ProductMapper.supplyCoffeeResponseFrom(coffee, isBookmarked);
     }
 
     public ToggleResponse toggleBookmark(Long id) {

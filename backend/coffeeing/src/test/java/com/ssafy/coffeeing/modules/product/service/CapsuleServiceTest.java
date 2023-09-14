@@ -62,7 +62,7 @@ class CapsuleServiceTest extends ServiceTest {
         capsuleBookmarkRepository.save(bookmark);
 
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(member);
-        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseBy(capsule, true);
+        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseFrom(capsule, true);
 
         // when
         CapsuleResponse actual = capsuleService.getDetail(capsule.getId());

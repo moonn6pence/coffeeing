@@ -40,7 +40,7 @@ public class CapsuleService {
             isBookmarked = capsuleBookmarkRepository.existsByCapsuleAndMember(capsule, member);
         }
 
-        return ProductMapper.supplyCapsuleResponseBy(capsule, isBookmarked);
+        return ProductMapper.supplyCapsuleResponseFrom(capsule, isBookmarked);
     }
 
     public ToggleResponse toggleBookmark(Long id) {
