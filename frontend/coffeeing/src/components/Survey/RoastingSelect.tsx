@@ -25,7 +25,7 @@ export const RoastingSelect = () =>{
     {src:darkRoast, label:'라이트 로스팅', isSelected:selectedDark,setIsSelected:setSelectedDark,num:2},
     {src:unknownRoast, label:'라이트 로스팅', isSelected:selectedUnknown,setIsSelected:setSelectedUnknown,num:3},
   ]
-  // 이미지 클릭 시
+  // 로스팅 단계 이미지 클릭 시
   const handleRoastSelect = (num:number,isSelected:boolean,setIsSelected:Dispatch<SetStateAction<boolean>>)=>{
     if(myRoast===0){
       setMyRoast(num)
@@ -39,9 +39,12 @@ export const RoastingSelect = () =>{
   }
   // 다음 버튼 클릭 시
   const handleRoastSubmit = ()=>{
+    // 선택 안 했을 때
     if (myRoast===0) {
       alert('선호하는 로스팅 단계를 하나 선택해주세요')
-    } else {
+    } 
+    // 선택 했을 때 - 다음 페이지로 & 로스팅 정보 저장
+    else {
       dispatch(addCurrentPage())
       dispatch(saveRoasting(myRoast))
     }
