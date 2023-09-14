@@ -6,7 +6,7 @@ const initialState:SurveyType = {
   currentPage:1,
   totalPage:0,
   roasting:0,
-  acid:0,
+  acidity:0,
   body:0,
   userId:0,
   machine:0,
@@ -26,6 +26,9 @@ const surveySlice = createSlice({
       state.roasting = action.payload
       console.log('roasting',state.roasting)
     },
+    saveAcidity(state, action:PayloadAction<number>){
+      state.acidity = action.payload
+    }
   },
 })
 
