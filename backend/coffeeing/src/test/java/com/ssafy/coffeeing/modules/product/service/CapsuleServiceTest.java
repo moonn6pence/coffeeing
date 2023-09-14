@@ -44,7 +44,7 @@ class CapsuleServiceTest extends ServiceTest {
     void Given_ValidCapsuleId_When_GetDetails_Then_Success() {
 
         // given
-        Capsule capsule = CapsuleTestDummy.createMockCapsule1();
+        Capsule capsule = CapsuleTestDummy.createMockCapsuleRoma();
         Member member = MemberTestDummy.createMemberSean();
         CapsuleBookmark bookmark = CapsuleBookmark.builder()
                 .capsule(capsule)
@@ -70,7 +70,7 @@ class CapsuleServiceTest extends ServiceTest {
     void Given_NotFoundCapsuleId_When_GetDetails_Then_ThrowException() {
 
         // given
-        Capsule capsule = CapsuleTestDummy.createMockCapsule1();
+        Capsule capsule = CapsuleTestDummy.createMockCapsuleRoma();
         capsuleRepository.save(capsule);
         Long invalidId = capsule.getId();
         capsuleRepository.delete(capsule);
