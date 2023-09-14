@@ -1,18 +1,9 @@
 package com.ssafy.coffeeing.modules.member.domain;
 
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
-
-import javax.persistence.AttributeOverride;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
 @Getter
 @SuperBuilder
@@ -48,12 +39,12 @@ public class Member extends BaseEntity {
 	private String oauthIdentifier;
 
 	@Column
-	@ColumnDefault("0")
-	private Integer experience;
+	@Builder.Default
+	private Integer experience = 0;
 
 	@Column
-	@ColumnDefault("0")
-	private Integer level;
+	@Builder.Default
+	private Integer level = 0;
 
 	public void updateByOnboardResult(String nickname, int ageIdx, int genderIdx) {
 		this.nickname = nickname;

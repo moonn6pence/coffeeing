@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
 import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
@@ -24,6 +25,13 @@ public class FeedTestDummy {
                 .likeCount(0L)
                 .content("testFeed")
                 .imageUrl("testFeedImageUrls")
+                .build();
+    }
+
+    public static FeedLike createFeedLike(Feed feed, Member member) {
+        return FeedLike.builder()
+                .feed(feed)
+                .member(member)
                 .build();
     }
 

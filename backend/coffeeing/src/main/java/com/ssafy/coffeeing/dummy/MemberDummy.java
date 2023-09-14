@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.member.domain.Age;
+import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.domain.MemberState;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
@@ -55,6 +56,7 @@ public class MemberDummy {
                     .password(passwords.get(i))
                     .email(emails.get(i))
                     .state(MemberState.NORMAL)
+                    .gender(Gender.MEN)
                     .age(Age.TWENTY)
                     .profileImage(null)
                     .oauthIdentifier(null)

@@ -4,6 +4,7 @@ import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.feed.service.FeedService;
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
@@ -38,6 +39,13 @@ public class FeedController {
     public BaseResponse<Void> deleteFeed(@PathVariable @NumberFormat Long feedId) {
         feedService.deleteFeedById(feedId);
         return BaseResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/{feedId}/like")
+    public BaseResponse<ToggleResponse> toggleFeedLike(@PathVariable @NumberFormat Long feedId) {
+        return BaseResponse.<ToggleResponse>builder()
+                .data(feedService.toggleFeedLike(feedId))
                 .build();
     }
 }

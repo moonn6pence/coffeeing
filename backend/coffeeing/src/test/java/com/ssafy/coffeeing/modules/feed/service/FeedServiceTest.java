@@ -1,22 +1,24 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
-import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
-import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +36,7 @@ class FeedServiceTest extends ServiceTest {
     private FeedRepository feedRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private FeedLikeRepository feedLikeRepository;
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
@@ -43,10 +45,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UploadFeedRequest_When_SaveFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("testNickname", "test123", "test1@test.com"));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(member);
+                .willReturn(generalMember);
         UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
 
         //when
@@ -71,10 +71,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteFeedRequest_When_DeleteFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("paul", "test", "test2@naver.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         //when, then
         feedService.deleteFeedById(feed.getId());
@@ -87,10 +85,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeedRequest_When_UpdateFeed_Then_Success() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("testNickname", "123", "amico@naver.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
 
         //when
@@ -107,10 +103,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeed_With_InValidID_When_UpdateFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("paul", "test1", "amico1@test.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
 
         //when, then
@@ -125,14 +119,10 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_UpdateFeed_With_InValidMember_When_UpdateFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("james", "testPassword", "test1@naver.com"));
-        Member other = memberRepository.save(MemberTestDummy
-                .createBeforeResearchMember("paul", "testPassword", "zase@naver.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(other);
+                .willReturn(beforeResearchMember);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
@@ -146,10 +136,8 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteRequest_When_DeleteFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("shawn", "testPassword", "test10@naver.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(beforeResearchMember);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
@@ -163,17 +151,63 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_DeleteRequest_With_InvalidMember_When_DeleteFeed_Then_Fail() {
         //given
-        Member member = memberRepository.save(MemberTestDummy
-                .createGeneralMember("shawnMendes", "srerwe", "test1@naver.com"));
-        Member other = memberRepository.save(MemberTestDummy
-                .createBeforeResearchMember("wony", "zserwe", "test2@naver.com"));
-        Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(other);
+                .willReturn(beforeResearchMember);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
                 () -> feedService.deleteFeedById(feed.getId())).getInfo());
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("피드 좋아요 클릭 시, 해당 유저가 좋아요를 누른 적이 없다면 좋아요가 생성된다.")
+    @Test
+    void Given_FeedLikeRequest_When_ToggleFeedLike_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        Long beforeLikeCount = feed.getLikeCount();
+
+        //when
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        Optional<FeedLike> result = feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember);
+
+        //then
+        assertAll(
+                () -> assertThat(toggleResponse.result()).isTrue(),
+                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount + 1),
+                () -> assertThat(result.isPresent()).isTrue()
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("피드 좋아요 클릭 시, 해당 유저가 좋아요를 누른 적이 있다면 좋아요가 취소된다.")
+    @Test
+    void Given_FeedDisLikeRequest_When_ToggleFeedLike_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        FeedLike feedLike = feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
+        feed.increaseLikeCount();
+        Long beforeLikeCount = feed.getLikeCount();
+
+        //when
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        Optional<FeedLike> result = feedLikeRepository.findById(feedLike.getId());
+
+        //then
+        assertAll(
+                () -> assertThat(toggleResponse.result()).isFalse(),
+                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount - 1),
+                () -> assertThat(result.isEmpty()).isTrue()
+        );
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
