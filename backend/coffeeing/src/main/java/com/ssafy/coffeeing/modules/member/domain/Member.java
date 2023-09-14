@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Column;
@@ -45,6 +46,14 @@ public class Member extends BaseEntity {
 
 	@Column(length = 512)
 	private String oauthIdentifier;
+
+	@Column
+	@ColumnDefault("0")
+	private Integer experience;
+
+	@Column
+	@ColumnDefault("0")
+	private Integer level;
 
 	public void updateByOnboardResult(String nickname, int ageIdx, int genderIdx) {
 		this.nickname = nickname;
