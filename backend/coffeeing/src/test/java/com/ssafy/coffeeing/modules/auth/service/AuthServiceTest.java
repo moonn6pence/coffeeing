@@ -3,19 +3,17 @@ package com.ssafy.coffeeing.modules.auth.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 
+import com.ssafy.coffeeing.modules.auth.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ssafy.coffeeing.modules.auth.dto.SignInRequest;
-import com.ssafy.coffeeing.modules.auth.dto.SignInResponse;
-import com.ssafy.coffeeing.modules.auth.dto.SignUpRequest;
-import com.ssafy.coffeeing.modules.auth.dto.SignUpResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class AuthServiceTest extends ServiceTest {
 
@@ -72,6 +70,24 @@ public class AuthServiceTest extends ServiceTest {
 			() -> assertNotNull(signInResponse.accessToken()),
 			() -> assertNotNull(signInResponse.refreshToken()),
 			() -> assertEquals(GRANT_TYPE, signInResponse.grantType())
+		);
+	}
+
+	@Test
+	@DisplayName("Refresh 토큰을 이용한 토큰 재발급 성공")
+	void Given_ValidRefreshToken_When_ReissueToken_Then_Success() {
+		//given
+		SignInResponse signInResponse = authService
+				.signIn(new UsernamePasswordAuthenticationToken(generalMember.getEmail(), generalMember.getPassword()));
+		String refreshToken = signInResponse.refreshToken();
+		ReissueRequest reissueRequest = new ReissueRequest(refreshToken);
+		//when
+		ReissueResponse reissueResponse = authService.reissueAccessToken(reissueRequest);
+		//then
+		assertAll(
+				()->assertNotNull(reissueResponse.accessToken()),
+				()->assertEquals(GRANT_TYPE, reissueResponse.grantType()),
+				()->assertEquals(generalMember.getEmail(), reissueResponse.email())
 		);
 	}
 }
