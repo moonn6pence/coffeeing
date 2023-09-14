@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,7 +37,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			return new UsernamePasswordAuthenticationToken(email, "");
 		}
 
-		throw new RuntimeException();
+		throw new BusinessException(MemberErrorInfo.NOT_VALID_LOGIN);
 	}
 
 	@Override
