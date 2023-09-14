@@ -55,4 +55,17 @@ public class Member extends BaseEntity {
 	public void updateMemberState(MemberState state) {
 		this.state = state;
 	}
+
+	public void addExperience(int experience){
+		this.experience+=experience;
+	}
+	public void subtractExperience(int amount){
+		if(this.experience>amount){
+			this.experience-=amount;
+		}
+	}
+	public void levelUp(){
+		this.level+=1;
+	}
+
 }
