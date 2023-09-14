@@ -17,6 +17,12 @@ module.exports = {
         'light-roasting': '#B78C5F',
         'cinamon-roasting': '#986E3F',
         light: '#F9F6F0',
+        'process-bar':'#F3F6FB',
+        'select-img':'#F9F6F0'
+      },
+      width:{
+        // 설문 진행 척도 바 길이
+        '560px':'560px'
       },
     },
   },
