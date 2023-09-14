@@ -12,7 +12,7 @@ public class CoffeeTestDummy {
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.9))
                 .aroma("floral, cocoa")
                 .imageUrl("https://abcdsfadsffddd.png")
-                .description("")
+                .productDescription("")
                 .totalScore(45.353)
                 .totalReviewer(10)
                 .build();
@@ -24,7 +24,7 @@ public class CoffeeTestDummy {
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
-                .description("")
+                .productDescription("")
                 .totalScore(50.0)
                 .totalReviewer(10)
                 .build();

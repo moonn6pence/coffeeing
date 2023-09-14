@@ -11,6 +11,8 @@ public record CapsuleResponse(
         Double body,
         String description,
         Double averageScore,
-        Boolean isBookmarked
+        Boolean isBookmarked,
+        Boolean isReviewed,
+        CapsuleReviewElement memberReview
 ) {
 }

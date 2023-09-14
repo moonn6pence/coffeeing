@@ -13,14 +13,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-    public static CapsuleResponse supplyCapsuleResponseFrom(Capsule capsule, Boolean isBookmarked) {
+    public static CapsuleResponse supplyCapsuleResponseFrom(Capsule capsule,
+                                                            Boolean isBookmarked,
+                                                            CapsuleReview memberReview) {
 
         return new CapsuleResponse(
                 capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl(),
                 capsule.getAroma(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getBody(), capsule.getProductDescription(),
                 capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer(),
-                isBookmarked);
+                isBookmarked,
+                memberReview != null,
+                memberReview != null ? supplyCapsuleReviewElementFrom(memberReview) : null);
     }
 
     public static CoffeeResponse supplyCoffeeResponseFrom(Coffee coffee, Boolean isBookmarked) {
