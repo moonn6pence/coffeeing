@@ -4,19 +4,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
+import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Profile("dev")
+@RequiredArgsConstructor
 @Component
-@Slf4j
 public class FeedDummy {
 
+    private final FeedRepository feedRepository;
     private final List<String> feedContents = new ArrayList<>(){
         {
             add(null);
@@ -53,6 +57,7 @@ public class FeedDummy {
                 }
             }
 
+            feedRepository.saveAll(feeds);
             return feeds;
         } catch (JsonProcessingException e) {
             throw new BusinessException(FeedErrorInfo.FEED_IMAGES_TO_JSON_STRING_ERROR);
