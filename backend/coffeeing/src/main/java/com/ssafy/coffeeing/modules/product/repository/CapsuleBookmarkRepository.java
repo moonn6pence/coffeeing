@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CapsuleBookmarkRepository extends JpaRepository<CapsuleBookmark, Long> {
-    Boolean existsByCapsuleAndMember(Capsule capsule, Member member);
+    Boolean existsByCapsuleAndMember_Id(Capsule capsule, Long memberId);
 }

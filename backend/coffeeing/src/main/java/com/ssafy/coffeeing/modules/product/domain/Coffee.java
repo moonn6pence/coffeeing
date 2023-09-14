@@ -27,7 +27,7 @@ public class Coffee extends BaseEntity {
     private String aroma;
     
     @Column(columnDefinition = "text")
-    private String imagePath;
+    private String imageUrl;
 
     @Column(columnDefinition = "text")
     private String description;
