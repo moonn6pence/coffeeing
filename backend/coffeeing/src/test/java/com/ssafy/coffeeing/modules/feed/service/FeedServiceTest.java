@@ -2,10 +2,13 @@ package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
@@ -14,6 +17,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +34,9 @@ class FeedServiceTest extends ServiceTest {
 
     @Autowired
     private FeedRepository feedRepository;
+
+    @Autowired
+    private FeedLikeRepository feedLikeRepository;
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
@@ -150,6 +158,56 @@ class FeedServiceTest extends ServiceTest {
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
                 () -> feedService.deleteFeedById(feed.getId())).getInfo());
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("피드 좋아요 클릭 시, 해당 유저가 좋아요를 누른 적이 없다면 좋아요가 생성된다.")
+    @Test
+    void Given_FeedLikeRequest_When_ToggleFeedLike_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        Long beforeLikeCount = feed.getLikeCount();
+
+        //when
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        Optional<FeedLike> result = feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember);
+
+        //then
+        assertAll(
+                () -> assertThat(toggleResponse.result()).isTrue(),
+                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount + 1),
+                () -> assertThat(result.isPresent()).isTrue()
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("피드 좋아요 클릭 시, 해당 유저가 좋아요를 누른 적이 있다면 좋아요가 취소된다.")
+    @Test
+    void Given_FeedDisLikeRequest_When_ToggleFeedLike_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        FeedLike feedLike = feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
+        feed.increaseLikeCount();
+        Long beforeLikeCount = feed.getLikeCount();
+
+        //when
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        Optional<FeedLike> result = feedLikeRepository.findById(feedLike.getId());
+
+        //then
+        assertAll(
+                () -> assertThat(toggleResponse.result()).isFalse(),
+                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount - 1),
+                () -> assertThat(result.isEmpty()).isTrue()
+        );
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
