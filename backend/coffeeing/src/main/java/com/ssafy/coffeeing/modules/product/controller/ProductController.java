@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RequestMapping("/product")
 @RestController
@@ -54,9 +56,10 @@ public class ProductController {
     }
 
     @GetMapping("/capsule/review/{id}")
-    public BaseResponse<CapsuleReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id){
+    public BaseResponse<CapsuleReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id,
+                                                                 @Valid PageInfoRequest pageInfoRequest){
         return BaseResponse.<CapsuleReviewResponse>builder()
-                .data(capsuleReviewService.getCapsuleReviews(id))
+                .data(capsuleReviewService.getCapsuleReviews(id, pageInfoRequest))
                 .build();
     }
 
@@ -82,25 +85,25 @@ public class ProductController {
     }
 
     @PostMapping("/capsule/review/{id}")
-    public BaseResponse<CreationResponse> createCapsuleReview(@RequestBody ReviewRequest reviewRequest){
+    public BaseResponse<CreationResponse> createCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest){
 
         return BaseResponse.<CreationResponse>builder().build();
     }
 
     @PostMapping("/coffee/review/{id}")
-    public BaseResponse<CreationResponse> createCoffeeReview(@RequestBody ReviewRequest reviewRequest){
+    public BaseResponse<CreationResponse> createCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest){
 
         return BaseResponse.<CreationResponse>builder().build();
     }
 
     @PutMapping("/capsule/review/{id}")
-    public BaseResponse<Void> editCapsuleReview(@RequestBody ReviewRequest reviewRequest){
+    public BaseResponse<Void> editCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest){
 
         return BaseResponse.<Void>builder().build();
     }
 
     @PutMapping("/coffee/review/{id}")
-    public BaseResponse<Void> editCoffeeReview(@RequestBody ReviewRequest reviewRequest){
+    public BaseResponse<Void> editCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest){
 
         return BaseResponse.<Void>builder().build();
     }
