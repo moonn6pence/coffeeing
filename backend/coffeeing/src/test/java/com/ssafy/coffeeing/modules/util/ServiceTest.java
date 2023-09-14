@@ -37,9 +37,9 @@ public class ServiceTest {
     @BeforeEach
     void setUp() {
         generalMember = memberRepository.save(MemberTestDummy
-                .createGeneralMember("testNickname", "test123", "test1@test.com"));
+                .createGeneralMember("testNickname", "{noop}test123", "test1@test.com"));
         beforeResearchMember = memberRepository.save(MemberTestDummy
-                .createBeforeResearchMember("paul", "testPassword", "zase@naver.com"));
+                .createBeforeResearchMember("paul", "{noop}testPassword", "zase@naver.com"));
     }
 
 
