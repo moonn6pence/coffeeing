@@ -3,7 +3,7 @@ import { SurveyType } from 'types/StoreTypes';
 
 
 const initialState:SurveyType = {
-  currentPage:1,
+  currentPage:0,
   totalPage:0,
   roasting:0,
   acidity:0,
