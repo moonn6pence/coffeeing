@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Member extends BaseEntity {
 
-	@Column(length = 320, nullable = false)
+	@Column(length = 320, nullable = false, unique = true)
 	private String email;
 
 	@Column(length = 512, nullable = false)
