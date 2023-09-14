@@ -62,7 +62,7 @@ public class CoffeeServiceTest extends ServiceTest {
         coffeeBookmarkRepository.save(bookmark);
 
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(member);
-        CoffeeResponse expected = ProductMapper.supplyCoffeeResponseFrom(coffee, true);
+        CoffeeResponse expected = ProductMapper.supplyCoffeeResponseFrom(coffee, true, null);
 
         // when
         CoffeeResponse actual = coffeeService.getDetail(coffee.getId());

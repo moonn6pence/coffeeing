@@ -7,11 +7,13 @@ import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
+import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class CoffeeService {
 
     private final CoffeeRepository coffeeRepository;
 
+    private final CoffeeReviewRepository coffeeReviewRepository;
+
     private final CoffeeBookmarkRepository coffeeBookmarkRepository;
 
     @Transactional(readOnly = true)
@@ -34,14 +38,17 @@ public class CoffeeService {
 
         Boolean isBookmarked = Boolean.FALSE;
 
+        CoffeeReview memberReview = null;
+
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
         if (member != null) {
 
             isBookmarked = coffeeBookmarkRepository.existsByCoffeeAndMember(coffee, member);
+            memberReview = coffeeReviewRepository.findCoffeeReviewByCoffeeAndMember(coffee, member);
         }
 
-        return ProductMapper.supplyCoffeeResponseFrom(coffee, isBookmarked);
+        return ProductMapper.supplyCoffeeResponseFrom(coffee, isBookmarked, memberReview);
     }
 
     public ToggleResponse toggleBookmark(Long id) {

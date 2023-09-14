@@ -2,9 +2,9 @@ package com.ssafy.coffeeing.modules.product.dto;
 
 import java.util.List;
 
-public record CapsuleReviewResponse(
+public record ProductReviewResponse(
         Integer page,
         Integer totalCount,
-        List<CapsuleReviewElement> reviews
+        List<ProductReviewElement> reviews
 ) {
 }

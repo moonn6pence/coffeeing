@@ -13,6 +13,6 @@ public record CapsuleResponse(
         Double averageScore,
         Boolean isBookmarked,
         Boolean isReviewed,
-        CapsuleReviewElement memberReview
+        ProductReviewElement memberReview
 ) {
 }

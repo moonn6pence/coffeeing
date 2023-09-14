@@ -10,6 +10,8 @@ public record CoffeeResponse(
         Double body,
         String description,
         Double averageScore,
-        Boolean isBookmarked
+        Boolean isBookmarked,
+        Boolean isReviewed,
+        ProductReviewElement memberReview
 ) {
 }
