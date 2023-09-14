@@ -122,10 +122,11 @@ class FeedServiceTest extends ServiceTest {
     void Given_UpdateFeed_With_InValidMember_When_UpdateFeed_Then_Fail() {
         //given
         Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member other = memberRepository.save(MemberTestDummy.createBeforeResearchMember());
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(MemberTestDummy.createBeforeResearchMember());
+                .willReturn(other);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
@@ -156,9 +157,10 @@ class FeedServiceTest extends ServiceTest {
     void Given_DeleteRequest_With_InvalidMember_When_DeleteFeed_Then_Fail() {
         //given
         Member member = memberRepository.save(MemberTestDummy.createGeneralMember());
+        Member other = memberRepository.save(MemberTestDummy.createBeforeResearchMember());
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(member));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(MemberTestDummy.createBeforeResearchMember());
+                .willReturn(other);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,

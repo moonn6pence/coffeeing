@@ -9,7 +9,6 @@ public class MemberTestDummy {
 
     public static Member createGeneralMember() {
         return Member.builder()
-                .id(1L)
                 .email("test1234@naver.com")
                 .age(Age.TEENAGER)
                 .gender(Gender.MEN)
@@ -23,7 +22,6 @@ public class MemberTestDummy {
 
     public static Member createBeforeResearchMember() {
         return Member.builder()
-                .id(2L)
                 .email("test@naver.com")
                 .age(Age.TWENTY)
                 .gender(Gender.WOMEN)
