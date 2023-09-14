@@ -31,22 +31,34 @@ public class MemberEventListenerTest extends ServiceTest {
     @Autowired
     private MemberService memberService;
 
-    @DisplayName("점수 증가 이벤트 발생시 점수를 증가시킨다.")
+    @DisplayName("점수 증가시 저장된 점수가 증가한다.")
     @Test
     void Given_ExperienceRecord_When_AddExperienceEvent_Then_Success(){
         // Given
         Member member  = MemberTestDummy.createGeneralMember("닉네이무","1234","how@and.why");
-
         memberRepository.save(member);
-
         // When
         memberService.addExperience(new ActivityConductedEvent(75, member.getId()));
-        System.out.println("WHY "+member.getExperience());
         //then
         assertThat(member.getExperience()).isEqualTo(75);
 
         // verify
+        // 실행횟수 확인하기용
+    }
 
+    @DisplayName("점수 증가시 레벨업을 실행하고 점수를 감소시킨다.")
+    @Test
+    void Given_ActivityConductedEvent_When_AddExperienceEvent_Then_Success(){
+        // given
+        Member member = MemberTestDummy.createGeneralMember("얍","1234","a@a.com");
+        memberRepository.save(member);
+        // when
+        memberService.addExperience(new ActivityConductedEvent(150,member.getId()));
+        // then
+        assertAll(
+                ()->assertThat(member.getExperience()).isEqualTo(25),
+                ()->assertThat(member.getLevel()).isEqualTo(1)
+        );
     }
 
 
