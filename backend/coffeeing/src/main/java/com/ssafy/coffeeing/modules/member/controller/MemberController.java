@@ -2,16 +2,9 @@ package com.ssafy.coffeeing.modules.member.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.ssafy.coffeeing.modules.member.dto.*;
+import org.springframework.web.bind.annotation.*;
 
-import com.ssafy.coffeeing.modules.member.dto.ExistNickNameResponse;
-import com.ssafy.coffeeing.modules.member.dto.OnboardRequest;
-import com.ssafy.coffeeing.modules.member.dto.OnboardResponse;
 import com.ssafy.coffeeing.modules.member.service.MemberService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 
@@ -22,22 +15,42 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/member")
 public class MemberController {
 
-	private final MemberService memberService;
+    private final MemberService memberService;
 
-	@GetMapping("/unique-nickname")
-	public BaseResponse<ExistNickNameResponse> checkDuplicateNickname(@RequestParam String nickname) {
-		return BaseResponse.<ExistNickNameResponse>builder()
-			.data(memberService.checkDuplicateNickname(nickname))
-			.build();
-	}
+    @GetMapping("/unique-nickname")
+    public BaseResponse<ExistNickNameResponse> checkDuplicateNickname(@RequestParam String nickname) {
+        return BaseResponse.<ExistNickNameResponse>builder()
+                .data(memberService.checkDuplicateNickname(nickname))
+                .build();
+    }
 
-	@PostMapping("/onboard")
-	public BaseResponse<OnboardResponse> insertAdditionalMemberInfo(@Valid @RequestBody OnboardRequest onboardRequest) {
+    @PostMapping("/onboard")
+    public BaseResponse<OnboardResponse> insertAdditionalMemberInfo(@Valid @RequestBody OnboardRequest onboardRequest) {
 
-		return BaseResponse.<OnboardResponse>builder()
-			.data(memberService.insertAdditionalMemberInfo(onboardRequest))
-			.build();
-	}
+        return BaseResponse.<OnboardResponse>builder()
+                .data(memberService.insertAdditionalMemberInfo(onboardRequest))
+                .build();
+    }
+
+    @GetMapping("/myinfo")
+    public BaseResponse<BaseInfoResponse> getMemberInfo() {
+        return BaseResponse.<BaseInfoResponse>builder()
+                .data(memberService.getMemberInfo())
+                .build();
+    }
+
+    @GetMapping("/experience")
+    public BaseResponse<ExperienceInfoResponse> getMemberExperience() {
+        return BaseResponse.<ExperienceInfoResponse>builder()
+                .data(memberService.getMemberExperience())
+                .build();
+    }
+
+    @PutMapping("/change-profile")
+    public BaseResponse<Void> updateMemberProfileImage(@Valid @RequestBody ProfileImageChangeRequest profileImageChangeRequest) {
+        memberService.updateMemberProfileImage(profileImageChangeRequest);
+        return BaseResponse.<Void>builder().build();
+    }
 
 
 }

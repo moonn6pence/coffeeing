@@ -2,29 +2,37 @@ package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.NicknameChangeRequest;
+import com.ssafy.coffeeing.modules.member.dto.ProfileImageChangeRequest;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.member.util.MemberUtil;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RecordApplicationEvents
-public class MemberServiceTest extends ServiceTest {
+class MemberServiceTest extends ServiceTest {
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private MemberUtil memberUtil;
 
-    @Autowired
-    ApplicationEvents events;
+    @MockBean
+    private SecurityContextUtils securityContextUtils;
 
     @Autowired
     private MemberService memberService;
@@ -57,5 +65,65 @@ public class MemberServiceTest extends ServiceTest {
         );
     }
 
+    @DisplayName("마이페이지에서 회원정보 요청시 닉네임, 이미지만 반환한다.")
+    @Test
+    void Given_SecurityMemberContext_When_GetMemberInfo_Then_Success(){
+        //given
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+
+        //when
+        BaseInfoResponse memberBaseInfoResponse = memberService.getMemberInfo();
+
+        //then
+        assertThat(memberBaseInfoResponse).isEqualTo(
+                new BaseInfoResponse(
+                        generalMember.getNickname(),
+                        generalMember.getProfileImage()
+                )
+        );
+    }
+
+    @DisplayName("멤버의 경험치, 레벨, 레벨업까지 필요 경험치량을 반환한다.")
+    @Test
+    void Given_Member_When_GetExperienceInfo_Then_Success(){
+        // given
+        memberService.addExperience(new ActivityConductedEvent(150,generalMember.getId()));
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+
+        // when
+        ExperienceInfoResponse experienceInfoResponse = memberService.getMemberExperience();
+
+        // then
+        assertAll(
+                ()->assertThat(experienceInfoResponse.experience()).isEqualTo(generalMember.getExperience()),
+                ()->assertThat(experienceInfoResponse.memberLevel()).isEqualTo(generalMember.getMemberLevel()),
+                ()->assertThat(experienceInfoResponse.experienceForLevelUp()).isEqualTo(memberUtil.calculateLevelUpExperience(1))
+        );
+    }
+
+    @DisplayName("멤버의 프로필 이미지를 변경한다.")
+    @Test
+    void Given_MemberProfileImageUrl_When_UpdateMemberProfileImage_Then_Success(){
+        // given
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        String newProfileImageUrl = "http://some-aws-directory:I23m52A93g39e";
+        // when
+        memberService.updateMemberProfileImage(new ProfileImageChangeRequest(newProfileImageUrl));
+        // then
+        assertThat(generalMember.getProfileImage()).isEqualTo(newProfileImageUrl);
+    }
+
+    @DisplayName("멤버 닉네임을 변경한다.")
+    @Test
+    void Given_MemberNickname_When_UpdateMemberNickname_Then_Success(){
+        // given
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        String newNickname = "제네럴 백";
+        // when
+        memberService.updateMemberNickname(new NicknameChangeRequest(newNickname));
+        // then
+        assertThat(generalMember.getNickname()).isEqualTo(newNickname);
+
+    }
 
 }

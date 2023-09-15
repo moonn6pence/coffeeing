@@ -1,10 +1,11 @@
 package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.member.dto.*;
+import com.ssafy.coffeeing.modules.member.mapper.MemberMapper;
 import com.ssafy.coffeeing.modules.member.util.MemberUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
@@ -12,9 +13,6 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.domain.MemberState;
-import com.ssafy.coffeeing.modules.member.dto.ExistNickNameResponse;
-import com.ssafy.coffeeing.modules.member.dto.OnboardRequest;
-import com.ssafy.coffeeing.modules.member.dto.OnboardResponse;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -58,5 +56,32 @@ public class MemberService {
 
     private boolean isLevelUp(int level, int experience) {
         return experience >= memberUtil.calculateLevelUpExperience(level);
+    }
+
+    @Transactional(readOnly = true)
+    public BaseInfoResponse getMemberInfo() {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        return MemberMapper.supplyBaseInfoResponseFrom(member);
+    }
+
+    @Transactional(readOnly = true)
+    public ExperienceInfoResponse getMemberExperience() {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        return MemberMapper.supplyExperienceInfoResponse(
+                member,
+                memberUtil.calculateLevelUpExperience(member.getMemberLevel())
+        );
+    }
+
+    @Transactional
+    public void updateMemberProfileImage(ProfileImageChangeRequest profileImageChangeRequest) {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        member.updateProfileImage(profileImageChangeRequest.profileImageUrl());
+    }
+
+    @Transactional
+    public void updateMemberNickname(NicknameChangeRequest nicknameChangeRequest) {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        member.updateMemberNickname(nicknameChangeRequest.nickname());
     }
 }
