@@ -48,8 +48,8 @@ public class FeedController {
     }
 
     @GetMapping("/my-list")
-    public BaseResponse<MyFeedsResponse> getMyFeeds(@Valid MyFeedsRequest myFeedRequest) {
-        return BaseResponse.<MyFeedsResponse>builder()
+    public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid MyFeedsRequest myFeedRequest) {
+        return BaseResponse.<ProfileFeedsResponse>builder()
                 .build();
     }
 

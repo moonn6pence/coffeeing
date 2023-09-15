@@ -1,8 +1,11 @@
 package com.ssafy.coffeeing.modules.feed.mapper;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.dto.FeedProjection;
+import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,5 +22,9 @@ public class FeedMapper {
                 .imageUrl(imageUrl)
                 .likeCount(0L)
                 .build();
+    }
+
+    public static ProfileFeedsResponse supplyFeedEntityOf(Slice<FeedProjection> feeds, Long nextCursor) {
+        return new ProfileFeedsResponse(feeds.getContent(), feeds.hasNext(), nextCursor);
     }
 }
