@@ -2,7 +2,9 @@ package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import org.springframework.context.annotation.Profile;
 
+@Profile("test")
 public class CapsuleTestDummy {
 
     private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
