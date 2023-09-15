@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
@@ -22,7 +23,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +46,7 @@ public class FeedService {
             Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
             return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
         } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGES_TO_JSON_STRING_ERROR);
+            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
         }
     }
 
@@ -107,7 +110,21 @@ public class FeedService {
 
         Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getFeedId() : null;
 
-        return FeedMapper.supplyFeedEntityOf(feeds, nextCursor);
+        List<FeedElement> feedElements = feeds.getContent().stream()
+                .map(feedProjection -> new FeedElement(feedProjection.getFeedId(), makeStringToJson(feedProjection)))
+                .collect(Collectors.toList());
+
+        return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
+    }
+
+    private List<ImageElement> makeStringToJson(FeedProjection feedProjection) {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            return objectMapper.readValue(feedProjection.getImages(), new TypeReference<>(){});
+        } catch (JsonProcessingException e) {
+            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
+        }
     }
 
     private ToggleResponse decreaseFeedLikeCount(Feed feed) {
