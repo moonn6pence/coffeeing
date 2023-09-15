@@ -6,6 +6,7 @@ import { NavBarBody } from 'components/NavBar/NavBarBody';
 import { RecMainPage } from 'pages/RecMainPage';
 import { RecSurveyPage } from 'pages/RecSurveyPage';
 import { ListPage } from 'pages/ListPage';
+import { SearchPage } from 'pages/SearchPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/recommend-main' element={<RecMainPage/>}></Route>
         <Route path='/recommend-survey' element={<RecSurveyPage/>}></Route>
         <Route path="/beans" element={<ListPage />}></Route>
+        <Route path='/search' element={<SearchPage/>}></Route>
       </Routes>
     </div>
   );
