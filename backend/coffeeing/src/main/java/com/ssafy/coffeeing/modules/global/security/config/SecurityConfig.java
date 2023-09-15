@@ -9,7 +9,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -24,6 +27,9 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final JWTFilter jwtFilter;
     private final CorsConfigurationSource corsConfigurationSource;
+    private final OAuth2UserService oAuth2UserService;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
@@ -43,6 +49,14 @@ public class SecurityConfig {
 
         http.authorizeRequests().anyRequest().permitAll();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.oauth2Login()
+            .userInfoEndpoint()
+            .userService(oAuth2UserService)
+            .and()
+            .successHandler(authenticationSuccessHandler)
+            .failureHandler(authenticationFailureHandler);
+
         return http.build();
     }
 
