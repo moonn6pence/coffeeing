@@ -223,7 +223,7 @@ class FeedServiceTest extends ServiceTest {
         MyFeedsRequest myFeedsRequest = FeedTestDummy.createMyFeedsRequest(null, null);
 
         //when
-        MyFeedsResponse myFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
+        ProfileFeedsResponse myFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
 
         //then
         assertAll(
@@ -238,22 +238,17 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_MemberFeedsRequest_When_RequestMemberFeeds_Then_Success() {
         //given
-        given(securityContextUtils.getCurrnetAuthenticatedMember())
-                .willReturn(generalMember);
         List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
         MemberFeedsRequest memberFeedsRequest = FeedTestDummy
                 .createMemberFeedsRequest(beforeResearchMember.getId(), null, null);
         feedRepository.saveAll(feeds);
 
         //when
-        MemberFeedsResponse memberFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
+        ProfileFeedsResponse profileFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
 
         //then
         assertAll(
-                () -> assertThat(memberFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
+                () -> assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
         );
-
-        //verify
-        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
     }
 }

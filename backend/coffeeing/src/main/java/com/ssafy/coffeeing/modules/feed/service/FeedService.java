@@ -22,7 +22,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,29 +85,29 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public MemberFeedsResponse getFeedsByMemberId(MemberFeedsRequest memberFeedsRequest) {
+    public ProfileFeedsResponse getFeedsByMemberId(MemberFeedsRequest memberFeedsRequest) {
         Member owner = memberRepository.findById(memberFeedsRequest.memberId())
                 .orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        Member viewer = securityContextUtils.getCurrnetAuthenticatedMember();
-        Long cursor = memberFeedsRequest.cursor();
-        Integer size = memberFeedsRequest.size();
 
-        Slice<Feed> feeds = feedRepository
-                .findOtherFeedsByMemberAndPage(owner, viewer , cursor, PageRequest.of(0, size));
-
-        return null;
+        return getProfileFeeds(owner, memberFeedsRequest.cursor(), memberFeedsRequest.size());
     }
 
     @Transactional(readOnly = true)
-    public MyFeedsResponse getMyFeeds(MyFeedsRequest myFeedsRequest) {
-        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+    public ProfileFeedsResponse getMyFeeds(MyFeedsRequest myFeedsRequest) {
+        Member owner = securityContextUtils.getCurrnetAuthenticatedMember();
         Long cursor = myFeedsRequest.cursor();
         Integer size = myFeedsRequest.size();
-        
-        Slice<Feed> feeds = feedRepository
-                .findFeedsByMemberAndPage(member, cursor, PageRequest.of(0, size));
 
-        List<Feed> response = feeds.getContent();
+        return getProfileFeeds(owner, cursor, size);
+    }
+
+    private ProfileFeedsResponse getProfileFeeds(Member owner, Long cursor, Integer size) {
+        Slice<FeedProjection> feeds = feedRepository
+                .findFeedsByMemberAndPage(owner, cursor, PageRequest.of(0, size));
+
+        Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getFeedId() : null;
+
+        return FeedMapper.supplyFeedEntityOf(feeds, nextCursor);
     }
 
     private ToggleResponse decreaseFeedLikeCount(Feed feed) {
