@@ -68,4 +68,12 @@ public class Member extends BaseEntity {
 		this.memberLevel+=1;
 	}
 
+	public void updateProfileImage(String profileImageUrl){
+		this.profileImage=profileImageUrl;
+	}
+
+	public void updateMemberNickname(String nickname){
+		this.nickname=nickname;
+	}
+
 }
