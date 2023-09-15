@@ -13,18 +13,21 @@ module.exports = {
         30: '7.5rem',
         300: '75rem',
         320: '80rem',
+        '450px': '450px',
       },
       colors: {
         'font-gray': '#4D4D4D',
         'light-roasting': '#B78C5F',
         'cinamon-roasting': '#986E3F',
         light: '#F9F6F0',
-        'process-bar':'#F3F6FB',
-        'select-img':'#F9F6F0'
+        'process-bar': '#F3F6FB',
+        'select-img': '#F9F6F0',
       },
-      width:{
+      width: {
         // 설문 진행 척도 바 길이
-        '560px':'560px'
+        '560px': '560px',
+        // 디테일 컴포넌트 길이
+        '532px': '532px',
       },
     },
   },
