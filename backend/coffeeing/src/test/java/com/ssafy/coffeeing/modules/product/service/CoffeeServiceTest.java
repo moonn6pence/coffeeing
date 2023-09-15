@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.BDDMockito.given;
 
-public class CoffeeServiceTest extends ServiceTest {
+class CoffeeServiceTest extends ServiceTest {
 
     @Autowired
     private CoffeeService coffeeService;
