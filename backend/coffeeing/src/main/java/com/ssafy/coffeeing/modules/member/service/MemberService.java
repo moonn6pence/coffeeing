@@ -44,7 +44,7 @@ public class MemberService {
 
 
     public void addExperience(final ActivityConductedEvent eventRecord) {
-        Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow();
+        Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
         member.addExperience(eventRecord.experience());
         while (isLevelUp(member.getMemberLevel(), member.getExperience())) {
             member.subtractExperience(memberUtil.calculateLevelUpExperience(member.getMemberLevel()));
