@@ -33,6 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final JWTUtils jwtUtils;
 
 	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth",
+			"/favicon.ico",
 			"/product",
 			"/v1/api-docs",
 			"/v2/api-docs",
@@ -46,7 +47,10 @@ public class JWTFilter extends OncePerRequestFilter {
 			"/v3/api-docs",
 			"/swagger-ui",
 			"/member/unique-nickname",
-			"/health"
+			"/health",
+			/* OAuth */
+			"/oauth2/authorization/google",
+			"/login/oauth2/code/google"
 		);
 
 	public JWTFilter(@Value("${jwt.header}") String header,
@@ -63,7 +67,6 @@ public class JWTFilter extends OncePerRequestFilter {
 		IOException {
 
 		boolean skipCondition = isPreFlightRequest(request) || isPermitAllRequest(request);
-
 		if(!skipCondition) {
 			String accessToken = resolveToken(request);
 			if (!jwtUtils.validateToken(accessToken)) {
