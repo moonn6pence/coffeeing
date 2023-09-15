@@ -2,7 +2,9 @@ package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import org.springframework.context.annotation.Profile;
 
+@Profile("test")
 public class CoffeeTestDummy {
 
     public static Coffee createMockCoffeeWiltonBenitezGeisha(){

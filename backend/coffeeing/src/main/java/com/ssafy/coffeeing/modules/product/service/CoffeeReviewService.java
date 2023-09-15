@@ -38,9 +38,6 @@ public class CoffeeReviewService {
         Coffee coffee = coffeeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
-        System.out.println(member == null);
-        System.out.println(coffee == null);
-
         Page<CoffeeReview> capsuleReviews = coffeeReviewQueryRepository
                 .findOthersCoffeeReviews(coffee, member, pageInfoRequest.getPageableWithSize(REVIEW_PAGE_SIZE));
 

@@ -34,6 +34,8 @@ public class ServiceTest {
 
     protected Member beforeResearchMember;
 
+    protected static final Integer REVIEW_PAGE_SIZE = 6;
+
     @BeforeEach
     void setUp() {
         generalMember = memberRepository.save(MemberTestDummy

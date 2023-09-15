@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-    public static CapsuleResponse supplyCapsuleResponseFrom(Capsule capsule,
-                                                            Boolean isBookmarked,
-                                                            CapsuleReview memberReview) {
+    public static CapsuleResponse supplyCapsuleResponseOf(Capsule capsule,
+                                                          Boolean isBookmarked,
+                                                          CapsuleReview memberReview) {
 
         return new CapsuleResponse(
                 capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl(),
@@ -28,8 +28,8 @@ public class ProductMapper {
                 memberReview != null ? supplyProductReviewElementFrom(memberReview) : null);
     }
 
-    public static CoffeeResponse supplyCoffeeResponseFrom(Coffee coffee, Boolean isBookmarked,
-                                                          CoffeeReview memberReview) {
+    public static CoffeeResponse supplyCoffeeResponseOf(Coffee coffee, Boolean isBookmarked,
+                                                        CoffeeReview memberReview) {
 
         return new CoffeeResponse(
                 coffee.getId(), coffee.getCoffeeName(), coffee.getImageUrl(),

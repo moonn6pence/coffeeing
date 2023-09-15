@@ -6,9 +6,11 @@ import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
 import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
 import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import org.springframework.context.annotation.Profile;
 
 import java.util.List;
 
+@Profile("test")
 public class FeedTestDummy {
 
     public static UploadFeedRequest createUploadFeedRequest() {

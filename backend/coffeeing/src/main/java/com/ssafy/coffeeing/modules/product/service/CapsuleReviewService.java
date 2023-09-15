@@ -36,9 +36,6 @@ public class CapsuleReviewService {
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
-        System.out.println(member == null);
-        System.out.println(capsule == null);
-
         Page<CapsuleReview> capsuleReviews = capsuleReviewQueryRepository
                 .findOthersCapsuleReviews(capsule, member, pageInfoRequest.getPageableWithSize(REVIEW_PAGE_SIZE));
 

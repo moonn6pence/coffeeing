@@ -17,8 +17,6 @@ public class ExceptionControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse RuntimeExceptionHandler(RuntimeException e){
 
-        e.printStackTrace();
-
         return BaseResponse.builder()
                 .code(GlobalErrorInfo.INTERNAL_SERVER_ERROR.getCode())
                 .message(GlobalErrorInfo.INTERNAL_SERVER_ERROR.getMessage())
@@ -28,8 +26,6 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse BusinessExceptionHandler(BusinessException e){
-
-        e.printStackTrace();
 
         return BaseResponse.builder()
                 .code(e.getInfo().getCode())

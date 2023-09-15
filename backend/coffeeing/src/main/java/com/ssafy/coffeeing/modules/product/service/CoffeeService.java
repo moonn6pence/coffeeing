@@ -48,7 +48,7 @@ public class CoffeeService {
             memberReview = coffeeReviewRepository.findCoffeeReviewByCoffeeAndMember(coffee, member);
         }
 
-        return ProductMapper.supplyCoffeeResponseFrom(coffee, isBookmarked, memberReview);
+        return ProductMapper.supplyCoffeeResponseOf(coffee, isBookmarked, memberReview);
     }
 
     public ToggleResponse toggleBookmark(Long id) {
