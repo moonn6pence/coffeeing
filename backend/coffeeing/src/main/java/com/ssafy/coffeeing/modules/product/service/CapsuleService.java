@@ -7,11 +7,13 @@ import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
+import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,8 @@ public class CapsuleService {
 
     private final CapsuleRepository capsuleRepository;
 
+    private final CapsuleReviewRepository capsuleReviewRepository;
+
     private final CapsuleBookmarkRepository capsuleBookmarkRepository;
 
     @Transactional(readOnly = true)
@@ -33,14 +37,18 @@ public class CapsuleService {
 
         Boolean isBookmarked = Boolean.FALSE;
 
+        CapsuleReview memberReview = null;
+
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
         if (member != null) {
 
             isBookmarked = capsuleBookmarkRepository.existsByCapsuleAndMember(capsule, member);
+
+            memberReview = capsuleReviewRepository.findCapsuleReviewByCapsuleAndMember(capsule, member);
         }
 
-        return ProductMapper.supplyCapsuleResponseBy(capsule, isBookmarked);
+        return ProductMapper.supplyCapsuleResponseFrom(capsule, isBookmarked, memberReview);
     }
 
     public ToggleResponse toggleBookmark(Long id) {

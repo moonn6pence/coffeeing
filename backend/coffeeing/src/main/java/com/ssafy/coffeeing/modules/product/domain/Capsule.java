@@ -39,7 +39,7 @@ public class Capsule extends BaseEntity {
     private String imageUrl;
 
     @Column
-    private String description;
+    private String productDescription;
 
     @Column
     private Double totalScore;

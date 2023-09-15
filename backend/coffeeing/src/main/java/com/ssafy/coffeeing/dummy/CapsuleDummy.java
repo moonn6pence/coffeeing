@@ -28,7 +28,7 @@ public class CapsuleDummy {
             "https://www.nespresso.com/ecom/medias/sys_master/public/14441096675358/ispirazione-firenze-arpeggio-XL.png?impolicy=small&imwidth=284&imdensity=1",
             "https://www.nespresso.com/ecom/medias/sys_master/public/16653932462110/ispirazione-roma-2x.png?impolicy=small&imwidth=284&imdensity=1"
     );
-    private final List<String> descriptions = List.of(
+    private final List<String> productDescriptions = List.of(
             "인디아와 우간다 원두를 오랜 시간 다크 로스팅하여 묵직한 바디감과 함께 기분 좋은 쓴맛의 코코아 향, 그리고 벨벳 같은 부드러운 질감이 특징입니다. 나폴리의 뿌리 깊은 커피 전통과 역사를 반영한 강렬하면서도 아름다운 아로마와 풍미, 질감을 선사 합니다.",
             "진하고 농후한 바디감이 선사하는 와일드한 풍미와 스파이시 향을 느껴보세요. 인디아산 원두의 크리미한 질감과 무게감에 니카라과 커피의 균형잡힌 맛이 부드러움을 줍니다.",
             "미디엄 다크로스팅한 브라질산 원두가 강한 로스트향을 주고 짧게 로스팅한 콜롬비아 원두가 산미를 더해 대조적인 쓴맛과 산미의 조화가 인상적인 커피입니다.",
@@ -46,7 +46,7 @@ public class CapsuleDummy {
         for(int i = 0; i < capsuleNames.size(); i++){
             capsules.add(createNespressoCapsule(capsuleNames.get(i),
                     roasts.get(i), acidities.get(i), bodies.get(i), aroma.get(i),
-                    imageUrls.get(i), descriptions.get(i), totalScores.get(i), 10));
+                    imageUrls.get(i), productDescriptions.get(i), totalScores.get(i), 10));
         }
 
         return capsuleRepository.saveAll(capsules);
@@ -72,7 +72,7 @@ public class CapsuleDummy {
                 .aroma(aroma)
                 .machineType(machineType)
                 .imageUrl(imageUrl)
-                .description(description)
+                .productDescription(description)
                 .totalScore(totalScore)
                 .totalReviewer(totalReviewer)
                 .build();
