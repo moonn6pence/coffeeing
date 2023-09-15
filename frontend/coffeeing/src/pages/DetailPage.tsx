@@ -13,9 +13,22 @@ export const DetailPage = () => {
     id: 0,
     imageUrl: 'string',
     isBookmarked: true,
+    isReviewed: true,
+    memberReview: {
+      content: 'string',
+      id: 0,
+      nickname: 'string',
+      score: 0,
+    },
     name: 'string',
     roast: 0,
   };
 
-  return <BeanRating rate={0} />;
+  return (
+    <div>
+      <BeanRating rate={capsule.acidity} />
+      <BeanRating rate={capsule.body} />
+      <BeanRating rate={capsule.roast} />
+    </div>
+  );
 };
