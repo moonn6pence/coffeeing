@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.member.controller;
 import javax.validation.Valid;
 
 import com.ssafy.coffeeing.modules.member.dto.*;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.coffeeing.modules.member.service.MemberService;
@@ -32,10 +33,14 @@ public class MemberController {
                 .build();
     }
 
-    @GetMapping("/myinfo")
-    public BaseResponse<BaseInfoResponse> getMemberInfo() {
+    @GetMapping("/info/{memberId}")
+    public BaseResponse<BaseInfoResponse> getMemberInfo(
+            @PathVariable
+            @NumberFormat
+            Long memberId
+            ) {
         return BaseResponse.<BaseInfoResponse>builder()
-                .data(memberService.getMemberInfo())
+                .data(memberService.getMemberInfo(memberId))
                 .build();
     }
 

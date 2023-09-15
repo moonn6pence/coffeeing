@@ -59,15 +59,17 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public BaseInfoResponse getMemberInfo() {
-        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+    public BaseInfoResponse getMemberInfo(Long memberId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
         return MemberMapper.supplyBaseInfoResponseFrom(member);
     }
 
     @Transactional(readOnly = true)
     public ExperienceInfoResponse getMemberExperience() {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-        return MemberMapper.supplyExperienceInfoResponse(
+        return MemberMapper.supplyExperienceInfoResponseOf(
                 member,
                 memberUtil.calculateLevelUpExperience(member.getMemberLevel())
         );

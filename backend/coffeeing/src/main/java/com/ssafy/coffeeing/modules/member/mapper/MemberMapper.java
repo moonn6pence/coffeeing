@@ -14,7 +14,7 @@ public class MemberMapper {
         );
     }
 
-    public static ExperienceInfoResponse supplyExperienceInfoResponse(Member member, int experienceForLevelUp) {
+    public static ExperienceInfoResponse supplyExperienceInfoResponseOf(Member member, int experienceForLevelUp) {
         return new ExperienceInfoResponse(
                 member.getExperience(),
                 member.getMemberLevel(),
