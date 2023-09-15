@@ -38,4 +38,7 @@ public class MemberController {
 			.data(memberService.insertAdditionalMemberInfo(onboardRequest))
 			.build();
 	}
+
+
 }
+

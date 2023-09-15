@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Member extends BaseEntity {
 
-	@Column(length = 320, nullable = false)
+	@Column(length = 320, nullable = false, unique = true)
 	private String email;
 
 	@Column(length = 512, nullable = false)
@@ -55,4 +55,17 @@ public class Member extends BaseEntity {
 	public void updateMemberState(MemberState state) {
 		this.state = state;
 	}
+
+	public void addExperience(int experience){
+		this.experience+=experience;
+	}
+	public void subtractExperience(int amount){
+		if(this.experience>amount){
+			this.experience-=amount;
+		}
+	}
+	public void levelUp(){
+		this.memberLevel+=1;
+	}
+
 }
