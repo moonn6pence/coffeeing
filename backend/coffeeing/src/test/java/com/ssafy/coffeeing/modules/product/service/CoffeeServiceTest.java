@@ -1,13 +1,10 @@
 package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
-import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
-import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
@@ -62,7 +59,7 @@ class CoffeeServiceTest extends ServiceTest {
         coffeeBookmarkRepository.save(bookmark);
 
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
-        CoffeeResponse expected = ProductMapper.supplyCoffeeResponseFrom(coffee, true, null);
+        CoffeeResponse expected = ProductMapper.supplyCoffeeResponseOf(coffee, true, null);
 
         // when
         CoffeeResponse actual = coffeeService.getDetail(coffee.getId());

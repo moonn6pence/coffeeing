@@ -48,7 +48,7 @@ public class CapsuleService {
             memberReview = capsuleReviewRepository.findCapsuleReviewByCapsuleAndMember(capsule, member);
         }
 
-        return ProductMapper.supplyCapsuleResponseFrom(capsule, isBookmarked, memberReview);
+        return ProductMapper.supplyCapsuleResponseOf(capsule, isBookmarked, memberReview);
     }
 
     public ToggleResponse toggleBookmark(Long id) {
