@@ -4,10 +4,15 @@ public enum Experience {
     ADDITIONAL_EXPERIENCE_PER_LEVEL(75),
     INITIAL_EXPERIENCE(125);
 
-    public final int exp;
+    private final int exp;
 
     Experience(int exp){
         this.exp=exp;
     }
+
+    public int getValue(){
+        return this.exp;
+    }
+
 
 }

@@ -1,4 +1,4 @@
-package com.ssafy.coffeeing.modules.event.listener;
+package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
 import com.ssafy.coffeeing.modules.member.service.MemberService;
@@ -19,7 +19,8 @@ public class MemberEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void addExperience(final ActivityConductedEvent event) { // count this
+    // When testing this EventListener method, count how many times it was called
+    public void addExperience(final ActivityConductedEvent event) {
         memberService.addExperience(event);
     }
 

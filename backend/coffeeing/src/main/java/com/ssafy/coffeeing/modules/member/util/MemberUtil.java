@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class MemberUtil {
     public int calculateLevelUpExperience(int level){
-        return level * Experience.ADDITIONAL_EXPERIENCE_PER_LEVEL.exp + Experience.INITIAL_EXPERIENCE.exp;
+        return level * Experience.ADDITIONAL_EXPERIENCE_PER_LEVEL.getValue() + Experience.INITIAL_EXPERIENCE.getValue();
     }
 }
