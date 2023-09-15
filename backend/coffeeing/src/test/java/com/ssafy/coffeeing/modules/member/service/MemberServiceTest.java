@@ -53,7 +53,7 @@ public class MemberServiceTest extends ServiceTest {
         // then
         assertAll(
                 ()->assertThat(member.getExperience()).isEqualTo(25),
-                ()->assertThat(member.getLevel()).isEqualTo(1)
+                ()->assertThat(member.getMemberLevel()).isEqualTo(1)
         );
     }
 

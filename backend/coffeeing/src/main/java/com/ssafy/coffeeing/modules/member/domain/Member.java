@@ -65,7 +65,7 @@ public class Member extends BaseEntity {
 		}
 	}
 	public void levelUp(){
-		this.level+=1;
+		this.memberLevel+=1;
 	}
 
 }

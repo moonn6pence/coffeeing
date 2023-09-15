@@ -48,8 +48,8 @@ public class MemberService {
     public void addExperience(final ActivityConductedEvent eventRecord) {
         Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow();
         member.addExperience(eventRecord.experience());
-        while (isLevelUp(member.getLevel(), member.getExperience())) {
-            member.subtractExperience(memberUtil.calculateLevelUpExperience(member.getLevel()));
+        while (isLevelUp(member.getMemberLevel(), member.getExperience())) {
+            member.subtractExperience(memberUtil.calculateLevelUpExperience(member.getMemberLevel()));
             member.levelUp();
         }
         memberRepository.save(member);
