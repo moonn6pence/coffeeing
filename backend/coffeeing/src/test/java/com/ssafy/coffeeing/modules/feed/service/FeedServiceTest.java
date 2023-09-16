@@ -4,7 +4,6 @@ import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.*;
-import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
@@ -42,9 +41,6 @@ class FeedServiceTest extends ServiceTest {
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
-
-    @Autowired
-    private FeedMapper feedMapper;
 
     @Autowired
     private FeedUtil feedUtil;
