@@ -71,7 +71,7 @@ public class ProductController {
     public BaseResponse<ProductReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id,
                                                                  @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
-                .data(capsuleReviewService.getCapsuleReviews(id, pageInfoRequest))
+                .data(capsuleReviewService.getReviews(id, pageInfoRequest))
                 .build();
     }
 
@@ -79,7 +79,7 @@ public class ProductController {
     public BaseResponse<ProductReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long id,
                                                                 @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
-                .data(coffeeReviewService.getCoffeeReviews(id, pageInfoRequest))
+                .data(coffeeReviewService.getReviews(id, pageInfoRequest))
                 .build();
     }
 
@@ -102,7 +102,7 @@ public class ProductController {
                                                               @Valid @RequestBody ReviewRequest reviewRequest) {
 
         return BaseResponse.<CreationResponse>builder()
-                .data(capsuleReviewService.createCapsuleReview(id, reviewRequest))
+                .data(capsuleReviewService.createReview(id, reviewRequest))
                 .build();
     }
 
@@ -111,7 +111,7 @@ public class ProductController {
                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
         return BaseResponse.<CreationResponse>builder()
-                .data(coffeeReviewService.createCoffeeReview(id, reviewRequest))
+                .data(coffeeReviewService.createReview(id, reviewRequest))
                 .build();
     }
 
@@ -119,7 +119,7 @@ public class ProductController {
     public BaseResponse<Void> editCapsuleReview(@PathVariable @NumberFormat Long id,
                                                 @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        capsuleReviewService.updateCapsuleReview(id, reviewRequest);
+        capsuleReviewService.updateReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 
@@ -127,7 +127,7 @@ public class ProductController {
     public BaseResponse<Void> editCoffeeReview(@PathVariable @NumberFormat Long id,
                                                @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        coffeeReviewService.updateCoffeeReview(id, reviewRequest);
+        coffeeReviewService.updateReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 

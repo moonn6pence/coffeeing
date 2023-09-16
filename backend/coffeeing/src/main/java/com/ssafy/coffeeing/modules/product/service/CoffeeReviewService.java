@@ -6,7 +6,6 @@ import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
@@ -36,7 +35,7 @@ public class CoffeeReviewService {
     private static final Integer REVIEW_PAGE_SIZE = 6;
 
     @Transactional
-    public CreationResponse createCoffeeReview(Long id, ReviewRequest reviewRequest) {
+    public CreationResponse createReview(Long id, ReviewRequest reviewRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
         Coffee coffee = coffeeRepository.findById(id)
@@ -49,7 +48,7 @@ public class CoffeeReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ProductReviewResponse getCoffeeReviews(Long id, PageInfoRequest pageInfoRequest) {
+    public ProductReviewResponse getReviews(Long id, PageInfoRequest pageInfoRequest) {
 
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
@@ -65,7 +64,7 @@ public class CoffeeReviewService {
     }
 
     @Transactional
-    public void updateCoffeeReview(Long id, ReviewRequest reviewRequest) {
+    public void updateReview(Long id, ReviewRequest reviewRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
         CoffeeReview review = coffeeReviewRepository.findById(id)

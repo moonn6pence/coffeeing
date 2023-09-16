@@ -1,6 +1,5 @@
 package com.ssafy.coffeeing.modules.product.service;
 
-import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeReviewTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
@@ -77,7 +76,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         );
 
         // when
-        ProductReviewResponse actual = coffeeReviewService.getCoffeeReviews(coffee.getId(), new PageInfoRequest(page));
+        ProductReviewResponse actual = coffeeReviewService.getReviews(coffee.getId(), new PageInfoRequest(page));
 
         // then
         assertEquals(expected, actual);
@@ -98,7 +97,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class,
-                        () -> coffeeReviewService.getCoffeeReviews(invalidId, pageInfoRequest)).getInfo()
+                        () -> coffeeReviewService.getReviews(invalidId, pageInfoRequest)).getInfo()
         );
 
     }

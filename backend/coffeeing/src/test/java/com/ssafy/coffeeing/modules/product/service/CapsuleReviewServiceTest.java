@@ -76,7 +76,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         );
 
         // when
-        ProductReviewResponse actual = capsuleReviewService.getCapsuleReviews(capsule.getId(), new PageInfoRequest(page));
+        ProductReviewResponse actual = capsuleReviewService.getReviews(capsule.getId(), new PageInfoRequest(page));
 
         // then
         assertEquals(expected, actual);
@@ -98,7 +98,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class,
-                        () -> capsuleReviewService.getCapsuleReviews(invalidId, pageInfoRequest)).getInfo()
+                        () -> capsuleReviewService.getReviews(invalidId, pageInfoRequest)).getInfo()
         );
 
     }

@@ -3,7 +3,6 @@ package com.ssafy.coffeeing.modules.product.service;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
-import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
@@ -36,7 +35,7 @@ public class CapsuleReviewService {
     private static final Integer REVIEW_PAGE_SIZE = 6;
 
     @Transactional
-    public CreationResponse createCapsuleReview(Long id, ReviewRequest reviewRequest) {
+    public CreationResponse createReview(Long id, ReviewRequest reviewRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
         Capsule capsule = capsuleRepository.findById(id)
@@ -49,7 +48,7 @@ public class CapsuleReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ProductReviewResponse getCapsuleReviews(Long id, PageInfoRequest pageInfoRequest) {
+    public ProductReviewResponse getReviews(Long id, PageInfoRequest pageInfoRequest) {
 
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
@@ -63,7 +62,7 @@ public class CapsuleReviewService {
     }
 
     @Transactional
-    public void updateCapsuleReview(Long id, ReviewRequest reviewRequest) {
+    public void updateReview(Long id, ReviewRequest reviewRequest) {
 
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
