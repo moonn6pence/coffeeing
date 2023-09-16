@@ -4,8 +4,10 @@ import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.*;
+import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,6 +42,12 @@ class FeedServiceTest extends ServiceTest {
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
+
+    @Autowired
+    private FeedMapper feedMapper;
+
+    @Autowired
+    private FeedUtil feedUtil;
 
     @DisplayName("피드 업로드 요청 시, 업로드에 성공한다.")
     @Test
@@ -221,12 +230,17 @@ class FeedServiceTest extends ServiceTest {
         List<Feed> feeds = FeedTestDummy.createFeeds(generalMember);
         feedRepository.saveAll(feeds);
         MyFeedsRequest myFeedsRequest = FeedTestDummy.createMyFeedsRequest(null, null);
+        List<FeedElement> expectFeedElements = feeds.stream()
+                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .collect(Collectors.toList());
 
         //when
         ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
 
         //then
         assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
+                .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -240,11 +254,16 @@ class FeedServiceTest extends ServiceTest {
         MemberFeedsRequest memberFeedsRequest = FeedTestDummy
                 .createMemberFeedsRequest(beforeResearchMember.getId(), null, null);
         feedRepository.saveAll(feeds);
+        List<FeedElement> expectFeedElements = feeds.stream()
+                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .collect(Collectors.toList());
 
         //when
         ProfileFeedsResponse profileFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
 
         //then
         assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
+                .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
     }
 }

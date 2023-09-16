@@ -106,7 +106,7 @@ public class FeedService {
 
         List<FeedElement> feedElements = feeds.getContent().stream()
                 .map(feedProjection -> new FeedElement(feedProjection.getFeedId(),
-                        feedUtil.makeJsonStringToImageElement(feedProjection)))
+                        feedUtil.makeJsonStringToImageElement(feedProjection.getImages())))
                 .collect(Collectors.toList());
 
         return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
