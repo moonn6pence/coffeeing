@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
+import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
+import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -8,6 +10,7 @@ import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewElement;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewResponse;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
+import com.ssafy.coffeeing.modules.product.dto.ReviewRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -71,5 +74,36 @@ public class ProductMapper {
 
         return new ProductReviewResponse(reviews.getNumber(), reviews.getTotalPages(),
                 reviews.getContent().stream().map(ProductMapper::supplyProductReviewElementFrom).toList());
+    }
+
+    public static CreationResponse supplyCreationResponseFrom(CapsuleReview review) {
+
+        return new CreationResponse(review.getId());
+    }
+
+    public static CreationResponse supplyCreationResponseFrom(CoffeeReview review) {
+
+        return new CreationResponse(review.getId());
+    }
+
+    public static CapsuleReview supplyCapsuleReviewOf(Capsule capsule, Member member, ReviewRequest reviewRequest) {
+
+        return CapsuleReview.builder()
+                .capsule(capsule)
+                .member(member)
+                .content(reviewRequest.content())
+                .score(reviewRequest.score())
+                .build();
+    }
+
+
+    public static CoffeeReview supplyCoffeeReviewOf(Coffee coffee, Member member, ReviewRequest reviewRequest) {
+
+        return CoffeeReview.builder()
+                .coffee(coffee)
+                .member(member)
+                .content(reviewRequest.content())
+                .score(reviewRequest.score())
+                .build();
     }
 }

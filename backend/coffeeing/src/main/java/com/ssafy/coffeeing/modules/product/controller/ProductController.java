@@ -98,25 +98,33 @@ public class ProductController {
     }
 
     @PostMapping("/capsule/review/{id}")
-    public BaseResponse<CreationResponse> createCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<CreationResponse> createCapsuleReview(@PathVariable @NumberFormat Long id,
+                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        return BaseResponse.<CreationResponse>builder().build();
+        return BaseResponse.<CreationResponse>builder()
+                .data(capsuleReviewService.createCapsuleReview(id, reviewRequest))
+                .build();
     }
 
     @PostMapping("/coffee/review/{id}")
-    public BaseResponse<CreationResponse> createCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long id,
+                                                             @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        return BaseResponse.<CreationResponse>builder().build();
+        return BaseResponse.<CreationResponse>builder()
+                .data(coffeeReviewService.createCoffeeReview(id, reviewRequest))
+                .build();
     }
 
     @PutMapping("/capsule/review/{id}")
-    public BaseResponse<Void> editCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<Void> editCapsuleReview(@PathVariable @NumberFormat Long id,
+                                                @Valid @RequestBody ReviewRequest reviewRequest) {
 
         return BaseResponse.<Void>builder().build();
     }
 
     @PutMapping("/coffee/review/{id}")
-    public BaseResponse<Void> editCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<Void> editCoffeeReview(@PathVariable @NumberFormat Long id,
+                                               @Valid @RequestBody ReviewRequest reviewRequest) {
 
         return BaseResponse.<Void>builder().build();
     }
