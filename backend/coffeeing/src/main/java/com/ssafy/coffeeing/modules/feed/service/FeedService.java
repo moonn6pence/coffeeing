@@ -1,8 +1,5 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.*;
@@ -10,6 +7,7 @@ import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
@@ -35,19 +33,15 @@ public class FeedService {
     private final FeedLikeRepository feedLikeRepository;
     private final MemberRepository memberRepository;
     private final SecurityContextUtils securityContextUtils;
+    private final FeedUtil feedUtil;
 
     @Transactional
     public UploadFeedResponse uploadFeedByMember(UploadFeedRequest uploadFeedRequest) {
-        ObjectMapper objectMapper = new ObjectMapper();
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
-        try{
-            String imageUrl = objectMapper.writeValueAsString(uploadFeedRequest.images());
-            Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
-            return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
-        }
+        String imageUrl = feedUtil.makeImageElementToJsonString(uploadFeedRequest.images());
+        Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
+        return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
 
     @Transactional
@@ -111,20 +105,11 @@ public class FeedService {
         Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getFeedId() : null;
 
         List<FeedElement> feedElements = feeds.getContent().stream()
-                .map(feedProjection -> new FeedElement(feedProjection.getFeedId(), makeStringToJson(feedProjection)))
+                .map(feedProjection -> new FeedElement(feedProjection.getFeedId(),
+                        feedUtil.makeJsonStringToImageElement(feedProjection)))
                 .collect(Collectors.toList());
 
         return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
-    }
-
-    private List<ImageElement> makeStringToJson(FeedProjection feedProjection) {
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        try {
-            return objectMapper.readValue(feedProjection.getImages(), new TypeReference<>(){});
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
-        }
     }
 
     private ToggleResponse decreaseFeedLikeCount(Feed feed) {
