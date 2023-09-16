@@ -223,12 +223,10 @@ class FeedServiceTest extends ServiceTest {
         MyFeedsRequest myFeedsRequest = FeedTestDummy.createMyFeedsRequest(null, null);
 
         //when
-        ProfileFeedsResponse myFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
+        ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
 
         //then
-        assertAll(
-                () -> assertThat(myFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
-        );
+        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -247,8 +245,6 @@ class FeedServiceTest extends ServiceTest {
         ProfileFeedsResponse profileFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
 
         //then
-        assertAll(
-                () -> assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10)
-        );
+        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
     }
 }
