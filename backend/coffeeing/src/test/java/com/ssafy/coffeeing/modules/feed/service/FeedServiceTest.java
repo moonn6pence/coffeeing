@@ -262,4 +262,33 @@ class FeedServiceTest extends ServiceTest {
         assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
                 .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
     }
+
+    @DisplayName("피드 상세보기 조회 시, 피드 ID가 존재한다면 조회에 성공한다.")
+    @Test
+    void Given_FeedId_When_Request_FeedDetail_Then_Success() {
+        //given
+        Feed feed = FeedTestDummy.createFeed(generalMember);
+
+        //when
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+
+        //then
+    }
+
+    @DisplayName("회원이 좋아요를 눌렀던 피드 상세보기 조회 시, 피드 ID가 존재한다면 조회에 성공한다.")
+    @Test
+    void Given_FeedIdWithFeedLikedMember_When_Request_FeedDetail_Then_Success() {
+        //given
+        Feed feed = FeedTestDummy.createFeed(generalMember);
+        FeedTestDummy.createFeedLike(feed, beforeResearchMember);
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(beforeResearchMember);
+
+        //when
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+
+        //then
+
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
+    }
 }

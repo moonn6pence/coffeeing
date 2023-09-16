@@ -60,4 +60,10 @@ public class FeedController {
                 .data(feedService.getFeedsByMemberId(memberFeedsRequest))
                 .build();
     }
+
+    @GetMapping("/{feedId}")
+    public BaseResponse<FeedDetailResponse> getFeedDetailById(@Valid @NumberFormat Long feedId) {
+        return BaseResponse.<FeedDetailResponse>builder()
+                .build();
+    }
 }
