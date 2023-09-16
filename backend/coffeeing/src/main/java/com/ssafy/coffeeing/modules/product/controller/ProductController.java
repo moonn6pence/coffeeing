@@ -134,12 +134,14 @@ public class ProductController {
     @DeleteMapping("/capsule/review/{id}")
     public BaseResponse<Void> deleteCapsuleReview(@PathVariable @NumberFormat Long id) {
 
+        capsuleReviewService.deleteReview(id);
         return BaseResponse.<Void>builder().build();
     }
 
     @DeleteMapping("/coffee/review/{id}")
     public BaseResponse<Void> deleteCoffeeReview(@PathVariable @NumberFormat Long id) {
 
+        coffeeReviewService.deleteReview(id);
         return BaseResponse.<Void>builder().build();
     }
 

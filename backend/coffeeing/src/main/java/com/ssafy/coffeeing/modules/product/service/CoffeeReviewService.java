@@ -76,4 +76,18 @@ public class CoffeeReviewService {
 
         review.update(reviewRequest.content(), reviewRequest.score());
     }
+
+    public void deleteReview(Long id) {
+
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        CoffeeReview review = coffeeReviewRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        if (!review.getMember().equals(member)) {
+            throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
+        }
+
+        coffeeReviewRepository.delete(review);
+    }
 }

@@ -75,4 +75,18 @@ public class CapsuleReviewService {
 
         review.update(reviewRequest.content(), reviewRequest.score());
     }
+
+    public void deleteReview(Long id) {
+
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        CapsuleReview review = capsuleReviewRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        if (!review.getMember().equals(member)) {
+            throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
+        }
+
+        capsuleReviewRepository.delete(review);
+    }
 }
