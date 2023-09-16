@@ -2,9 +2,11 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
@@ -60,5 +62,19 @@ public class CoffeeReviewService {
         return ProductMapper.supplyCoffeeReviewResponseFrom(coffeeReviews);
 
 
+    }
+
+    @Transactional
+    public void updateCoffeeReview(Long id, ReviewRequest reviewRequest) {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        CoffeeReview review = coffeeReviewRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        if (!review.getMember().equals(member)) {
+            throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
+        }
+
+        review.update(reviewRequest.content(), reviewRequest.score());
     }
 }

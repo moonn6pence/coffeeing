@@ -46,8 +46,4 @@ public class Capsule extends BaseEntity {
 
     @Column
     private Integer totalReviewer;
-
-    @OneToMany(mappedBy = "capsule", fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<CapsuleReview> capsuleReviews = new ArrayList<>();
 }

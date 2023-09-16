@@ -2,6 +2,8 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
@@ -58,5 +60,20 @@ public class CapsuleReviewService {
                 .findOthersCapsuleReviews(capsule, member, pageInfoRequest.getPageableWithSize(REVIEW_PAGE_SIZE));
 
         return ProductMapper.supplyCapsuleReviewResponseFrom(capsuleReviews);
+    }
+
+    @Transactional
+    public void updateCapsuleReview(Long id, ReviewRequest reviewRequest) {
+
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+
+        CapsuleReview review = capsuleReviewRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        if (!review.getMember().equals(member)) {
+            throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
+        }
+
+        review.update(reviewRequest.content(), reviewRequest.score());
     }
 }
