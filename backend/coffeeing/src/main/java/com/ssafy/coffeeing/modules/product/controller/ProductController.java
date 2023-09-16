@@ -53,21 +53,21 @@ public class ProductController {
                 .build();
     }
 
-    @PostMapping("/capsule/bookmark/{id}")
+    @PostMapping("/capsule/{id}/bookmark")
     public BaseResponse<ToggleResponse> toggleCapsuleBookmark(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(capsuleService.toggleBookmark(id))
                 .build();
     }
 
-    @PostMapping("/coffee/bookmark/{id}")
+    @PostMapping("/coffee/{id}/bookmark")
     public BaseResponse<ToggleResponse> toggleCoffeeBookmark(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(coffeeService.toggleBookmark(id))
                 .build();
     }
 
-    @GetMapping("/capsule/review/{id}")
+    @GetMapping("/capsule/{id}/review")
     public BaseResponse<ProductReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id,
                                                                  @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
@@ -75,7 +75,7 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping("/coffee/review/{id}")
+    @GetMapping("/coffee/{id}/review")
     public BaseResponse<ProductReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long id,
                                                                 @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
@@ -83,21 +83,21 @@ public class ProductController {
                 .build();
     }
 
-    @GetMapping("/capsule/similar/{id}")
+    @GetMapping("/capsule/{id}/similar")
     public BaseResponse<SimilarProductResponse> getSimilarCapsules(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(capsuleService.getSimilarCapsules(id))
                 .build();
     }
 
-    @GetMapping("/coffee/similar/{id}")
+    @GetMapping("/coffee/{id}/similar")
     public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(coffeeService.getSimilarCoffees(id))
                 .build();
     }
 
-    @PostMapping("/capsule/review/{id}")
+    @PostMapping("/capsule/{id}/review")
     public BaseResponse<CreationResponse> createCapsuleReview(@PathVariable @NumberFormat Long id,
                                                               @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -106,7 +106,7 @@ public class ProductController {
                 .build();
     }
 
-    @PostMapping("/coffee/review/{id}")
+    @PostMapping("/coffee/{id}/review")
     public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long id,
                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -119,6 +119,7 @@ public class ProductController {
     public BaseResponse<Void> editCapsuleReview(@PathVariable @NumberFormat Long id,
                                                 @Valid @RequestBody ReviewRequest reviewRequest) {
 
+        capsuleReviewService.updateCapsuleReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 
@@ -126,6 +127,7 @@ public class ProductController {
     public BaseResponse<Void> editCoffeeReview(@PathVariable @NumberFormat Long id,
                                                @Valid @RequestBody ReviewRequest reviewRequest) {
 
+        coffeeReviewService.updateCoffeeReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 
