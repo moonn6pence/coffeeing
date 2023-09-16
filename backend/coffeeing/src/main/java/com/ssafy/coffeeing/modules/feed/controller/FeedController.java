@@ -50,12 +50,14 @@ public class FeedController {
     @GetMapping("/my-list")
     public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid MyFeedsRequest myFeedRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
+                .data(feedService.getMyFeeds(myFeedRequest))
                 .build();
     }
 
     @GetMapping("/{memberId}/list")
-    public BaseResponse<MemberFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
-        return BaseResponse.<MemberFeedsResponse>builder()
+    public BaseResponse<ProfileFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
+        return BaseResponse.<ProfileFeedsResponse>builder()
+                .data(feedService.getFeedsByMemberId(memberFeedsRequest))
                 .build();
     }
 }
