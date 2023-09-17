@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.feed.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.FeedProjection;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +34,25 @@ public class FeedDynamicRepositoryImpl implements FeedDynamicRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        Boolean hasNext = pageable.isPaged() && feedProjections.size() > pageable.getPageSize();
+        boolean hasNext = pageable.isPaged() && feedProjections.size() > pageable.getPageSize();
 
         return new SliceImpl<>(hasNext ? feedProjections.subList(0, pageable.getPageSize()) : feedProjections, pageable,
                 hasNext);
     }
 
     @Override
-    public Slice<FeedProjection> findOtherFeedsByMemberAndPage(Member owner, Member viewer, Long cursor, Pageable pageable) {
-        return null;
+    public Slice<Feed> findFeedsByFeedPage(Long cursor, Pageable pageable) {
+        if(cursor == null) cursor = 0L;
+
+        List<Feed> feeds = jpaQueryFactory.selectFrom(feed)
+                .join(feed.member)
+                .offset(cursor)
+                .limit(pageable.getPageSize() + 1)
+                .orderBy(feed.createdAt.desc())
+                .fetch();
+
+        boolean hasNext = pageable.isPaged() && feeds.size() > pageable.getPageSize();
+
+        return new SliceImpl<>(hasNext ? feeds.subList(0, pageable.getPageSize()) : feeds, pageable, hasNext);
     }
 }

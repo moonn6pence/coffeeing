@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
+import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
@@ -21,6 +22,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -112,6 +114,24 @@ public class FeedService {
         }
         Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, viewer);
         return getFeedDetailResponse(viewer, feed, feedLike, images);
+    }
+
+    @Transactional(readOnly = true)
+    public FeedPageResponse getFeedsByFeedPage(FeedsRequest feedsRequest) {
+        Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
+        List<FeedLike> feedLikes = new ArrayList<>();
+        Long cursor = feedsRequest.cursor();
+        Integer size = feedsRequest.size();
+
+        Slice<Feed> feeds = feedRepository.findFeedsByFeedPage(cursor, PageRequest.of(0, size));
+        if (!feeds.getContent().isEmpty()) {
+            feedLikes = feedLikeRepository.findFeedLikesByFeedsAndMember(feeds.getContent(), viewer);
+        }
+        Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getId() : null;
+
+        FeedPage feedPage = new FeedPage(feeds.getContent(), feedLikes, viewer, feedUtil);
+
+        return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
 
     private static FeedDetailResponse getFeedDetailResponse(

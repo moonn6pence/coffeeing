@@ -67,4 +67,11 @@ public class FeedController {
                 .data(feedService.getFeedDetailById(feedId))
                 .build();
     }
+
+    @GetMapping
+    public BaseResponse<FeedPageResponse> getFeedsByFeedPage(@Valid FeedsRequest feedsRequest) {
+        return BaseResponse.<FeedPageResponse>builder()
+                .data(feedService.getFeedsByFeedPage(feedsRequest))
+                .build();
+    }
 }

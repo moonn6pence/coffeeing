@@ -31,4 +31,8 @@ public class FeedMapper {
         return new FeedDetailResponse(feed.getId(), images, feed.getContent(), feed.getMember().getId(),
                 feed.getLikeCount(), feed.getMember().getNickname(), feed.getMember().getProfileImage(), isLike, isMine);
     }
+
+    public static FeedPageResponse supplyFeedPageEntityOf(List<FeedPageElement> images, Boolean hasNext, Long nextCursor) {
+        return new FeedPageResponse(images, hasNext, nextCursor);
+    }
 }
