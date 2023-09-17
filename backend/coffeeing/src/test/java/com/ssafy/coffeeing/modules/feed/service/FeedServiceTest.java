@@ -225,13 +225,13 @@ class FeedServiceTest extends ServiceTest {
                 .willReturn(generalMember);
         List<Feed> feeds = FeedTestDummy.createFeeds(generalMember);
         feedRepository.saveAll(feeds);
-        MyFeedsRequest myFeedsRequest = FeedTestDummy.createMyFeedsRequest(null, null);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
         List<FeedElement> expectFeedElements = feeds.stream()
                 .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
                 .collect(Collectors.toList());
 
         //when
-        ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(myFeedsRequest);
+        ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(feedsRequest);
 
         //then
         assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
@@ -312,6 +312,40 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertEquals(feedDetailResponse.isLike(), true),
                 () -> assertEquals(feedDetailResponse.isMine(), false)
         );
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
+    }
+
+    @DisplayName("토큰값을 통해 피드 페이지를 조회 시, 최대 10개의 피드들을 불러오는데 성공한다.")
+    @Test
+    void GivenToken_When_Request_FeedPage_Then_Success() {
+        //given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+
+        //when
+        FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
+
+        //then
+        assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10);
+
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
+    }
+
+    @DisplayName("토큰 값이 존재하지 않을때 피드 페이지 조회 시, 최대 10개의 피드들을 불러오는데 성공한다.")
+    @Test
+    void GivenNotToken_When_Request_FeedPage_Then_Success() {
+        //given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+
+        //when
+        FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
+
+        //then
+        assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10);
+
         //verify
         verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
     }
