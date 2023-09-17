@@ -41,6 +41,7 @@ export const DetailPage = () => {
   return (
     <div>
       <BeanDetailBody {...beanDetail} />
+      <p className='text-2xl font-bold'>리뷰 남기기</p>
       <ReviewForm />
     </div>
   );
