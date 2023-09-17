@@ -91,10 +91,10 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public ProfileFeedsResponse getMyFeeds(MyFeedsRequest myFeedsRequest) {
+    public ProfileFeedsResponse getMyFeeds(FeedsRequest feedsRequest) {
         Member owner = securityContextUtils.getCurrnetAuthenticatedMember();
-        Long cursor = myFeedsRequest.cursor();
-        Integer size = myFeedsRequest.size();
+        Long cursor = feedsRequest.cursor();
+        Integer size = feedsRequest.size();
 
         return getProfileFeeds(owner, cursor, size);
     }

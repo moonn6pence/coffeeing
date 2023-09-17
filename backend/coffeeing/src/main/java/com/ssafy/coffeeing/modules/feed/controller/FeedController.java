@@ -48,9 +48,9 @@ public class FeedController {
     }
 
     @GetMapping("/my-list")
-    public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid MyFeedsRequest myFeedRequest) {
+    public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid FeedsRequest feedsRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
-                .data(feedService.getMyFeeds(myFeedRequest))
+                .data(feedService.getMyFeeds(feedsRequest))
                 .build();
     }
 
@@ -64,6 +64,7 @@ public class FeedController {
     @GetMapping("/{feedId}")
     public BaseResponse<FeedDetailResponse> getFeedDetailById(@Valid @NumberFormat Long feedId) {
         return BaseResponse.<FeedDetailResponse>builder()
+                .data(feedService.getFeedDetailById(feedId))
                 .build();
     }
 }

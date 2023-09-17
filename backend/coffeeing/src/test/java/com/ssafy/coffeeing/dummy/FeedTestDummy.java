@@ -20,8 +20,8 @@ public class FeedTestDummy {
         return List.of(new ImageElement("https://image1.webp"), new ImageElement("https://image2.webp"));
     }
 
-    public static MyFeedsRequest createMyFeedsRequest(Long cursor, Integer size) {
-        return new MyFeedsRequest(cursor, size);
+    public static FeedsRequest createFeedsRequest(Long cursor, Integer size) {
+        return new FeedsRequest(cursor, size);
     }
 
     public static MemberFeedsRequest createMemberFeedsRequest(Long memberId, Long cursor, Integer size) {
