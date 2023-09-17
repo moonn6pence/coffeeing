@@ -1,5 +1,6 @@
 import React from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
+import { ReviewForm } from 'components/Detail/ReviewForm';
 
 export const DetailPage = () => {
   // 더미 데이터, 나중에 받아온 데이터로 연결할 예정
@@ -40,6 +41,7 @@ export const DetailPage = () => {
   return (
     <div>
       <BeanDetailBody {...beanDetail} />
+      <ReviewForm />
     </div>
   );
 };
