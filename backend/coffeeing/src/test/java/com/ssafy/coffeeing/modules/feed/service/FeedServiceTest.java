@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
+import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
@@ -17,6 +18,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -322,12 +325,25 @@ class FeedServiceTest extends ServiceTest {
         //given
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        List<FeedLike> feedLikes = new ArrayList<>();
+        feeds.forEach(feed -> {
+            feedLikes.add(FeedLike.builder().feed(feed).member(generalMember).build());
+        });
+        feedRepository.saveAll(feeds);
+        feedLikeRepository.saveAll(feedLikes);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
 
         //when
         FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
 
         //then
-        assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertAll(
+                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+        );
 
         //verify
         verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
@@ -338,13 +354,22 @@ class FeedServiceTest extends ServiceTest {
     void GivenNotToken_When_Request_FeedPage_Then_Success() {
         //given
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        List<FeedLike> feedLikes = new ArrayList<>();
+        feedRepository.saveAll(feeds);
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getCreatedAt).reversed())
+                .collect(Collectors.toList());
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
 
         //when
         FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
 
         //then
-        assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertAll(
+                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+        );
 
         //verify
         verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
