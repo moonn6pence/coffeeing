@@ -268,11 +268,23 @@ class FeedServiceTest extends ServiceTest {
     void Given_FeedId_When_Request_FeedDetail_Then_Success() {
         //given
         Feed feed = FeedTestDummy.createFeed(generalMember);
+        feedRepository.save(feed);
 
         //when
         FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
 
         //then
+        assertAll(
+                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
+                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
+                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
+                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
+                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
+                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertEquals(feedDetailResponse.isLike(), false),
+                () -> assertEquals(feedDetailResponse.isMine(), false)
+        );
     }
 
     @DisplayName("회원이 좋아요를 눌렀던 피드 상세보기 조회 시, 피드 ID가 존재한다면 조회에 성공한다.")
@@ -280,14 +292,26 @@ class FeedServiceTest extends ServiceTest {
     void Given_FeedIdWithFeedLikedMember_When_Request_FeedDetail_Then_Success() {
         //given
         Feed feed = FeedTestDummy.createFeed(generalMember);
-        FeedTestDummy.createFeedLike(feed, beforeResearchMember);
+        FeedLike feedLike = FeedTestDummy.createFeedLike(feed, beforeResearchMember);
+        feedRepository.save(feed);
+        feedLikeRepository.save(feedLike);
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(beforeResearchMember);
 
         //when
         FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
 
         //then
-
+        assertAll(
+                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
+                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
+                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
+                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
+                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
+                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertEquals(feedDetailResponse.isLike(), true),
+                () -> assertEquals(feedDetailResponse.isMine(), false)
+        );
         //verify
         verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
     }
