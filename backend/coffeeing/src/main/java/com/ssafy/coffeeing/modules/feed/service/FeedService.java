@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -96,6 +97,38 @@ public class FeedService {
         Integer size = myFeedsRequest.size();
 
         return getProfileFeeds(owner, cursor, size);
+    }
+
+    @Transactional(readOnly = true)
+    public FeedDetailResponse getFeedDetailById(Long feedId) {
+        Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
+        Feed feed = feedRepository.findFeedDetail(feedId)
+                .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+
+        List<ImageElement> images = feedUtil.makeJsonStringToImageElement(feed.getImageUrl());
+
+        if (Objects.isNull(viewer)) {
+            return getFeedDetailResponse(null, feed, Optional.empty(), images);
+        }
+        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, viewer);
+        return getFeedDetailResponse(viewer, feed, feedLike, images);
+    }
+
+    private static FeedDetailResponse getFeedDetailResponse(
+            Member viewer, Feed feed,
+            Optional<FeedLike> feedLike,
+            List<ImageElement> images) {
+        if (viewer == null) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+        } else if (feedLike.isPresent() && Objects.equals(feed.getMember().getId(), viewer.getId())) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, true);
+        } else if (feedLike.isPresent()) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, false);
+        } else if (Objects.equals(feed.getMember().getId(), viewer.getId())) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, true);
+        } else {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+        }
     }
 
     private ProfileFeedsResponse getProfileFeeds(Member owner, Long cursor, Integer size) {
