@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,16 +24,12 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
 
     @Override
     public Page<BookmarkedElement> findBookmarkedCoffeeElements(Member member, Pageable pageable) {
-        List<Tuple> queryResult = jpaQueryFactory
+        List<Coffee> queryResult = jpaQueryFactory
                 .select(
-                        coffee.id,
-                        coffee.coffeeName,
-                        coffee.region,
-                        coffee.imageUrl,
-                        coffeeBookmark.id
+                        coffeeBookmark.coffee
                 )
                 .from(coffeeBookmark)
-                .innerJoin(coffeeBookmark.coffee).fetchJoin()
+                .innerJoin(coffeeBookmark.coffee)
                 .where(
                         coffeeBookmark.member.eq(member)
                 )
@@ -44,11 +41,10 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
         List<BookmarkedElement> bookmarks = queryResult
                 .stream()
                 .map((item) -> ProductMapper.supplyBookmarkedCoffeeElementOf(
-                                item.get(coffee.id),
-                                item.get(coffee.coffeeName),
-                                item.get(coffee.region),
-                                item.get(coffee.imageUrl),
-                                item.get(coffeeBookmark.id)
+                                item.getId(),
+                                item.getCoffeeName(),
+                                item.getRegion(),
+                                item.getImageUrl()
                         )
                 )
                 .toList();

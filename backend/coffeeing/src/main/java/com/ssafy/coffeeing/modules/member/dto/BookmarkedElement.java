@@ -4,7 +4,6 @@ public record BookmarkedElement(
     Long elementId,
     String elementName,
     String elementRegionOrBrand,
-    String elementImageUrl,
-    Long elementBookmarkId
+    String elementImageUrl
 ) {
 }

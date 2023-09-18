@@ -35,6 +35,7 @@ public class ServiceTest {
     protected Member beforeResearchMember;
 
     protected static final Integer REVIEW_PAGE_SIZE = 6;
+    protected static final Integer BOOKMARK_PAGE_SIZE = 8;
 
     @BeforeEach
     void setUp() {

@@ -113,10 +113,9 @@ public class ProductMapper {
             Long coffeeId,
             String coffeeName,
             String coffeeRegion,
-            String coffeeImageUrl,
-            Long coffeeBookmarkId
+            String coffeeImageUrl
     ) {
-        return new BookmarkedElement(coffeeId, coffeeName, coffeeRegion, coffeeImageUrl, coffeeBookmarkId);
+        return new BookmarkedElement(coffeeId, coffeeName, coffeeRegion, coffeeImageUrl);
     }
 
     public static BookmarkedResponse supplyBookmarkedCoffeeResponseFrom(Page<BookmarkedElement> bookmarkedElements) {
