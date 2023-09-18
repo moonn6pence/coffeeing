@@ -229,6 +229,8 @@ class FeedServiceTest extends ServiceTest {
         List<Feed> feeds = FeedTestDummy.createFeeds(generalMember);
         feedRepository.saveAll(feeds);
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
         List<FeedElement> expectFeedElements = feeds.stream()
                 .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
                 .collect(Collectors.toList());
@@ -253,6 +255,8 @@ class FeedServiceTest extends ServiceTest {
         MemberFeedsRequest memberFeedsRequest = FeedTestDummy
                 .createMemberFeedsRequest(beforeResearchMember.getId(), null, null);
         feedRepository.saveAll(feeds);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
         List<FeedElement> expectFeedElements = feeds.stream()
                 .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
                 .collect(Collectors.toList());
@@ -327,12 +331,10 @@ class FeedServiceTest extends ServiceTest {
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
         List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
         List<FeedLike> feedLikes = new ArrayList<>();
-        feeds.forEach(feed -> {
-            feedLikes.add(FeedLike.builder().feed(feed).member(generalMember).build());
-        });
+        feeds.forEach(feed -> feedLikes.add(FeedLike.builder().feed(feed).member(generalMember).build()));
         feedRepository.saveAll(feeds);
         feedLikeRepository.saveAll(feedLikes);
-        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getCreatedAt).reversed())
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
         FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
 
@@ -358,7 +360,7 @@ class FeedServiceTest extends ServiceTest {
         List<FeedLike> feedLikes = new ArrayList<>();
         feedRepository.saveAll(feeds);
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
-        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getCreatedAt).reversed())
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
         FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
 

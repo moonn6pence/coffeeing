@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.modules.feed.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.FeedProjection;
@@ -23,15 +24,13 @@ public class FeedDynamicRepositoryImpl implements FeedDynamicRepository {
 
     @Override
     public Slice<FeedProjection> findFeedsByMemberAndPage(Member owner, Long cursor, Pageable pageable) {
-        if(cursor == null) cursor = 0L;
-
         List<FeedProjection> feedProjections = jpaQueryFactory.select(
                         Projections.fields(FeedProjection.class, feed.id.as("feedId"), feed.imageUrl.as("images")))
                 .from(feed)
                 .join(feed.member)
-                .where(feed.member.eq(owner))
-                .offset(cursor)
+                .where(feed.member.eq(owner), cursorId(cursor))
                 .limit(pageable.getPageSize() + 1)
+                .orderBy(feed.id.desc())
                 .fetch();
 
         boolean hasNext = pageable.isPaged() && feedProjections.size() > pageable.getPageSize();
@@ -42,17 +41,19 @@ public class FeedDynamicRepositoryImpl implements FeedDynamicRepository {
 
     @Override
     public Slice<Feed> findFeedsByFeedPage(Long cursor, Pageable pageable) {
-        if(cursor == null) cursor = 0L;
-
         List<Feed> feeds = jpaQueryFactory.selectFrom(feed)
                 .join(feed.member)
-                .offset(cursor)
+                .where(cursorId(cursor))
                 .limit(pageable.getPageSize() + 1)
-                .orderBy(feed.createdAt.desc())
+                .orderBy(feed.id.desc())
                 .fetch();
 
         boolean hasNext = pageable.isPaged() && feeds.size() > pageable.getPageSize();
 
         return new SliceImpl<>(hasNext ? feeds.subList(0, pageable.getPageSize()) : feeds, pageable, hasNext);
+    }
+
+    private BooleanExpression cursorId(Long cursorId){
+        return cursorId == null ? null : feed.id.gt(cursorId);
     }
 }
