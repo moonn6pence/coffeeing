@@ -17,10 +17,7 @@ import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
-import com.ssafy.coffeeing.modules.product.repository.BookmarkQueryRepository;
-import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
-import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
-import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
+import com.ssafy.coffeeing.modules.product.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +38,7 @@ public class CapsuleService {
 
     private final MemberRepository memberRepository;
 
-    private final BookmarkQueryRepository bookmarkQueryRepository;
+    private final CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
 
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
 
@@ -103,7 +100,7 @@ public class CapsuleService {
     public BookmarkedResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        Page<BookmarkedElement> bookmarkedCapsuleElements = bookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
+        Page<BookmarkedElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
         return ProductMapper.supplyBookmarkedCoffeeResponseFrom(bookmarkedCapsuleElements);
     }
 }
