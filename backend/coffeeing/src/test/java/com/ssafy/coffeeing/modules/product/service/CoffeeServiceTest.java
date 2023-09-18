@@ -48,7 +48,7 @@ class CoffeeServiceTest extends ServiceTest {
     }
 
     @Test
-    @DisplayName("원두 아이디를 통해 캡슐 상세 정보를 조회한다.")
+    @DisplayName("원두 아이디를 통해 원두 상세 정보를 조회한다.")
     void Given_ValidCoffeeId_When_GetDetails_Then_Success() {
 
         // given
@@ -60,6 +60,21 @@ class CoffeeServiceTest extends ServiceTest {
 
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
         CoffeeResponse expected = ProductMapper.supplyCoffeeResponseOf(coffee, true, null);
+
+        // when
+        CoffeeResponse actual = coffeeService.getDetail(coffee.getId());
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("미인증된 사용자가 원두 아이디를 통해 캡슐 상세 정보를 조회한다.")
+    void Given_ValidCoffeeIdWithUnauthenticatedMember_When_GetDetails_Then_Success() {
+
+        // given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(null);
+        CoffeeResponse expected = ProductMapper.supplyCoffeeResponseOf(coffee, false, null);
 
         // when
         CoffeeResponse actual = coffeeService.getDetail(coffee.getId());
@@ -115,5 +130,18 @@ class CoffeeServiceTest extends ServiceTest {
         // then
         assertFalse(actual.result());
         assertNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee,generalMember));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 캡슐 아이디로 북마크 토글 요청 시에 예외를 던진다.")
+    void Given_InvalidCapsuleId_When_ToggleBookmark_Then_ThrowException() {
+
+        // given
+        Long invalidId = coffee.getId();
+        coffeeRepository.delete(coffee);
+
+        // when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
+                assertThrows(BusinessException.class, () -> coffeeService.toggleBookmark(invalidId)).getInfo());
     }
 }
