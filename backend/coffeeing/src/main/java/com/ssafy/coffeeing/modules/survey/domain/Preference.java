@@ -1,6 +1,7 @@
-package com.ssafy.coffeeing.modules.member.domain;
+package com.ssafy.coffeeing.modules.survey.domain;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
+import com.ssafy.coffeeing.modules.member.domain.MachineType;
 import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
@@ -36,4 +37,7 @@ public class Preference extends BaseEntity {
 
 	@Embedded
 	private CoffeeCriteria coffeeCriteria;
+
+	@Column
+	private String flavorNote;
 }
