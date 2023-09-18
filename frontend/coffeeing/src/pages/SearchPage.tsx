@@ -5,7 +5,9 @@ export const SearchPage = () =>{
   
   return(
     <div>
-      <SearchBar/>
+      <div className="mt-24 flex flex-col items-center justify-center">
+        <SearchBar/>
+      </div>
     </div>
   )
 }
