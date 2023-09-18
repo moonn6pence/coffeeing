@@ -45,7 +45,7 @@ export const ReviewForm = () => {
           maxLength={100}
           onChange={onChangeDescription}
           placeholder={'내용을 입력해주세요'}
-          className="bg-transparent text-base mt-3 h-10 w-full"
+          className="bg-transparent text-base mt-3 h-10 w-full focus:outline-none"
         />
       </label>
       <button className="bg-[#1F170B] text-white rounded-3xl py-3 px-22px w-fit self-end">
