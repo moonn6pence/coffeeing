@@ -4,12 +4,15 @@ import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import org.springframework.context.annotation.Profile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Profile("test")
 public class CapsuleTestDummy {
 
     private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
-                                  String aroma, Integer machineType, String imageUrl, String description,
-                                  Double totalScore, Integer totalReviewer) {
+                                             String aroma, Integer machineType, String imageUrl, String description,
+                                             Double totalScore, Integer totalReviewer) {
 
         return Capsule.builder()
                 .brandKr(brandKr)
@@ -40,6 +43,7 @@ public class CapsuleTestDummy {
                 .totalReviewer(10)
                 .build();
     }
+
     public static Capsule createMockCapsuleNapoli() {
 
         return Capsule.builder()
@@ -55,4 +59,25 @@ public class CapsuleTestDummy {
                 .totalReviewer(20)
                 .build();
     }
+
+    public static List<Capsule> create25GenericCapsules() {
+        List<Capsule> capsules = new ArrayList<>();
+        for (int i = 0; i < 25; i++) {
+            capsules.add(createMockCapsule(
+                    "Generic 한국 브랜드" + i,
+                    "Generic English brand " + i,
+                    "Generic Capsule Name " + i,
+                    new CoffeeCriteria(0.5, 0.5, 0.5),
+                    "Generic aroma " + i,
+                    1,
+                    "Generic Url " + i,
+                    "generic description " + i,
+                    50.0,
+                    12
+            ));
+        }
+        return capsules;
+    }
+
+
 }
