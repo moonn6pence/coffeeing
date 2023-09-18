@@ -9,3 +9,11 @@ export type SurveyType = {
   // 원두 or 캡슐 type
   type:number; 
 }
+
+export type SearchType = {
+  searchText:string,
+  roasting:number,
+  acidity:number,
+  body:number,
+  aroma:number[],
+}
