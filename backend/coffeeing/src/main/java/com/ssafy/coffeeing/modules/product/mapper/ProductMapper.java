@@ -53,6 +53,8 @@ public class ProductMapper {
                 capsuleReview.getId(),
                 capsuleReview.getScore(),
                 capsuleReview.getContent(),
+                capsuleReview.getMember().getId(),
+                capsuleReview.getMember().getProfileImage(),
                 capsuleReview.getMember().getNickname()
         );
     }
@@ -62,6 +64,8 @@ public class ProductMapper {
                 coffeeReview.getId(),
                 coffeeReview.getScore(),
                 coffeeReview.getContent(),
+                coffeeReview.getMember().getId(),
+                coffeeReview.getMember().getProfileImage(),
                 coffeeReview.getMember().getNickname()
         );
     }
