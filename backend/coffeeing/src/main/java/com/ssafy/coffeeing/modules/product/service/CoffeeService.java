@@ -5,16 +5,23 @@ import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +36,12 @@ public class CoffeeService {
     private final CoffeeReviewRepository coffeeReviewRepository;
 
     private final CoffeeBookmarkRepository coffeeBookmarkRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final CoffeeQueryRepository coffeeQueryRepository;
+
+    private static final Integer BOOKMARK_PAGE_SIZE = 8;
 
     @Transactional(readOnly = true)
     public CoffeeResponse getDetail(Long id) {
@@ -83,5 +96,13 @@ public class CoffeeService {
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCoffees(Long id) {
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public BookmarkedResponse getBookmarkedCoffees(Long id, PageInfoRequest pageInfoRequest) {
+        Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
+        Member member = memberRepository.getReferenceById(id);
+        Page<BookmarkedElement> bookmarkedCoffeeElements = coffeeQueryRepository.findBookmarkedCoffeeElements(member, pageable);
+        return ProductMapper.supplyBookmarkedCoffeeResponseFrom(bookmarkedCoffeeElements);
     }
 }

@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
@@ -106,4 +108,23 @@ public class ProductMapper {
                 .score(reviewRequest.score())
                 .build();
     }
+
+    public static BookmarkedElement supplyBookmarkedCoffeeElementOf(
+            Long coffeeId,
+            String coffeeName,
+            String coffeeRegion,
+            String coffeeImageUrl,
+            Long coffeeBookmarkId
+    ) {
+        return new BookmarkedElement(coffeeId, coffeeName, coffeeRegion, coffeeImageUrl, coffeeBookmarkId);
+    }
+
+    public static BookmarkedResponse supplyBookmarkedCoffeeResponseFrom(Page<BookmarkedElement> bookmarkedElements) {
+        return new BookmarkedResponse(
+                bookmarkedElements.getNumber(),
+                bookmarkedElements.getTotalPages(),
+                bookmarkedElements.getContent()
+        );
+    }
+
 }

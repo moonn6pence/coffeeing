@@ -5,10 +5,12 @@ import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedCapsuleResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
@@ -29,6 +31,8 @@ public class CapsuleService {
     private final CapsuleReviewRepository capsuleReviewRepository;
 
     private final CapsuleBookmarkRepository capsuleBookmarkRepository;
+
+    private static final Integer BOOKMARK_PAGE_SIZE = 8;
 
     @Transactional(readOnly = true)
     public CapsuleResponse getDetail(Long id) {
@@ -81,6 +85,11 @@ public class CapsuleService {
 
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCapsules(Long id) {
+        return null;
+    }
+
+    @Transactional(readOnly = true)
+    public BookmarkedCapsuleResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
         return null;
     }
 }
