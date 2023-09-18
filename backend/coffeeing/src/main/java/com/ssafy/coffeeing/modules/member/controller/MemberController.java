@@ -71,9 +71,9 @@ public class MemberController {
     }
 
     @GetMapping("/capsule/like/{id}")
-    public BaseResponse<BookmarkedCapsuleResponse> getBookmarkedCapsule(@PathVariable @NumberFormat Long id,
+    public BaseResponse<BookmarkedResponse> getBookmarkedCapsule(@PathVariable @NumberFormat Long id,
                                                                         @Valid PageInfoRequest pageInfoRequest) {
-        return BaseResponse.<BookmarkedCapsuleResponse>builder()
+        return BaseResponse.<BookmarkedResponse>builder()
                 .data(capsuleService.getBookmarkedCapsule(id, pageInfoRequest))
                 .build();
     }

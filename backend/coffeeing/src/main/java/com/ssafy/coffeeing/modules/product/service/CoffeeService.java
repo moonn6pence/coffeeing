@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
@@ -16,7 +17,7 @@ import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
-import com.ssafy.coffeeing.modules.product.repository.CoffeeQueryRepository;
+import com.ssafy.coffeeing.modules.product.repository.BookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class CoffeeService {
 
     private final MemberRepository memberRepository;
 
-    private final CoffeeQueryRepository coffeeQueryRepository;
+    private final BookmarkQueryRepository coffeeQueryRepository;
 
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
 
@@ -101,7 +102,7 @@ public class CoffeeService {
     @Transactional(readOnly = true)
     public BookmarkedResponse getBookmarkedCoffees(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
-        Member member = memberRepository.getReferenceById(id);
+        Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<BookmarkedElement> bookmarkedCoffeeElements = coffeeQueryRepository.findBookmarkedCoffeeElements(member, pageable);
         return ProductMapper.supplyBookmarkedCoffeeResponseFrom(bookmarkedCoffeeElements);
     }
