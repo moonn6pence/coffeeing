@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import surveySlice from "./surveySlice";
+import searchSlice from "./searchSlice";
 
 export const store = configureStore({
   reducer:{
     survey:surveySlice,
+    search:searchSlice,
   }
 })
 
