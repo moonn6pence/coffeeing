@@ -33,6 +33,8 @@ public class CoffeeReview extends BaseEntity {
     @Column
     private Double score;
 
-
-
+    public void update(String content, Double score) {
+        this.content = content;
+        this.score = score;
+    }
 }

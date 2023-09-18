@@ -48,8 +48,8 @@ class CapsuleServiceTest extends ServiceTest {
     }
 
     @Test
-    @DisplayName("캡슐 아이디를 통해 캡슐 상세 정보를 조회한다.")
-    void Given_ValidCapsuleId_When_GetDetails_Then_Success() {
+    @DisplayName("인증된 사용자가 캡슐 아이디를 통해 캡슐 상세 정보를 조회한다.")
+    void Given_ValidCapsuleIdWithAuthenticatedMember_When_GetDetails_Then_Success() {
 
         // given
         CapsuleBookmark bookmark = CapsuleBookmark.builder()
@@ -60,6 +60,21 @@ class CapsuleServiceTest extends ServiceTest {
 
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
         CapsuleResponse expected = ProductMapper.supplyCapsuleResponseOf(capsule, true, null);
+
+        // when
+        CapsuleResponse actual = capsuleService.getDetail(capsule.getId());
+
+        // then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("미인증된 사용자가 캡슐 아이디를 통해 캡슐 상세 정보를 조회한다.")
+    void Given_ValidCapsuleIdWithUnauthenticatedMember_When_GetDetails_Then_Success() {
+
+        // given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(null);
+        CapsuleResponse expected = ProductMapper.supplyCapsuleResponseOf(capsule, false, null);
 
         // when
         CapsuleResponse actual = capsuleService.getDetail(capsule.getId());
@@ -115,5 +130,18 @@ class CapsuleServiceTest extends ServiceTest {
         // then
         assertFalse(actual.result());
         assertNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule,generalMember));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 캡슐 아이디로 북마크 토글 요청 시에 예외를 던진다.")
+    void Given_InvalidCapsuleId_When_ToggleBookmark_Then_ThrowException() {
+
+        // given
+        Long invalidId = capsule.getId();
+        capsuleRepository.delete(capsule);
+
+        // when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
+                assertThrows(BusinessException.class, () -> capsuleService.toggleBookmark(invalidId)).getInfo());
     }
 }

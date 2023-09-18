@@ -53,83 +53,95 @@ public class ProductController {
                 .build();
     }
 
-    @PostMapping("/capsule/bookmark/{id}")
+    @PostMapping("/capsule/{id}/bookmark")
     public BaseResponse<ToggleResponse> toggleCapsuleBookmark(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(capsuleService.toggleBookmark(id))
                 .build();
     }
 
-    @PostMapping("/coffee/bookmark/{id}")
+    @PostMapping("/coffee/{id}/bookmark")
     public BaseResponse<ToggleResponse> toggleCoffeeBookmark(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(coffeeService.toggleBookmark(id))
                 .build();
     }
 
-    @GetMapping("/capsule/review/{id}")
+    @GetMapping("/capsule/{id}/review")
     public BaseResponse<ProductReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long id,
                                                                  @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
-                .data(capsuleReviewService.getCapsuleReviews(id, pageInfoRequest))
+                .data(capsuleReviewService.getReviews(id, pageInfoRequest))
                 .build();
     }
 
-    @GetMapping("/coffee/review/{id}")
+    @GetMapping("/coffee/{id}/review")
     public BaseResponse<ProductReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long id,
                                                                 @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
-                .data(coffeeReviewService.getCoffeeReviews(id, pageInfoRequest))
+                .data(coffeeReviewService.getReviews(id, pageInfoRequest))
                 .build();
     }
 
-    @GetMapping("/capsule/similar/{id}")
+    @GetMapping("/capsule/{id}/similar")
     public BaseResponse<SimilarProductResponse> getSimilarCapsules(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(capsuleService.getSimilarCapsules(id))
                 .build();
     }
 
-    @GetMapping("/coffee/similar/{id}")
+    @GetMapping("/coffee/{id}/similar")
     public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long id) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(coffeeService.getSimilarCoffees(id))
                 .build();
     }
 
-    @PostMapping("/capsule/review/{id}")
-    public BaseResponse<CreationResponse> createCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    @PostMapping("/capsule/{id}/review")
+    public BaseResponse<CreationResponse> createCapsuleReview(@PathVariable @NumberFormat Long id,
+                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        return BaseResponse.<CreationResponse>builder().build();
+        return BaseResponse.<CreationResponse>builder()
+                .data(capsuleReviewService.createReview(id, reviewRequest))
+                .build();
     }
 
-    @PostMapping("/coffee/review/{id}")
-    public BaseResponse<CreationResponse> createCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    @PostMapping("/coffee/{id}/review")
+    public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long id,
+                                                             @Valid @RequestBody ReviewRequest reviewRequest) {
 
-        return BaseResponse.<CreationResponse>builder().build();
+        return BaseResponse.<CreationResponse>builder()
+                .data(coffeeReviewService.createReview(id, reviewRequest))
+                .build();
     }
 
     @PutMapping("/capsule/review/{id}")
-    public BaseResponse<Void> editCapsuleReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<Void> editCapsuleReview(@PathVariable @NumberFormat Long id,
+                                                @Valid @RequestBody ReviewRequest reviewRequest) {
 
+        capsuleReviewService.updateReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 
     @PutMapping("/coffee/review/{id}")
-    public BaseResponse<Void> editCoffeeReview(@Valid @RequestBody ReviewRequest reviewRequest) {
+    public BaseResponse<Void> editCoffeeReview(@PathVariable @NumberFormat Long id,
+                                               @Valid @RequestBody ReviewRequest reviewRequest) {
 
+        coffeeReviewService.updateReview(id, reviewRequest);
         return BaseResponse.<Void>builder().build();
     }
 
     @DeleteMapping("/capsule/review/{id}")
     public BaseResponse<Void> deleteCapsuleReview(@PathVariable @NumberFormat Long id) {
 
+        capsuleReviewService.deleteReview(id);
         return BaseResponse.<Void>builder().build();
     }
 
     @DeleteMapping("/coffee/review/{id}")
     public BaseResponse<Void> deleteCoffeeReview(@PathVariable @NumberFormat Long id) {
 
+        coffeeReviewService.deleteReview(id);
         return BaseResponse.<Void>builder().build();
     }
 
