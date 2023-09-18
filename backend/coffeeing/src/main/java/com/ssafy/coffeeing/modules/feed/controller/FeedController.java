@@ -1,8 +1,6 @@
 package com.ssafy.coffeeing.modules.feed.controller;
 
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.service.FeedService;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
@@ -46,6 +44,34 @@ public class FeedController {
     public BaseResponse<ToggleResponse> toggleFeedLike(@PathVariable @NumberFormat Long feedId) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(feedService.toggleFeedLike(feedId))
+                .build();
+    }
+
+    @GetMapping("/my-list")
+    public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid FeedsRequest feedsRequest) {
+        return BaseResponse.<ProfileFeedsResponse>builder()
+                .data(feedService.getMyFeeds(feedsRequest))
+                .build();
+    }
+
+    @GetMapping("/{memberId}/list")
+    public BaseResponse<ProfileFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
+        return BaseResponse.<ProfileFeedsResponse>builder()
+                .data(feedService.getFeedsByMemberId(memberFeedsRequest))
+                .build();
+    }
+
+    @GetMapping("/{feedId}")
+    public BaseResponse<FeedDetailResponse> getFeedDetailById(@Valid @NumberFormat Long feedId) {
+        return BaseResponse.<FeedDetailResponse>builder()
+                .data(feedService.getFeedDetailById(feedId))
+                .build();
+    }
+
+    @GetMapping
+    public BaseResponse<FeedPageResponse> getFeedsByFeedPage(@Valid FeedsRequest feedsRequest) {
+        return BaseResponse.<FeedPageResponse>builder()
+                .data(feedService.getFeedsByFeedPage(feedsRequest))
                 .build();
     }
 }

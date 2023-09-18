@@ -60,7 +60,7 @@ public class FeedDummy {
             feedRepository.saveAll(feeds);
             return feeds;
         } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGES_TO_JSON_STRING_ERROR);
+            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
         }
     }
 }

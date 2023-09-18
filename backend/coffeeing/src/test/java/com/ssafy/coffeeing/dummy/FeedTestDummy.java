@@ -2,12 +2,11 @@ package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
-import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import org.springframework.context.annotation.Profile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Profile("test")
@@ -21,12 +20,20 @@ public class FeedTestDummy {
         return List.of(new ImageElement("https://image1.webp"), new ImageElement("https://image2.webp"));
     }
 
+    public static FeedsRequest createFeedsRequest(Long cursor, Integer size) {
+        return new FeedsRequest(cursor, size);
+    }
+
+    public static MemberFeedsRequest createMemberFeedsRequest(Long memberId, Long cursor, Integer size) {
+        return new MemberFeedsRequest(memberId, cursor, size);
+    }
+
     public static Feed createFeed(Member member) {
         return Feed.builder()
                 .member(member)
                 .likeCount(0L)
                 .content("testFeed")
-                .imageUrl("testFeedImageUrls")
+                .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
                 .build();
     }
 
@@ -35,6 +42,20 @@ public class FeedTestDummy {
                 .feed(feed)
                 .member(member)
                 .build();
+    }
+
+    public static List<Feed> createFeeds(Member member) {
+        List<Feed> feeds = new ArrayList<>();
+
+        for (int i = 0; i < 12; i++) {
+            feeds.add(Feed.builder()
+                    .member(member)
+                    .likeCount(0L)
+                    .content(i + "contents")
+                    .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
+                    .build());
+        }
+        return feeds;
     }
 
     public static UpdateFeedRequest createUpdateFeedRequest() {

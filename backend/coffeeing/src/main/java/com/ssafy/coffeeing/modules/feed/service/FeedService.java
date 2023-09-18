@@ -1,26 +1,32 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,20 +34,17 @@ public class FeedService {
 
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
+    private final MemberRepository memberRepository;
     private final SecurityContextUtils securityContextUtils;
+    private final FeedUtil feedUtil;
 
     @Transactional
     public UploadFeedResponse uploadFeedByMember(UploadFeedRequest uploadFeedRequest) {
-        ObjectMapper objectMapper = new ObjectMapper();
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
 
-        try{
-            String imageUrl = objectMapper.writeValueAsString(uploadFeedRequest.images());
-            Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
-            return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGES_TO_JSON_STRING_ERROR);
-        }
+        String imageUrl = feedUtil.makeImageElementToJsonString(uploadFeedRequest.images());
+        Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
+        return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
 
     @Transactional
@@ -79,6 +82,96 @@ public class FeedService {
             feedLikeRepository.save(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
             return increaseFeedLikeCount(feed);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public ProfileFeedsResponse getFeedsByMemberId(MemberFeedsRequest memberFeedsRequest) {
+        Member owner = memberRepository.findById(memberFeedsRequest.memberId())
+                .orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
+
+        return getProfileFeeds(owner, memberFeedsRequest.cursor(), memberFeedsRequest.size());
+    }
+
+    @Transactional(readOnly = true)
+    public ProfileFeedsResponse getMyFeeds(FeedsRequest feedsRequest) {
+        Member owner = securityContextUtils.getCurrnetAuthenticatedMember();
+        Long cursor = feedsRequest.cursor();
+        Integer size = feedsRequest.size();
+
+        return getProfileFeeds(owner, cursor, size);
+    }
+
+    @Transactional(readOnly = true)
+    public FeedDetailResponse getFeedDetailById(Long feedId) {
+        Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
+        Feed feed = feedRepository.findFeedDetail(feedId)
+                .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+
+        List<ImageElement> images = feedUtil.makeJsonStringToImageElement(feed.getImageUrl());
+
+        if (Objects.isNull(viewer)) {
+            return getFeedDetailResponse(null, feed, Optional.empty(), images);
+        }
+        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, viewer);
+        return getFeedDetailResponse(viewer, feed, feedLike, images);
+    }
+
+    @Transactional(readOnly = true)
+    public FeedPageResponse getFeedsByFeedPage(FeedsRequest feedsRequest) {
+        Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
+        List<FeedLike> feedLikes = new ArrayList<>();
+        Long cursor = feedsRequest.cursor();
+        Integer size = feedsRequest.size();
+
+        Slice<Feed> feeds = feedRepository.findFeedsByFeedPage(cursor, PageRequest.of(0, size));
+        if (!feeds.getContent().isEmpty()) {
+            feedLikes = feedLikeRepository.findFeedLikesByFeedsAndMember(feeds.getContent(), viewer);
+        }
+        Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getId() : null;
+
+        FeedPage feedPage = new FeedPage(feeds.getContent(), feedLikes, viewer, feedUtil);
+
+        return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+    }
+
+    private FeedDetailResponse getFeedDetailResponse(
+            Member viewer, Feed feed,
+            Optional<FeedLike> feedLike,
+            List<ImageElement> images) {
+        Member feedWriter = feed.getMember();
+        if (Objects.isNull(viewer)) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+        } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, true);
+        } else if (viewerLikedFeed(feedLike)) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, false);
+        } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, true);
+        } else {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+        }
+    }
+
+    private boolean viewerLikedFeed(Optional<FeedLike> feedLike) {
+        return feedLike.isPresent();
+    }
+
+    private boolean isFeedWrittenByViewer(Long feedWriterId, Long viewerId) {
+        return Objects.equals(feedWriterId, viewerId);
+    }
+
+    private ProfileFeedsResponse getProfileFeeds(Member owner, Long cursor, Integer size) {
+        Slice<FeedProjection> feeds = feedRepository
+                .findFeedsByMemberAndPage(owner, cursor, PageRequest.of(0, size));
+
+        Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getFeedId() : null;
+
+        List<FeedElement> feedElements = feeds.getContent().stream()
+                .map(feedProjection -> new FeedElement(feedProjection.getFeedId(),
+                        feedUtil.makeJsonStringToImageElement(feedProjection.getImages())))
+                .collect(Collectors.toList());
+
+        return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
     }
 
     private ToggleResponse decreaseFeedLikeCount(Feed feed) {

@@ -3,11 +3,11 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
@@ -18,7 +18,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,6 +44,9 @@ class FeedServiceTest extends ServiceTest {
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
+
+    @Autowired
+    private FeedUtil feedUtil;
 
     @DisplayName("피드 업로드 요청 시, 업로드에 성공한다.")
     @Test
@@ -211,5 +218,162 @@ class FeedServiceTest extends ServiceTest {
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("나의 피드 조회 시, 최대 10개의 피드들을 조회하는데 성공한다")
+    @Test
+    void Given_MyFeedsRequest_When_RequestMyFeeds_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        List<Feed> feeds = FeedTestDummy.createFeeds(generalMember);
+        feedRepository.saveAll(feeds);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
+        List<FeedElement> expectFeedElements = feeds.stream()
+                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .collect(Collectors.toList());
+
+        //when
+        ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(feedsRequest);
+
+        //then
+        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
+                .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("다른 멤버의 피드 조회 시, 최대 10개의 피드들을 조회하는데 성공한다.")
+    @Test
+    void Given_MemberFeedsRequest_When_RequestMemberFeeds_Then_Success() {
+        //given
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        MemberFeedsRequest memberFeedsRequest = FeedTestDummy
+                .createMemberFeedsRequest(beforeResearchMember.getId(), null, null);
+        feedRepository.saveAll(feeds);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
+        List<FeedElement> expectFeedElements = feeds.stream()
+                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .collect(Collectors.toList());
+
+        //when
+        ProfileFeedsResponse profileFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
+
+        //then
+        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
+                .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
+    }
+
+    @DisplayName("피드 상세보기 조회 시, 피드 ID가 존재한다면 조회에 성공한다.")
+    @Test
+    void Given_FeedId_When_Request_FeedDetail_Then_Success() {
+        //given
+        Feed feed = FeedTestDummy.createFeed(generalMember);
+        feedRepository.save(feed);
+
+        //when
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+
+        //then
+        assertAll(
+                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
+                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
+                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
+                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
+                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
+                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertEquals(feedDetailResponse.isLike(), false),
+                () -> assertEquals(feedDetailResponse.isMine(), false)
+        );
+    }
+
+    @DisplayName("회원이 좋아요를 눌렀던 피드 상세보기 조회 시, 피드 ID가 존재한다면 조회에 성공한다.")
+    @Test
+    void Given_FeedIdWithFeedLikedMember_When_Request_FeedDetail_Then_Success() {
+        //given
+        Feed feed = FeedTestDummy.createFeed(generalMember);
+        FeedLike feedLike = FeedTestDummy.createFeedLike(feed, beforeResearchMember);
+        feedRepository.save(feed);
+        feedLikeRepository.save(feedLike);
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(beforeResearchMember);
+
+        //when
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+
+        //then
+        assertAll(
+                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
+                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
+                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
+                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
+                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
+                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertEquals(feedDetailResponse.isLike(), true),
+                () -> assertEquals(feedDetailResponse.isMine(), false)
+        );
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
+    }
+
+    @DisplayName("토큰값을 통해 피드 페이지를 조회 시, 최대 10개의 피드들을 불러오는데 성공한다.")
+    @Test
+    void GivenToken_When_Request_FeedPage_Then_Success() {
+        //given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        List<FeedLike> feedLikes = new ArrayList<>();
+        feeds.forEach(feed -> feedLikes.add(FeedLike.builder().feed(feed).member(generalMember).build()));
+        feedRepository.saveAll(feeds);
+        feedLikeRepository.saveAll(feedLikes);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
+
+        //when
+        FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
+
+        //then
+        assertAll(
+                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
+    }
+
+    @DisplayName("토큰 값이 존재하지 않을때 피드 페이지 조회 시, 최대 10개의 피드들을 불러오는데 성공한다.")
+    @Test
+    void GivenNotToken_When_Request_FeedPage_Then_Success() {
+        //given
+        given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
+        List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
+        List<FeedLike> feedLikes = new ArrayList<>();
+        feedRepository.saveAll(feeds);
+        FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
+        feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
+                .collect(Collectors.toList());
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
+
+        //when
+        FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
+
+        //then
+        assertAll(
+                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
     }
 }
