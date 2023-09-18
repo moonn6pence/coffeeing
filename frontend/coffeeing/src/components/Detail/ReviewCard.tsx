@@ -2,7 +2,7 @@ import React from 'react';
 import star from 'assets/detail/star.svg';
 import profile from 'assets/profile.svg';
 
-type ReviewProps = {
+export type ReviewProps = {
   content: string;
   id: number;
   nickname: string;
