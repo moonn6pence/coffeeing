@@ -50,12 +50,10 @@ class CoffeeReviewServiceTest extends ServiceTest {
     private SecurityContextUtils securityContextUtils;
 
     private Coffee coffee;
-    private Member member;
 
     @BeforeEach
     void setUpCoffeeReviews(){
         coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeKenyaAA());
-        member = memberRepository.save(MemberTestDummy.createMemberSean());
     }
 
     @Test
@@ -64,7 +62,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
@@ -74,7 +72,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         assertAll(
                 () -> assertEquals(actualReview.getCoffee(), coffee),
-                () -> assertEquals(actualReview.getMember(), member)
+                () -> assertEquals(actualReview.getMember(), generalMember)
         );
     }
 
@@ -87,7 +85,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         coffeeRepository.delete(coffee);
         ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
 
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
@@ -154,12 +152,12 @@ class CoffeeReviewServiceTest extends ServiceTest {
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         coffeeReviewService.updateReview(review.getId(), reviewRequest);
@@ -179,7 +177,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
@@ -202,8 +200,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
 
-        Member other = memberRepository.save(MemberTestDummy
-                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
@@ -213,7 +210,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 .build();
         coffeeReviewRepository.save(review);
 
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,
@@ -229,12 +226,12 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         coffeeReviewService.deleteReview(review.getId());
@@ -250,7 +247,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
@@ -271,8 +268,8 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeReviewIdOfOthers_When_DeleteReview_Then_Success() {
 
         // given
-        Member other = memberRepository.save(MemberTestDummy
-                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
+
 
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
@@ -281,7 +278,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,

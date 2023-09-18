@@ -50,12 +50,10 @@ class CapsuleReviewServiceTest extends ServiceTest {
     private SecurityContextUtils securityContextUtils;
 
     private Capsule capsule;
-    private Member member;
 
     @BeforeEach
     void setUpCapsuleReviews(){
         capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleNapoli());
-        member = memberRepository.save(MemberTestDummy.createMemberSean());
     }
 
 
@@ -65,7 +63,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
@@ -75,7 +73,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         assertAll(
                 () -> assertEquals(actualReview.getCapsule(), capsule),
-                () -> assertEquals(actualReview.getMember(), member)
+                () -> assertEquals(actualReview.getMember(), generalMember)
         );
     }
 
@@ -88,7 +86,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         capsuleRepository.delete(capsule);
         ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
 
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
@@ -155,12 +153,12 @@ class CapsuleReviewServiceTest extends ServiceTest {
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         capsuleReviewService.updateReview(review.getId(), reviewRequest);
@@ -180,7 +178,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
@@ -203,8 +201,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
 
-        Member other = memberRepository.save(MemberTestDummy
-                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
@@ -214,7 +211,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
                 .build();
         capsuleReviewRepository.save(review);
 
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,
@@ -230,12 +227,12 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
         capsuleReviewService.deleteReview(review.getId());
@@ -251,7 +248,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
-                .member(member)
+                .member(generalMember)
                 .score(3.5)
                 .content("tasty")
                 .build();
@@ -272,8 +269,8 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleReviewIdOfOthers_When_DeleteReview_Then_Success() {
 
         // given
-        Member other = memberRepository.save(MemberTestDummy
-                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
+
 
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
@@ -282,7 +279,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,

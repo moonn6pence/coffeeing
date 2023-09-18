@@ -70,7 +70,7 @@ public class CoffeeReviewService {
         CoffeeReview review = coffeeReviewRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
 
-        if (!review.getMember().equals(member)) {
+        if (!review.getMember().getId().equals(member.getId())) {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
         }
 
@@ -84,7 +84,7 @@ public class CoffeeReviewService {
         CoffeeReview review = coffeeReviewRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
 
-        if (!review.getMember().equals(member)) {
+        if (!review.getMember().getId().equals(member.getId())) {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
         }
 
