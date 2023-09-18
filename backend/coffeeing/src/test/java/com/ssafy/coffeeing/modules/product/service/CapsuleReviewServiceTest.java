@@ -3,7 +3,9 @@ package com.ssafy.coffeeing.modules.product.service;
 import com.ssafy.coffeeing.dummy.CapsuleReviewTestDummy;
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
@@ -12,6 +14,7 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewResponse;
+import com.ssafy.coffeeing.modules.product.dto.ReviewRequest;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
@@ -47,12 +50,52 @@ class CapsuleReviewServiceTest extends ServiceTest {
     private SecurityContextUtils securityContextUtils;
 
     private Capsule capsule;
-    private List<Member> members;
+    private Member member;
 
     @BeforeEach
     void setUpCapsuleReviews(){
         capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleNapoli());
-        members = memberRepository.saveAll(MemberTestDummy.create25GeneralMembers());
+        member = memberRepository.save(MemberTestDummy.createMemberSean());
+    }
+
+
+    @Test
+    @DisplayName("인증된 사용자가 캡슐 아이디와 리뷰 점수와 코멘트로 리뷰를 작성한다.")
+    void Given_CapsuleIdAndReviewRequest_When_CreateReview_Then_Success() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
+
+        // then
+        CapsuleReview actualReview = capsuleReviewRepository.findById(actual.id()).get();
+
+        assertAll(
+                () -> assertEquals(actualReview.getCapsule(), capsule),
+                () -> assertEquals(actualReview.getMember(), member)
+        );
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 캡슐 아이디를 통해 리뷰를 생성할 시 예외를 던진다.")
+    void Given_InvalidCapsuleId_When_CreateReview_Then_ThrowException() {
+
+        // given
+        Long invalidId = capsule.getId();
+        capsuleRepository.delete(capsule);
+        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
+                assertThrows(BusinessException.class,
+                        () -> capsuleReviewService.createReview(invalidId, reviewRequest)).getInfo()
+        );
+
     }
 
     @Test
@@ -60,6 +103,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleIdAndPageInfoRequest_When_GetCapsuleReviews_Then_Success() {
 
         // given
+        List<Member> members = memberRepository.saveAll(MemberTestDummy.create25GeneralMembers());
         List<CapsuleReview> capsuleReviews =
                 capsuleReviewRepository.saveAll(CapsuleReviewTestDummy.createMockCapsuleReviews(capsule, members));
 
@@ -103,4 +147,147 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
     }
 
+    @Test
+    @DisplayName("인증된 사용자가 자신의 캡슐 리뷰 아이디와 리뷰 점수와 코멘트로 리뷰를 수정한다.")
+    void Given_CapsuleReviewIdAndReviewRequest_When_UpdateReview_Then_Success() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(member)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        capsuleReviewService.updateReview(review.getId(), reviewRequest);
+
+        // then
+        assertAll(
+                () -> assertEquals(review.getScore(), reviewRequest.score()),
+                () -> assertEquals(review.getContent(), reviewRequest.content())
+        );
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 캡슐 리뷰 아이디로 리뷰 수정을 요청할 시 예외를 던진다.")
+    void Given_InvalidCapsuleReviewId_When_UpdateReview_Then_ThrowException() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(member)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+        Long invalidId = review.getId();
+        capsuleReviewRepository.delete(review);
+
+        // when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_REVIEW,
+                assertThrows(BusinessException.class,
+                        () -> capsuleReviewService.updateReview(invalidId, reviewRequest)).getInfo()
+        );
+
+    }
+
+    @Test
+    @DisplayName("인증된 사용자가 타인의 리뷰 수정을 요청할 시 예외를 던진다.")
+    void Given_CapsuleReviewIdOfOthers_When_UpdateReview_Then_ThrowException() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+
+        Member other = memberRepository.save(MemberTestDummy
+                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(other)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when, then
+        assertEquals(AuthErrorInfo.UNAUTHORIZED,
+                assertThrows(BusinessException.class,
+                        () -> capsuleReviewService.updateReview(review.getId(), reviewRequest)).getInfo()
+        );
+    }
+
+    @Test
+    @DisplayName("인증된 사용자가 캡슐 리뷰 아이디로 리뷰 삭제를 요청한다.")
+    void Given_CapsuleReviewId_When_DeleteReview_Then_Success() {
+
+        // given
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(member)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when
+        capsuleReviewService.deleteReview(review.getId());
+
+        // then
+        assertNull(capsuleReviewRepository.findById(review.getId()).orElse(null));
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 캡슐 리뷰 아이디로 리뷰 삭제를 요청할 시 예외를 던진다.")
+    void Given_InvalidCapsuleReviewId_When_DeleteReview_Then_ThrowException() {
+
+        // given
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(member)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+        Long invalidId = review.getId();
+        capsuleReviewRepository.delete(review);
+
+        // when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_REVIEW,
+                assertThrows(BusinessException.class,
+                        () -> capsuleReviewService.deleteReview(invalidId)).getInfo()
+        );
+
+    }
+
+    @Test
+    @DisplayName("인증된 사용자가 타인의 캡슐 리뷰 삭제를 요청할 시 예외를 던진다.")
+    void Given_CapsuleReviewIdOfOthers_When_DeleteReview_Then_Success() {
+
+        // given
+        Member other = memberRepository.save(MemberTestDummy
+                .createGeneralMember("Not Sean","nsns123","notsean@ex.com"));
+
+        CapsuleReview review = CapsuleReview.builder()
+                .capsule(capsule)
+                .member(other)
+                .score(3.5)
+                .content("tasty")
+                .build();
+        capsuleReviewRepository.save(review);
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+
+        // when, then
+        assertEquals(AuthErrorInfo.UNAUTHORIZED,
+                assertThrows(BusinessException.class,
+                        () -> capsuleReviewService.deleteReview(review.getId())).getInfo()
+        );
+    }
 }
