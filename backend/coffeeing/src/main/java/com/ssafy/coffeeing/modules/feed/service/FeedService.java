@@ -134,21 +134,30 @@ public class FeedService {
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
 
-    private static FeedDetailResponse getFeedDetailResponse(
+    private FeedDetailResponse getFeedDetailResponse(
             Member viewer, Feed feed,
             Optional<FeedLike> feedLike,
             List<ImageElement> images) {
-        if (viewer == null) {
+        Member feedWriter = feed.getMember();
+        if (Objects.isNull(viewer)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
-        } else if (feedLike.isPresent() && Objects.equals(feed.getMember().getId(), viewer.getId())) {
+        } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, true);
-        } else if (feedLike.isPresent()) {
+        } else if (viewerLikedFeed(feedLike)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, false);
-        } else if (Objects.equals(feed.getMember().getId(), viewer.getId())) {
+        } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, true);
         } else {
             return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
         }
+    }
+
+    private boolean viewerLikedFeed(Optional<FeedLike> feedLike) {
+        return feedLike.isPresent();
+    }
+
+    private boolean isFeedWrittenByViewer(Long feedWriterId, Long viewerId) {
+        return Objects.equals(feedWriterId, viewerId);
     }
 
     private ProfileFeedsResponse getProfileFeeds(Member owner, Long cursor, Integer size) {
