@@ -3,7 +3,6 @@ package com.ssafy.coffeeing.modules.feed.util;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.coffeeing.modules.feed.dto.FeedProjection;
 import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;

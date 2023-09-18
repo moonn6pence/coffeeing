@@ -20,13 +20,14 @@ public class FeedPage {
 
     private void makeFeedImageUrlsToObject(List<Feed> feeds, FeedUtil feedUtil) {
         feeds.forEach(feed -> {
+            Member member = feed.getMember();
             feedPageElements.add(new FeedPageElement(feed.getId(),
                     feedUtil.makeJsonStringToImageElement(feed.getImageUrl()),
                     feed.getContent(),
-                    feed.getMember().getId(),
+                    member.getId(),
                     feed.getLikeCount(),
-                    feed.getMember().getNickname(),
-                    feed.getMember().getProfileImage()));
+                    member.getNickname(),
+                    member.getProfileImage()));
         });
     }
 
@@ -41,7 +42,8 @@ public class FeedPage {
     private void changeIsLikeStatus(List<FeedLike> feedLikes) {
         for (FeedLike feedLike : feedLikes) {
             for (FeedPageElement feedPageElement : feedPageElements) {
-                if (Objects.equals(feedLike.getFeed().getId(), feedPageElement.getId())) {
+                Feed feed = feedLike.getFeed();
+                if (Objects.equals(feed.getId(), feedPageElement.getId())) {
                     feedPageElement.updateIsLikeStatus();
                     break;
                 }
