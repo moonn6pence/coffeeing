@@ -1,6 +1,7 @@
 import React from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
+import { ReviewCard } from 'components/Detail/ReviewCard';
 
 export const DetailPage = () => {
   // 더미 데이터, 나중에 받아온 데이터로 연결할 예정
@@ -17,10 +18,11 @@ export const DetailPage = () => {
     isBookmarked: true,
     isReviewed: true,
     memberReview: {
-      content: 'string',
+      content:
+        '가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하',
       id: 0,
-      nickname: 'string',
-      score: 0,
+      nickname: '김씨',
+      score: 3,
     },
     name: '아르페지오',
     roast: 2.5,
@@ -41,8 +43,21 @@ export const DetailPage = () => {
   return (
     <div>
       <BeanDetailBody {...beanDetail} />
-      <p className='text-2xl font-bold'>리뷰 남기기</p>
-      <ReviewForm />
+      <div className="w-fit mt-10 mx-auto">
+        <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
+        <ReviewForm />
+      </div>
+      <div className="w-fit mt-10 mx-auto">
+        <p className="text-2xl font-bold mb-3">
+          평균 평점 {capsule.averageScore}{' '}
+          <span className="text-[#BE9E8B]">/ 5.0</span>
+        </p>
+        <div className="flex space-x-6">
+          <ReviewCard memberReview={capsule.memberReview} />
+          <ReviewCard memberReview={capsule.memberReview} />
+          <ReviewCard memberReview={capsule.memberReview} />
+        </div>
+      </div>
     </div>
   );
 };
