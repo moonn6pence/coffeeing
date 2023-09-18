@@ -1,5 +1,8 @@
 import React from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
+import { ReviewForm } from 'components/Detail/ReviewForm';
+import { ReviewCard } from 'components/Detail/ReviewCard';
+import { Pagination } from 'components/Pagination';
 
 export const DetailPage = () => {
   // 더미 데이터, 나중에 받아온 데이터로 연결할 예정
@@ -15,15 +18,56 @@ export const DetailPage = () => {
     imageUrl: 'string',
     isBookmarked: true,
     isReviewed: true,
-    memberReview: {
-      content: 'string',
-      id: 0,
-      nickname: 'string',
-      score: 0,
-    },
+    memberReview: { content: 'string', id: 0, nickname: 'string', score: 0 },
     name: '아르페지오',
     roast: 2.5,
   };
+
+  // 더미데이터(2페이지)
+  const reviews = [
+    {
+      content: '1',
+      id: 0,
+      nickname: '김씨',
+      score: 3,
+    },
+    {
+      content: '2',
+      id: 1,
+      nickname: '이씨',
+      score: 4,
+    },
+    {
+      content: '3',
+      id: 2,
+      nickname: '박씨',
+      score: 3,
+    },
+    {
+      content: '4',
+      id: 3,
+      nickname: '용씨',
+      score: 3,
+    },
+    {
+      content: '5',
+      id: 4,
+      nickname: '용씨',
+      score: 3,
+    },
+    {
+      content: '6',
+      id: 5,
+      nickname: '용씨',
+      score: 3,
+    },
+    {
+      content: '7',
+      id: 6,
+      nickname: '용씨',
+      score: 3,
+    },
+  ];
 
   const beanDetail = {
     roast: capsule.roast,
@@ -40,6 +84,20 @@ export const DetailPage = () => {
   return (
     <div>
       <BeanDetailBody {...beanDetail} />
+      <div className="w-fit mt-10 mx-auto">
+        <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
+        <ReviewForm />
+      </div>
+      <div className="w-fit mt-10 mx-auto">
+        <p className="text-2xl font-bold mb-3">
+          평균 평점 {capsule.averageScore}{' '}
+          <span className="text-[#BE9E8B]">/ 5.0</span>
+        </p>
+        <div className="flex space-x-6">
+          {/* 나중에 review 받아온 걸로 연결해줄 예정 */}
+          <Pagination limit={6} contentList={reviews} />
+        </div>
+      </div>
     </div>
   );
 };
