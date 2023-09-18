@@ -15,6 +15,7 @@ module.exports = {
         320: '80rem',
         '450px': '450px',
         '200px': '200px',
+        '104px': '104px',
       },
       colors: {
         'font-gray': '#4D4D4D',
