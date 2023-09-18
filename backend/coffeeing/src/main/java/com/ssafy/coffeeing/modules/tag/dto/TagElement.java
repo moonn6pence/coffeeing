@@ -1,7 +1,9 @@
 package com.ssafy.coffeeing.modules.tag.dto;
 
+import com.ssafy.coffeeing.modules.tag.domain.TagType;
+
 public record TagElement(
         Long tagId,
-        String category,
+        TagType category,
         String name
 ) { }

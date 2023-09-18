@@ -19,6 +19,7 @@ public class TagController {
     @GetMapping("/search")
     public BaseResponse<TagsResponse> getProductsBySuggestion(SearchTagRequest searchTagRequest) {
         return BaseResponse.<TagsResponse>builder()
+                .data(tagService.getProductsBySuggestion(searchTagRequest))
                 .build();
     }
 }
