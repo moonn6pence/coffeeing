@@ -112,10 +112,10 @@ public class ProductMapper {
     public static SimpleProductElement supplySimpleProductElementOf(
             Long id,
             String subtitle, // input Region(Coffee) or Brand(Capsule)
-            String name,
+            String title,
             String imageUrl
     ) {
-        return new SimpleProductElement(id, subtitle, name, imageUrl);
+        return new SimpleProductElement(id, subtitle, title, imageUrl);
     }
 
     public static BookmarkedResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
