@@ -35,6 +35,8 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
     { name: '산 미', value: acidity },
   ];
 
+  const aromaList = aroma.split(', ');
+
   return (
     <div className="bg-light flex w-300 h-450px justify-around mx-auto mt-10 items-center">
       <CapsuleCard
@@ -58,7 +60,11 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
           ))}
         </div>
         <p className="w-full max-w-full">{description}</p>
-        <p className="w-full text-xl font-bold"># {aroma}</p>
+        <p className="w-full text-xl font-bold flex justify-between">
+          {aromaList.map((flavor, index) => (
+            <span key={index}># {flavor}</span>
+          ))}
+        </p>
       </div>
     </div>
   );
