@@ -12,8 +12,8 @@ import java.util.List;
 @Profile("test")
 public class FeedTestDummy {
 
-    public static UploadFeedRequest createUploadFeedRequest() {
-        return new UploadFeedRequest(createImageElement(), "첫 번째 피드1");
+    public static UploadFeedRequest createUploadFeedRequestWithoutTag() {
+        return new UploadFeedRequest(null, createImageElement(), "첫 번째 피드1");
     }
 
     public static List<ImageElement> createImageElement() {
