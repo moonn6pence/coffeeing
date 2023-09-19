@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.product.dto;
 
 public record CoffeeResponse(
         Long id,
+        String region,
         String name,
         String imageUrl,
         String aroma,
