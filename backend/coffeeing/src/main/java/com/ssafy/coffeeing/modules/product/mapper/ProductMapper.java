@@ -7,7 +7,6 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
-//import com.ssafy.coffeeing.modules.product.dto.*;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewElement;
