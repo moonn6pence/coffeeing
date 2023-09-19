@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.product.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
@@ -29,6 +28,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
                 )
                 .from(coffeeBookmark)
                 .innerJoin(coffeeBookmark.coffee)
+                .innerJoin(coffeeBookmark.member)
                 .where(
                         coffeeBookmark.member.eq(member)
                 )
