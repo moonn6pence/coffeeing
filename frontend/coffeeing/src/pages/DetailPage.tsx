@@ -1,8 +1,8 @@
 import React from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
-import { ReviewCard } from 'components/Detail/ReviewCard';
 import { Pagination } from 'components/Pagination';
+import { CapsuleCard } from 'components/CapsuleCard';
 
 export const DetailPage = () => {
   // 더미 데이터, 나중에 받아온 데이터로 연결할 예정
@@ -25,48 +25,20 @@ export const DetailPage = () => {
 
   // 더미데이터(2페이지)
   const reviews = [
-    {
-      content: '1',
-      id: 0,
-      nickname: '김씨',
-      score: 3,
-    },
-    {
-      content: '2',
-      id: 1,
-      nickname: '이씨',
-      score: 4,
-    },
-    {
-      content: '3',
-      id: 2,
-      nickname: '박씨',
-      score: 3,
-    },
-    {
-      content: '4',
-      id: 3,
-      nickname: '용씨',
-      score: 3,
-    },
-    {
-      content: '5',
-      id: 4,
-      nickname: '용씨',
-      score: 3,
-    },
-    {
-      content: '6',
-      id: 5,
-      nickname: '용씨',
-      score: 3,
-    },
-    {
-      content: '7',
-      id: 6,
-      nickname: '용씨',
-      score: 3,
-    },
+    { content: '1', id: 0, nickname: '김씨', score: 3 },
+    { content: '2', id: 1, nickname: '이씨', score: 4 },
+    { content: '3', id: 2, nickname: '박씨', score: 3 },
+    { content: '4', id: 3, nickname: '용씨', score: 3 },
+    { content: '5', id: 4, nickname: '용씨', score: 3 },
+    { content: '6', id: 5, nickname: '용씨', score: 3 },
+    { content: '7', id: 6, nickname: '용씨', score: 3 },
+  ];
+
+  const similarList = [
+    { name: '아르페지오', brand: '네스프레소', capsule_id: 1, imgLink: '/' },
+    { name: '니카라과', brand: '네스프레소', capsule_id: 2, imgLink: '/' },
+    { name: '코지', brand: '네스프레소', capsule_id: 3, imgLink: '/' },
+    { name: '인도네시아', brand: '네스프레소', capsule_id: 4, imgLink: '/' },
   ];
 
   const beanDetail = {
@@ -96,6 +68,20 @@ export const DetailPage = () => {
         <div className="flex space-x-6">
           {/* 나중에 review 받아온 걸로 연결해줄 예정 */}
           <Pagination limit={6} contentList={reviews} />
+        </div>
+      </div>
+      <div className="w-fit mt-10 mx-auto">
+        <p className="text-2xl font-bold mb-3">비슷한</p>
+        <div className="flex w-300 justify-between">
+          {similarList.map((item, index) => (
+            <CapsuleCard
+              brand={item.brand}
+              name={item.name}
+              capsule_id={item.capsule_id}
+              imgLink={item.imgLink}
+              key={index}
+            />
+          ))}
         </div>
       </div>
     </div>
