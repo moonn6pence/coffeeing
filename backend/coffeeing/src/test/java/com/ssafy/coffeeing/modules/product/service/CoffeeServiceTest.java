@@ -168,11 +168,12 @@ class CoffeeServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
-        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseFrom(
+        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseOf(
                 coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
-                )
+                ),
+                false
         );
 
         // when

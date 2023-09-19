@@ -2,12 +2,10 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.dummy.CapsuleBookmarkTestDummy;
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
-import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
-import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
@@ -171,11 +169,12 @@ class CapsuleServiceTest extends ServiceTest {
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
 
-        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseFrom(
+        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseOf(
                 capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
-                )
+                ),
+                true
         );
 
         // when

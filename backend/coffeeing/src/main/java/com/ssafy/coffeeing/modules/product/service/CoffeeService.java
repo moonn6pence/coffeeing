@@ -6,7 +6,6 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -41,6 +40,7 @@ public class CoffeeService {
     private final CoffeeBookmarkQueryRepository coffeeBookmarkQueryRepository;
 
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Boolean IS_CAPSULE = false;
 
     @Transactional(readOnly = true)
     public CoffeeResponse getDetail(Long id) {
@@ -102,6 +102,6 @@ public class CoffeeService {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<SimpleProductElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
-        return ProductMapper.supplyBookmarkedResponseFrom(bookmarkedCoffeeElements);
+        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
     }
 }

@@ -6,7 +6,6 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
@@ -17,7 +16,10 @@ import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
-import com.ssafy.coffeeing.modules.product.repository.*;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +43,7 @@ public class CapsuleService {
     private final CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
 
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Boolean IS_CAPSULE = true;
 
     @Transactional(readOnly = true)
     public CapsuleResponse getDetail(Long id) {
@@ -99,8 +102,8 @@ public class CapsuleService {
     @Transactional(readOnly = true)
     public BookmarkedResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
-        Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
+        Member member = memberRepository.findById(id).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
-        return ProductMapper.supplyBookmarkedResponseFrom(bookmarkedCapsuleElements);
+        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCapsuleElements, IS_CAPSULE);
     }
 }
