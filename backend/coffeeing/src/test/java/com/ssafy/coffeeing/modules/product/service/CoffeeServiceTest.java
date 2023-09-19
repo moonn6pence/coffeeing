@@ -6,7 +6,7 @@ import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
@@ -168,7 +168,7 @@ class CoffeeServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
-        BookmarkedResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+        BookmarkResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
                 coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
@@ -178,7 +178,7 @@ class CoffeeServiceTest extends ServiceTest {
 
         // when
 
-        BookmarkedResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
+        BookmarkResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
                 memberId,
                 pageInfoRequest
         );

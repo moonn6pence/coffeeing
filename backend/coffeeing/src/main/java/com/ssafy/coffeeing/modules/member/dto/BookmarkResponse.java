@@ -4,7 +4,7 @@ import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 
 import java.util.List;
 
-public record BookmarkedResponse(
+public record BookmarkResponse(
         Integer page,
         Integer totalCount,
         List<SimpleProductElement> bookmarkedElements,

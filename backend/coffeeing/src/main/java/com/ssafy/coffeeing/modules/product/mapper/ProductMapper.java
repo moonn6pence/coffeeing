@@ -1,6 +1,6 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
@@ -118,8 +118,8 @@ public class ProductMapper {
         return new SimpleProductElement(id, subtitle, title, imageUrl);
     }
 
-    public static BookmarkedResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
-        return new BookmarkedResponse(
+    public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
+        return new BookmarkResponse(
                 bookmarkedElements.getNumber(),
                 bookmarkedElements.getTotalPages(),
                 bookmarkedElements.getContent(),

@@ -6,7 +6,7 @@ import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
@@ -169,7 +169,7 @@ class CapsuleServiceTest extends ServiceTest {
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
 
-        BookmarkedResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+        BookmarkResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
                 capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
@@ -178,7 +178,7 @@ class CapsuleServiceTest extends ServiceTest {
         );
 
         // when
-        BookmarkedResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
+        BookmarkResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
 
         // then
         assertEquals(expectedCapsuleBookmarkResponse, actualCapsuleBookmarkResponse);

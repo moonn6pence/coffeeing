@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.member.controller;
 
 import javax.validation.Valid;
 
+import com.ssafy.coffeeing.modules.feed.service.FeedService;
 import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.service.CapsuleService;
@@ -40,9 +41,7 @@ public class MemberController {
 
     @GetMapping("/info/{memberId}")
     public BaseResponse<BaseInfoResponse> getMemberInfo(
-            @PathVariable
-            @NumberFormat
-            Long memberId
+            @PathVariable @NumberFormat Long memberId
     ) {
         return BaseResponse.<BaseInfoResponse>builder()
                 .data(memberService.getMemberInfo(memberId))
@@ -62,22 +61,21 @@ public class MemberController {
         return BaseResponse.<Void>builder().build();
     }
 
-    @GetMapping("/coffee/bookmark/{id}")
-    public BaseResponse<BookmarkedResponse> getBookmarkedCoffees(@PathVariable @NumberFormat Long id,
-                                                                @Valid PageInfoRequest pageInfoRequest) {
-        return BaseResponse.<BookmarkedResponse>builder()
+    @GetMapping("/coffee/bookmark/{memberId}")
+    public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long id,
+                                                             @Valid PageInfoRequest pageInfoRequest) {
+        return BaseResponse.<BookmarkResponse>builder()
                 .data(coffeeService.getBookmarkedCoffees(id, pageInfoRequest))
                 .build();
     }
 
-    @GetMapping("/capsule/bookmark/{id}")
-    public BaseResponse<BookmarkedResponse> getBookmarkedCapsules(@PathVariable @NumberFormat Long id,
-                                                                        @Valid PageInfoRequest pageInfoRequest) {
-        return BaseResponse.<BookmarkedResponse>builder()
-                .data(capsuleService.getBookmarkedCapsule(id, pageInfoRequest))
+    @GetMapping("/capsule/bookmark/{memberId}")
+    public BaseResponse<BookmarkResponse> getBookmarkCapsules(@PathVariable @NumberFormat Long memberId,
+                                                              @Valid PageInfoRequest pageInfoRequest) {
+        return BaseResponse.<BookmarkResponse>builder()
+                .data(capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest))
                 .build();
     }
-
 
 }
 
