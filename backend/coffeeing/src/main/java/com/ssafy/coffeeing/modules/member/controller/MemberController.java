@@ -62,16 +62,16 @@ public class MemberController {
         return BaseResponse.<Void>builder().build();
     }
 
-    @GetMapping("/coffee/like/{id}")
-    public BaseResponse<BookmarkedResponse> getBookmarkedCoffee(@PathVariable @NumberFormat Long id,
+    @GetMapping("/coffee/bookmark/{id}")
+    public BaseResponse<BookmarkedResponse> getBookmarkedCoffees(@PathVariable @NumberFormat Long id,
                                                                 @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkedResponse>builder()
                 .data(coffeeService.getBookmarkedCoffees(id, pageInfoRequest))
                 .build();
     }
 
-    @GetMapping("/capsule/like/{id}")
-    public BaseResponse<BookmarkedResponse> getBookmarkedCapsule(@PathVariable @NumberFormat Long id,
+    @GetMapping("/capsule/bookmark/{id}")
+    public BaseResponse<BookmarkedResponse> getBookmarkedCapsules(@PathVariable @NumberFormat Long id,
                                                                         @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkedResponse>builder()
                 .data(capsuleService.getBookmarkedCapsule(id, pageInfoRequest))

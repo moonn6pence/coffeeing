@@ -15,6 +15,7 @@ import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
+import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -99,7 +100,7 @@ public class CapsuleService {
     public BookmarkedResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        Page<BookmarkedElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
+        Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
         return ProductMapper.supplyBookmarkedResponseFrom(bookmarkedCapsuleElements);
     }
 }

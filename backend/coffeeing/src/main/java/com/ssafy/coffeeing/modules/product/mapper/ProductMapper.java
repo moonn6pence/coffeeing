@@ -8,11 +8,7 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
-import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
-import com.ssafy.coffeeing.modules.product.dto.ProductReviewElement;
-import com.ssafy.coffeeing.modules.product.dto.ProductReviewResponse;
-import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
-import com.ssafy.coffeeing.modules.product.dto.ReviewRequest;
+import com.ssafy.coffeeing.modules.product.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -109,16 +105,16 @@ public class ProductMapper {
                 .build();
     }
 
-    public static BookmarkedElement supplyBookmarkedElementOf(
+    public static SimpleProductElement supplySimpleProductElementOf(
             Long id,
             String name,
-            String regionOrBrand,
+            String subtitle, // input Region(Coffee) or Brand(Capsule)
             String imageUrl
     ) {
-        return new BookmarkedElement(id, name, regionOrBrand, imageUrl);
+        return new SimpleProductElement(id, name, subtitle, imageUrl);
     }
 
-    public static BookmarkedResponse supplyBookmarkedResponseFrom(Page<BookmarkedElement> bookmarkedElements) {
+    public static BookmarkedResponse supplyBookmarkedResponseFrom(Page<SimpleProductElement> bookmarkedElements) {
         return new BookmarkedResponse(
                 bookmarkedElements.getNumber(),
                 bookmarkedElements.getTotalPages(),
