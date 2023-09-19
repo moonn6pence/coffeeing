@@ -17,7 +17,8 @@ public class CorsConfig {
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedOrigins(List.of("http://localhost:3000"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-		configuration.setAllowedHeaders(List.of("Authorization", "accept", "Referer", "User-Agent"));
+		configuration.setAllowedHeaders(List.of("Authorization", "accept", "Referer", "User-Agent",
+			"access-control-allow-credentials", "access-control-allow-methods", "access-control-allow-origin", "content-type"));
 		configuration.setExposedHeaders(List.of("X-Get-Header", "Authorization"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
