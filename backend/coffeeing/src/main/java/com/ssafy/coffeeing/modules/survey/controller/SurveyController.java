@@ -23,12 +23,11 @@ public class SurveyController {
         return BaseResponse.<SurveyResponse>builder()
                 .data(surveyService.recommendBySurvey(preferenceRequest))
                 .build();
-
     }
 
     @PostMapping("/save")
     public BaseResponse<Void> savePreference(@Valid PreferenceRequest preferenceRequest){
-
+        surveyService.savePreference(preferenceRequest);
         return BaseResponse.<Void>builder().build();
     }
 

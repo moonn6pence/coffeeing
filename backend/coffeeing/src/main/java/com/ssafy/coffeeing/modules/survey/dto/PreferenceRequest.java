@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.survey.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 
 public record PreferenceRequest(
 
@@ -10,6 +11,6 @@ public record PreferenceRequest(
         @Min(value = 0) @Max(value = 3) Integer roast,
         @Min(value = 0) @Max(value = 3) Integer acidity,
         @Min(value = 0) @Max(value = 3) Integer body,
-        @Min(value = 0) @Max(value = 9) Integer flavorNote
+        @NotEmpty String flavorNote
 ) {
 }
