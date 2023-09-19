@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import InputField from "components/InputField";
 import Button from "components/Button";
 import GoogleLoginBtn from "components/GoogleLogin";
+import { signUp } from "../service/auth/auth"
+
+import { useDispatch } from "react-redux";
+import { AppDispatch  } from 'store/store';
+import { setMemberToken } from "store/memberSlice";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -12,6 +17,8 @@ function SignupPage() {
   const [isValidPw, setIsValidPw] = useState(true);
   const [pw2, setPw2] = useState("");
   const [isIdenticalPw, setIsIdenticalPw] = useState(true);
+  const dispatch = useDispatch<AppDispatch>();
+
   // validation check
   useEffect(()=>{
     setIsValidEmail(/\S+@\S+\.\S+/.test(email))
@@ -26,9 +33,13 @@ function SignupPage() {
   },[pw1, pw2])
 
   // 회원가입 처리
-  const handleSubmit = (e:React.MouseEvent) =>{
+  const handleSubmit = async (e:React.MouseEvent) =>{
     e.preventDefault();
-    console.log('회원가입 처리하기')
+    if(!email || !pw1 || !pw2 || pw1 !== pw2) return;
+    const result = await signUp({email: email, password: pw1});
+    if(result) {
+      dispatch(setMemberToken(result));
+    }
   }
 
   return (
