@@ -62,7 +62,7 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    public BaseResponse<FeedDetailResponse> getFeedDetailById(@Valid @NumberFormat Long feedId) {
+    public BaseResponse<FeedDetailResponse> getFeedDetailById(@PathVariable @NumberFormat Long feedId) {
         return BaseResponse.<FeedDetailResponse>builder()
                 .data(feedService.getFeedDetailById(feedId))
                 .build();
