@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
-import searchIcon from '../../assets/search.png'
+import searchIcon from '../../assets/search/search.png'
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setSearchText } from "store/searchSlice";
