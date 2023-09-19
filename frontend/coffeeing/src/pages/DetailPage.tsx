@@ -1,27 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
 import { Pagination } from 'components/Pagination';
 import { CapsuleCard } from 'components/CapsuleCard';
+import { publicRequest } from 'util/axios';
+import { API_URL } from 'util/constants';
+import { useLocation } from 'react-router-dom';
 
 export const DetailPage = () => {
-  // 더미 데이터, 나중에 받아온 데이터로 연결할 예정
-  const capsule = {
-    acidity: 2,
-    aroma: '코코아',
+  const location = useLocation();
+  const id = location.state.id;
+
+  // 상품 정보 불러오기
+  useEffect(() => {
+    publicRequest
+      .get(`${API_URL}/product/capsule/${id}`)
+      .then((res) => {
+        setCapsule(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const [capsule, setCapsule] = useState({
+    acidity: 0,
+    aroma: 'string',
     averageScore: 0,
-    body: 3.5,
-    brand: '네스프레소',
-    description:
-      '짧게 다크로스팅한 브라질산 원두가 강한 로스팅향과 균형감을 주고 다크로스팅한 코스타리카 원두가 쌉싸름한 코코아향에 무게감을 더해주는 커피입니다. 정교한 그라인딩으로 벨벳처럼 부드러워 거부할 수 없는 크리미한 질감을 표현했습니다.',
+    body: 0,
+    brand: 'string',
+    description: 'string',
     id: 0,
     imageUrl: 'string',
     isBookmarked: true,
     isReviewed: true,
-    memberReview: { content: 'string', id: 0, nickname: 'string', score: 0 },
-    name: '아르페지오',
-    roast: 2.5,
-  };
+    memberReview: {
+      content: 'string',
+      id: 0,
+      nickname: 'string',
+      score: 0,
+    },
+    name: 'string',
+    roast: 0,
+  });
 
   // 더미데이터(2페이지)
   const reviews = [
