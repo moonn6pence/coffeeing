@@ -25,6 +25,7 @@ module.exports = {
         'process-bar': '#F3F6FB',
         'select-img': '#F9F6F0',
         'half-light':'#B78C5F80',
+        'drop-down':'#EFEEF1'
       },
       width: {
         // 설문 진행 척도 바 길이
