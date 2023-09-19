@@ -1,6 +1,5 @@
 package com.ssafy.coffeeing.modules.product.repository;
 
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.ssafy.coffeeing.modules.product.domain.QCoffee.coffee;
 import static com.ssafy.coffeeing.modules.product.domain.QCoffeeBookmark.coffeeBookmark;
 
 @Repository
@@ -40,7 +38,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
 
         List<BookmarkedElement> bookmarks = queryResult
                 .stream()
-                .map((item) -> ProductMapper.supplyBookmarkedCoffeeElementOf(
+                .map((item) -> ProductMapper.supplyBookmarkedElementOf(
                                 item.getId(),
                                 item.getCoffeeName(),
                                 item.getRegion(),

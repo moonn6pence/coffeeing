@@ -6,7 +6,6 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkedCapsuleResponse;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
@@ -101,6 +100,6 @@ public class CapsuleService {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<BookmarkedElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
-        return ProductMapper.supplyBookmarkedCoffeeResponseFrom(bookmarkedCapsuleElements);
+        return ProductMapper.supplyBookmarkedResponseFrom(bookmarkedCapsuleElements);
     }
 }

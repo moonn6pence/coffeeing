@@ -101,6 +101,6 @@ public class CoffeeService {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<BookmarkedElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
-        return ProductMapper.supplyBookmarkedCoffeeResponseFrom(bookmarkedCoffeeElements);
+        return ProductMapper.supplyBookmarkedResponseFrom(bookmarkedCoffeeElements);
     }
 }

@@ -109,20 +109,21 @@ public class ProductMapper {
                 .build();
     }
 
-    public static BookmarkedElement supplyBookmarkedCoffeeElementOf(
-            Long coffeeId,
-            String coffeeName,
-            String coffeeRegion,
-            String coffeeImageUrl
+    public static BookmarkedElement supplyBookmarkedElementOf(
+            Long id,
+            String name,
+            String regionOrBrand,
+            String imageUrl
     ) {
-        return new BookmarkedElement(coffeeId, coffeeName, coffeeRegion, coffeeImageUrl);
+        return new BookmarkedElement(id, name, regionOrBrand, imageUrl);
     }
 
-    public static BookmarkedResponse supplyBookmarkedCoffeeResponseFrom(Page<BookmarkedElement> bookmarkedElements) {
+    public static BookmarkedResponse supplyBookmarkedResponseFrom(Page<BookmarkedElement> bookmarkedElements) {
         return new BookmarkedResponse(
                 bookmarkedElements.getNumber(),
                 bookmarkedElements.getTotalPages(),
-                bookmarkedElements.getContent()
+                bookmarkedElements.getContent(),
+                false
         );
     }
 

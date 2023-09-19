@@ -5,7 +5,8 @@ import java.util.List;
 public record BookmarkedResponse(
         Integer page,
         Integer totalCount,
-        List<BookmarkedElement> bookmarkedElements
+        List<BookmarkedElement> bookmarkedElements,
+        Boolean isCapsule
 ) {
 
 

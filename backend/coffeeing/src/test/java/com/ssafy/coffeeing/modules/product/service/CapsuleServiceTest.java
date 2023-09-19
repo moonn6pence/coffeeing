@@ -167,13 +167,15 @@ class CapsuleServiceTest extends ServiceTest {
                         capsuleDummyList, generalMember
                 )
         );
-
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
 
-        BookmarkedResponse expected = ProductMapper.supplyBookmarkedCoffeeResponseFrom(
-                capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(generalMember, pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE))
+        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseFrom(
+                capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
+                        generalMember,
+                        pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
+                )
         );
 
         // when
@@ -181,6 +183,7 @@ class CapsuleServiceTest extends ServiceTest {
 
         // then
         assertEquals(expected, actual);
+        assertEquals(BOOKMARK_PAGE_SIZE, actual.bookmarkedElements().size());
     }
 
 }

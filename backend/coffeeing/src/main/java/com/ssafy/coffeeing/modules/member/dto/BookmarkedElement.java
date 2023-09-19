@@ -5,5 +5,7 @@ public record BookmarkedElement(
     String elementName,
     String elementRegionOrBrand,
     String elementImageUrl
+
+
 ) {
 }
