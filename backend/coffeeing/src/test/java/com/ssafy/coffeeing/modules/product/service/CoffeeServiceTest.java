@@ -1,14 +1,18 @@
 package com.ssafy.coffeeing.modules.product.service;
 
+import com.ssafy.coffeeing.dummy.CoffeeBookmarkTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
@@ -17,6 +21,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,6 +43,8 @@ class CoffeeServiceTest extends ServiceTest {
     @Autowired
     private CoffeeBookmarkRepository coffeeBookmarkRepository;
 
+    @Autowired
+    private CoffeeBookmarkQueryRepository coffeeBookmarkQueryRepository;
     @MockBean
     private SecurityContextUtils securityContextUtils;
 
@@ -108,7 +116,7 @@ class CoffeeServiceTest extends ServiceTest {
 
         // then
         assertTrue(actual.result());
-        assertNotNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee,generalMember));
+        assertNotNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee, generalMember));
     }
 
     @Test
@@ -129,7 +137,7 @@ class CoffeeServiceTest extends ServiceTest {
 
         // then
         assertFalse(actual.result());
-        assertNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee,generalMember));
+        assertNull(coffeeBookmarkRepository.findByCoffeeAndMember(coffee, generalMember));
     }
 
     @Test
@@ -144,4 +152,43 @@ class CoffeeServiceTest extends ServiceTest {
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class, () -> coffeeService.toggleBookmark(invalidId)).getInfo());
     }
+
+    @Test
+    @DisplayName("유저의 북마크된 커피 1페이지를 조회한다.")
+    void Given_MemberIdWithPageInfoRequest_When_GetBookmarkedCoffees_Then_Success() {
+        // given
+        List<Coffee> coffeeDummyList = CoffeeTestDummy.create25GeneralCoffees();
+        coffeeRepository.saveAll(coffeeDummyList);
+        coffeeBookmarkRepository.saveAll(
+                CoffeeBookmarkTestDummy.createMockCoffeeBookmarkList(
+                        coffeeDummyList,
+                        generalMember
+                )
+        );
+        Long memberId = generalMember.getId();
+        int pageNo = 1;
+        PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
+        BookmarkedResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+                coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
+                        generalMember,
+                        pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
+                ),
+                false
+        );
+
+        // when
+
+        BookmarkedResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
+                memberId,
+                pageInfoRequest
+        );
+
+        // then
+        assertEquals(expectedCoffeeBookmarkResponse,actualCoffeeBookmarkResponse);
+        assertEquals(BOOKMARK_PAGE_SIZE, actualCoffeeBookmarkResponse.bookmarkedElements().size());
+
+
+    }
+
+
 }

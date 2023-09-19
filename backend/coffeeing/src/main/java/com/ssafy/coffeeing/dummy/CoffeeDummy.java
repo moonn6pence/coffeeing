@@ -37,6 +37,13 @@ public class CoffeeDummy {
     );
     private final List<Double> totalScores = List.of(38.9, 48.3, 42.1, 49.8, 25.5);
 
+    private final List<String> regions = List.of(
+            "South america",
+            "Costa Rica",
+            "Ethiopia",
+            "Colombia",
+            "India"
+    );
 
     private final CoffeeRepository coffeeRepository;
 
@@ -48,14 +55,14 @@ public class CoffeeDummy {
             coffees.add(createCoffee(coffeeNames.get(i), aroma.get(i),
                     imageUrls.get(i), productDescriptions.get(i),
                     new CoffeeCriteria(roasts.get(i), acidities.get(i), bodies.get(i)),
-                    totalScores.get(i), 5));
+                    totalScores.get(i), 5,regions.get(i)));
         }
 
         return coffeeRepository.saveAll(coffees);
     }
 
     private Coffee createCoffee(String coffeeName, String aroma, String imageUrl, String productDescription,
-                                CoffeeCriteria coffeeCriteria, Double totalScore ,Integer totalReviewer){
+                                CoffeeCriteria coffeeCriteria, Double totalScore ,Integer totalReviewer, String region){
         return Coffee.builder()
                 .coffeeName(coffeeName)
                 .coffeeCriteria(coffeeCriteria)
@@ -64,6 +71,7 @@ public class CoffeeDummy {
                 .productDescription(productDescription)
                 .totalScore(totalScore)
                 .totalReviewer(totalReviewer)
+                .region(region)
                 .build();
     }
 }

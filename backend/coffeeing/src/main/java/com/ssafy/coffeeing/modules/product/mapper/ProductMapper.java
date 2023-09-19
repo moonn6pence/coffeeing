@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
@@ -7,10 +8,11 @@ import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewElement;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewResponse;
-import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.ReviewRequest;
+import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -106,4 +108,23 @@ public class ProductMapper {
                 .score(reviewRequest.score())
                 .build();
     }
+
+    public static SimpleProductElement supplySimpleProductElementOf(
+            Long id,
+            String name,
+            String subtitle, // input Region(Coffee) or Brand(Capsule)
+            String imageUrl
+    ) {
+        return new SimpleProductElement(id, name, subtitle, imageUrl);
+    }
+
+    public static BookmarkedResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
+        return new BookmarkedResponse(
+                bookmarkedElements.getNumber(),
+                bookmarkedElements.getTotalPages(),
+                bookmarkedElements.getContent(),
+                isCapsule
+        );
+    }
+
 }

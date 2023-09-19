@@ -3,6 +3,9 @@ package com.ssafy.coffeeing.modules.member.controller;
 import javax.validation.Valid;
 
 import com.ssafy.coffeeing.modules.member.dto.*;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
+import com.ssafy.coffeeing.modules.product.service.CapsuleService;
+import com.ssafy.coffeeing.modules.product.service.CoffeeService;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
     private final MemberService memberService;
+    private final CoffeeService coffeeService;
+    private final CapsuleService capsuleService;
 
     @GetMapping("/unique-nickname")
     public BaseResponse<ExistNickNameResponse> checkDuplicateNickname(@RequestParam String nickname) {
@@ -38,7 +43,7 @@ public class MemberController {
             @PathVariable
             @NumberFormat
             Long memberId
-            ) {
+    ) {
         return BaseResponse.<BaseInfoResponse>builder()
                 .data(memberService.getMemberInfo(memberId))
                 .build();
@@ -55,6 +60,22 @@ public class MemberController {
     public BaseResponse<Void> updateMemberProfileImage(@Valid @RequestBody ProfileImageChangeRequest profileImageChangeRequest) {
         memberService.updateMemberProfileImage(profileImageChangeRequest);
         return BaseResponse.<Void>builder().build();
+    }
+
+    @GetMapping("/coffee/bookmark/{id}")
+    public BaseResponse<BookmarkedResponse> getBookmarkedCoffees(@PathVariable @NumberFormat Long id,
+                                                                @Valid PageInfoRequest pageInfoRequest) {
+        return BaseResponse.<BookmarkedResponse>builder()
+                .data(coffeeService.getBookmarkedCoffees(id, pageInfoRequest))
+                .build();
+    }
+
+    @GetMapping("/capsule/bookmark/{id}")
+    public BaseResponse<BookmarkedResponse> getBookmarkedCapsules(@PathVariable @NumberFormat Long id,
+                                                                        @Valid PageInfoRequest pageInfoRequest) {
+        return BaseResponse.<BookmarkedResponse>builder()
+                .data(capsuleService.getBookmarkedCapsule(id, pageInfoRequest))
+                .build();
     }
 
 

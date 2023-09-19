@@ -2,19 +2,27 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
+import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +37,13 @@ public class CapsuleService {
     private final CapsuleReviewRepository capsuleReviewRepository;
 
     private final CapsuleBookmarkRepository capsuleBookmarkRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
+
+    private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Boolean IS_CAPSULE = true;
 
     @Transactional(readOnly = true)
     public CapsuleResponse getDetail(Long id) {
@@ -82,5 +97,13 @@ public class CapsuleService {
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCapsules(Long id) {
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public BookmarkedResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
+        Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
+        Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
+        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCapsuleElements, IS_CAPSULE);
     }
 }

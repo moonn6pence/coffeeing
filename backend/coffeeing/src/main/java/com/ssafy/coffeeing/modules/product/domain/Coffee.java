@@ -37,4 +37,8 @@ public class Coffee extends BaseEntity {
 
     @Column
     private Integer totalReviewer;
+
+    @Column(length = 64)
+    private String region;
+
 }

@@ -1,14 +1,18 @@
 package com.ssafy.coffeeing.modules.product.service;
 
+import com.ssafy.coffeeing.dummy.CapsuleBookmarkTestDummy;
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
@@ -17,6 +21,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -37,13 +43,16 @@ class CapsuleServiceTest extends ServiceTest {
     @Autowired
     private CapsuleBookmarkRepository capsuleBookmarkRepository;
 
+    @Autowired
+    private CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
+
     @MockBean
     private SecurityContextUtils securityContextUtils;
 
     private Capsule capsule;
 
     @BeforeEach
-    void setUpCapsule(){
+    void setUpCapsule() {
         capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleRoma());
     }
 
@@ -108,7 +117,7 @@ class CapsuleServiceTest extends ServiceTest {
 
         // then
         assertTrue(actual.result());
-        assertNotNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule,generalMember));
+        assertNotNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule, generalMember));
     }
 
     @Test
@@ -129,7 +138,7 @@ class CapsuleServiceTest extends ServiceTest {
 
         // then
         assertFalse(actual.result());
-        assertNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule,generalMember));
+        assertNull(capsuleBookmarkRepository.findByCapsuleAndMember(capsule, generalMember));
     }
 
     @Test
@@ -144,4 +153,36 @@ class CapsuleServiceTest extends ServiceTest {
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT,
                 assertThrows(BusinessException.class, () -> capsuleService.toggleBookmark(invalidId)).getInfo());
     }
+
+    @Test
+    @DisplayName("유저의 북마크된 캡슐 1페이지를 조회해온다.")
+    void Given_MemberIdWithPageInfoRequest_When_GetBookmarkedCapsules_Then_Success() {
+        // given
+        List<Capsule> capsuleDummyList = CapsuleTestDummy.create25GenericCapsules();
+        capsuleRepository.saveAll(capsuleDummyList);
+        capsuleBookmarkRepository.saveAll(
+                CapsuleBookmarkTestDummy.createMockCapsuleBookmarkList(
+                        capsuleDummyList, generalMember
+                )
+        );
+        Long memberId = generalMember.getId();
+        int pageNo = 1;
+        PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
+
+        BookmarkedResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+                capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
+                        generalMember,
+                        pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
+                ),
+                true
+        );
+
+        // when
+        BookmarkedResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
+
+        // then
+        assertEquals(expectedCapsuleBookmarkResponse, actualCapsuleBookmarkResponse);
+        assertEquals(BOOKMARK_PAGE_SIZE, actualCapsuleBookmarkResponse.bookmarkedElements().size());
+    }
+
 }

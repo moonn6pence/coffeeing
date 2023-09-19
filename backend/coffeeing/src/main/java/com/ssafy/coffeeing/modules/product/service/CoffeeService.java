@@ -2,19 +2,24 @@ package com.ssafy.coffeeing.modules.product.service;
 
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkedResponse;
+import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
+import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
+import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
-import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
-import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
+import com.ssafy.coffeeing.modules.product.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +34,13 @@ public class CoffeeService {
     private final CoffeeReviewRepository coffeeReviewRepository;
 
     private final CoffeeBookmarkRepository coffeeBookmarkRepository;
+
+    private final MemberRepository memberRepository;
+
+    private final CoffeeBookmarkQueryRepository coffeeBookmarkQueryRepository;
+
+    private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Boolean IS_CAPSULE = false;
 
     @Transactional(readOnly = true)
     public CoffeeResponse getDetail(Long id) {
@@ -83,5 +95,13 @@ public class CoffeeService {
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCoffees(Long id) {
         return null;
+    }
+
+    @Transactional(readOnly = true)
+    public BookmarkedResponse getBookmarkedCoffees(Long id, PageInfoRequest pageInfoRequest) {
+        Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
+        Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
+        Page<SimpleProductElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
+        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
     }
 }
