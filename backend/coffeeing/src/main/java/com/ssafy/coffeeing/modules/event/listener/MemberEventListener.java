@@ -1,4 +1,4 @@
-package com.ssafy.coffeeing.modules.member.service;
+package com.ssafy.coffeeing.modules.event.listener;
 
 import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
 import com.ssafy.coffeeing.modules.member.service.MemberService;

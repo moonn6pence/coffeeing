@@ -55,7 +55,7 @@ public class MemberController {
                 .build();
     }
 
-    @PutMapping("/change-profile")
+    @PutMapping("/profile")
     public BaseResponse<Void> updateMemberProfileImage(@Valid @RequestBody ProfileImageChangeRequest profileImageChangeRequest) {
         memberService.updateMemberProfileImage(profileImageChangeRequest);
         return BaseResponse.<Void>builder().build();
