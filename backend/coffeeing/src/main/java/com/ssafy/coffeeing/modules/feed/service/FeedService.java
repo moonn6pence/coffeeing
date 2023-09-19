@@ -73,13 +73,19 @@ public class FeedService {
     }
 
     @Transactional
-    public void updateFeedContentById(Long feedId, UpdateFeedRequest updateFeedRequest) {
+    public void updateFeedById(Long feedId, UpdateFeedRequest updateFeedRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-
+        Tag tag = updateFeedRequest.tag();
         Feed feed = feedRepository.findByIdAndMember(feedId, member)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
-        feed.updateContent(updateFeedRequest.content());
+        if(Objects.nonNull(tag)) {
+            validateTagInformation(tag);
+            feed.updateTag(tag);
+            feed.updateContent(updateFeedRequest.content());
+        } else {
+            feed.updateContent(updateFeedRequest.content());
+        }
     }
 
     @Transactional

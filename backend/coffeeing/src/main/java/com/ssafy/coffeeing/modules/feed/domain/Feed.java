@@ -1,6 +1,7 @@
 package com.ssafy.coffeeing.modules.feed.domain;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import com.ssafy.coffeeing.modules.tag.domain.TagType;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
@@ -44,6 +45,12 @@ public class Feed extends BaseEntity {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void updateTag(Tag tag) {
+        this.tagId = tag.tagId();
+        this.tagType = tag.category();
+        this.tagName = tag.name();
     }
 
     public void increaseLikeCount() {

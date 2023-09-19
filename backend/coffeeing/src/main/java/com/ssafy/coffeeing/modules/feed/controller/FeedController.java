@@ -28,7 +28,7 @@ public class FeedController {
     public BaseResponse<Void> updateFeedContent(
             @PathVariable @NumberFormat Long feedId,
             @Valid @RequestBody UpdateFeedRequest updateFeedRequest) {
-        feedService.updateFeedContentById(feedId, updateFeedRequest);
+        feedService.updateFeedById(feedId, updateFeedRequest);
         return BaseResponse.<Void>builder()
                 .build();
     }
