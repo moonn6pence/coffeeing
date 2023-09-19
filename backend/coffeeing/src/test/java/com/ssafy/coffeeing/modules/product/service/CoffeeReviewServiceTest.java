@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.product.service;
 import com.ssafy.coffeeing.dummy.CoffeeReviewTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
@@ -25,6 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +35,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
+@RecordApplicationEvents
 class CoffeeReviewServiceTest extends ServiceTest {
 
     @Autowired
@@ -45,6 +49,9 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
@@ -74,6 +81,21 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 () -> assertEquals(actualReview.getCoffee(), coffee),
                 () -> assertEquals(actualReview.getMember(), generalMember)
         );
+    }
+
+    @Test
+    @DisplayName("리뷰 작성시 경험치 이벤트가 발생한다.")
+    void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_ExperienceEventSuccess() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+
+        // when
+        CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
+
+        // then
+        assertEquals(1, (int)applicationEvents.stream(ExperienceEvent.class).count());
     }
 
     @Test
