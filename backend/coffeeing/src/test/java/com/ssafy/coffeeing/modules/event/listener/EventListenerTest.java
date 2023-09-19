@@ -13,7 +13,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
 
 @RecordApplicationEvents
 public class EventListenerTest extends ServiceTest {
@@ -35,11 +34,9 @@ public class EventListenerTest extends ServiceTest {
         int experience = 75;
         ActivityConductedEvent activityConductedEvent = new ActivityConductedEvent(experience, memberId);
         // when
-
         applicationEventPublisher.publishEvent(activityConductedEvent);
-
         // then
         assertEquals(1,(int)applicationEvents.stream(ActivityConductedEvent.class).count());
-
     }
+
 }
