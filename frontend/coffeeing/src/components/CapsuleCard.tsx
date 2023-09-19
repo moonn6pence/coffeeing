@@ -15,7 +15,9 @@ export const CapsuleCard = (props: ICardProps) => {
 
   // 디테일 페이지로 이동
   const goDetail = () => {
-    navigate(`/detail/capsule/${capsule_id}`);
+    navigate(`/detail/capsule/${capsule_id}`, {
+      state: { id: `${capsule_id}` },
+    });
   };
 
   return (
