@@ -4,14 +4,24 @@ import InputField from "components/InputField";
 import Button from "components/Button";
 import GoogleLoginBtn from "components/GoogleLogin";
 
+import { signIn } from "../service/auth/auth"
+import { useDispatch } from "react-redux";
+import { AppDispatch  } from 'store/store';
+import { setMemberToken } from "store/memberSlice";
+
+
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
   // 로그인 처리
-  const handleSubmit = (e:MouseEvent)=>{
+  const handleSubmit = async (e:MouseEvent)=>{
     e.preventDefault();
-    console.log('로그인 처리')
+    const result = await signIn({email: email, password: pw});
+    if(result) {
+      dispatch(setMemberToken(result));
+    }
   }
 
   return(
