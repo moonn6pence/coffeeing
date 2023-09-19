@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.mapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.tag.dto.TagElement;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,12 +15,24 @@ public class FeedMapper {
         return new UploadFeedResponse(feed.getId());
     }
 
-    public static Feed supplyFeedEntityBy(Member member, String content, String imageUrl) {
+    public static Feed supplyFeedEntityOf(Member member, String content, String imageUrl) {
         return Feed.builder()
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
                 .likeCount(0L)
+                .build();
+    }
+
+    public static Feed supplyFeedEntityOf(Member member, String content, String imageUrl, TagElement tagElement) {
+        return Feed.builder()
+                .member(member)
+                .content(content)
+                .imageUrl(imageUrl)
+                .likeCount(0L)
+                .tagId(tagElement.tagId())
+                .tagType(tagElement.category())
+                .tagName(tagElement.name())
                 .build();
     }
 

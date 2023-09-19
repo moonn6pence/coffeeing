@@ -13,9 +13,14 @@ import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
+import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.tag.dto.TagElement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -35,15 +40,25 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final MemberRepository memberRepository;
+    private final CapsuleRepository capsuleRepository;
+    private final CoffeeRepository coffeeRepository;
     private final SecurityContextUtils securityContextUtils;
     private final FeedUtil feedUtil;
 
     @Transactional
     public UploadFeedResponse uploadFeedByMember(UploadFeedRequest uploadFeedRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-
+        Feed feed;
         String imageUrl = feedUtil.makeImageElementToJsonString(uploadFeedRequest.images());
-        Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
+        String content = uploadFeedRequest.content();
+        TagElement tagElement = uploadFeedRequest.tagElement();
+
+        if(Objects.nonNull(tagElement)) {
+            validateTagInformation(tagElement);
+            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl, tagElement);
+        } else {
+            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
+        }
         return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
 
@@ -132,6 +147,16 @@ public class FeedService {
         FeedPage feedPage = new FeedPage(feeds.getContent(), feedLikes, viewer, feedUtil);
 
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+    }
+
+    private void validateTagInformation(TagElement tagElement) {
+        if(tagElement.category().equals(TagType.CAPSULE)) {
+            boolean isExist = capsuleRepository.existsById(tagElement.tagId());
+            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
+        } else if(tagElement.category().equals(TagType.BEAN)) {
+            boolean isExist = coffeeRepository.existsById(tagElement.tagId());
+            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
+        }
     }
 
     private FeedDetailResponse getFeedDetailResponse(
