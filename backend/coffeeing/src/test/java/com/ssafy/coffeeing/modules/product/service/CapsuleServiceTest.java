@@ -169,7 +169,7 @@ class CapsuleServiceTest extends ServiceTest {
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
 
-        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseOf(
+        BookmarkedResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
                 capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
@@ -178,11 +178,11 @@ class CapsuleServiceTest extends ServiceTest {
         );
 
         // when
-        BookmarkedResponse actual = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
+        BookmarkedResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
 
         // then
-        assertEquals(expected, actual);
-        assertEquals(BOOKMARK_PAGE_SIZE, actual.bookmarkedElements().size());
+        assertEquals(expectedCapsuleBookmarkResponse, actualCapsuleBookmarkResponse);
+        assertEquals(BOOKMARK_PAGE_SIZE, actualCapsuleBookmarkResponse.bookmarkedElements().size());
     }
 
 }

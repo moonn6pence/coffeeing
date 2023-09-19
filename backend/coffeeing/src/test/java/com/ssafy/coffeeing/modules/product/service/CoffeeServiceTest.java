@@ -168,7 +168,7 @@ class CoffeeServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
-        BookmarkedResponse expected = ProductMapper.supplyBookmarkedResponseOf(
+        BookmarkedResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
                 coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
                         generalMember,
                         pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
@@ -178,14 +178,14 @@ class CoffeeServiceTest extends ServiceTest {
 
         // when
 
-        BookmarkedResponse acutal = coffeeService.getBookmarkedCoffees(
+        BookmarkedResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
                 memberId,
                 pageInfoRequest
         );
 
         // then
-        assertEquals(expected,acutal);
-        assertEquals(BOOKMARK_PAGE_SIZE, acutal.bookmarkedElements().size());
+        assertEquals(expectedCoffeeBookmarkResponse,actualCoffeeBookmarkResponse);
+        assertEquals(BOOKMARK_PAGE_SIZE, actualCoffeeBookmarkResponse.bookmarkedElements().size());
 
 
     }
