@@ -1,7 +1,6 @@
 package com.ssafy.coffeeing.modules.event.listener;
 
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
-import com.ssafy.coffeeing.modules.member.service.MemberService;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,11 +31,11 @@ public class EventListenerTest extends ServiceTest {
         // given
         Long memberId = generalMember.getId();
         int experience = 75;
-        ActivityConductedEvent activityConductedEvent = new ActivityConductedEvent(experience, memberId);
+        ExperienceEvent activityConductedEvent = new ExperienceEvent(experience, memberId);
         // when
         applicationEventPublisher.publishEvent(activityConductedEvent);
         // then
-        assertEquals(1,(int)applicationEvents.stream(ActivityConductedEvent.class).count());
+        assertEquals(1,(int)applicationEvents.stream(ExperienceEvent.class).count());
     }
 
 }

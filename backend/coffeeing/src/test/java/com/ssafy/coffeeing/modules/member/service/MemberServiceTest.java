@@ -1,7 +1,7 @@
 package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
@@ -47,7 +47,7 @@ class MemberServiceTest extends ServiceTest {
         Member member = MemberTestDummy.createGeneralMember("닉네이무", "1234", "how@and.why");
         memberRepository.save(member);
         // when
-        memberService.addExperience(new ActivityConductedEvent(75, member.getId()));
+        memberService.addExperience(new ExperienceEvent(75, member.getId()));
         // then
         assertThat(member.getExperience()).isEqualTo(75);
 
@@ -60,7 +60,7 @@ class MemberServiceTest extends ServiceTest {
         Member member = MemberTestDummy.createGeneralMember("얍", "1234", "a@a.com");
         memberRepository.save(member);
         // when
-        memberService.addExperience(new ActivityConductedEvent(150, member.getId()));
+        memberService.addExperience(new ExperienceEvent(150, member.getId()));
         // then
         assertAll(
                 () -> assertThat(member.getExperience()).isEqualTo(25),
@@ -87,7 +87,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void Given_Member_When_GetExperienceInfo_Then_Success() {
         // given
-        memberService.addExperience(new ActivityConductedEvent(150, generalMember.getId()));
+        memberService.addExperience(new ExperienceEvent(150, generalMember.getId()));
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when

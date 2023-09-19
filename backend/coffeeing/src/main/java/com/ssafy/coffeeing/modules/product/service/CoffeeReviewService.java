@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.product.service;
 
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
@@ -16,6 +17,7 @@ import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +34,10 @@ public class CoffeeReviewService {
 
     private final SecurityContextUtils securityContextUtils;
 
-    private static final Integer REVIEW_PAGE_SIZE = 6;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
+    private static final Integer REVIEW_PAGE_SIZE = 6;
+    private static final int REVIEW_EXPERIENCE = 50;
     @Transactional
     public CreationResponse createReview(Long id, ReviewRequest reviewRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
@@ -43,6 +47,8 @@ public class CoffeeReviewService {
 
         CoffeeReview review = coffeeReviewRepository.save(
                 ProductMapper.supplyCoffeeReviewOf(coffee, member, reviewRequest));
+
+        applicationEventPublisher.publishEvent(new ExperienceEvent(REVIEW_EXPERIENCE,member.getId()));
 
         return ProductMapper.supplyCreationResponseFrom(review);
     }

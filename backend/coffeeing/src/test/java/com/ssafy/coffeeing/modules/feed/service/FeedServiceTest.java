@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
@@ -25,6 +26,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -38,7 +42,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
+@RecordApplicationEvents
 class FeedServiceTest extends ServiceTest {
 
     @Autowired
@@ -58,6 +62,9 @@ class FeedServiceTest extends ServiceTest {
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @Autowired
     private FeedUtil feedUtil;
@@ -119,6 +126,20 @@ class FeedServiceTest extends ServiceTest {
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
     }
 
+    @Test
+    @DisplayName("피드 등록시 점수 증가 이벤트리스너가 실행된다.")
+    void Given_UploadFeedRequest_When_SaveFeed_Then_EventListenerSuccess() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
+
+        //when
+        feedService.uploadFeedByMember(uploadFeedRequest);
+        //then
+        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
+
+    }
 
     @DisplayName("피드 삭제 요청 시, 삭제에 성공한다.")
     @Test

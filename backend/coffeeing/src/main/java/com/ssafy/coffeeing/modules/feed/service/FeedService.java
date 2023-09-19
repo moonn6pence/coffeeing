@@ -1,6 +1,6 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
@@ -66,7 +66,7 @@ public class FeedService {
             feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
         }
 
-        applicationEventPublisher.publishEvent(new ActivityConductedEvent(FEED_UPLOAD_EXPERIENCE, member.getId()));
+        applicationEventPublisher.publishEvent(new ExperienceEvent(FEED_UPLOAD_EXPERIENCE, member.getId()));
 
         return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
