@@ -4,6 +4,10 @@ import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
@@ -14,6 +18,11 @@ public class FeedTestDummy {
 
     public static UploadFeedRequest createUploadFeedRequestWithoutTag() {
         return new UploadFeedRequest(null, createImageElement(), "첫 번째 피드1");
+    }
+
+    public static UploadFeedRequest createUploadFeedRequestWithTag(Capsule capsule) {
+        return new UploadFeedRequest(new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleName()),
+                createImageElement(), "첫 번째 피드1");
     }
 
     public static List<ImageElement> createImageElement() {
@@ -58,7 +67,12 @@ public class FeedTestDummy {
         return feeds;
     }
 
-    public static UpdateFeedRequest createUpdateFeedRequest() {
-        return new UpdateFeedRequest("testUpdateContent");
+    public static UpdateFeedRequest createUpdateFeedRequestWithoutTag() {
+        return new UpdateFeedRequest("testUpdateContent", null);
+    }
+
+    public static UpdateFeedRequest createUpdateFeedRequestWithTag(Coffee coffee) {
+        return new UpdateFeedRequest("testUpdateContent",
+                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()));
     }
 }

@@ -94,7 +94,7 @@ class FeedServiceTest extends ServiceTest {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
 
         //when
         feedService.updateFeedContentById(feed.getId(), updateFeedRequest);
@@ -112,7 +112,7 @@ class FeedServiceTest extends ServiceTest {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
@@ -127,7 +127,7 @@ class FeedServiceTest extends ServiceTest {
     void Given_UpdateFeed_With_InValidMember_When_UpdateFeed_Then_Fail() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(beforeResearchMember);
 
@@ -282,7 +282,7 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
                 () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
                 () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
                 () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
@@ -309,7 +309,7 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
                 () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
                 () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
                 () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),

@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.domain;
 import com.ssafy.coffeeing.modules.feed.dto.FeedPageElement;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +22,12 @@ public class FeedPage {
     private void makeFeedImageUrlsToObject(List<Feed> feeds, FeedUtil feedUtil) {
         feeds.forEach(feed -> {
             Member member = feed.getMember();
+            Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+
             feedPageElements.add(new FeedPageElement(feed.getId(),
                     feedUtil.makeJsonStringToImageElement(feed.getImageUrl()),
                     feed.getContent(),
+                    tag,
                     member.getId(),
                     feed.getLikeCount(),
                     member.getNickname(),
@@ -43,7 +47,7 @@ public class FeedPage {
         for (FeedLike feedLike : feedLikes) {
             for (FeedPageElement feedPageElement : feedPageElements) {
                 Feed feed = feedLike.getFeed();
-                if (Objects.equals(feed.getId(), feedPageElement.getId())) {
+                if (Objects.equals(feed.getId(), feedPageElement.getFeedId())) {
                     feedPageElement.updateIsLikeStatus();
                     break;
                 }

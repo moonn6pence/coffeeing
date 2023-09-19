@@ -20,7 +20,7 @@ import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.tag.domain.TagType;
-import com.ssafy.coffeeing.modules.tag.dto.TagElement;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -51,11 +51,11 @@ public class FeedService {
         Feed feed;
         String imageUrl = feedUtil.makeImageElementToJsonString(uploadFeedRequest.images());
         String content = uploadFeedRequest.content();
-        TagElement tagElement = uploadFeedRequest.tagElement();
+        Tag tag = uploadFeedRequest.tag();
 
-        if(Objects.nonNull(tagElement)) {
-            validateTagInformation(tagElement);
-            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl, tagElement);
+        if(Objects.nonNull(tag)) {
+            validateTagInformation(tag);
+            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl, tag);
         } else {
             feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
         }
@@ -149,12 +149,12 @@ public class FeedService {
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
 
-    private void validateTagInformation(TagElement tagElement) {
-        if(tagElement.category().equals(TagType.CAPSULE)) {
-            boolean isExist = capsuleRepository.existsById(tagElement.tagId());
+    private void validateTagInformation(Tag tag) {
+        if(tag.category().equals(TagType.CAPSULE)) {
+            boolean isExist = capsuleRepository.existsById(tag.tagId());
             if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
-        } else if(tagElement.category().equals(TagType.BEAN)) {
-            boolean isExist = coffeeRepository.existsById(tagElement.tagId());
+        } else if(tag.category().equals(TagType.BEAN)) {
+            boolean isExist = coffeeRepository.existsById(tag.tagId());
             if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
         }
     }
@@ -164,16 +164,18 @@ public class FeedService {
             Optional<FeedLike> feedLike,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
+        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+
         if (Objects.isNull(viewer)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
         } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, true);
         } else if (viewerLikedFeed(feedLike)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, false);
         } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, true);
         } else {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
         }
     }
 

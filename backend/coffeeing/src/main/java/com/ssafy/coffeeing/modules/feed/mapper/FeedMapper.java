@@ -3,7 +3,7 @@ package com.ssafy.coffeeing.modules.feed.mapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.tag.dto.TagElement;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,15 +24,15 @@ public class FeedMapper {
                 .build();
     }
 
-    public static Feed supplyFeedEntityOf(Member member, String content, String imageUrl, TagElement tagElement) {
+    public static Feed supplyFeedEntityOf(Member member, String content, String imageUrl, Tag tag) {
         return Feed.builder()
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
                 .likeCount(0L)
-                .tagId(tagElement.tagId())
-                .tagType(tagElement.category())
-                .tagName(tagElement.name())
+                .tagId(tag.tagId())
+                .tagType(tag.category())
+                .tagName(tag.name())
                 .build();
     }
 
@@ -40,8 +40,13 @@ public class FeedMapper {
         return new ProfileFeedsResponse(feeds, hasNext, nextCursor);
     }
 
-    public static FeedDetailResponse supplyFeedDetailEntityOf(Feed feed, List<ImageElement> images, Boolean isLike, Boolean isMine) {
-        return new FeedDetailResponse(feed.getId(), images, feed.getContent(), feed.getMember().getId(),
+    public static FeedDetailResponse supplyFeedDetailEntityOf(
+            Feed feed,
+            Tag tag,
+            List<ImageElement> images,
+            Boolean isLike,
+            Boolean isMine) {
+        return new FeedDetailResponse(feed.getId(), images, feed.getContent(), tag, feed.getMember().getId(),
                 feed.getLikeCount(), feed.getMember().getNickname(), feed.getMember().getProfileImage(), isLike, isMine);
     }
 
