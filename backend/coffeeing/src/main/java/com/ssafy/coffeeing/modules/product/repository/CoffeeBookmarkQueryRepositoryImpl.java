@@ -41,8 +41,8 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
                 .stream()
                 .map((item) -> ProductMapper.supplySimpleProductElementOf(
                                 item.getId(),
-                                item.getCoffeeName(),
                                 item.getRegion(),
+                                item.getCoffeeName(),
                                 item.getImageUrl()
                         )
                 )

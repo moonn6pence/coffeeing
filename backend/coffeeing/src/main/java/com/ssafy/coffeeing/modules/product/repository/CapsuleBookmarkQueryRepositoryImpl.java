@@ -43,8 +43,8 @@ public class CapsuleBookmarkQueryRepositoryImpl implements CapsuleBookmarkQueryR
                 .stream()
                 .map((item) -> ProductMapper.supplySimpleProductElementOf(
                                 item.getId(),
-                                item.getCapsuleName(),
                                 item.getBrandKr(),
+                                item.getCapsuleName(),
                                 item.getImageUrl()
                         )
                 )
