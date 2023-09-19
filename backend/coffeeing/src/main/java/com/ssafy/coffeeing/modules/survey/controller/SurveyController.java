@@ -16,7 +16,6 @@ public class SurveyController {
 
     private final SurveyService surveyService;
 
-
     @PostMapping("/recommend")
     public BaseResponse<SurveyResponse> recommendBySurvey(@Valid PreferenceRequest preferenceRequest){
 

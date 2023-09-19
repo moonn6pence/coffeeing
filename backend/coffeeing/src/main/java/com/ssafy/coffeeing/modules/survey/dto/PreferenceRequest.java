@@ -1,16 +1,17 @@
 package com.ssafy.coffeeing.modules.survey.dto;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import org.hibernate.validator.constraints.Range;
+
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 public record PreferenceRequest(
 
-        Boolean isCapsule,
-        Integer machineType,
-        @Min(value = 0) @Max(value = 3) Integer roast,
-        @Min(value = 0) @Max(value = 3) Integer acidity,
-        @Min(value = 0) @Max(value = 3) Integer body,
+        @NotNull Boolean isCapsule,
+        @Range(min = 1, max = 5) Integer machineType,
+        @Range(min = 0, max = 1) Double roast,
+        @Range(min = 0, max = 1) Double acidity,
+        @Range(min = 0, max = 1) Double body,
         @NotEmpty String flavorNote
 ) {
 }

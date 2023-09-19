@@ -122,8 +122,18 @@ public class ProductMapper {
         return new SimpleProductElement(id, subtitle, title, imageUrl);
     }
 
-    public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
-        return new BookmarkResponse(
+    public static SimpleProductElement supplySimpleProductElementFrom(Capsule capsule) {
+
+        return new SimpleProductElement(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl());
+    }
+
+    public static SimpleProductElement supplySimpleProductElementFrom(Coffee coffee) {
+
+        return new SimpleProductElement(coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl());
+    }
+
+    public static BookmarkedResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
+        return new BookmarkedResponse(
                 bookmarkedElements.getNumber(),
                 bookmarkedElements.getTotalPages(),
                 bookmarkedElements.getContent(),

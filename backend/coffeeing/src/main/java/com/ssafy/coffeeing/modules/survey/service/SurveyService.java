@@ -2,6 +2,12 @@ package com.ssafy.coffeeing.modules.survey.service;
 
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
+import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
+import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import com.ssafy.coffeeing.modules.survey.domain.Preference;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import com.ssafy.coffeeing.modules.survey.dto.SurveyResponse;
@@ -11,22 +17,40 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class SurveyService {
 
     private final SecurityContextUtils securityContextUtils;
-
     private final PreferenceRepository preferenceRepository;
+    private final RecommendService recommendService;
+    private final CapsuleRepository capsuleRepository;
+    private final CoffeeRepository coffeeRepository;
 
     @Transactional
     public SurveyResponse recommendBySurvey(PreferenceRequest preferenceRequest) {
 
-        // http로 fastApi에 추천 요청 -> RecommendService.recommend() -> @Profile("test") TestRecommendService.recommend()
+        Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
-        // 결과 받아서 db에서 추가 정보 찾아서 DTO로 감싸고 리턴
+        RecommendResponse recommendResponse = recommendService.getRecommendationsByParameter(preferenceRequest);
 
-        return null;
+        List<SimpleProductElement> products = preferenceRequest.isCapsule() ?
+                capsuleRepository.findAllById(recommendResponse.results())
+                        .stream()
+                        .map(ProductMapper::supplySimpleProductElementFrom)
+                        .toList() :
+                coffeeRepository.findAllById(recommendResponse.results())
+                        .stream()
+                        .map(ProductMapper::supplySimpleProductElementFrom)
+                        .toList();
+
+        if (member == null) {
+            return SurveyMapper.supplySurveyResponseOf(products, preferenceRequest);
+        }
+
+        return SurveyMapper.supplySurveyResponseOf(products, preferenceRequest, member);
     }
 
     @Transactional
