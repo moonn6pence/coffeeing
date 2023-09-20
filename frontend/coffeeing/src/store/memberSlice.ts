@@ -6,7 +6,7 @@ type LoginState = SignInMemberInfo & {isLogin: boolean};
 const initialState: LoginState = {
     isLogin: false,
     accessToken:'',
-    refreshToken:'',
+    refreshToken: localStorage.getItem("refreshToken") || '',
     grantType:''
 }
 
@@ -16,6 +16,8 @@ const memberSlice = createSlice({
   reducers:{
     setMemberToken(state, action:PayloadAction<SignInMemberInfo>) {
         const payload = action.payload;
+        localStorage.setItem("refreshToken", payload.refreshToken);
+
         return {
             ...state,
             isLogin: true,

@@ -41,6 +41,8 @@ export const signUp = (params: MemberParams):Promise<void|SignUpMemberInfo> => {
 export const reissueToken = (reissueToken: string) => {
     return publicRequest.post(`${API_URL}/${AUTH_PATH}/reissue`, {
         reissueToken
+    }).then((res)=>{
+        return Promise.resolve(res.data.data);
     }).catch(async (error)=>{
         if(!isAxiosError(error) || !error.response?.data || !error.config) {
             console.error("[token reissue]: Unknown error");

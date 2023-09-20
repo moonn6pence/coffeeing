@@ -4,18 +4,18 @@ import InputField from "components/InputField";
 import Button from "components/Button";
 import GoogleLoginBtn from "components/GoogleLogin";
 
+import { store } from "store/store"
 import { signIn } from "../service/auth/auth"
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setMemberToken } from "store/memberSlice";
-
 
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  // 로그인 처리
+  // 로그인 처리``
   const handleSubmit = async (e:MouseEvent)=>{
     e.preventDefault();
     const result = await signIn({email: email, password: pw});
@@ -23,6 +23,11 @@ function LoginPage() {
       dispatch(setMemberToken(result));
     }
   }
+
+  const isLogin = store.getState().member.isLogin;
+  if(isLogin) {
+    window.location.replace("/");
+  } 
 
   return(
     <div className="flex flex-col gap-6 items-center">
