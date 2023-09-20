@@ -72,8 +72,10 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ExperienceInfoResponse getMemberExperience() {
-        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+    public ExperienceInfoResponse getMemberExperience(Long memberId) {
+        Member member = memberRepository
+                .findById(memberId)
+                .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
         return MemberMapper.supplyExperienceInfoResponseOf(
                 member,
                 memberUtil.calculateLevelUpExperience(member.getMemberLevel())
