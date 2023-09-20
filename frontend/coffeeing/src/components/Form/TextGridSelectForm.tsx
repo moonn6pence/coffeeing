@@ -5,7 +5,7 @@ import { Item } from "../../util/constants"
 
 type TextGridSelectorProps = {
     label: string,
-    selectedItem: Item|undefined,
+    selectedItem: Item,
     setSelectedItem: any,
     itemList: Item[];
     containerWidth?: string,
