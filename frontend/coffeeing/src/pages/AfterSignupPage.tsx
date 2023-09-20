@@ -15,10 +15,10 @@ export const AfterSignupPage = () => {
   const [selectedGender, setSelectedGender] = useState();
   const [selectedAge, setSelectedAge] = useState();
 
-  const isLogin = store.getState().member.isLogin;
-  if(isLogin) {
-    window.location.replace("/");
-  } 
+  // const isLogin = store.getState().member.isLogin;
+  // if(isLogin) {
+  //   window.location.replace("/");
+  // } 
 
   return(
     <div className="flex flex-col gap-6 items-center pt-10">

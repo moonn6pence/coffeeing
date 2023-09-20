@@ -6,21 +6,26 @@ import GoogleLoginBtn from "components/GoogleLogin";
 
 import { store } from "store/store"
 import { signIn } from "../service/auth/auth"
+import { getMyInfo } from "../service/member/member"
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setMemberToken } from "store/memberSlice";
+import { MemberState } from "service/member/types";
 
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [pw, setPw] = useState('');
   const dispatch = useDispatch<AppDispatch>();
-  // 로그인 처리``
+  // 로그인 처리
   const handleSubmit = async (e:MouseEvent)=>{
     e.preventDefault();
     const result = await signIn({email: email, password: pw});
     if(result) {
       dispatch(setMemberToken(result));
+      const myInfo = await getMyInfo();
+      const nextPage = (myInfo?.state === MemberState.BEFORE_ADDITIONAL_DATA) ? "/signup/additonal-info" : "/";
+      window.location.replace(nextPage);
     }
   }
 
