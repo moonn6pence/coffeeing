@@ -4,7 +4,7 @@ import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.NicknameChangeRequest;
 import com.ssafy.coffeeing.modules.member.dto.ProfileImageChangeRequest;
@@ -75,7 +75,7 @@ class MemberServiceTest extends ServiceTest {
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         //when
-        BaseInfoResponse memberBaseInfoResponse = memberService.getMemberInfo(generalMember.getId());
+        MemberInfoResponse memberBaseInfoResponse = memberService.getMemberInfo(generalMember.getId());
 
         //then
         assertThat(memberBaseInfoResponse).isEqualTo(

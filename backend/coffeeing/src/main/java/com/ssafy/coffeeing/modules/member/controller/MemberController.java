@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.member.controller;
 
 import javax.validation.Valid;
 
-import com.ssafy.coffeeing.modules.feed.service.FeedService;
 import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.service.CapsuleService;
@@ -40,10 +39,10 @@ public class MemberController {
     }
 
     @GetMapping("/info/{memberId}")
-    public BaseResponse<BaseInfoResponse> getMemberInfo(
+    public BaseResponse<MemberInfoResponse> getMemberInfo(
             @PathVariable @NumberFormat Long memberId
     ) {
-        return BaseResponse.<BaseInfoResponse>builder()
+        return BaseResponse.<MemberInfoResponse>builder()
                 .data(memberService.getMemberInfo(memberId))
                 .build();
     }

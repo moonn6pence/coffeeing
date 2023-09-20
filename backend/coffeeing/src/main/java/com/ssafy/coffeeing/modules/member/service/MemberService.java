@@ -59,7 +59,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public BaseInfoResponse getMemberInfo(Long memberId) {
+    public MemberInfoResponse getMemberInfo(Long memberId) {
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));

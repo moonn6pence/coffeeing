@@ -1,16 +1,17 @@
 package com.ssafy.coffeeing.modules.member.mapper;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MemberMapper {
-    public static BaseInfoResponse supplyBaseInfoResponseFrom(Member member) {
-        return new BaseInfoResponse(
+    public static MemberInfoResponse supplyBaseInfoResponseFrom(Member member) {
+        return new MemberInfoResponse(
                 member.getNickname(),
-                member.getProfileImage()
+                member.getProfileImage(),
+                member.getState()
         );
     }
 
