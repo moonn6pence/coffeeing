@@ -1,14 +1,16 @@
 package com.ssafy.coffeeing.modules.feed.dto;
 
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import lombok.Getter;
 
 import java.util.List;
 
 @Getter
 public class FeedPageElement {
-    Long id;
+    Long feedId;
     List<ImageElement> images;
     String content;
+    Tag tag;
     Long registerId;
     Long likeCount;
     String registerName;
@@ -16,11 +18,12 @@ public class FeedPageElement {
     Boolean isLike = false;
     Boolean isMine = false;
 
-    public FeedPageElement(Long id, List<ImageElement> images, String content, Long registerId, Long likeCount,
+    public FeedPageElement(Long feedId, List<ImageElement> images, String content, Tag tag, Long registerId, Long likeCount,
                            String registerName, String registerProfileImg) {
-        this.id = id;
+        this.feedId = feedId;
         this.images = images;
         this.content = content;
+        this.tag = tag;
         this.registerId = registerId;
         this.likeCount = likeCount;
         this.registerName = registerName;

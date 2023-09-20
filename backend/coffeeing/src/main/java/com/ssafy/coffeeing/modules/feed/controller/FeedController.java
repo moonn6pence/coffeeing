@@ -28,7 +28,7 @@ public class FeedController {
     public BaseResponse<Void> updateFeedContent(
             @PathVariable @NumberFormat Long feedId,
             @Valid @RequestBody UpdateFeedRequest updateFeedRequest) {
-        feedService.updateFeedContentById(feedId, updateFeedRequest);
+        feedService.updateFeedById(feedId, updateFeedRequest);
         return BaseResponse.<Void>builder()
                 .build();
     }
@@ -62,7 +62,7 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    public BaseResponse<FeedDetailResponse> getFeedDetailById(@Valid @NumberFormat Long feedId) {
+    public BaseResponse<FeedDetailResponse> getFeedDetailById(@PathVariable @NumberFormat Long feedId) {
         return BaseResponse.<FeedDetailResponse>builder()
                 .data(feedService.getFeedDetailById(feedId))
                 .build();

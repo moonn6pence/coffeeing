@@ -54,4 +54,28 @@ public class CoffeeTestDummy {
         return coffees;
     }
 
+    public static Coffee createMockCoffeeRoma(){
+        return Coffee.builder()
+                .coffeeName("로마 카프리치오")
+                .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
+                .aroma("sweet")
+                .imageUrl("https://abcdsffddd.png")
+                .productDescription("")
+                .totalScore(50.0)
+                .totalReviewer(10)
+                .build();
+    }
+
+    public static Coffee createMockCoffeeRomaWithInvalidId(){
+        return Coffee.builder()
+                .id(-1L)
+                .coffeeName("로마 카프리치오")
+                .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
+                .aroma("sweet")
+                .imageUrl("https://abcdsffddd.png")
+                .productDescription("")
+                .totalScore(50.0)
+                .totalReviewer(10)
+                .build();
+    }
 }

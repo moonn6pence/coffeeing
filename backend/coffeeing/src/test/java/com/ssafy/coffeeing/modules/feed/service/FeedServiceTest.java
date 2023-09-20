@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
+import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
+import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.dummy.FeedTestDummy;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
@@ -11,7 +13,13 @@ import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
+import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
+import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.tag.domain.TagType;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,6 +50,12 @@ class FeedServiceTest extends ServiceTest {
     @Autowired
     private FeedLikeRepository feedLikeRepository;
 
+    @Autowired
+    private CapsuleRepository capsuleRepository;
+
+    @Autowired
+    private CoffeeRepository coffeeRepository;
+
     @MockBean
     private SecurityContextUtils securityContextUtils;
 
@@ -54,7 +68,7 @@ class FeedServiceTest extends ServiceTest {
         //given
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
-        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
+        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequestWithoutTag();
 
         //when
         UploadFeedResponse uploadFeedResponse = feedService
@@ -66,7 +80,39 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
                 () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
                 () -> assertThat(response.getId()).isPositive(),
-                () -> assertThat(response.getLikeCount()).isEqualTo(0L)
+                () -> assertThat(response.getLikeCount()).isEqualTo(0L),
+                () -> assertThat(response.getTagId()).isEqualTo(null),
+                () -> assertThat(response.getTagType()).isEqualTo(null),
+                () -> assertThat(response.getTagName()).isEqualTo(null)
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("태그와 함께 피드 업로드 요청 시, 업로드에 성공한다.")
+    @Test
+    void GivenUploadFeeRequestWIthTag_When_SaveFeed_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Capsule capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleRoma());
+        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequestWithTag(capsule);
+
+        //when
+        UploadFeedResponse uploadFeedResponse = feedService
+                .uploadFeedByMember(uploadFeedRequest);
+        Feed response = feedRepository.getReferenceById(uploadFeedResponse.feedId());
+
+        //then
+        assertAll(
+                () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
+                () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
+                () -> assertThat(response.getId()).isPositive(),
+                () -> assertThat(response.getLikeCount()).isEqualTo(0L),
+                () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
+                () -> assertThat(response.getTagType()).isEqualTo(TagType.CAPSULE),
+                () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleName())
         );
 
         //verify
@@ -94,13 +140,55 @@ class FeedServiceTest extends ServiceTest {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
 
         //when
-        feedService.updateFeedContentById(feed.getId(), updateFeedRequest);
+        feedService.updateFeedById(feed.getId(), updateFeedRequest);
 
         //then
         assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content());
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("태그와 함께 피드 업데이트 요청 시, 수정에 성공한다.")
+    @Test
+    void Given_UpdateFeedWithTag_When_UpdateFeed_Then_Success() {
+        //given
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        Coffee coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeRoma());
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(coffee);
+
+        //when
+        feedService.updateFeedById(feed.getId(), updateFeedRequest);
+
+        //then
+        assertAll(
+                () -> assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content()),
+                () -> assertThat(feed.getTagName()).isEqualTo(updateFeedRequest.tag().name()),
+                () -> assertThat(feed.getTagId()).isEqualTo(updateFeedRequest.tag().tagId()),
+                () -> assertThat(feed.getTagType()).isEqualTo(updateFeedRequest.tag().category())
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
+    @DisplayName("태그와 함께 피드 업데이트 요청 시, 태그 정보가 존재하지 않다면 수정에 실패한다.")
+    @Test
+    void Given_UpdateFeedWithNotExistTag_When_UpdateFeed_Then_Fail() {
+        //given
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        Coffee coffee = CoffeeTestDummy.createMockCoffeeRomaWithInvalidId();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(coffee);
+
+        //when, then
+        assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT, assertThrows(BusinessException.class,
+                () -> feedService.updateFeedById(feed.getId(), updateFeedRequest)).getInfo());
+
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -112,11 +200,11 @@ class FeedServiceTest extends ServiceTest {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.updateFeedContentById(feed.getId() + 1, updateFeedRequest)).getInfo());
+                () -> feedService.updateFeedById(feed.getId() + 1, updateFeedRequest)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -127,13 +215,13 @@ class FeedServiceTest extends ServiceTest {
     void Given_UpdateFeed_With_InValidMember_When_UpdateFeed_Then_Fail() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequest();
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(beforeResearchMember);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.updateFeedContentById(feed.getId(), updateFeedRequest)).getInfo());
+                () -> feedService.updateFeedById(feed.getId(), updateFeedRequest)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -282,13 +370,14 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
                 () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
                 () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
                 () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
                 () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
                 () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
                 () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertNull(feedDetailResponse.tag()),
                 () -> assertEquals(feedDetailResponse.isLike(), false),
                 () -> assertEquals(feedDetailResponse.isMine(), false)
         );
@@ -309,7 +398,7 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.id(), feed.getId()),
+                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
                 () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
                 () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
                 () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),

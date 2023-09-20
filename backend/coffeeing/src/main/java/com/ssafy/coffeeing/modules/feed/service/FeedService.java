@@ -13,9 +13,14 @@ import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
+import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -35,15 +40,25 @@ public class FeedService {
     private final FeedRepository feedRepository;
     private final FeedLikeRepository feedLikeRepository;
     private final MemberRepository memberRepository;
+    private final CapsuleRepository capsuleRepository;
+    private final CoffeeRepository coffeeRepository;
     private final SecurityContextUtils securityContextUtils;
     private final FeedUtil feedUtil;
 
     @Transactional
     public UploadFeedResponse uploadFeedByMember(UploadFeedRequest uploadFeedRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-
+        Feed feed;
         String imageUrl = feedUtil.makeImageElementToJsonString(uploadFeedRequest.images());
-        Feed feed = FeedMapper.supplyFeedEntityBy(member, uploadFeedRequest.content(), imageUrl);
+        String content = uploadFeedRequest.content();
+        Tag tag = uploadFeedRequest.tag();
+
+        if(Objects.nonNull(tag)) {
+            validateTagInformation(tag);
+            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl, tag);
+        } else {
+            feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
+        }
         return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
 
@@ -58,13 +73,19 @@ public class FeedService {
     }
 
     @Transactional
-    public void updateFeedContentById(Long feedId, UpdateFeedRequest updateFeedRequest) {
+    public void updateFeedById(Long feedId, UpdateFeedRequest updateFeedRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-
+        Tag tag = updateFeedRequest.tag();
         Feed feed = feedRepository.findByIdAndMember(feedId, member)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
-        feed.updateContent(updateFeedRequest.content());
+        if(Objects.nonNull(tag)) {
+            validateTagInformation(tag);
+            feed.updateTag(tag);
+            feed.updateContent(updateFeedRequest.content());
+        } else {
+            feed.updateContent(updateFeedRequest.content());
+        }
     }
 
     @Transactional
@@ -134,21 +155,33 @@ public class FeedService {
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
 
+    private void validateTagInformation(Tag tag) {
+        if(tag.category().equals(TagType.CAPSULE)) {
+            boolean isExist = capsuleRepository.existsById(tag.tagId());
+            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
+        } else if(tag.category().equals(TagType.BEAN)) {
+            boolean isExist = coffeeRepository.existsById(tag.tagId());
+            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
+        }
+    }
+
     private FeedDetailResponse getFeedDetailResponse(
             Member viewer, Feed feed,
             Optional<FeedLike> feedLike,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
+        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+
         if (Objects.isNull(viewer)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
         } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, true);
         } else if (viewerLikedFeed(feedLike)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, true, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, false);
         } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, true);
         } else {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
         }
     }
 
