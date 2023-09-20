@@ -1,15 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { AppDispatch  } from 'store/store';
+import { logout } from "store/memberSlice";
 
 interface INavButtonProps {
   value: string;
   navLink: string;
+  isLogout?: boolean
 }
 
-export const NavBarButton = (props: INavButtonProps) => {
-  const { value, navLink } = props;
+export const NavBarButton = ({ value, navLink, isLogout=false }: INavButtonProps) => {
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const goLink = () => {
+    if(isLogout) {
+      // TODO LOGOUT API 
+      dispatch(logout());
+    }
     navigate(`${navLink}`);
   };
 

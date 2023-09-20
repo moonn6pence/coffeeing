@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SignInMemberInfo } from "../service/auth/types"
 
 type LoginState = SignInMemberInfo & {isLogin: boolean};
@@ -25,9 +25,19 @@ const memberSlice = createSlice({
             refreshToken: payload.refreshToken,
             grantType: payload.grantType
         };
+    },
+    logout(state) {
+      localStorage.removeItem("refreshToken");
+      return {
+        ...state,
+        isLogin: false,
+        accessToken: "",
+        refreshToken: "",
+        grantType: ""
+      }
     }
   },
 })
 
 export default memberSlice.reducer;
-export const { setMemberToken } = memberSlice.actions;
+export const { setMemberToken, logout } = memberSlice.actions;
