@@ -1,12 +1,9 @@
 package com.ssafy.coffeeing.dummy;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
-import com.ssafy.coffeeing.modules.global.exception.BusinessException;
-import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
+import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -21,6 +18,7 @@ import java.util.List;
 public class FeedDummy {
 
     private final FeedRepository feedRepository;
+    private final FeedUtil feedUtil;
     private final List<String> feedContents = new ArrayList<>(){
         {
             add(null);
@@ -41,26 +39,21 @@ public class FeedDummy {
 
     public List<Feed> createFeedDummies(List<Member> members) {
         List<Feed> feeds = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            String feedImageUrlAsString = objectMapper.writeValueAsString(
-                            new ImageElement("https://coffeeing.s3.ap-northeast-2.amazonaws.com/beanPicture.webp"));
-            for(int i = 0; i < members.size(); i++) {
-                for (String feedContent : feedContents) {
+        List<ImageElement> images = new ArrayList<>();
+        images.add(new ImageElement("https://coffeeing.s3.ap-northeast-2.amazonaws.com/beanPicture.webp"));
+        for(int i = 0; i < members.size(); i++) {
+            for (String feedContent : feedContents) {
 
-                    feeds.add(Feed.builder()
-                            .member(members.get(i))
-                            .content(i + feedContent)
-                            .imageUrl(feedImageUrlAsString)
-                            .likeCount(0L)
-                            .build());
-                }
+                feeds.add(Feed.builder()
+                        .member(members.get(i))
+                        .content(i + feedContent)
+                        .imageUrl(feedUtil.makeImageElementToJsonString(images))
+                        .likeCount(0L)
+                        .build());
             }
-
-            feedRepository.saveAll(feeds);
-            return feeds;
-        } catch (JsonProcessingException e) {
-            throw new BusinessException(FeedErrorInfo.FEED_IMAGE_ERROR);
         }
+
+        feedRepository.saveAll(feeds);
+        return feeds;
     }
 }
