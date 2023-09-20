@@ -54,6 +54,6 @@ public class FeedDynamicRepositoryImpl implements FeedDynamicRepository {
     }
 
     private BooleanExpression cursorId(Long cursorId){
-        return cursorId == null ? null : feed.id.gt(cursorId);
+        return cursorId == null ? null : feed.id.lt(cursorId);
     }
 }
