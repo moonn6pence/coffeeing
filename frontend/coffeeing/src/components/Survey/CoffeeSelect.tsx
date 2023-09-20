@@ -36,16 +36,15 @@ export const CoffeeSelect = () => {
     // 원두 일 때
     else if (myCoffee===0) {
       dispatch(addCurrentPage())
-      // !!!!!!!!!!!!!!!!!!추후 변경해야 함!!!!!!!!!!!!!!!!!!!!
-      dispatch(setTotalPage(5))
+      dispatch(setTotalPage(4))
     } else {
       dispatch(addCurrentPage())
-      // !!!!!!!!!!!!!!!!!!추후 변경해야 함!!!!!!!!!!!!!!!!!!!!
-      dispatch(setTotalPage(6))
+      dispatch(setTotalPage(5))
     }
   }
+
   return(
-    <div className='flex flex-col items-center gap-5'>
+    <div className='flex flex-col items-center gap-5 mt-10'>
       {/* 설문 상단 */}
       <p className='text-2xl'>무엇을 추천해드릴까요?</p>
       {/* 설문 사진 */}
