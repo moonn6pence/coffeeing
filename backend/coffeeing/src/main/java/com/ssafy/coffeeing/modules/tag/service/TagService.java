@@ -12,6 +12,8 @@ import com.ssafy.coffeeing.modules.tag.mapper.TagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +28,7 @@ public class TagService {
 
     private static final int AUTO_COMPLETE_SIZE = 10;
 
+    @Transactional(readOnly = true)
     public TagsResponse getProductsBySuggestion(SearchTagRequest searchTagRequest) {
         List<Tag> tags = new ArrayList<>();
         String keyword = searchTagRequest.keyword();
