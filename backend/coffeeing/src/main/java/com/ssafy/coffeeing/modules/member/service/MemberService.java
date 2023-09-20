@@ -1,6 +1,6 @@
 package com.ssafy.coffeeing.modules.member.service;
 
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.member.mapper.MemberMapper;
 import com.ssafy.coffeeing.modules.member.util.MemberUtil;
@@ -43,7 +43,7 @@ public class MemberService {
     }
 
 
-    public void addExperience(final ActivityConductedEvent eventRecord) {
+    public void addExperience(final ExperienceEvent eventRecord) {
         Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
         member.addExperience(eventRecord.experience());
         while (isLevelUp(member.getMemberLevel(), member.getExperience())) {

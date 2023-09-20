@@ -1,7 +1,7 @@
 package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,6 +37,9 @@ class MemberServiceTest extends ServiceTest {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @DisplayName("점수 증가시 저장된 점수가 증가한다.")
     @Test
     void Given_ExperienceRecord_When_AddExperienceEvent_Then_Success() {
@@ -43,7 +47,7 @@ class MemberServiceTest extends ServiceTest {
         Member member = MemberTestDummy.createGeneralMember("닉네이무", "1234", "how@and.why");
         memberRepository.save(member);
         // when
-        memberService.addExperience(new ActivityConductedEvent(75, member.getId()));
+        memberService.addExperience(new ExperienceEvent(75, member.getId()));
         // then
         assertThat(member.getExperience()).isEqualTo(75);
 
@@ -56,7 +60,7 @@ class MemberServiceTest extends ServiceTest {
         Member member = MemberTestDummy.createGeneralMember("얍", "1234", "a@a.com");
         memberRepository.save(member);
         // when
-        memberService.addExperience(new ActivityConductedEvent(150, member.getId()));
+        memberService.addExperience(new ExperienceEvent(150, member.getId()));
         // then
         assertAll(
                 () -> assertThat(member.getExperience()).isEqualTo(25),
@@ -83,7 +87,7 @@ class MemberServiceTest extends ServiceTest {
     @Test
     void Given_Member_When_GetExperienceInfo_Then_Success() {
         // given
-        memberService.addExperience(new ActivityConductedEvent(150, generalMember.getId()));
+        memberService.addExperience(new ExperienceEvent(150, generalMember.getId()));
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
@@ -125,5 +129,7 @@ class MemberServiceTest extends ServiceTest {
         assertThat(generalMember.getNickname()).isEqualTo(newNickname);
 
     }
+
+
 
 }

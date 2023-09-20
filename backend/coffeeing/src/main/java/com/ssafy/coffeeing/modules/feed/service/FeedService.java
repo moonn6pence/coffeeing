@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.feed.service;
 
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
@@ -22,6 +23,7 @@ import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.tag.domain.TagType;
 import com.ssafy.coffeeing.modules.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,10 @@ public class FeedService {
     private final CoffeeRepository coffeeRepository;
     private final SecurityContextUtils securityContextUtils;
     private final FeedUtil feedUtil;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    private static final int FEED_UPLOAD_EXPERIENCE = 75;
+
 
     @Transactional
     public UploadFeedResponse uploadFeedByMember(UploadFeedRequest uploadFeedRequest) {
@@ -59,6 +65,9 @@ public class FeedService {
         } else {
             feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
         }
+
+        applicationEventPublisher.publishEvent(new ExperienceEvent(FEED_UPLOAD_EXPERIENCE, member.getId()));
+
         return FeedMapper.supplyFeedResponseBy(feedRepository.save(feed));
     }
 

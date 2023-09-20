@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.product.service;
 import com.ssafy.coffeeing.dummy.CapsuleReviewTestDummy;
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
@@ -25,6 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,6 +35,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
+@RecordApplicationEvents
 class CapsuleReviewServiceTest extends ServiceTest {
 
     @Autowired
@@ -45,6 +49,9 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @MockBean
     private SecurityContextUtils securityContextUtils;
@@ -75,6 +82,21 @@ class CapsuleReviewServiceTest extends ServiceTest {
                 () -> assertEquals(actualReview.getCapsule(), capsule),
                 () -> assertEquals(actualReview.getMember(), generalMember)
         );
+    }
+
+    @Test
+    @DisplayName("리뷰 작성시 점수 증가 이벤트가 실행됨을 확인한다.")
+    void Given_CapsuleIdAndReviewRequest_When_CreateReview_Then_ExperienceEventSuccess() {
+
+        // given
+        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+
+        // when
+        CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
+
+        // then
+        assertEquals(1, (int)applicationEvents.stream(ExperienceEvent.class).count());
     }
 
     @Test

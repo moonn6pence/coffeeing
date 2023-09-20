@@ -1,6 +1,6 @@
-package com.ssafy.coffeeing.modules.member.service;
+package com.ssafy.coffeeing.modules.event.listener;
 
-import com.ssafy.coffeeing.modules.event.eventer.ActivityConductedEvent;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class MemberEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     // When testing this EventListener method, count how many times it was called
-    public void addExperience(final ActivityConductedEvent event) {
+    public void addExperience(final ExperienceEvent event) {
         memberService.addExperience(event);
     }
 
