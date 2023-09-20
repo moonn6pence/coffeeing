@@ -2,10 +2,16 @@ package com.ssafy.coffeeing.modules.product.domain;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
 
 @Getter
 @SuperBuilder
@@ -31,7 +37,7 @@ public class Coffee extends BaseEntity {
     private CoffeeCriteria coffeeCriteria;
 
     @Column
-    private String aroma;
+    private String flavorNote;
     
     @Column(columnDefinition = "text")
     private String imageUrl;

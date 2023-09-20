@@ -79,13 +79,13 @@ public class CoffeeDummy {
         return coffeeRepository.saveAll(coffees);
     }
 
-    private Coffee createCoffee(String coffeeNameKr, String coffeeNameEng, String aroma, String imageUrl, String productDescription,
+    private Coffee createCoffee(String coffeeNameKr, String coffeeNameEng, String flavorNote, String imageUrl, String productDescription,
                                 CoffeeCriteria coffeeCriteria, Double totalScore, Integer totalReviewer, String regionKr, String regionEng) {
         return Coffee.builder()
                 .coffeeNameKr(coffeeNameKr)
                 .coffeeNameEng(coffeeNameEng)
                 .coffeeCriteria(coffeeCriteria)
-                .aroma(aroma)
+                .flavorNote(flavorNote)
                 .imageUrl(imageUrl)
                 .productDescription(productDescription)
                 .totalScore(totalScore)

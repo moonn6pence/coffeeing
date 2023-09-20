@@ -73,7 +73,7 @@ public class CapsuleDummy {
                 .capsuleNameKr(capsuleNameKr)
                 .capsuleNameEng(capsuleNameEng)
                 .coffeeCriteria(coffeeCriteria)
-                .aroma(aroma)
+                .flavorNote(flavorNote)
                 .machineType(machineType)
                 .imageUrl(imageUrl)
                 .productDescription(description)
