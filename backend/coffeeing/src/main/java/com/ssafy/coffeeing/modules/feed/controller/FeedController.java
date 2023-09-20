@@ -4,6 +4,8 @@ import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.service.FeedService;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,27 @@ public class FeedController {
                 .build();
     }
 
+
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "cursor"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Long"
+                            , paramType = "query"
+                            , defaultValue = ""
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "size"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Integer"
+                            , paramType = "query"
+                            , defaultValue = "10"
+                    )
+            })
     @GetMapping("/my-list")
     public BaseResponse<ProfileFeedsResponse> getMyFeeds(@Valid FeedsRequest feedsRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
@@ -54,6 +77,33 @@ public class FeedController {
                 .build();
     }
 
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "memberId"
+                            , value = "멤버 ID"
+                            , required = true
+                            ,dataType = "Long"
+                            ,paramType = "path"
+                    ),
+                    @ApiImplicitParam(
+                            name = "cursor"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Long"
+                            , paramType = "query"
+                            , defaultValue = ""
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "size"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Integer"
+                            , paramType = "query"
+                            , defaultValue = "10"
+                    )
+            })
     @GetMapping("/{memberId}/list")
     public BaseResponse<ProfileFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
@@ -68,6 +118,26 @@ public class FeedController {
                 .build();
     }
 
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "cursor"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Long"
+                            , paramType = "query"
+                            , defaultValue = ""
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "size"
+                            , value = "응답 필드 종류"
+                            , required = false
+                            , dataType = "Integer"
+                            , paramType = "query"
+                            , defaultValue = "10"
+                    )
+            })
     @GetMapping
     public BaseResponse<FeedPageResponse> getFeedsByFeedPage(@Valid FeedsRequest feedsRequest) {
         return BaseResponse.<FeedPageResponse>builder()
