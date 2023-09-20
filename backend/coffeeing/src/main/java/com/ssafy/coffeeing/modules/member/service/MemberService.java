@@ -36,7 +36,12 @@ public class MemberService {
         if (checkDuplicateNickname(onboardRequest.nickname()).exist()) {
             throw new BusinessException(MemberErrorInfo.PRE_EXIST_NICKNAME);
         }
+
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        if(!member.getState().equals(MemberState.BEFORE_ADDITIONAL_DATA)) {
+            throw new BusinessException(MemberErrorInfo.NOT_VALID_STATE);
+        }
+
         member.updateMemberState(MemberState.BEFORE_RESEARCH);
         member.updateByOnboardResult(onboardRequest.nickname(), onboardRequest.ageIdx(), onboardRequest.genderIdx());
         return new OnboardResponse(member.getId(), member.getNickname());
