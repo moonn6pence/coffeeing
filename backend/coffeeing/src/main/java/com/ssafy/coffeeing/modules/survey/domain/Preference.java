@@ -44,7 +44,7 @@ public class Preference extends BaseEntity {
 	public void update(PreferenceRequest p) {
 		this.productType = p.isCapsule() ? ProductType.COFFEE_CAPSULE : ProductType.COFFEE_BEAN;
 		this.machineType = p.isCapsule() ? p.machineType() : null;
-		this.coffeeCriteria = new CoffeeCriteria(p.roast() / 3.0, p.acidity() / 3.0, p.body() / 3.0);
+		this.coffeeCriteria = new CoffeeCriteria(p.roast(), p.acidity(), p.body());
 		this.flavorNote = p.flavorNote();
 	}
 }

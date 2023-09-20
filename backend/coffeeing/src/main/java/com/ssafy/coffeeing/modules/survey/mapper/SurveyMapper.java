@@ -19,6 +19,7 @@ public class SurveyMapper {
     public static Preference supplyPreferenceOf(PreferenceRequest request, Long memberId) {
 
         return Preference.builder()
+                .memberId(memberId)
                 .productType(request.isCapsule() ? ProductType.COFFEE_CAPSULE : ProductType.COFFEE_BEAN)
                 .machineType(request.isCapsule() ? request.machineType() : null)
                 .coffeeCriteria(new CoffeeCriteria(request.roast(), request.acidity(), request.body()))
