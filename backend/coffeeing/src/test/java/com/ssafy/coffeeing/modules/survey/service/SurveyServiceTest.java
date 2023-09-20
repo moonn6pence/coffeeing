@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.survey.service;
 
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
@@ -27,6 +28,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
@@ -36,6 +40,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
+@RecordApplicationEvents
 class SurveyServiceTest extends ServiceTest {
 
     @MockBean
@@ -52,6 +57,12 @@ class SurveyServiceTest extends ServiceTest {
 
     @Autowired
     private CoffeeRepository coffeeRepository;
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @Autowired
+    private ApplicationEvents applicationEvents;
 
     @Autowired
     private SurveyService surveyService;
@@ -116,6 +127,7 @@ class SurveyServiceTest extends ServiceTest {
 
         // then
         assertEquals(expected, actual);
+        assertEquals(1,(int)applicationEvents.stream(ExperienceEvent.class).count());
     }
 
     @Test

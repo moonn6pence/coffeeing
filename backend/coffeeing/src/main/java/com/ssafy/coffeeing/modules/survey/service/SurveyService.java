@@ -1,5 +1,6 @@
 package com.ssafy.coffeeing.modules.survey.service;
 
+import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
@@ -14,6 +15,7 @@ import com.ssafy.coffeeing.modules.survey.dto.SurveyResponse;
 import com.ssafy.coffeeing.modules.survey.mapper.SurveyMapper;
 import com.ssafy.coffeeing.modules.survey.repository.PreferenceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,8 @@ public class SurveyService {
     private final RecommendService recommendService;
     private final CapsuleRepository capsuleRepository;
     private final CoffeeRepository coffeeRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private static final Integer SURVEY_EXPERIENCE = 15;
 
     @Transactional
     public SurveyResponse recommendBySurvey(PreferenceRequest preferenceRequest) {
@@ -49,6 +53,8 @@ public class SurveyService {
         if (member == null) {
             return SurveyMapper.supplySurveyResponseOf(products, preferenceRequest);
         }
+
+        applicationEventPublisher.publishEvent(new ExperienceEvent(SURVEY_EXPERIENCE, member.getId()));
 
         return SurveyMapper.supplySurveyResponseOf(products, preferenceRequest, member);
     }
