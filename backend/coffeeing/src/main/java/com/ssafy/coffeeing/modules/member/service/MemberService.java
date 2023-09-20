@@ -47,7 +47,6 @@ public class MemberService {
         return new OnboardResponse(member.getId(), member.getNickname());
     }
 
-
     public void addExperience(final ExperienceEvent eventRecord) {
         Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
         member.addExperience(eventRecord.experience());
@@ -92,5 +91,11 @@ public class MemberService {
     public void updateMemberNickname(NicknameChangeRequest nicknameChangeRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
         member.updateMemberNickname(nicknameChangeRequest.nickname());
+    }
+
+    @Transactional(readOnly = true)
+    public MyInfoResponse getCurrentMemberInfo() {
+        Member member = securityContextUtils.getCurrnetAuthenticatedMember();
+        return MemberMapper.supplyMyInfoResponseOf(member);
     }
 }

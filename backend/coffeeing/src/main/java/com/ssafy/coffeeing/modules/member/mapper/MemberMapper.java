@@ -3,6 +3,8 @@ package com.ssafy.coffeeing.modules.member.mapper;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.MyInfoResponse;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +21,15 @@ public class MemberMapper {
                 member.getExperience(),
                 member.getMemberLevel(),
                 experienceForLevelUp
+        );
+    }
+
+    public static MyInfoResponse supplyMyInfoResponseOf(Member member) {
+        return new MyInfoResponse(
+            member.getId(),
+            member.getState(),
+            member.getNickname(),
+            member.getProfileImage()
         );
     }
 
