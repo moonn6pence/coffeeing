@@ -76,5 +76,11 @@ public class MemberController {
                 .build();
     }
 
+    @GetMapping("/my-info")
+    public BaseResponse<MyInfoResponse> getMyInfo() {
+        return BaseResponse.<MyInfoResponse>builder()
+            .data(memberService.getCurrentMemberInfo())
+            .build();
+    }
 }
 
