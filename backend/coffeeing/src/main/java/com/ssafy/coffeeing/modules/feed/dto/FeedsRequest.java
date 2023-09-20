@@ -4,6 +4,7 @@ package com.ssafy.coffeeing.modules.feed.dto;
 import lombok.Builder;
 
 import javax.validation.constraints.Positive;
+import java.util.Objects;
 
 public record FeedsRequest(
         Long cursor,
@@ -12,8 +13,11 @@ public record FeedsRequest(
         Integer size
 ) {
         @Builder
-        public FeedsRequest {
-                cursor = null;
-                size = 10;
+        public FeedsRequest(Long cursor, Integer size) {
+                if (Objects.isNull(size)) {
+                        size = 10;
+                }
+                this.cursor = cursor;
+                this.size = size;
         }
 }

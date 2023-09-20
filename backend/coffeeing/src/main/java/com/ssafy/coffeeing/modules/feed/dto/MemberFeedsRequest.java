@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.feed.dto;
 import lombok.Builder;
 
 import javax.validation.constraints.Positive;
+import java.util.Objects;
 
 public record MemberFeedsRequest(
         Long memberId,
@@ -13,8 +14,12 @@ public record MemberFeedsRequest(
         Integer size
 ) {
     @Builder
-    public MemberFeedsRequest {
-        cursor = null;
-        size = 10;
+    public MemberFeedsRequest(Long memberId, Long cursor, Integer size) {
+        if (Objects.isNull(size)) {
+            size = 10;
+        }
+        this.memberId = memberId;
+        this.cursor = cursor;
+        this.size = size;
     }
 }
