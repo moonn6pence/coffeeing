@@ -132,7 +132,7 @@ class FeedServiceTest extends ServiceTest {
         //given
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
-        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequest();
+        UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequestWithoutTag();
 
         //when
         feedService.uploadFeedByMember(uploadFeedRequest);
