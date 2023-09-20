@@ -33,9 +33,10 @@ const surveySlice = createSlice({
     saveAcidity(state, action:PayloadAction<number>){
       state.acidity = action.payload
       console.log('acidity', state.acidity)
-    }
+    },
+    resetSurvey:()=>initialState
   },
 })
 
 export default surveySlice.reducer;
-export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity} = surveySlice.actions;
+export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity,resetSurvey} = surveySlice.actions;
