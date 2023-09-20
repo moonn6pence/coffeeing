@@ -47,10 +47,10 @@ public class MemberController {
                 .build();
     }
 
-    @GetMapping("/experience")
-    public BaseResponse<ExperienceInfoResponse> getMemberExperience() {
+    @GetMapping("/experience/{memberId}")
+    public BaseResponse<ExperienceInfoResponse> getMemberExperience(@PathVariable @NumberFormat Long memberId) {
         return BaseResponse.<ExperienceInfoResponse>builder()
-                .data(memberService.getMemberExperience())
+                .data(memberService.getMemberExperience(memberId))
                 .build();
     }
 

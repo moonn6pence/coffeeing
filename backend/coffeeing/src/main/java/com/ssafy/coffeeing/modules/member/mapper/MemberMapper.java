@@ -10,8 +10,7 @@ public class MemberMapper {
     public static MemberInfoResponse supplyBaseInfoResponseFrom(Member member) {
         return new MemberInfoResponse(
                 member.getNickname(),
-                member.getProfileImage(),
-                member.getState()
+                member.getProfileImage()
         );
     }
 

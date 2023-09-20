@@ -97,7 +97,7 @@ class MemberServiceTest extends ServiceTest {
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
-        ExperienceInfoResponse experienceInfoResponse = memberService.getMemberExperience();
+        ExperienceInfoResponse experienceInfoResponse = memberService.getMemberExperience(generalMember.getId());
 
         // then
         assertEquals(
