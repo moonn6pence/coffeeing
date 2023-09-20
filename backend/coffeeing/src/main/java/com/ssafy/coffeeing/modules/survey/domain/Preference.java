@@ -1,7 +1,8 @@
-package com.ssafy.coffeeing.modules.member.domain;
+package com.ssafy.coffeeing.modules.survey.domain;
 
 import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.product.domain.ProductType;
+import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,9 +32,19 @@ public class Preference extends BaseEntity {
 	@Enumerated(EnumType.ORDINAL)
 	private ProductType productType;
 
-	@Enumerated(EnumType.ORDINAL)
-	private MachineType machineType;
+	@Column
+	private Integer machineType;
 
 	@Embedded
 	private CoffeeCriteria coffeeCriteria;
+
+	@Column
+	private String flavorNote;
+
+	public void update(PreferenceRequest p) {
+		this.productType = p.isCapsule() ? ProductType.COFFEE_CAPSULE : ProductType.COFFEE_BEAN;
+		this.machineType = p.isCapsule() ? p.machineType() : null;
+		this.coffeeCriteria = new CoffeeCriteria(p.roast(), p.acidity(), p.body());
+		this.flavorNote = p.flavorNote();
+	}
 }

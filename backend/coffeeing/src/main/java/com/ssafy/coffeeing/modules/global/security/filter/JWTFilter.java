@@ -35,6 +35,7 @@ public class JWTFilter extends OncePerRequestFilter {
 	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth",
 			"/favicon.ico",
 			"/product",
+			"/survey/recommend",
 			"/v1/api-docs",
 			"/v2/api-docs",
 			"/swagger-resources",

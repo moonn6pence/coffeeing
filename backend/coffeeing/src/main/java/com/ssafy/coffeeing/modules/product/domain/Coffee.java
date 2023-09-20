@@ -40,5 +40,4 @@ public class Coffee extends BaseEntity {
 
     @Column(length = 64)
     private String region;
-
 }

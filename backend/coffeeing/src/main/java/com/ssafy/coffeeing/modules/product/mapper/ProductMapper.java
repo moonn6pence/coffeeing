@@ -37,7 +37,7 @@ public class ProductMapper {
                                                         CoffeeReview memberReview) {
 
         return new CoffeeResponse(
-                coffee.getId(), coffee.getCoffeeName(), coffee.getImageUrl(),
+                coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl(),
                 coffee.getAroma(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
                 coffee.getCoffeeCriteria().getBody(), coffee.getProductDescription(),
                 coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / coffee.getTotalReviewer(),
@@ -53,6 +53,8 @@ public class ProductMapper {
                 capsuleReview.getId(),
                 capsuleReview.getScore(),
                 capsuleReview.getContent(),
+                capsuleReview.getMember().getId(),
+                capsuleReview.getMember().getProfileImage(),
                 capsuleReview.getMember().getNickname()
         );
     }
@@ -62,6 +64,8 @@ public class ProductMapper {
                 coffeeReview.getId(),
                 coffeeReview.getScore(),
                 coffeeReview.getContent(),
+                coffeeReview.getMember().getId(),
+                coffeeReview.getMember().getProfileImage(),
                 coffeeReview.getMember().getNickname()
         );
     }
@@ -116,6 +120,16 @@ public class ProductMapper {
             String imageUrl
     ) {
         return new SimpleProductElement(id, subtitle, title, imageUrl);
+    }
+
+    public static SimpleProductElement supplySimpleProductElementFrom(Capsule capsule) {
+
+        return new SimpleProductElement(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl());
+    }
+
+    public static SimpleProductElement supplySimpleProductElementFrom(Coffee coffee) {
+
+        return new SimpleProductElement(coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl());
     }
 
     public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
