@@ -51,6 +51,8 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.oauth2Login()
+            .authorizationEndpoint().baseUri("/oauth2")
+            .and()
             .userInfoEndpoint()
             .userService(oAuth2UserService)
             .and()
