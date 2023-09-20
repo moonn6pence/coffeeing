@@ -132,8 +132,8 @@ public class ProductMapper {
         return new SimpleProductElement(coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl());
     }
 
-    public static BookmarkedResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
-        return new BookmarkedResponse(
+    public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
+        return new BookmarkResponse(
                 bookmarkedElements.getNumber(),
                 bookmarkedElements.getTotalPages(),
                 bookmarkedElements.getContent(),
