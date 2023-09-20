@@ -1,13 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import storage from 'redux-persist/lib/storage';
-import { persistReducer, persistStore } from 'redux-persist';
+import storageSession from 'redux-persist/lib/storage/session';
+import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import surveySlice from "./surveySlice";
 import searchSlice from "./searchSlice";
 import memberSlice from "./memberSlice";
 
 const persistConfig = {
   key: 'root',
-  storage: storage,
+  storage: storageSession,
   whitelist: ["member"]
 };
 
@@ -20,7 +20,13 @@ const reducers = combineReducers({
 const reducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-  reducer
+  reducer,
+  middleware: (getDefaultMiddleware) =>
+  getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }),
 })
 
 export const persistor = persistStore(store);
