@@ -1,10 +1,9 @@
-import React,{useState,MouseEvent} from "react";
+import React,{useState, useEffect, MouseEvent} from "react";
 import {useNavigate} from 'react-router-dom'
 import InputField from "components/InputField";
 import Button from "components/Button";
 import GoogleLoginBtn from "components/GoogleLogin";
 
-import { store } from "store/store"
 import { signIn } from "../service/auth/auth"
 import { getMyInfo } from "../service/member/member"
 import { useDispatch } from "react-redux";
@@ -24,18 +23,32 @@ function LoginPage() {
     if(result) {
       dispatch(setMemberToken(result));
       const myInfo = await getMyInfo();
-      const nextPage = (myInfo?.state === MemberState.BEFORE_ADDITIONAL_DATA) ? "/signup/additonal-info" : "/";
-      window.location.replace(nextPage);
+      if(myInfo && myInfo.state == MemberState.BEFORE_ADDITIONAL_DATA) {
+        window.location.replace("/signup/additonal-info");
+      } 
+    
+      if(myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
+          window.location.replace("/recommend-main");
+      }
     }
   }
 
-  const isLogin = store.getState().member.isLogin;
-  if(isLogin) {
-    window.location.replace("/");
-  } 
+  useEffect(()=>{
+    const checkMemberInfo = async () => {
+        const result = await getMyInfo();
+        if(result && result.state == MemberState.BEFORE_ADDITIONAL_DATA) {
+            window.location.replace("/signup/additonal-info");
+        } 
+        
+        if(result && result.state == MemberState.BEFORE_RESEARCH) {
+            window.location.replace("/recommend-main");
+        }
+    }
+    checkMemberInfo();
+  }, []);
 
   return(
-    <div className="flex flex-col gap-6 items-center">
+    <div className="flex flex-col gap-6 items-center pt-10">
       <div className="text-3xl font-bold">로그인</div>
       <div className="flex flex-row gap-1">
         <p>아직 회원이 아니신가요?</p>
