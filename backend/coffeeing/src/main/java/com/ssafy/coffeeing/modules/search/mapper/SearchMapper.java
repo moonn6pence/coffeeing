@@ -1,13 +1,13 @@
-package com.ssafy.coffeeing.modules.tag.mapper;
+package com.ssafy.coffeeing.modules.search.mapper;
 
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
-import com.ssafy.coffeeing.modules.tag.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class TagMapper {
+public class SearchMapper {
 
     public static TagsResponse supplyTagsResponseFrom(List<Tag> tags) {
         return new TagsResponse(tags);

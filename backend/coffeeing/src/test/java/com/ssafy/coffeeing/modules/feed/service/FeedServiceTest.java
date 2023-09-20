@@ -20,7 +20,7 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

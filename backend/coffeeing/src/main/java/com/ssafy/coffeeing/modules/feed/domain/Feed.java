@@ -1,8 +1,8 @@
 package com.ssafy.coffeeing.modules.feed.domain;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.ssafy.coffeeing.modules.tag.service;
+package com.ssafy.coffeeing.modules.search.service;
 
 import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
@@ -7,8 +7,9 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.tag.dto.SearchTagRequest;
-import com.ssafy.coffeeing.modules.tag.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.service.SearchService;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class TagServiceTest extends ServiceTest {
+class SearchServiceTest extends ServiceTest {
 
     @Autowired
-    TagService tagService;
+    SearchService searchService;
 
     @Autowired
     CapsuleRepository capsuleRepository;
@@ -38,7 +39,7 @@ class TagServiceTest extends ServiceTest {
         coffeeRepository.save(coffee);
 
         //when
-        TagsResponse tagsResponse = tagService.getProductsBySuggestion(searchTagRequest);
+        TagsResponse tagsResponse = searchService.getProductsBySuggestion(searchTagRequest);
 
         //then
         assertEquals(tagsResponse.tags().size(), 2);

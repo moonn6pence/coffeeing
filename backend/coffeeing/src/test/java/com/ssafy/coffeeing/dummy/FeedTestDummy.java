@@ -6,8 +6,8 @@ import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;

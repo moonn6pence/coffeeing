@@ -1,14 +1,14 @@
-package com.ssafy.coffeeing.modules.tag.service;
+package com.ssafy.coffeeing.modules.search.service;
 
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
-import com.ssafy.coffeeing.modules.tag.dto.SearchTagRequest;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
-import com.ssafy.coffeeing.modules.tag.dto.TagsResponse;
-import com.ssafy.coffeeing.modules.tag.mapper.TagMapper;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.mapper.SearchMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
-public class TagService {
+public class SearchService {
 
     private final CapsuleRepository capsuleRepository;
 
@@ -44,7 +44,7 @@ public class TagService {
         if (tags.size() > AUTO_COMPLETE_SIZE) {
             tags = tags.subList(0, AUTO_COMPLETE_SIZE);
         }
-        return TagMapper.supplyTagsResponseFrom(tags);
+        return SearchMapper.supplyTagsResponseFrom(tags);
     }
 
     private void addCapsulesAndCoffeesToTagElement(
