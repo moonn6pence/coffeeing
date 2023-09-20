@@ -2,11 +2,17 @@ package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BaseInfoResponse;
+import com.ssafy.coffeeing.modules.member.domain.MemberState;
+import com.ssafy.coffeeing.modules.member.dto.ExistNickNameResponse;
+import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.NicknameChangeRequest;
+import com.ssafy.coffeeing.modules.member.dto.OnboardRequest;
+import com.ssafy.coffeeing.modules.member.dto.OnboardResponse;
 import com.ssafy.coffeeing.modules.member.dto.ProfileImageChangeRequest;
 import com.ssafy.coffeeing.modules.member.mapper.MemberMapper;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
@@ -75,7 +81,7 @@ class MemberServiceTest extends ServiceTest {
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         //when
-        BaseInfoResponse memberBaseInfoResponse = memberService.getMemberInfo(generalMember.getId());
+        MemberInfoResponse memberBaseInfoResponse = memberService.getMemberInfo(generalMember.getId());
 
         //then
         assertThat(memberBaseInfoResponse).isEqualTo(
@@ -130,6 +136,42 @@ class MemberServiceTest extends ServiceTest {
 
     }
 
+    @DisplayName("회원가입만 사용자의 경우 추가정보 입력을 통해 사용자 상태를 업데이트 한다.")
+    @Test
+    void Given_OnboardRequest_When_InsertAdditionalMemberInfo_Then_Success() {
+        //given
+        Member member = MemberTestDummy.createMember("dsfmkls", "{noop}test", "t1e1s1t@naver.com", MemberState.BEFORE_ADDITIONAL_DATA);
+        memberRepository.save(member);
+        OnboardRequest onboardRequest = new OnboardRequest("ad1f11n11", 0, 0);
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(member);
+        //when
+        OnboardResponse response = memberService.insertAdditionalMemberInfo(onboardRequest);
+        //then
+        assertAll(
+            ()-> assertEquals(member.getId(), response.memberId()),
+            ()-> assertEquals(member.getNickname(), response.nickname())
+        );
+    }
 
+    @DisplayName("이미 추가정보를 입력한 사용자는 추가정보 입력을 할 수 없다.")
+    @Test
+    void Given_OnboardRequest_When_InsertAdditionalMemberInfo_Then_Fail() {
+        //given
+        OnboardRequest onboardRequest = new OnboardRequest("제약조건상절대중복이발생불가능한닉네임", 0, 0);
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        //when, then
+        assertEquals(MemberErrorInfo.NOT_VALID_STATE,
+            assertThrows(BusinessException.class, ()->memberService.insertAdditionalMemberInfo(onboardRequest)).getInfo());
+    }
 
+    @DisplayName("중복되는 닉네임이 존재하는지 확인한다.")
+    @Test
+    void Given_MemberNickname_When_CheckDuplication_Then_ReturnTrue() {
+        //given
+        String existNickName = generalMember.getNickname();
+        //when
+        ExistNickNameResponse response = memberService.checkDuplicateNickname(existNickName);
+        //then
+        assertTrue(response.exist());
+    }
 }
