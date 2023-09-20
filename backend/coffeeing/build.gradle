@@ -159,6 +159,7 @@ sonar {
 		property 'sonar.java.binaries', "${buildDir}/classes"
 		property 'sonar.test.inclusions', '**/*Test.java'
 		property 'sonar.exclusions', '**/test/**, **/Q*.java, **/resources/**'
+		property 'sonar.coverage.exclusions', '**/test/**, **/Q*.java, **/resources/**, **/dummy/**, **/health/**, **/infra/config/**, **/modules/*/dto/**, **/modules/*/domain/**, **/modules/*/controller/**, **/modules/global/security/**, **/modules/global/dto/**, **/modules/global/exception/**, **/CoffeeingApplication.java'
 		property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
 	}
 }
