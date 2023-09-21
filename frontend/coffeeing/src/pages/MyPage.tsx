@@ -20,7 +20,7 @@ export const MyPage = () => {
   //     });
   // }, []);
   return (
-    <div className="w-300 bg-light h-80">
+    <div className="w-300 bg-light h-80 flex items-center">
       <MyProfile nickname={nickname} imgLink={imgLink} />
     </div>
   );
