@@ -1,4 +1,4 @@
-import React,{Dispatch, SetStateAction, useState} from 'react';
+import React,{Dispatch, SetStateAction, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import lightRoast from '../../assets/survey/lightRoast.png'
 import mediumRoast from '../../assets/survey/mediumRoast.png'
@@ -8,15 +8,18 @@ import { AppDispatch, RootState } from 'store/store';
 import { addCurrentPage, saveRoasting } from 'store/surveySlice';
 import { NextButton } from './NextButton';
 
-
 export const RoastingSelect = () =>{
   const survey = useSelector((state:RootState)=>state.survey)
+  const widthClass = `w-${survey.currentPage}/${survey.totalPage}`;
   const dispatch = useDispatch<AppDispatch>();
   const [selectedLight, setSelectedLight] = useState(false)
   const [selectedMedium, setSelectedMedium] = useState(false)
   const [selectedDark, setSelectedDark] = useState(false)
   const [selectedUnknown, setSelectedUnknown] = useState(false)
   const [myRoast, setMyRoast] = useState(-1)
+  useEffect(()=>{
+    console.log(widthClass)
+  },[])
 
   // 데이터
   const data = [
@@ -56,7 +59,9 @@ export const RoastingSelect = () =>{
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='font-bold'>로스팅 단계 선택</p>
-        <p className='w-560px h-2.5 rounded-lg bg-process-bar'></p>
+        <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
+          <span className={`absolute botton-0 left-0 widthClass h-2.5 rounded-lg bg-light-roasting`}></span>
+        </p>
       </div>
       {/* 설문 사진 */}
       <div className='flex flex-row gap-10'>

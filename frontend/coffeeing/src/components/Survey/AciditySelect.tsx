@@ -1,4 +1,4 @@
-import React,{Dispatch, SetStateAction, useState} from 'react';
+import React,{Dispatch, SetStateAction, useEffect, useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import noAcid from '../../assets/survey/acidity/noAcid.png'
 import lowAcid from '../../assets/survey/acidity/lowAcid.png'
@@ -10,12 +10,17 @@ import { NextButton } from './NextButton';
 
 export const AciditySelect = () =>{
   const survey = useSelector((state:RootState)=>state.survey)
+  const widthClass = `w-${survey.currentPage}/${survey.totalPage}`;
   const dispatch = useDispatch<AppDispatch>();
   const [selectedNoAcid, setSelectedNoAcid] = useState(false)
   const [selectedLowAcid, setSelectedLowAcid] = useState(false)
   const [selectedMediumAcid, setSelectedMediumAcid] = useState(false)
   const [selectedHighAcid, setSelectedHighAcid] = useState(false)
   const [myAcidity, setMyAcidity] = useState(-1)
+
+  useEffect(()=>{
+    console.log(widthClass)
+  },[])
 
   // 데이터
   const data = [
@@ -54,7 +59,11 @@ export const AciditySelect = () =>{
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='font-bold'>산미 단계 선택</p>
-        <p className='w-560px h-2.5 rounded-lg bg-process-bar'></p>
+        <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
+          {widthClass&&
+            <p className={`absolute botton-0 left-0 ${widthClass} h-2.5 rounded-lg bg-light-roasting`}></p>
+          }
+        </p>
       </div>
       {/* 설문 사진 */}
       <div className='flex flex-row gap-10'>
