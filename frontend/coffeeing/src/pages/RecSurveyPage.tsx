@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { CoffeeSelect } from 'components/Survey/CoffeeSelect';
 import { RoastingSelect } from 'components/Survey/RoastingSelect';
 import { AciditySelect } from 'components/Survey/AciditySelect';
+import { BodySelect } from 'components/Survey/BodySelect';
 import { RootState } from 'store/store';
 
 export const RecSurveyPage = () =>{
@@ -18,6 +19,9 @@ export const RecSurveyPage = () =>{
       }
       {survey.currentPage==2&&
         <AciditySelect/>
+      }
+      {survey.currentPage==3&&
+        <BodySelect/>
       }
     </div>
   )

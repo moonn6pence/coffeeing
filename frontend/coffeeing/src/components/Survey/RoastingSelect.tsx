@@ -16,22 +16,22 @@ export const RoastingSelect = () =>{
   const [selectedMedium, setSelectedMedium] = useState(false)
   const [selectedDark, setSelectedDark] = useState(false)
   const [selectedUnknown, setSelectedUnknown] = useState(false)
-  const [myRoast, setMyRoast] = useState(0)
+  const [myRoast, setMyRoast] = useState(-1)
 
   // 데이터
   const data = [
-    {src:lightRoast, label:'라이트 로스팅', isSelected:selectedLight,setIsSelected:setSelectedLight,num:0},
-    {src:mediumRoast, label:'미디엄 로스팅', isSelected:selectedMedium,setIsSelected:setSelectedMedium,num:1},
-    {src:darkRoast, label:'라이트 로스팅', isSelected:selectedDark,setIsSelected:setSelectedDark,num:2},
-    {src:unknownRoast, label:'라이트 로스팅', isSelected:selectedUnknown,setIsSelected:setSelectedUnknown,num:3},
+    {src:lightRoast, label:'라이트 로스팅', isSelected:selectedLight,setIsSelected:setSelectedLight,num:0.3},
+    {src:mediumRoast, label:'미디엄 로스팅', isSelected:selectedMedium,setIsSelected:setSelectedMedium,num:0.6},
+    {src:darkRoast, label:'라이트 로스팅', isSelected:selectedDark,setIsSelected:setSelectedDark,num:0.9},
+    {src:unknownRoast, label:'잘 모르겠어요', isSelected:selectedUnknown,setIsSelected:setSelectedUnknown,num:0},
   ]
   // 로스팅 단계 이미지 클릭 시
   const handleRoastSelect = (num:number,isSelected:boolean,setIsSelected:Dispatch<SetStateAction<boolean>>)=>{
-    if(myRoast===0){
+    if(myRoast===-1){
       setMyRoast(num)
       setIsSelected(!isSelected)
     } else if (myRoast===num) {
-      setMyRoast(0)
+      setMyRoast(-1)
       setIsSelected(!isSelected)
     } else {
       alert('하나만 선택해주세요')
@@ -40,7 +40,7 @@ export const RoastingSelect = () =>{
   // 다음 버튼 클릭 시
   const handleRoastSubmit = ()=>{
     // 선택 안 했을 때
-    if (myRoast===0) {
+    if (myRoast===-1) {
       alert('선호하는 로스팅 단계를 하나 선택해주세요')
     } 
     // 선택 했을 때 - 다음 페이지로 & 로스팅 정보 저장
@@ -51,7 +51,7 @@ export const RoastingSelect = () =>{
   }
 
   return(
-    <div className='flex flex-col items-center gap-10'>
+    <div className='flex flex-col items-center gap-10 mt-10'>
       {/* 설문 상단 */}
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
@@ -75,7 +75,6 @@ export const RoastingSelect = () =>{
           );
         })
       }
-
       </div>
       {/* 버튼 */}
       <NextButton handleClick={handleRoastSubmit} />
