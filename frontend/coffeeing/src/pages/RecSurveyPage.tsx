@@ -4,6 +4,7 @@ import { CoffeeSelect } from 'components/Survey/CoffeeSelect';
 import { RoastingSelect } from 'components/Survey/RoastingSelect';
 import { AciditySelect } from 'components/Survey/AciditySelect';
 import { BodySelect } from 'components/Survey/BodySelect';
+import { MachineSelect } from 'components/Survey/MachineSelect';
 import { RootState } from 'store/store';
 
 export const RecSurveyPage = () =>{
@@ -22,6 +23,10 @@ export const RecSurveyPage = () =>{
       }
       {survey.currentPage==3&&
         <BodySelect/>
+      } 
+      {
+        survey.currentPage==5&&
+        <MachineSelect/>
       }
     </div>
   )
