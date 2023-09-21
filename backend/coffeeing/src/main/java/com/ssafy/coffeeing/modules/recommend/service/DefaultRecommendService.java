@@ -3,6 +3,7 @@ package com.ssafy.coffeeing.modules.recommend.service;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.SurveyErrorInfo;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
+import com.ssafy.coffeeing.modules.recommend.property.RecSysProperty;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -20,9 +21,7 @@ import java.util.Optional;
 @Service
 public class DefaultRecommendService implements RecommendService {
 
-    private static final String baseUrl = "http://localhost:80/rec";
-    private static final String recByParamUrl = baseUrl.concat("/collab");
-    private static final String recByProductUrl = baseUrl.concat("/content");
+    private final RecSysProperty recSysProperty;
 
     private final RestTemplate restTemplate;
 
@@ -30,7 +29,7 @@ public class DefaultRecommendService implements RecommendService {
     public RecommendResponse getRecommendationsByParameter(PreferenceRequest preferenceRequest) {
 
         URI uri = UriComponentsBuilder
-                .fromUriString(recByParamUrl)
+                .fromUriString(recSysProperty.getCollaborativeFilteringUrl())
                 .queryParam("isCapsule", preferenceRequest.isCapsule())
                 .queryParamIfPresent("machineType", Optional.of(preferenceRequest.machineType()))
                 .queryParam("roast", preferenceRequest.roast())
@@ -54,7 +53,7 @@ public class DefaultRecommendService implements RecommendService {
     public RecommendResponse getSimilarProduct(Boolean isCapsule, Long id) {
 
         URI uri = UriComponentsBuilder
-                .fromUriString(recByProductUrl)
+                .fromUriString(recSysProperty.getContentBasedFilteringUrl())
                 .queryParam("isCapsule", isCapsule)
                 .queryParam("id", id)
                 .encode()
