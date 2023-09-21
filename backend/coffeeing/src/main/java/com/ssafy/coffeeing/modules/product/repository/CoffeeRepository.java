@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface CoffeeRepository extends JpaRepository<Coffee, Long> {
 
-    List<Coffee> findCoffeesByCoffeeNameContainingIgnoreCase(String keyword, Pageable pageable);
+    List<Coffee> findCoffeesByCoffeeNameKrContainingIgnoreCase(String keyword, Pageable pageable);
 }

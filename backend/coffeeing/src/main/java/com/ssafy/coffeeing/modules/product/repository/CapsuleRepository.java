@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface CapsuleRepository extends JpaRepository<Capsule, Long> {
 
-    List<Capsule> findCapsulesByCapsuleNameContainingIgnoreCase(String keyword, Pageable pageable);
+    List<Capsule> findCapsulesByCapsuleNameKrContainingIgnoreCase(String keyword, Pageable pageable);
 }
