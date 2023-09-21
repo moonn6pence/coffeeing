@@ -133,7 +133,21 @@ class MemberServiceTest extends ServiceTest {
         memberService.updateMemberNickname(new NicknameChangeRequest(newNickname));
         // then
         assertThat(generalMember.getNickname()).isEqualTo(newNickname);
+    }
 
+    @DisplayName("중복된 멤버 닉네임으로 변경을 시도하는 경우 변경은 실패한다.")
+    @Test
+    void Given_DuplicateMemberNickname_When_updateMemberNickname_Then_Fail() {
+        // given
+        Member preExistMember = MemberTestDummy.createMemberSean();
+        memberRepository.save(preExistMember);
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        String newDuplicateNickname = preExistMember.getNickname();
+        NicknameChangeRequest nicknameChangeRequest = new NicknameChangeRequest(newDuplicateNickname);
+        // when then
+        assertEquals(MemberErrorInfo.PRE_EXIST_NICKNAME,
+                assertThrows(BusinessException.class, () -> memberService.updateMemberNickname(nicknameChangeRequest)).getInfo()
+        );
     }
 
     @DisplayName("회원가입만 사용자의 경우 추가정보 입력을 통해 사용자 상태를 업데이트 한다.")
@@ -148,8 +162,8 @@ class MemberServiceTest extends ServiceTest {
         OnboardResponse response = memberService.insertAdditionalMemberInfo(onboardRequest);
         //then
         assertAll(
-            ()-> assertEquals(member.getId(), response.memberId()),
-            ()-> assertEquals(member.getNickname(), response.nickname())
+                () -> assertEquals(member.getId(), response.memberId()),
+                () -> assertEquals(member.getNickname(), response.nickname())
         );
     }
 
@@ -161,7 +175,7 @@ class MemberServiceTest extends ServiceTest {
         BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         //when, then
         assertEquals(MemberErrorInfo.NOT_VALID_STATE,
-            assertThrows(BusinessException.class, ()->memberService.insertAdditionalMemberInfo(onboardRequest)).getInfo());
+                assertThrows(BusinessException.class, () -> memberService.insertAdditionalMemberInfo(onboardRequest)).getInfo());
     }
 
     @DisplayName("중복되는 닉네임이 존재하는지 확인한다.")
