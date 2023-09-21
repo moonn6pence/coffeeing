@@ -12,6 +12,7 @@ import { saveBody } from 'store/surveySlice';
 
 export const BodySelect = () => {
   const survey = useSelector((state:RootState)=>state.survey)
+  const widthClass = `w-${survey.currentPage}/${survey.totalPage}`;
   const dispatch = useDispatch<AppDispatch>();
   const [selectedWater, setSelectedWater] = useState(false);
   const [selectedIcedTea, setSelectedIcedTea] = useState(false);
@@ -52,7 +53,9 @@ export const BodySelect = () => {
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='font-bold'>바디감 단계 선택</p>
-        <p className='w-560px h-2.5 rounded-lg bg-process-bar'></p>
+        <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
+          <p className={`absolute botton-0 left-0 ${widthClass} h-2.5 rounded-lg bg-light-roasting`}></p>
+        </p>
       </div>
       {/* 설문 사진 */}
       <div className='flex flex-row gap-10'>

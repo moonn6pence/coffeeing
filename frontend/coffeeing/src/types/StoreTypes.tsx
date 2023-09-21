@@ -6,6 +6,7 @@ export type SurveyType = {
   body:number;
   userId:number;
   machine:number;
+  flavorNote:Array<string>
   // 원두 or 캡슐 type
   type:number; 
 }
