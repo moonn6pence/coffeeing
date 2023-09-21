@@ -9,6 +9,7 @@ import { ListPage } from 'pages/ListPage';
 import { SearchPage } from 'pages/SearchPage';
 import { DetailPage } from 'pages/DetailPage';
 import { OauthPage } from 'pages/OauthPage';
+import { AfterSignupPage } from 'pages/AfterSignupPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/search" element={<SearchPage />}></Route>
         <Route path="/detail/:beans/:id" element={<DetailPage />}></Route>
         <Route path="/oauth" element={<OauthPage />}></Route>
+        <Route path="/signup/additonal-info" element={<AfterSignupPage />}></Route>
       </Routes>
     </div>
   );

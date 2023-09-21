@@ -4,10 +4,11 @@ import InputField from "components/InputField";
 import Button from "components/Button";
 import GoogleLoginBtn from "components/GoogleLogin";
 import { signUp } from "../service/auth/auth"
-
+import { getMyInfo } from "../service/member/member"
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setMemberToken } from "store/memberSlice";
+import { MemberState } from "service/member/types";
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -32,6 +33,20 @@ function SignupPage() {
     setIsIdenticalPw(pw1===pw2)
   },[pw1, pw2])
 
+  useEffect(()=>{
+    const checkMemberInfo = async () => {
+        const result = await getMyInfo();
+        if(result && result.state == MemberState.BEFORE_ADDITIONAL_DATA) {
+            window.location.replace("/signup/additonal-info");
+        } 
+        
+        if(result && result.state == MemberState.BEFORE_RESEARCH) {
+            window.location.replace("/recommend-main");
+        }
+    }
+    checkMemberInfo();
+  }, []);
+
   // 회원가입 처리
   const handleSubmit = async (e:React.MouseEvent) =>{
     e.preventDefault();
@@ -39,11 +54,19 @@ function SignupPage() {
     const result = await signUp({email: email, password: pw1});
     if(result) {
       dispatch(setMemberToken(result));
+
+      const myInfo = await getMyInfo();
+      if(myInfo && myInfo.state == MemberState.BEFORE_ADDITIONAL_DATA) {
+          window.location.replace("/signup/additonal-info");
+      } 
+      if(myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
+          window.location.replace("/recommend-main");
+      }
     }
   }
 
   return (
-    <div className="flex flex-col gap-5 items-center">
+    <div className="flex flex-col gap-5 items-center pt-10">
       <div className="text-3xl font-bold">회원가입</div>
       <div className="flex flex-row gap-1">
         <p>이미 회원이신가요?</p> 

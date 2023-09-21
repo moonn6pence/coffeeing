@@ -30,7 +30,7 @@ export const NavBarBody = () => {
                 navigate('/myprofile');
               }}
             />
-            <NavBarButton value="로그아웃" navLink="/logout" />
+            <NavBarButton value="로그아웃" navLink="/" isLogout={true}/>
           </div>
         ) : (
           <div className="flex space-x-3">
