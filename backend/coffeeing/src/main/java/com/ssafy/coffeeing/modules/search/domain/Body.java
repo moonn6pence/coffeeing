@@ -26,7 +26,7 @@ public enum Body {
         return this.maxValue;
     }
 
-    public Body findBody(String degree) {
+    public static Body findBody(String degree) {
         return Arrays.stream(Body.values())
                 .filter(body -> body.name().equals(degree.toUpperCase()))
                 .findFirst().orElseThrow(() -> new BusinessException(SearchErrorInfo.NOT_EXIST_BODY));

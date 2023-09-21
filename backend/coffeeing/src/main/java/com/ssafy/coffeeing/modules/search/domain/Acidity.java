@@ -27,7 +27,7 @@ public enum Acidity {
         return this.maxValue;
     }
 
-    public Acidity findBody(String degree) {
+    public static Acidity findAcidity(String degree) {
         return Arrays.stream(Acidity.values())
                 .filter(acidity -> acidity.name().equals(degree.toUpperCase()))
                 .findFirst().orElseThrow(() -> new BusinessException(SearchErrorInfo.NOT_EXIST_ACIDITY));

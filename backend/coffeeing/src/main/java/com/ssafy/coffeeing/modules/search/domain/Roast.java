@@ -29,7 +29,7 @@ public enum Roast {
         return this.maxValue;
     }
 
-    public Roast findRoast(String degree) {
+    public static Roast findRoast(String degree) {
         return Arrays.stream(Roast.values())
                 .filter(roast -> roast.name().equals(degree.toUpperCase()))
                 .findFirst().orElseThrow(() -> new BusinessException(SearchErrorInfo.NOT_EXIST_ROAST));
