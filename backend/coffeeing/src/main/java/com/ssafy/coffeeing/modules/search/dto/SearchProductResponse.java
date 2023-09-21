@@ -1,4 +1,8 @@
 package com.ssafy.coffeeing.modules.search.dto;
 
-public record SearchProductResponse() {
+import java.util.List;
+
+public record SearchProductResponse(
+        List<ProductSearchElement> productSearchElements
+) {
 }
