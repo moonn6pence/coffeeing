@@ -44,7 +44,4 @@ public class Coffee extends BaseEntity {
 
     @Column
     private Integer totalReviewer;
-
-
-
 }
