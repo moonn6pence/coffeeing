@@ -38,7 +38,7 @@ public class ProductMapper {
 
         return new CoffeeResponse(
                 coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl(),
-                coffee.getAroma(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
+                coffee.getFlavorNote(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
                 coffee.getCoffeeCriteria().getBody(), coffee.getProductDescription(),
                 coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / coffee.getTotalReviewer(),
                 isBookmarked,
