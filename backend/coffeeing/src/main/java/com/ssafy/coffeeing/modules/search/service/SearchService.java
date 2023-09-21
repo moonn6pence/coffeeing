@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -40,6 +41,7 @@ public class SearchService {
         addCapsulesAndCoffeesToTagElement(tags, capsules, coffees);
 
         Collections.shuffle(tags);
+        tags.sort(Comparator.comparing(Tag::name));
 
         if (tags.size() > AUTO_COMPLETE_SIZE) {
             tags = tags.subList(0, AUTO_COMPLETE_SIZE);
