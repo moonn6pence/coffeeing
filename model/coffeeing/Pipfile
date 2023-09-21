@@ -6,6 +6,12 @@ name = "pypi"
 [packages]
 fastapi = "*"
 uvicorn = "*"
+sqlalchemy = "*"
+python-dotenv = "*"
+mysql = "*"
+numpy = "*"
+pandas = "*"
+pymysql = "*"
 
 [dev-packages]
 
