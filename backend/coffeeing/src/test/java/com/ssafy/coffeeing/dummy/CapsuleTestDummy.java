@@ -83,5 +83,55 @@ public class CapsuleTestDummy {
         return capsules;
     }
 
-
+    public static List<Capsule> createSearchResultExpectCapsules() {
+        List<Capsule> capsules = new ArrayList<>();
+        capsules.add(createMockCapsule(
+                "Generic 한국 브랜드",
+                "Generic English brand",
+                "Generic Capsule Name",
+                new CoffeeCriteria(0.2, 0.25, null),
+                "Fruits",
+                1,
+                "Generic Url ",
+                "generic description ",
+                50.0,
+                12));
+        capsules.add(
+                createMockCapsule(
+                        "Generic 한국 브랜드",
+                        "Generic English brand",
+                        "Generic Capsule Name",
+                        new CoffeeCriteria(0.8, 0.5, 0.6),
+                        "Fruits",
+                        1,
+                        "Generic Url ",
+                        "generic description ",
+                        50.0,
+                        12));
+        capsules.add(
+                createMockCapsule(
+                        "Generic 한국 브랜드",
+                        "Generic English brand",
+                        "Generic Capsule Name",
+                        new CoffeeCriteria(0.8, 0.9, 0.9),
+                        "Chocolate",
+                        1,
+                        "Generic Url ",
+                        "generic description ",
+                        50.0,
+                        12));
+        capsules.add(
+                createMockCapsule(
+                        "Generic 한국 브랜드",
+                        "Generic English brand",
+                        "Generic Capsule Name",
+                        new CoffeeCriteria(0.2, 0.75, 0.3),
+                        "Fruits, Nutty",
+                        1,
+                        "Generic Url ",
+                        "generic description ",
+                        50.0,
+                        12));
+        return capsules;
+    }
 }
