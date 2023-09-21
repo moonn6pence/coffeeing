@@ -73,6 +73,6 @@ public class FeedTestDummy {
 
     public static UpdateFeedRequest createUpdateFeedRequestWithTag(Coffee coffee) {
         return new UpdateFeedRequest("testUpdateContent",
-                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()));
+                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()));
     }
 }

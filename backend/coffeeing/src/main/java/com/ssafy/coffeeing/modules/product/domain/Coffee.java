@@ -15,8 +15,17 @@ import javax.persistence.*;
 @Entity
 public class Coffee extends BaseEntity {
 
-    @Column(length = 64, nullable = false)
-    private String coffeeName;
+    @Column
+    private String regionKr;
+
+    @Column
+    private String regionEng;
+
+    @Column
+    private String coffeeNameKr;
+
+    @Column
+    private String coffeeNameEng;
 
     @Embedded
     private CoffeeCriteria coffeeCriteria;
@@ -36,11 +45,6 @@ public class Coffee extends BaseEntity {
     @Column
     private Integer totalReviewer;
 
-    @Column
-    private String regionEng;
-
-    @Column
-    private String regionKr;
 
 
 }

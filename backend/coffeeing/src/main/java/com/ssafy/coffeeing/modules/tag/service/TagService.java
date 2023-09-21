@@ -55,7 +55,7 @@ public class TagService {
                 new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()))
                 .toList());
         tags.addAll(coffees.stream().map(coffee ->
-                        new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()))
+                        new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()))
                 .toList());
     }
 }

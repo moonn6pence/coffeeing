@@ -13,7 +13,7 @@ public class CoffeeTestDummy {
     public static Coffee createMockCoffeeWiltonBenitezGeisha() {
 
         return Coffee.builder()
-                .coffeeName("Wilton Benitez Geisha")
+                .coffeeNameKr("Wilton Benitez Geisha")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.9))
                 .aroma("floral, cocoa")
                 .imageUrl("https://abcdsfadsffddd.png")
@@ -25,7 +25,7 @@ public class CoffeeTestDummy {
 
     public static Coffee createMockCoffeeKenyaAA() {
         return Coffee.builder()
-                .coffeeName("Kenya AA")
+                .coffeeNameKr("Kenya AA")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
@@ -40,7 +40,7 @@ public class CoffeeTestDummy {
 
         for (int i = 0; i < 25; i++) {
             coffees.add(Coffee.builder()
-                    .coffeeName("Generic Coffee " + i)
+                    .coffeeNameKr("Generic Coffee " + i)
                     .regionEng("Generic Region " + i)
                     .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                     .aroma("Generic aroma")
@@ -56,7 +56,7 @@ public class CoffeeTestDummy {
 
     public static Coffee createMockCoffeeRoma(){
         return Coffee.builder()
-                .coffeeName("로마 카프리치오")
+                .coffeeNameKr("로마 카프리치오")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
@@ -69,7 +69,7 @@ public class CoffeeTestDummy {
     public static Coffee createMockCoffeeRomaWithInvalidId(){
         return Coffee.builder()
                 .id(-1L)
-                .coffeeName("로마 카프리치오")
+                .coffeeNameKr("로마 카프리치오")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")

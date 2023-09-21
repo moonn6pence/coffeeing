@@ -37,7 +37,7 @@ public class CapsuleReviewService {
     private final ApplicationEventPublisher applicationEventPublisher;
 
     private static final Integer REVIEW_PAGE_SIZE = 6;
-    private static final int REVIEW_EXPERIENCE = 50;
+    private static final Integer REVIEW_EXPERIENCE = 50;
     @Transactional
     public CreationResponse createReview(Long id, ReviewRequest reviewRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();

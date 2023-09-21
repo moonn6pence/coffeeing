@@ -64,7 +64,7 @@ public class CoffeeDummy {
     private Coffee createCoffee(String coffeeName, String aroma, String imageUrl, String productDescription,
                                 CoffeeCriteria coffeeCriteria, Double totalScore ,Integer totalReviewer, String region){
         return Coffee.builder()
-                .coffeeName(coffeeName)
+                .coffeeNameKr(coffeeName)
                 .coffeeCriteria(coffeeCriteria)
                 .aroma(aroma)
                 .imageUrl(imageUrl)
