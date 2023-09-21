@@ -21,7 +21,7 @@ public class FeedTestDummy {
     }
 
     public static UploadFeedRequest createUploadFeedRequestWithTag(Capsule capsule) {
-        return new UploadFeedRequest(new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleName()),
+        return new UploadFeedRequest(new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()),
                 createImageElement(), "첫 번째 피드1");
     }
 
@@ -73,6 +73,6 @@ public class FeedTestDummy {
 
     public static UpdateFeedRequest createUpdateFeedRequestWithTag(Coffee coffee) {
         return new UpdateFeedRequest("testUpdateContent",
-                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()));
+                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()));
     }
 }

@@ -24,7 +24,7 @@ public class ProductMapper {
                                                           CapsuleReview memberReview) {
 
         return new CapsuleResponse(
-                capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl(),
+                capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleNameKr(), capsule.getImageUrl(),
                 capsule.getAroma(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getBody(), capsule.getProductDescription(),
                 capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer(),
@@ -37,7 +37,7 @@ public class ProductMapper {
                                                         CoffeeReview memberReview) {
 
         return new CoffeeResponse(
-                coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl(),
+                coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl(),
                 coffee.getAroma(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
                 coffee.getCoffeeCriteria().getBody(), coffee.getProductDescription(),
                 coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / coffee.getTotalReviewer(),
@@ -124,12 +124,12 @@ public class ProductMapper {
 
     public static SimpleProductElement supplySimpleProductElementFrom(Capsule capsule) {
 
-        return new SimpleProductElement(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleName(), capsule.getImageUrl());
+        return new SimpleProductElement(capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleNameKr(), capsule.getImageUrl());
     }
 
     public static SimpleProductElement supplySimpleProductElementFrom(Coffee coffee) {
 
-        return new SimpleProductElement(coffee.getId(), coffee.getRegion(), coffee.getCoffeeName(), coffee.getImageUrl());
+        return new SimpleProductElement(coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl());
     }
 
     public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {

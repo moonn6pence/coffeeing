@@ -15,7 +15,10 @@ import java.util.List;
 @Component
 public class CapsuleDummy {
 
-    private final List<String> capsuleNames = List.of("나폴리", "카자르", "리스트레토", "아르페지오", "로마");
+    private final List<String> capsuleNamesKr = List.of("나폴리", "카자르", "리스트레토", "아르페지오", "로마");
+    private final List<String> capsuleNamesEng = List.of("Napoli", "Quazar", "Ristreto", "Arpezzio", "Roma");
+    private final List<String> brandKr = List.of("네스프레소", "일리", "던킨", "돌체구스토", "네스프레소");
+    private final List<String> brandEng = List.of("Nesspresso", "Illy", "Dunkin", "Dolchegusto", "Nesspresso");
     private final List<Double> roasts = List.of(1.0, 1.0, 0.8, 0.8, 0.6);
     private final List<Double> acidities = List.of(1.0, 1.0, 0.8, 0.8, 0.6);
     private final List<Double> bodies = List.of(0.2, 0.2, 0.6, 0.4, 0.8);
@@ -39,12 +42,12 @@ public class CapsuleDummy {
 
     private final CapsuleRepository capsuleRepository;
 
-    public List<Capsule> create5NespressoCapsules(){
+    public List<Capsule> create5NespressoCapsules() {
 
         List<Capsule> capsules = new ArrayList<>();
 
-        for(int i = 0; i < capsuleNames.size(); i++){
-            capsules.add(createNespressoCapsule(capsuleNames.get(i),
+        for (int i = 0; i < capsuleNamesKr.size(); i++) {
+            capsules.add(createNespressoCapsule(capsuleNamesKr.get(i), capsuleNamesEng.get(i),
                     roasts.get(i), acidities.get(i), bodies.get(i), aroma.get(i),
                     imageUrls.get(i), productDescriptions.get(i), totalScores.get(i), 10));
         }
@@ -52,22 +55,23 @@ public class CapsuleDummy {
         return capsuleRepository.saveAll(capsules);
     }
 
-    public Capsule createNespressoCapsule(String capsuleName, Double roast, Double acidity, Double body,
+    public Capsule createNespressoCapsule(String capsuleNameKr, String capsuleNameEng, Double roast, Double acidity, Double body,
                                           String aroma, String imageUrl, String description,
-                                          Double totalScore, Integer totalReviewer){
-        return createCapsule("네스프레소", "nespresso", capsuleName,
+                                          Double totalScore, Integer totalReviewer) {
+        return createCapsule("네스프레소", "nespresso", capsuleNameKr, capsuleNameEng,
                 new CoffeeCriteria(roast, acidity, body), aroma, 1,
                 imageUrl, description, totalScore, totalReviewer);
     }
 
-    private Capsule createCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
-                                 String aroma, Integer machineType, String imageUrl, String description,
-                                 Double totalScore, Integer totalReviewer) {
+    private Capsule createCapsule(String brandKr, String brandEng, String capsuleNameKr, String capsuleNameEng, CoffeeCriteria coffeeCriteria,
+                                  String aroma, Integer machineType, String imageUrl, String description,
+                                  Double totalScore, Integer totalReviewer) {
 
         return Capsule.builder()
                 .brandKr(brandKr)
                 .brandEng(brandEng)
-                .capsuleName(capsuleName)
+                .capsuleNameKr(capsuleNameKr)
+                .capsuleNameEng(capsuleNameEng)
                 .coffeeCriteria(coffeeCriteria)
                 .aroma(aroma)
                 .machineType(machineType)

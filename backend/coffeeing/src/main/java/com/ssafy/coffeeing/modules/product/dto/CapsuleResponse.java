@@ -3,7 +3,7 @@ package com.ssafy.coffeeing.modules.product.dto;
 public record CapsuleResponse(
         Long id,
         String brand,
-        String name,
+        String nameKr,
         String imageUrl,
         String aroma,
         Double roast,

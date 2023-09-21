@@ -33,9 +33,9 @@ public class TagService {
         List<Tag> tags = new ArrayList<>();
         String keyword = searchTagRequest.keyword();
         List<Capsule> capsules = capsuleRepository
-                .findCapsulesByCapsuleNameContainingIgnoreCase(keyword, PageRequest.of(0, AUTO_COMPLETE_SIZE));
+                .findCapsulesByCapsuleNameKrContainingIgnoreCase(keyword, PageRequest.of(0, AUTO_COMPLETE_SIZE));
         List<Coffee> coffees = coffeeRepository
-                .findCoffeesByCoffeeNameContainingIgnoreCase(keyword, PageRequest.of(0, AUTO_COMPLETE_SIZE));
+                .findCoffeesByCoffeeNameKrContainingIgnoreCase(keyword, PageRequest.of(0, AUTO_COMPLETE_SIZE));
 
         addCapsulesAndCoffeesToTagElement(tags, capsules, coffees);
 
@@ -52,10 +52,10 @@ public class TagService {
             List<Capsule> capsules,
             List<Coffee> coffees) {
         tags.addAll(capsules.stream().map(capsule ->
-                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleName()))
+                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()))
                 .toList());
         tags.addAll(coffees.stream().map(coffee ->
-                        new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()))
+                        new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()))
                 .toList());
     }
 }

@@ -13,7 +13,10 @@ public class CoffeeTestDummy {
     public static Coffee createMockCoffeeWiltonBenitezGeisha() {
 
         return Coffee.builder()
-                .coffeeName("Wilton Benitez Geisha")
+                .coffeeNameKr("윌튼 베니테즈 게이샤")
+                .coffeeNameEng("Wilton Benitez Geisha")
+                .regionEng("CostaRica")
+                .regionKr("코스타리카")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.9))
                 .aroma("floral, cocoa")
                 .imageUrl("https://abcdsfadsffddd.png")
@@ -25,7 +28,10 @@ public class CoffeeTestDummy {
 
     public static Coffee createMockCoffeeKenyaAA() {
         return Coffee.builder()
-                .coffeeName("Kenya AA")
+                .coffeeNameKr("케냐 에이에이")
+                .coffeeNameEng("Kenya AA")
+                .regionKr("케냐")
+                .regionEng("kenya")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
@@ -40,8 +46,10 @@ public class CoffeeTestDummy {
 
         for (int i = 0; i < 25; i++) {
             coffees.add(Coffee.builder()
-                    .coffeeName("Generic Coffee " + i)
-                    .region("Generic Region " + i)
+                    .coffeeNameKr("제네렉 커피 " + i)
+                    .coffeeNameEng("Generic Coffee " + i)
+                    .regionKr("제네렉 지역 " + i)
+                    .regionEng("Generic Region " + i)
                     .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                     .aroma("Generic aroma")
                     .imageUrl("Generic Url " + i)
@@ -54,9 +62,12 @@ public class CoffeeTestDummy {
         return coffees;
     }
 
-    public static Coffee createMockCoffeeRoma(){
+    public static Coffee createMockCoffeeRoma() {
         return Coffee.builder()
-                .coffeeName("로마 카프리치오")
+                .coffeeNameKr("로마 카프리치오")
+                .coffeeNameEng("Roma cappricio")
+                .regionKr("로마")
+                .regionEng("ROMA")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
@@ -66,10 +77,13 @@ public class CoffeeTestDummy {
                 .build();
     }
 
-    public static Coffee createMockCoffeeRomaWithInvalidId(){
+    public static Coffee createMockCoffeeRomaWithInvalidId() {
         return Coffee.builder()
                 .id(-1L)
-                .coffeeName("로마 카프리치오")
+                .coffeeNameKr("로마 카프리치오")
+                .coffeeNameEng("Roma cappricio")
+                .regionKr("로마")
+                .regionEng("ROMA")
                 .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                 .aroma("sweet")
                 .imageUrl("https://abcdsffddd.png")
