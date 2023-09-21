@@ -12,14 +12,12 @@ import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
 import com.ssafy.coffeeing.modules.search.dto.SearchProductResponse;
 import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
 import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
-import com.ssafy.coffeeing.modules.search.service.SearchService;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -54,15 +52,22 @@ class SearchServiceTest extends ServiceTest {
     @DisplayName("캡슐 및 원두 검색 시, 검색에 성공한다.")
     @ParameterizedTest
     @CsvSource({
-        "0.2, 0.25, , Fruits",
-        ", 0.5, , ",
-        ", , 0.9, Chocolate",
-        "0.8, , 0.6, ",
-        ", , , Nutty",
-        ", , , 'Fruits,Nutty'",
-        "0.2, 0.75, 0.3, "
+        "light, unknown, , Fruits, 0",
+        ", low, , ,1",
+        ", , heavy, Chocolate, 2",
+        "medium_dark, , medium, ,3",
+        ", , , Nutty,4",
+        ", , , 'Fruits,Nutty',5",
+        ", , , Fruits,6",
+        "light, medium, light, ,7",
+        "'light, medium_light', , , ,8"
     })
-    void Given_RequestSearchWithFiltering_When_Search_Then_Success(String roast, String acidity, String body, String flavorNote) {
+    void Given_RequestSearchWithFiltering_When_Search_Then_Success(
+            String roast,
+            String acidity,
+            String body,
+            String flavorNote,
+            int index) {
         //given
         capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
         SearchProductRequest searchProductRequest = new SearchProductRequest(roast, acidity, body,
@@ -72,6 +77,6 @@ class SearchServiceTest extends ServiceTest {
         SearchProductResponse searchProductResponse = searchService.getProductsBySearch(searchProductRequest);
 
         //then
-        assertThat(searchProductResponse.productSearchElements().size()).isEqualTo(1);
+        assertThat(searchProductResponse.products().size()).isEqualTo(CapsuleTestDummy.expectedSearchCount(index));
     }
 }

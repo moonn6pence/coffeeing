@@ -126,12 +126,26 @@ public class CapsuleTestDummy {
                         "Generic English brand",
                         "Generic Capsule Name",
                         new CoffeeCriteria(0.2, 0.75, 0.3),
-                        "Fruits, Nutty",
+                        "Fruits,Nutty",
                         1,
                         "Generic Url ",
                         "generic description ",
                         50.0,
                         12));
         return capsules;
+    }
+
+    public static Integer expectedSearchCount(int index) {
+        List<Integer> expected = new ArrayList<>();
+        expected.add(3);
+        expected.add(1);
+        expected.add(1);
+        expected.add(2);
+        expected.add(1);
+        expected.add(1);
+        expected.add(3);
+        expected.add(2);
+        expected.add(2);
+        return expected.get(index);
     }
 }
