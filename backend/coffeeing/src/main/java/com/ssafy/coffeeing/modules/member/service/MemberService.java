@@ -90,7 +90,12 @@ public class MemberService {
     @Transactional
     public void updateMemberNickname(NicknameChangeRequest nicknameChangeRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-        member.updateMemberNickname(nicknameChangeRequest.nickname());
+        boolean nicknameExists = memberRepository.existsByNickname(nicknameChangeRequest.nickname());
+        if(nicknameExists){
+            throw new BusinessException(MemberErrorInfo.PRE_EXIST_NICKNAME);
+        }else{
+            member.updateMemberNickname(nicknameChangeRequest.nickname());
+        }
     }
 
     @Transactional(readOnly = true)
