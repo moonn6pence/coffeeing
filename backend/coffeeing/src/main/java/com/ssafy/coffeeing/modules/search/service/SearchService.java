@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.search.service;
 
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
+import com.ssafy.coffeeing.modules.global.exception.info.SearchErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
@@ -9,8 +11,8 @@ import com.ssafy.coffeeing.modules.search.dto.*;
 import com.ssafy.coffeeing.modules.search.mapper.SearchMapper;
 import com.ssafy.coffeeing.modules.search.repository.SearchDynamicRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +51,7 @@ public class SearchService {
 
     @Transactional(readOnly = true)
     public SearchProductResponse getProductsBySearch(SearchProductRequest searchProductRequest) {
-        Set<ProductSearchElement> productSearchElements = new HashSet<>();
+        Page<ProductSearchElement> productSearchElements;
 
         if(searchProductRequest.tagType() == TagType.BEAN) {
             productSearchElements = searchByBeanConditions(
@@ -59,6 +61,7 @@ public class SearchService {
                     searchProductRequest.flavorNote(),
                     searchProductRequest.page(),
                     searchProductRequest.size());
+            return SearchMapper.supplySearchProductResponseOf(productSearchElements.getContent(), productSearchElements.getTotalPages());
         }
         if(searchProductRequest.tagType() == TagType.CAPSULE) {
             productSearchElements = searchByCapsuleConditions(
@@ -68,37 +71,35 @@ public class SearchService {
                     searchProductRequest.flavorNote(),
                     searchProductRequest.page(),
                     searchProductRequest.size());
+            return SearchMapper.supplySearchProductResponseOf(productSearchElements.getContent(), productSearchElements.getTotalPages());
         }
-        return SearchMapper.supplySearchProductResponseOf(productSearchElements, null);
+
+        throw new BusinessException(SearchErrorInfo.NOT_EXIST_TAG_TYPE);
     }
 
-    private Set<ProductSearchElement> searchByBeanConditions(String roast, String acidity, String body, String flavorNote,
+    private Page<ProductSearchElement> searchByBeanConditions(String roast, String acidity, String body, String flavorNote,
                                                              Integer page, Integer size) {
-
-        Slice<Coffee> coffees = searchDynamicRepository.searchByBeanConditions(
+        return searchDynamicRepository.searchByBeanConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
                 flavorNote,
-                page,
-                size);
-
-        return null;
+                PageRequest.of(page, size));
     }
 
-    private Set<ProductSearchElement> searchByCapsuleConditions(String roast, String acidity, String body, String flavorNote,
+    private Page<ProductSearchElement> searchByCapsuleConditions(String roast, String acidity, String body, String flavorNote,
                                                              Integer page, Integer size) {
-        Slice<Capsule> coffees = searchDynamicRepository.searchByCapsuleConditions(
+        return searchDynamicRepository.searchByCapsuleConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
                 flavorNote,
-                page,
-                size);
-        return null;
+                PageRequest.of(page, size));
     }
 
     private List<Roast> roastStringToList(String roast) {
+        if(Objects.isNull(roast)) return new ArrayList<>();
+
         return Arrays.stream(roast.split(","))
                 .map(String::trim)
                 .map(Roast::findRoast)
@@ -106,6 +107,8 @@ public class SearchService {
     }
 
     private List<Acidity> acidityStringToList(String acidity) {
+        if(Objects.isNull(acidity)) return new ArrayList<>();
+
         return Arrays.stream(acidity.split(","))
                 .map(String::trim)
                 .map(Acidity::findAcidity)
@@ -113,6 +116,8 @@ public class SearchService {
     }
 
     private List<Body> bodyStringToList(String body) {
+        if(Objects.isNull(body)) return new ArrayList<>();
+
         return Arrays.stream(body.split(","))
                 .map(String::trim)
                 .map(Body::findBody)
