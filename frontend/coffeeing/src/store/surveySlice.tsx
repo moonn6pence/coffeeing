@@ -7,6 +7,7 @@ const initialState:SurveyType = {
   totalPage:0,
   roasting:0,
   acidity:0,
+  flavorNote:[],
   body:0,
   userId:0,
   machine:0,
@@ -38,9 +39,13 @@ const surveySlice = createSlice({
       state.body=action.payload
       console.log('body', state.body)
     },
+    saveFlavorNote(state, action:PayloadAction<Array<string>>){
+      state.flavorNote = action.payload
+      console.log('flavorNote', state.flavorNote)
+    },
     resetSurvey:()=>initialState
   },
 })
 
 export default surveySlice.reducer;
-export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity,saveBody,resetSurvey} = surveySlice.actions;
+export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity,saveBody,resetSurvey,saveFlavorNote} = surveySlice.actions;
