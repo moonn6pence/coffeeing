@@ -15,13 +15,13 @@ public class MockRecommendService implements RecommendService{
     private static List<Long> mockCoffeeIds = List.of(1L, 2L, 3L, 4L);
 
     @Override
-    public RecommendResponse getRecommendationsByParameter(PreferenceRequest preferenceRequest) {
+    public RecommendResponse pickByPreference(PreferenceRequest preferenceRequest) {
 
         return new RecommendResponse(preferenceRequest.isCapsule() ? mockCapsuleIds : mockCoffeeIds);
     }
 
     @Override
-    public RecommendResponse getSimilarProduct(Boolean isCapsule, Long id) {
+    public RecommendResponse pickBySimilarity(Boolean isCapsule, Long id) {
 
         return new RecommendResponse(isCapsule ? mockCapsuleIds : mockCoffeeIds);
     }

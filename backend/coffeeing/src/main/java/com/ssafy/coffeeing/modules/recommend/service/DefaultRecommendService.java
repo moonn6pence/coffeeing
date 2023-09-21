@@ -26,7 +26,7 @@ public class DefaultRecommendService implements RecommendService {
     private final RestTemplate restTemplate;
 
     @Override
-    public RecommendResponse getRecommendationsByParameter(PreferenceRequest preferenceRequest) {
+    public RecommendResponse pickByPreference(PreferenceRequest preferenceRequest) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getCollaborativeFilteringUrl())
@@ -50,7 +50,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    public RecommendResponse getSimilarProduct(Boolean isCapsule, Long id) {
+    public RecommendResponse pickBySimilarity(Boolean isCapsule, Long id) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getContentBasedFilteringUrl())

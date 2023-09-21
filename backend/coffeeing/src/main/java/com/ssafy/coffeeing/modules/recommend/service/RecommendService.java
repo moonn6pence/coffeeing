@@ -1,12 +1,18 @@
 package com.ssafy.coffeeing.modules.recommend.service;
 
+import com.ssafy.coffeeing.modules.member.domain.Age;
+import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 
 public interface RecommendService {
 
-    RecommendResponse getRecommendationsByParameter(PreferenceRequest preferenceRequest);
+    RecommendResponse pickByPreference(PreferenceRequest preferenceRequest);
 
-    RecommendResponse getSimilarProduct(Boolean isCapsule, Long id);
+    RecommendResponse pickBySimilarity(Boolean isCapsule, Long id);
+
+    RecommendResponse pickByAgeAndGender(Boolean isCapsule, Age age, Gender gender);
+
+    RecommendResponse pickByCriteria(String criteria, String attribute);
 
 }
