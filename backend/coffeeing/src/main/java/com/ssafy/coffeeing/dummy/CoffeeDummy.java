@@ -15,7 +15,22 @@ import java.util.List;
 @Component
 public class CoffeeDummy {
 
-    private final List<String> coffeeNames = List.of("Kenya AA", "Kenya AB", "Geisha", "아르페지오", "로마");
+    private final List<String> coffeeNamesKr = List.of("케냐 에이에이", "케냐 에이비", "게이샤", "아르페지오", "로마");
+    private final List<String> coffeeNamesEng = List.of("Kenya AA", "Kenya AB", "Geisha", "Arpegio", "Roma");
+    private final List<String> regionsKr = List.of(
+            "남아메리카",
+            "코스타리카",
+            "에티오피아",
+            "콜롬비아",
+            "인도"
+    );
+    private final List<String> regionsEng = List.of(
+            "South america",
+            "Costa Rica",
+            "Ethiopia",
+            "Colombia",
+            "India"
+    );
     private final List<Double> roasts = List.of(1.0, 1.0, 0.8, 0.8, 0.6);
     private final List<Double> acidities = List.of(1.0, 1.0, 0.8, 0.8, 0.6);
     private final List<Double> bodies = List.of(0.2, 0.2, 0.6, 0.4, 0.8);
@@ -37,41 +52,46 @@ public class CoffeeDummy {
     );
     private final List<Double> totalScores = List.of(38.9, 48.3, 42.1, 49.8, 25.5);
 
-    private final List<String> regions = List.of(
-            "South america",
-            "Costa Rica",
-            "Ethiopia",
-            "Colombia",
-            "India"
-    );
 
     private final CoffeeRepository coffeeRepository;
 
-    public List<Coffee> create5CoffeeDummy(){
+    public List<Coffee> create5CoffeeDummy() {
 
         List<Coffee> coffees = new ArrayList<>();
 
-        for (int i = 0; i < coffeeNames.size(); i++) {
-            coffees.add(createCoffee(coffeeNames.get(i), aroma.get(i),
-                    imageUrls.get(i), productDescriptions.get(i),
-                    new CoffeeCriteria(roasts.get(i), acidities.get(i), bodies.get(i)),
-                    totalScores.get(i), 5,regions.get(i)));
+        for (int i = 0; i < coffeeNamesKr.size(); i++) {
+            coffees.add(
+                    createCoffee(
+                            coffeeNamesKr.get(i),
+                            coffeeNamesEng.get(i),
+                            aroma.get(i),
+                            imageUrls.get(i),
+                            productDescriptions.get(i),
+                            new CoffeeCriteria(roasts.get(i), acidities.get(i), bodies.get(i)),
+                            totalScores.get(i),
+                            5,
+                            regionsKr.get(i),
+                            regionsEng.get(i)
+                    )
+            );
         }
 
         return coffeeRepository.saveAll(coffees);
     }
 
-    private Coffee createCoffee(String coffeeName, String aroma, String imageUrl, String productDescription,
-                                CoffeeCriteria coffeeCriteria, Double totalScore ,Integer totalReviewer, String region){
+    private Coffee createCoffee(String coffeeNameKr, String coffeeNameEng, String aroma, String imageUrl, String productDescription,
+                                CoffeeCriteria coffeeCriteria, Double totalScore, Integer totalReviewer, String regionKr, String regionEng) {
         return Coffee.builder()
-                .coffeeNameKr(coffeeName)
+                .coffeeNameKr(coffeeNameKr)
+                .coffeeNameEng(coffeeNameEng)
                 .coffeeCriteria(coffeeCriteria)
                 .aroma(aroma)
                 .imageUrl(imageUrl)
                 .productDescription(productDescription)
                 .totalScore(totalScore)
                 .totalReviewer(totalReviewer)
-                .regionEng(region)
+                .regionKr(regionKr)
+                .regionEng(regionEng)
                 .build();
     }
 }
