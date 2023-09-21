@@ -71,7 +71,7 @@ public class CoffeeDummy {
                 .productDescription(productDescription)
                 .totalScore(totalScore)
                 .totalReviewer(totalReviewer)
-                .region(region)
+                .regionEng(region)
                 .build();
     }
 }

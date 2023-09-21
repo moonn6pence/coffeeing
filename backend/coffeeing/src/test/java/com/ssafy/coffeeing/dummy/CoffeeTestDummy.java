@@ -41,7 +41,7 @@ public class CoffeeTestDummy {
         for (int i = 0; i < 25; i++) {
             coffees.add(Coffee.builder()
                     .coffeeName("Generic Coffee " + i)
-                    .region("Generic Region " + i)
+                    .regionEng("Generic Region " + i)
                     .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
                     .aroma("Generic aroma")
                     .imageUrl("Generic Url " + i)

@@ -52,7 +52,7 @@ public class TagService {
             List<Capsule> capsules,
             List<Coffee> coffees) {
         tags.addAll(capsules.stream().map(capsule ->
-                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleName()))
+                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()))
                 .toList());
         tags.addAll(coffees.stream().map(coffee ->
                         new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeName()))

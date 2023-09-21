@@ -6,8 +6,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -24,7 +22,10 @@ public class Capsule extends BaseEntity {
     private String brandEng;
 
     @Column
-    private String capsuleName;
+    private String capsuleNameKr;
+
+    @Column
+    private String capsuleNameEng;
 
     @Embedded
     private CoffeeCriteria coffeeCriteria;

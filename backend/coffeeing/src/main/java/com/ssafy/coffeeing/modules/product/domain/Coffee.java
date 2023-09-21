@@ -6,8 +6,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @SuperBuilder
@@ -38,6 +36,11 @@ public class Coffee extends BaseEntity {
     @Column
     private Integer totalReviewer;
 
-    @Column(length = 64)
-    private String region;
+    @Column
+    private String regionEng;
+
+    @Column
+    private String regionKr;
+
+
 }

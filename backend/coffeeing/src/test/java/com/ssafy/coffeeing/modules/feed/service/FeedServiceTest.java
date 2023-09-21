@@ -26,7 +26,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
@@ -119,7 +118,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getLikeCount()).isEqualTo(0L),
                 () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
                 () -> assertThat(response.getTagType()).isEqualTo(TagType.CAPSULE),
-                () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleName())
+                () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr())
         );
 
         //verify

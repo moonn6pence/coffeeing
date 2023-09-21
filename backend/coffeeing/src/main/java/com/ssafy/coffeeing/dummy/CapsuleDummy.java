@@ -67,7 +67,7 @@ public class CapsuleDummy {
         return Capsule.builder()
                 .brandKr(brandKr)
                 .brandEng(brandEng)
-                .capsuleName(capsuleName)
+                .capsuleNameKr(capsuleName)
                 .coffeeCriteria(coffeeCriteria)
                 .aroma(aroma)
                 .machineType(machineType)
