@@ -10,14 +10,15 @@ import java.util.List;
 @Profile("test")
 public class CapsuleTestDummy {
 
-    private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleName, CoffeeCriteria coffeeCriteria,
+    private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleNameKr, String capsuleNameEng, CoffeeCriteria coffeeCriteria,
                                              String aroma, Integer machineType, String imageUrl, String description,
                                              Double totalScore, Integer totalReviewer) {
 
         return Capsule.builder()
                 .brandKr(brandKr)
                 .brandEng(brandEng)
-                .capsuleNameKr(capsuleName)
+                .capsuleNameKr(capsuleNameKr)
+                .capsuleNameEng(capsuleNameEng)
                 .coffeeCriteria(coffeeCriteria)
                 .aroma(aroma)
                 .machineType(machineType)
@@ -33,7 +34,8 @@ public class CapsuleTestDummy {
         return Capsule.builder()
                 .brandKr("네스프레소")
                 .brandEng("nespresso")
-                .capsuleNameKr("로마")
+                .capsuleNameKr("로마 인빅타")
+                .capsuleNameEng("Roma Invicta")
                 .coffeeCriteria(new CoffeeCriteria(1.0, 1.0, 1.0))
                 .aroma("nutty")
                 .machineType(1)
@@ -50,6 +52,7 @@ public class CapsuleTestDummy {
                 .brandKr("네스프레소")
                 .brandEng("nespresso")
                 .capsuleNameKr("나폴리")
+                .capsuleNameEng("Napoli")
                 .coffeeCriteria(new CoffeeCriteria(1.0, 1.0, 1.0))
                 .aroma("chocolate, floral")
                 .machineType(1)
@@ -66,6 +69,7 @@ public class CapsuleTestDummy {
             capsules.add(createMockCapsule(
                     "Generic 한국 브랜드" + i,
                     "Generic English brand " + i,
+                    "제네릭 캡슐명 " + i,
                     "Generic Capsule Name " + i,
                     new CoffeeCriteria(0.5, 0.5, 0.5),
                     "Generic aroma " + i,
