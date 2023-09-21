@@ -7,6 +7,7 @@ import nutty from '../../assets/survey/flavor/nutty.png'
 import spicy from '../../assets/survey/flavor/spicy.png'
 import sweet from '../../assets/survey/flavor/sweet.png'
 import { AppDispatch, RootState } from 'store/store';
+import { saveFlavorNote } from "store/surveySlice"
 
 export const FlavorNoteSelect = () => {
   const survey = useSelector((state:RootState)=>state.survey)
@@ -17,7 +18,7 @@ export const FlavorNoteSelect = () => {
   const [selectedNutty, setSelectedNutty] = useState(false);
   const [selectedSpicy, setSelectedSpicy] = useState(false);
   const [selectedSweety, setSelectedSweety] = useState(false);
-  const [myFlavor, setMyFlavor] = useState(['']);
+  const [myFlavor, setMyFlavor] = useState(Array<string>);
 
   const data = [
     {src:chocolate, label:'초콜릿', isSelected:selectedChocolate, setIsSelected:setSelectedChocolate, keyword:'chocolate'},
@@ -66,6 +67,7 @@ export const FlavorNoteSelect = () => {
           })
         }
       </div>
+      <button onClick={()=>dispatch(saveFlavorNote(myFlavor))}>추가</button>
     </div>
   )
 }
