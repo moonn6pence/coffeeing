@@ -88,6 +88,7 @@ public class CapsuleTestDummy {
         capsules.add(createMockCapsule(
                 "Generic 한국 브랜드",
                 "Generic English brand",
+                "제네릭 캡슐명",
                 "Generic Capsule Name",
                 new CoffeeCriteria(0.2, 0.25, null),
                 "Fruits",
@@ -100,6 +101,7 @@ public class CapsuleTestDummy {
                 createMockCapsule(
                         "Generic 한국 브랜드",
                         "Generic English brand",
+                        "제네릭 캡슐명",
                         "Generic Capsule Name",
                         new CoffeeCriteria(0.8, 0.5, 0.6),
                         "Fruits",
@@ -112,6 +114,7 @@ public class CapsuleTestDummy {
                 createMockCapsule(
                         "Generic 한국 브랜드",
                         "Generic English brand",
+                        "제네릭 캡슐명",
                         "Generic Capsule Name",
                         new CoffeeCriteria(0.8, 0.9, 0.9),
                         "Chocolate",
@@ -124,6 +127,7 @@ public class CapsuleTestDummy {
                 createMockCapsule(
                         "Generic 한국 브랜드",
                         "Generic English brand",
+                        "제네릭 캡슐명",
                         "Generic Capsule Name",
                         new CoffeeCriteria(0.2, 0.75, 0.3),
                         "Fruits,Nutty",
