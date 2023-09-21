@@ -6,9 +6,9 @@ import lombok.Builder;
 import java.util.Objects;
 
 public record SearchProductRequest(
-        Double roast,
-        Double acidity,
-        Double body,
+        String roast,
+        String acidity,
+        String body,
         String flavorNote,
         TagType tagType,
         Integer page,
@@ -17,7 +17,7 @@ public record SearchProductRequest(
 ) {
 
     @Builder
-    public SearchProductRequest(Double roast, Double acidity, Double body, String flavorNote,
+    public SearchProductRequest(String roast, String acidity, String body, String flavorNote,
                                 TagType tagType, Integer page, Integer size) {
         if(Objects.isNull(tagType)) {
             tagType = TagType.BEAN;

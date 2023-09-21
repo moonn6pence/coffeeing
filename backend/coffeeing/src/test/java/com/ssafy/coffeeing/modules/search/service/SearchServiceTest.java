@@ -62,7 +62,7 @@ class SearchServiceTest extends ServiceTest {
         ", , , 'Fruits,Nutty'",
         "0.2, 0.75, 0.3, "
     })
-    void Given_RequestSearchWithFiltering_When_Search_Then_Success(Double roast, Double acidity, Double body, String flavorNote) {
+    void Given_RequestSearchWithFiltering_When_Search_Then_Success(String roast, String acidity, String body, String flavorNote) {
         //given
         capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
         SearchProductRequest searchProductRequest = new SearchProductRequest(roast, acidity, body,
