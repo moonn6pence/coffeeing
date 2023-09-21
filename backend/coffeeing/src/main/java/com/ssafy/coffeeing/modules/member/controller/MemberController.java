@@ -60,6 +60,12 @@ public class MemberController {
         return BaseResponse.<Void>builder().build();
     }
 
+    @PutMapping("/nickname")
+    public BaseResponse<Void> updateMemberNickname(@Valid @RequestBody NicknameChangeRequest nicknameChangeRequest){
+        memberService.updateMemberNickname(nicknameChangeRequest);
+        return BaseResponse.<Void>builder().build();
+    }
+
     @GetMapping("/coffee/bookmark/{memberId}")
     public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long id,
                                                              @Valid PageInfoRequest pageInfoRequest) {
