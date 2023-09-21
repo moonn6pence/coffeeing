@@ -12,6 +12,7 @@ mysql = "*"
 numpy = "*"
 pandas = "*"
 pymysql = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
