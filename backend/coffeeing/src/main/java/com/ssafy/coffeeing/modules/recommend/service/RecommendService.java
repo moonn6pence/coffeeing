@@ -11,8 +11,6 @@ public interface RecommendService {
 
     RecommendResponse pickBySimilarity(Boolean isCapsule, Long id);
 
-    RecommendResponse pickByAgeAndGender(Boolean isCapsule, Age age, Gender gender);
-
-    RecommendResponse pickByCriteria(String criteria, String attribute);
+    RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute);
 
 }

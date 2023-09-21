@@ -2,6 +2,8 @@ package com.ssafy.coffeeing.modules.recommend.service;
 
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.SurveyErrorInfo;
+import com.ssafy.coffeeing.modules.member.domain.Age;
+import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.property.RecSysProperty;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
@@ -67,5 +69,10 @@ public class DefaultRecommendService implements RecommendService {
         } catch (HttpServerErrorException e) {
             throw new BusinessException(SurveyErrorInfo.EXTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute) {
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.recommend.service;
 
+import com.ssafy.coffeeing.modules.member.domain.Age;
+import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import org.springframework.context.annotation.Profile;
@@ -23,6 +25,11 @@ public class MockRecommendService implements RecommendService{
     @Override
     public RecommendResponse pickBySimilarity(Boolean isCapsule, Long id) {
 
+        return new RecommendResponse(isCapsule ? mockCapsuleIds : mockCoffeeIds);
+    }
+
+    @Override
+    public RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute) {
         return new RecommendResponse(isCapsule ? mockCapsuleIds : mockCoffeeIds);
     }
 }
