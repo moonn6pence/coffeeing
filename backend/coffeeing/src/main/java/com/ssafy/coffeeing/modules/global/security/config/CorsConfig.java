@@ -15,7 +15,7 @@ public class CorsConfig {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+		configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://j9a204.p.ssafy.io/", "http://j9a204.p.ssafy.io/"));
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("Authorization", "accept", "Referer", "User-Agent",
 			"access-control-allow-credentials", "access-control-allow-methods", "access-control-allow-origin", "content-type"));
