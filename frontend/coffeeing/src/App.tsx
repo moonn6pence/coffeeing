@@ -31,7 +31,7 @@ function App() {
           path="/signup/additonal-info"
           element={<AfterSignupPage />}
         ></Route>
-        <Route path="/mypage" element={<MyPage />}></Route>
+        <Route path="/myprofile" element={<MyPage />}></Route>
       </Routes>
     </div>
   );
