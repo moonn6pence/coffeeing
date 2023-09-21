@@ -1,10 +1,10 @@
 package com.ssafy.coffeeing.modules.search.dto;
 
-import java.util.Set;
+import java.util.List;
 
 public record SearchProductResponse(
-        Set<ProductSearchElement> products,
+        List<ProductSearchElement> products,
 
-        Integer totalCount
+        Integer totalPage
 ) {
 }

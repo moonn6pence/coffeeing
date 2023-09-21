@@ -7,7 +7,6 @@ import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Set;
 
 @Component
 public class SearchMapper {
@@ -16,7 +15,7 @@ public class SearchMapper {
         return new TagsResponse(tags);
     }
 
-    public static SearchProductResponse supplySearchProductResponseOf(Set<ProductSearchElement> products, Integer totalCount){
+    public static SearchProductResponse supplySearchProductResponseOf(List<ProductSearchElement> products, Integer totalCount){
         return new SearchProductResponse(products, totalCount);
     }
 }
