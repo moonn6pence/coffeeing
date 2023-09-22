@@ -10,7 +10,7 @@ import { SearchPage } from 'pages/SearchPage';
 import { DetailPage } from 'pages/DetailPage';
 import { OauthPage } from 'pages/OauthPage';
 import { AfterSignupPage } from 'pages/AfterSignupPage';
-import { MyPage } from 'pages/MyPage';
+import { MemberPage } from 'pages/MemberPage';
 
 function App() {
   return (
@@ -31,7 +31,7 @@ function App() {
           path="/signup/additonal-info"
           element={<AfterSignupPage />}
         ></Route>
-        <Route path="/myprofile" element={<MyPage />}></Route>
+        <Route path="/member/:id" element={<MemberPage />}></Route>
       </Routes>
     </div>
   );

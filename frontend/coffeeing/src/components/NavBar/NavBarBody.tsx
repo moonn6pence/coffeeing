@@ -27,10 +27,10 @@ export const NavBarBody = () => {
               src={profile}
               className="w-9 h-9 cursor-pointer my-auto"
               onClick={() => {
-                navigate('/myprofile');
+                navigate('/member');
               }}
             />
-            <NavBarButton value="로그아웃" navLink="/" isLogout={true}/>
+            <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
           </div>
         ) : (
           <div className="flex space-x-3">
