@@ -8,7 +8,7 @@ import { signIn } from "../service/auth/auth"
 import { getMyInfo } from "../service/member/member"
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
-import { setMemberToken } from "store/memberSlice";
+import { setMemberToken, setMyInfo } from "store/memberSlice";
 import { MemberState } from "service/member/types";
 
 function LoginPage() {
@@ -23,6 +23,10 @@ function LoginPage() {
     if(result) {
       dispatch(setMemberToken(result));
       const myInfo = await getMyInfo();
+      if(myInfo){
+        dispatch(setMyInfo(myInfo));
+      }
+
       if(myInfo && myInfo.state == MemberState.BEFORE_ADDITIONAL_DATA) {
         window.location.replace("/signup/additonal-info");
       } 

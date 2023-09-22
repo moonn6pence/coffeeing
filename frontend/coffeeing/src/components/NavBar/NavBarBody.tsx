@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const NavBarBody = () => {
   const isLogin = useSelector((state: RootState) => state.member.isLogin);
+  const myInfo = useSelector((state:RootState) => state.member.myInfo);
   const navigate = useNavigate();
   return (
     <div className="w-screen h-16 border-b border-light-roasting py-2 px-30">
@@ -27,7 +28,9 @@ export const NavBarBody = () => {
               src={profile}
               className="w-9 h-9 cursor-pointer my-auto"
               onClick={() => {
-                navigate('/member');
+                if(myInfo){
+                  navigate(`/member/${myInfo.memberId}`);
+                }
               }}
             />
             <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
