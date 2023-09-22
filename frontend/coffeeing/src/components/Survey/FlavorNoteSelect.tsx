@@ -46,12 +46,15 @@ export const FlavorNoteSelect = () => {
   }
   // 캡슐 일 때 -> 머신으로 이동시키기
   const handleFlavorSubmit = ()=>{
+    const flavor = myFlavor.toString()
     dispatch(addCurrentPage())
-    dispatch(saveFlavorNote(myFlavor))
+    dispatch(saveFlavorNote(flavor))
   }
   // 원두 일 때 -> 결과 받기
   const handleSurveySubmit = ()=>{
-    dispatch(saveFlavorNote(myFlavor))
+    const flavor = myFlavor.toString()
+    console.log(flavor)
+    dispatch(saveFlavorNote(flavor))
     navigate('/recommend-result')
   }
   return(
