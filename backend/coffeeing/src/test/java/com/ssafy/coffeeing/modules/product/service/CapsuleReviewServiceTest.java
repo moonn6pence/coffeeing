@@ -69,7 +69,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleIdAndReviewRequest_When_CreateReview_Then_Success() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
@@ -89,7 +89,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleIdAndReviewRequest_When_CreateReview_Then_ExperienceEventSuccess() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
@@ -106,7 +106,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         Long invalidId = capsule.getId();
         capsuleRepository.delete(capsule);
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
 
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
@@ -172,7 +172,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleReviewIdAndReviewRequest_When_UpdateReview_Then_Success() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
@@ -187,7 +187,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), reviewRequest.score()),
+                () -> assertEquals(review.getScore(), (double) reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -197,7 +197,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_InvalidCapsuleReviewId_When_UpdateReview_Then_ThrowException() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
@@ -221,7 +221,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleReviewIdOfOthers_When_UpdateReview_Then_ThrowException() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
 
         Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 

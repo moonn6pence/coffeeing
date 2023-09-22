@@ -13,6 +13,7 @@ import com.ssafy.coffeeing.modules.product.service.CapsuleService;
 import com.ssafy.coffeeing.modules.product.service.CoffeeReviewService;
 import com.ssafy.coffeeing.modules.product.service.CoffeeService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
+import io.swagger.annotations.ApiImplicitParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,6 +68,7 @@ public class ProductController {
                 .build();
     }
 
+    @ApiImplicitParam(name = "page", dataType = "integer", value = "페이지 번호", paramType = "query")
     @GetMapping("/capsule/{capsuleId}/review")
     public BaseResponse<ProductReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long capsuleId,
                                                                  @Valid PageInfoRequest pageInfoRequest) {
@@ -75,6 +77,7 @@ public class ProductController {
                 .build();
     }
 
+    @ApiImplicitParam(name = "page", dataType = "integer", value = "페이지 번호", paramType = "query")
     @GetMapping("/coffee/{coffeeId}/review")
     public BaseResponse<ProductReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long coffeeId,
                                                                 @Valid PageInfoRequest pageInfoRequest) {

@@ -98,7 +98,7 @@ public class ProductMapper {
                 .capsule(capsule)
                 .member(member)
                 .content(reviewRequest.content())
-                .score(reviewRequest.score())
+                .score((double) reviewRequest.score())
                 .build();
     }
 
@@ -109,7 +109,7 @@ public class ProductMapper {
                 .coffee(coffee)
                 .member(member)
                 .content(reviewRequest.content())
-                .score(reviewRequest.score())
+                .score((double) reviewRequest.score())
                 .build();
     }
 

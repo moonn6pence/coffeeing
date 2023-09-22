@@ -68,7 +68,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_Success() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
@@ -88,7 +88,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_ExperienceEventSuccess() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when
@@ -105,7 +105,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         Long invalidId = coffee.getId();
         coffeeRepository.delete(coffee);
-        ReviewRequest reviewRequest = new ReviewRequest(3.5, "tasty");
+        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
 
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
@@ -171,7 +171,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeReviewIdAndReviewRequest_When_UpdateReview_Then_Success() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
@@ -186,7 +186,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), reviewRequest.score()),
+                () -> assertEquals(review.getScore(), (double) reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -196,7 +196,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_InvalidCoffeeReviewId_When_UpdateReview_Then_ThrowException() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
@@ -220,7 +220,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeReviewIdOfOthers_When_UpdateReview_Then_ThrowException() {
 
         // given
-        ReviewRequest reviewRequest = new ReviewRequest(1.5, "disgusting");
+        ReviewRequest reviewRequest = new ReviewRequest(1, "disgusting");
 
         Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 
