@@ -36,11 +36,13 @@ export const DetailPage = () => {
     isReviewed: true,
     memberReview: {
       content: 'string',
-      id: 0,
+      memberId: 0,
       nickname: 'string',
+      profileImageUrl: 'string',
+      reviewId: 0,
       score: 0,
     },
-    name: 'string',
+    nameKr: 'string',
     roast: 0,
   });
 
@@ -63,11 +65,11 @@ export const DetailPage = () => {
   ];
 
   const beanDetail = {
-    roast: capsule.roast,
-    body: capsule.body,
-    acidity: capsule.acidity,
+    roast: capsule.roast * 5,
+    body: capsule.body * 5,
+    acidity: capsule.acidity * 5,
     brand: capsule.brand,
-    name: capsule.name,
+    name: capsule.nameKr,
     isBookmarked: capsule.isBookmarked,
     imageUrl: capsule.imageUrl,
     description: capsule.description,
@@ -83,7 +85,7 @@ export const DetailPage = () => {
       </div>
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">
-          평균 평점 {capsule.averageScore}{' '}
+          평균 평점 {capsule.averageScore.toFixed(1)}{' '}
           <span className="text-[#BE9E8B]">/ 5.0</span>
         </p>
         <div className="flex space-x-6">
