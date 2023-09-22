@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import coffeeBean from '../../assets/survey/coffee/coffeeBean.png';
 import coffeeCapsule from '../../assets/survey/coffee/coffeeCapsule.png';
 import { AppDispatch } from 'store/store';
-import { addCurrentPage, setTotalPage } from 'store/surveySlice';
+import { addCurrentPage, setTotalPage, saveIsCapsule } from 'store/surveySlice';
 import { NextButton } from './SurveyButton';
 
 export const CoffeeSelect = () => {
@@ -54,6 +54,7 @@ export const CoffeeSelect = () => {
       dispatch(addCurrentPage());
       dispatch(setTotalPage(4));
     } else {
+      dispatch(saveIsCapsule());
       dispatch(addCurrentPage());
       dispatch(setTotalPage(5));
     }
