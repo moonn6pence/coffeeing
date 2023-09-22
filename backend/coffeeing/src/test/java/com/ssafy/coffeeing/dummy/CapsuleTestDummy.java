@@ -88,8 +88,8 @@ public class CapsuleTestDummy {
         capsules.add(createMockCapsule(
                 "Generic 한국 브랜드",
                 "Generic English brand",
-                "제네릭 캡슐명",
-                "Generic Capsule Name",
+                "윌튼 베네티즈 게이샤",
+                "Wilton Benitez Geisha",
                 new CoffeeCriteria(0.2, 0.25, null),
                 "Fruits",
                 1,
@@ -97,45 +97,42 @@ public class CapsuleTestDummy {
                 "generic description ",
                 50.0,
                 12));
-        capsules.add(
-                createMockCapsule(
-                        "Generic 한국 브랜드",
-                        "Generic English brand",
-                        "제네릭 캡슐명",
-                        "Generic Capsule Name",
-                        new CoffeeCriteria(0.8, 0.5, 0.6),
-                        "Fruits",
-                        1,
-                        "Generic Url ",
-                        "generic description ",
-                        50.0,
-                        12));
-        capsules.add(
-                createMockCapsule(
-                        "Generic 한국 브랜드",
-                        "Generic English brand",
-                        "제네릭 캡슐명",
-                        "Generic Capsule Name",
-                        new CoffeeCriteria(0.8, 0.9, 0.9),
-                        "Chocolate",
-                        1,
-                        "Generic Url ",
-                        "generic description ",
-                        50.0,
-                        12));
-        capsules.add(
-                createMockCapsule(
-                        "Generic 한국 브랜드",
-                        "Generic English brand",
-                        "제네릭 캡슐명",
-                        "Generic Capsule Name",
-                        new CoffeeCriteria(0.2, 0.75, 0.3),
-                        "Fruits,Nutty",
-                        1,
-                        "Generic Url ",
-                        "generic description ",
-                        50.0,
-                        12));
+        capsules.add(createMockCapsule(
+                "Generic 한국 브랜드",
+                "Generic English brand",
+                "예가체프 멩게샤 네츄럴",
+                "Yirgacheffe Mengesha Natural",
+                new CoffeeCriteria(0.8, 0.5, 0.6),
+                "Fruits",
+                1,
+                "Generic Url ",
+                "generic description ",
+                50.0,
+                12));
+        capsules.add(createMockCapsule(
+                "Generic 한국 브랜드",
+                "Generic English brand",
+                "파나마 게이샤 핑카 데브라 비비드",
+                "Panama Geisha Finca Debra Vivid",
+                new CoffeeCriteria(0.8, 0.9, 0.9),
+                "Chocolate",
+                1,
+                "Generic Url ",
+                "generic description ",
+                50.0,
+                12));
+        capsules.add(createMockCapsule(
+                "Generic 한국 브랜드",
+                "Generic English brand",
+                "파나마 게이샤 핑카 데브라 에코",
+                "Panama Geisha Finca Debra Echo",
+                new CoffeeCriteria(0.2, 0.75, 0.3),
+                "Fruits,Nutty",
+                1,
+                "Generic Url ",
+                "generic description ",
+                50.0,
+                12));
         return capsules;
     }
 
@@ -149,6 +146,13 @@ public class CapsuleTestDummy {
         expected.add(3);
         expected.add(3);
         expected.add(2);
+        expected.add(2);
+        return expected.get(index);
+    }
+
+    public static Integer expectedSearchCountWithKeyword(int index) {
+        List<Integer> expected = new ArrayList<>();
+        expected.add(1);
         expected.add(2);
         return expected.get(index);
     }

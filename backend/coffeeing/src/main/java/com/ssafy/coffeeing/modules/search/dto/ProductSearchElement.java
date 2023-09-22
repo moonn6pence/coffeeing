@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 public class ProductSearchElement {
     Long id;
-    String name;
+    String nameKr;
+    String nameEng;
     String imageUrl;
 }

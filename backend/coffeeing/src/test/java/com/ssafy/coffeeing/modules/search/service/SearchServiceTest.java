@@ -70,7 +70,7 @@ class SearchServiceTest extends ServiceTest {
             int index) {
         //given
         capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
-        SearchProductRequest searchProductRequest = new SearchProductRequest(roast, acidity, body,
+        SearchProductRequest searchProductRequest = new SearchProductRequest(null, roast, acidity, body,
                 flavorNote, TagType.CAPSULE, null, null);
 
         //when
@@ -78,5 +78,24 @@ class SearchServiceTest extends ServiceTest {
 
         //then
         assertThat(searchProductResponse.products().size()).isEqualTo(CapsuleTestDummy.expectedSearchCount(index));
+    }
+
+    @DisplayName("검색어와 함께 입력 시, 검색어가 포함된 검색 결과를 제공한다.")
+    @ParameterizedTest
+    @CsvSource({
+            "예가체프, light, , 0",
+            "Panama, medium_dark, medium, 1"
+    })
+    void Given_WithKeywordRequest_When_Search_Then_Fail(String keyword, String roast, String acidity, int index) {
+        //given
+        capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
+        SearchProductRequest searchProductRequest = new SearchProductRequest(keyword, roast, acidity, null,
+                null, TagType.CAPSULE, null, null);
+        //when
+        SearchProductResponse searchProductResponse = searchService.getProductsBySearch(searchProductRequest);
+
+        //then
+        assertThat(searchProductResponse.products().size())
+                .isEqualTo(CapsuleTestDummy.expectedSearchCountWithKeyword(index));
     }
 }
