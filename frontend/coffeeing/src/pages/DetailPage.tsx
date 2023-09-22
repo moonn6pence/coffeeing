@@ -46,16 +46,26 @@ export const DetailPage = () => {
     roast: 0,
   });
 
-  // 더미데이터(2페이지)
-  const reviews = [
-    { content: '1', id: 0, nickname: '김씨', score: 3 },
-    { content: '2', id: 1, nickname: '이씨', score: 4 },
-    { content: '3', id: 2, nickname: '박씨', score: 3 },
-    { content: '4', id: 3, nickname: '용씨', score: 3 },
-    { content: '5', id: 4, nickname: '용씨', score: 3 },
-    { content: '6', id: 5, nickname: '용씨', score: 3 },
-    { content: '7', id: 6, nickname: '용씨', score: 3 },
-  ];
+  // 리뷰들 불러오기
+  useEffect(() => {
+    publicRequest
+      .get(`${API_URL}/product/capsule/${id}/review`, { params: { page: 0 } })
+      .then((res) => {
+        // console.log(res.data.data.reviews);
+        setReviews(res.data.data.reviews);
+      });
+  }, [capsule]);
+
+  const [reviews, setReviews] = useState([
+    {
+      content: '',
+      memberId: 0,
+      nickname: '',
+      profileImageUrl: '',
+      reviewId: 0,
+      score: 0,
+    },
+  ]);
 
   const similarList = [
     { name: '아르페지오', brand: '네스프레소', capsule_id: 1, imgLink: '/' },
@@ -89,7 +99,6 @@ export const DetailPage = () => {
           <span className="text-[#BE9E8B]">/ 5.0</span>
         </p>
         <div className="flex space-x-6">
-          {/* 나중에 review 받아온 걸로 연결해줄 예정 */}
           <Pagination limit={6} contentList={reviews} />
         </div>
       </div>
