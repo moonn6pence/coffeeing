@@ -9,7 +9,7 @@ import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.search.domain.*;
 import com.ssafy.coffeeing.modules.search.dto.*;
 import com.ssafy.coffeeing.modules.search.mapper.SearchMapper;
-import com.ssafy.coffeeing.modules.search.repository.SearchDynamicRepository;
+import com.ssafy.coffeeing.modules.search.repository.SearchQueryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,7 @@ public class SearchService {
 
     private final CoffeeRepository coffeeRepository;
 
-    private final SearchDynamicRepository searchDynamicRepository;
+    private final SearchQueryRepository searchQueryRepository;
     private static final int AUTO_COMPLETE_SIZE = 10;
 
     @Transactional(readOnly = true)
@@ -79,7 +79,7 @@ public class SearchService {
 
     private Page<ProductSearchElement> searchBeanByConditions(String roast, String acidity, String body, String flavorNote,
                                                               Integer page, Integer size) {
-        return searchDynamicRepository.searchByBeanConditions(
+        return searchQueryRepository.searchByBeanConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
@@ -89,7 +89,7 @@ public class SearchService {
 
     private Page<ProductSearchElement> searchCapsuleByConditions(String roast, String acidity, String body, String flavorNote,
                                                                  Integer page, Integer size) {
-        return searchDynamicRepository.searchByCapsuleConditions(
+        return searchQueryRepository.searchByCapsuleConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),

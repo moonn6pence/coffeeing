@@ -22,11 +22,11 @@ import static com.ssafy.coffeeing.modules.product.domain.QCoffee.coffee;
 
 @Repository
 @RequiredArgsConstructor
-public class SearchDynamicRepositoryImpl implements SearchDynamicRepository {
+public class SearchQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    @Override
+
     public Page<ProductSearchElement> searchByBeanConditions(
             List<Roast> roasts,
             List<Acidity> acidities,
@@ -54,7 +54,6 @@ public class SearchDynamicRepositoryImpl implements SearchDynamicRepository {
         return new PageImpl<>(coffees, pageable, count);
     }
 
-    @Override
     public Page<ProductSearchElement> searchByCapsuleConditions(
             List<Roast> roasts,
             List<Acidity> acidities,
