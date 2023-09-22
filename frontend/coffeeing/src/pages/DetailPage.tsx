@@ -6,6 +6,7 @@ import { CapsuleCard } from 'components/CapsuleCard';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
+import { MyReview } from 'components/Detail/MyReview';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
@@ -102,7 +103,11 @@ export const DetailPage = () => {
       <BeanDetailBody {...beanDetail} />
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
-        <ReviewForm />
+        {capsule.isReviewed ? (
+          <MyReview memberReview={capsule.memberReview} />
+        ) : (
+          <ReviewForm />
+        )}
       </div>
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">
