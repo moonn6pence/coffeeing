@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 public class FeedProjection {
 
-    Long feedId;
-    String images;
+    private Long feedId;
+    private String images;
 }
