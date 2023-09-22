@@ -24,8 +24,9 @@ module.exports = {
         light: '#F9F6F0',
         'process-bar': '#F3F6FB',
         'select-img': '#F9F6F0',
-        'half-light':'#B78C5F80',
-        'drop-down':'#EFEEF1'
+        'half-light': '#B78C5F80',
+        'drop-down': '#EFEEF1',
+        'my-black': '#1F170B',
       },
       width: {
         // 설문 진행 척도 바 길이
