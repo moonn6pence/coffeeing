@@ -61,9 +61,12 @@ public class SearchService {
                     searchProductRequest.flavorNote(),
                     searchProductRequest.page(),
                     searchProductRequest.size());
+            Boolean isLast = searchProductRequest.page() + 1 == productSearchElements.getTotalPages();
 
             return SearchMapper.supplySearchProductResponseOf(
                     productSearchElements.getContent(),
+                    searchProductRequest.page() + 1,
+                    isLast,
                     productSearchElements.getTotalPages());
         }
         if(searchProductRequest.tagType() == TagType.CAPSULE) {
@@ -75,8 +78,12 @@ public class SearchService {
                     searchProductRequest.page(),
                     searchProductRequest.size());
 
+            Boolean isLast = searchProductRequest.page() + 1 == productSearchElements.getTotalPages();
+
             return SearchMapper.supplySearchProductResponseOf(
                     productSearchElements.getContent(),
+                    searchProductRequest.page() + 1,
+                    isLast,
                     productSearchElements.getTotalPages());
         }
 

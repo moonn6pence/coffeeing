@@ -15,7 +15,8 @@ public class SearchMapper {
         return new TagsResponse(tags);
     }
 
-    public static SearchProductResponse supplySearchProductResponseOf(List<ProductSearchElement> products, Integer totalCount){
-        return new SearchProductResponse(products, totalCount);
+    public static SearchProductResponse supplySearchProductResponseOf(
+            List<ProductSearchElement> products, Integer currentPage, Boolean isLast, Integer totalCount){
+        return new SearchProductResponse(products, currentPage, isLast, totalCount);
     }
 }
