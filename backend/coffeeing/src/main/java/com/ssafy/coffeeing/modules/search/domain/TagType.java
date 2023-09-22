@@ -1,4 +1,4 @@
-package com.ssafy.coffeeing.modules.tag.domain;
+package com.ssafy.coffeeing.modules.search.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

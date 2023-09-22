@@ -20,7 +20,7 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -285,7 +285,7 @@ class FeedServiceTest extends ServiceTest {
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        Long beforeLikeCount = feed.getLikeCount();
+        Integer beforeLikeCount = feed.getLikeCount();
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
@@ -311,7 +311,7 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         FeedLike feedLike = feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
         feed.increaseLikeCount();
-        Long beforeLikeCount = feed.getLikeCount();
+        Integer beforeLikeCount = feed.getLikeCount();
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());

@@ -3,7 +3,7 @@ package com.ssafy.coffeeing.modules.feed.domain;
 import com.ssafy.coffeeing.modules.feed.dto.FeedPageElement;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,7 +3,7 @@ package com.ssafy.coffeeing.modules.feed.mapper;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class FeedMapper {
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
-                .likeCount(0L)
+                .likeCount(0)
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class FeedMapper {
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
-                .likeCount(0L)
+                .likeCount(0)
                 .tagId(tag.tagId())
                 .tagType(tag.category())
                 .tagName(tag.name())

@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional
-@Profile("dev")
+@Profile("test")
 public class Dummy implements CommandLineRunner {
 
     private final EntityManager em;

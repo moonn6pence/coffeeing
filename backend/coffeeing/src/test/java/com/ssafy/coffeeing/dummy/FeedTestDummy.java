@@ -6,8 +6,8 @@ import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class FeedTestDummy {
     public static Feed createFeed(Member member) {
         return Feed.builder()
                 .member(member)
-                .likeCount(0L)
+                .likeCount(0)
                 .content("testFeed")
                 .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
                 .build();
@@ -59,7 +59,7 @@ public class FeedTestDummy {
         for (int i = 0; i < 12; i++) {
             feeds.add(Feed.builder()
                     .member(member)
-                    .likeCount(0L)
+                    .likeCount(0)
                     .content(i + "contents")
                     .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
                     .build());

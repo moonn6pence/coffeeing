@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Profile("dev")
+@Profile("test")
 @RequiredArgsConstructor
 @Component
 public class FeedDummy {
@@ -48,7 +48,7 @@ public class FeedDummy {
                         .member(members.get(i))
                         .content(i + feedContent)
                         .imageUrl(feedUtil.makeImageElementToJsonString(images))
-                        .likeCount(0L)
+                        .likeCount(0)
                         .build());
             }
         }

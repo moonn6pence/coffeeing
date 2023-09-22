@@ -1,8 +1,8 @@
-package com.ssafy.coffeeing.modules.tag.controller;
+package com.ssafy.coffeeing.modules.search.controller;
 
-import com.ssafy.coffeeing.modules.tag.dto.TagsResponse;
-import com.ssafy.coffeeing.modules.tag.dto.SearchTagRequest;
-import com.ssafy.coffeeing.modules.tag.service.TagService;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.service.SearchService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,16 +10,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/tags")
+@RequestMapping("/search")
 @RequiredArgsConstructor
-public class TagController {
+public class SearchController {
 
-    private final TagService tagService;
+    private final SearchService searchService;
 
-    @GetMapping("/search")
+    @GetMapping("/tags")
     public BaseResponse<TagsResponse> getProductsBySuggestion(SearchTagRequest searchTagRequest) {
         return BaseResponse.<TagsResponse>builder()
-                .data(tagService.getProductsBySuggestion(searchTagRequest))
+                .data(searchService.getProductsBySuggestion(searchTagRequest))
                 .build();
     }
 }

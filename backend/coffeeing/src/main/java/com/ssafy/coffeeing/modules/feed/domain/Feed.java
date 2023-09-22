@@ -1,13 +1,10 @@
 package com.ssafy.coffeeing.modules.feed.domain;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.tag.domain.Tag;
-import com.ssafy.coffeeing.modules.tag.domain.TagType;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
+import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -24,7 +21,8 @@ public class Feed extends BaseEntity {
     private String content;
 
     @Column(name = "like_count", nullable = false)
-    private Long likeCount;
+    @Builder.Default
+    private Integer likeCount = 0;
 
     @Column(name = "image_url", nullable = false)
     private String imageUrl;

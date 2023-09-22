@@ -1,6 +1,6 @@
 package com.ssafy.coffeeing.dummy;
 
-import com.ssafy.coffeeing.modules.tag.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
 
 public class TagTestDummy {
 
