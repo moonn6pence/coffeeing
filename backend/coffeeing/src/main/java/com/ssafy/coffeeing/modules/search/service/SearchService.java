@@ -61,7 +61,10 @@ public class SearchService {
                     searchProductRequest.flavorNote(),
                     searchProductRequest.page(),
                     searchProductRequest.size());
-            return SearchMapper.supplySearchProductResponseOf(productSearchElements.getContent(), productSearchElements.getTotalPages());
+
+            return SearchMapper.supplySearchProductResponseOf(
+                    productSearchElements.getContent(),
+                    productSearchElements.getTotalPages());
         }
         if(searchProductRequest.tagType() == TagType.CAPSULE) {
             productSearchElements = searchCapsuleByConditions(
@@ -71,7 +74,10 @@ public class SearchService {
                     searchProductRequest.flavorNote(),
                     searchProductRequest.page(),
                     searchProductRequest.size());
-            return SearchMapper.supplySearchProductResponseOf(productSearchElements.getContent(), productSearchElements.getTotalPages());
+
+            return SearchMapper.supplySearchProductResponseOf(
+                    productSearchElements.getContent(),
+                    productSearchElements.getTotalPages());
         }
 
         throw new BusinessException(SearchErrorInfo.NOT_EXIST_TAG_TYPE);
@@ -83,7 +89,7 @@ public class SearchService {
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
-                flavorNote,
+                flavorNoteToList(flavorNote),
                 PageRequest.of(page, size));
     }
 
@@ -93,8 +99,16 @@ public class SearchService {
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
-                flavorNote,
+                flavorNoteToList(flavorNote),
                 PageRequest.of(page, size));
+    }
+
+    private List<String> flavorNoteToList(String flavorNote) {
+        if(Objects.isNull(flavorNote)) return new ArrayList<>();
+
+        return Arrays.stream(flavorNote.split(","))
+                .map(String::trim)
+                .toList();
     }
 
     private List<Roast> roastStringToList(String roast) {

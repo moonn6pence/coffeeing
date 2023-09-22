@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.search.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.search.domain.Acidity;
 import com.ssafy.coffeeing.modules.search.domain.Body;
@@ -31,24 +30,26 @@ public class SearchQueryRepository {
             List<Roast> roasts,
             List<Acidity> acidities,
             List<Body> bodies,
-            String flavorNote,
+            List<String> flavorNotes,
             Pageable pageable) {
 
         List<ProductSearchElement> coffees = jpaQueryFactory
                 .select(Projections.fields(ProductSearchElement.class,
-                        coffee.id.as("id"), coffee.coffeeNameKr.as("name"), coffee.imageUrl.as("imageUrl")))
+                        coffee.id.as("id"),
+                        coffee.coffeeNameKr.as("name"),
+                        coffee.imageUrl.as("imageUrl")))
                 .from(coffee)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
-                        .or(containsCoffeeFlavorNote(flavorNote)))
+                        .or(containsCoffeeFlavorNotes(flavorNotes)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .stream().distinct().toList();
+                .fetch();
 
         Long count = jpaQueryFactory
                 .select(coffee.count())
                 .from(coffee)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
-                        .or(containsCoffeeFlavorNote(flavorNote)))
+                        .or(containsCoffeeFlavorNotes(flavorNotes)))
                 .fetchOne();
 
         return new PageImpl<>(coffees, pageable, count);
@@ -58,41 +59,43 @@ public class SearchQueryRepository {
             List<Roast> roasts,
             List<Acidity> acidities,
             List<Body> bodies,
-            String flavorNote,
+            List<String> flavorNotes,
             Pageable pageable) {
 
         List<ProductSearchElement> capsules = jpaQueryFactory
                 .select(Projections.fields(ProductSearchElement.class,
-                        capsule.id.as("id"), capsule.capsuleNameKr.as("name"), capsule.imageUrl.as("imageUrl")))
+                        capsule.id.as("id"),
+                        capsule.capsuleNameKr.as("name"),
+                        capsule.imageUrl.as("imageUrl")))
                 .from(capsule)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
-                        .or(containsCapsuleFlavorNote(flavorNote)))
+                        .or(containsCapsuleFlavorNotes(flavorNotes)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .stream().distinct().toList();
+                .fetch();
 
         Long count = jpaQueryFactory
                 .select(capsule.count())
                 .from(capsule)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
-                        .or(containsCapsuleFlavorNote(flavorNote)))
+                        .or(containsCapsuleFlavorNotes(flavorNotes)))
                 .fetchOne();
 
         return new PageImpl<>(capsules, pageable, count);
     }
 
-    private BooleanExpression containsCoffeeFlavorNote(String flavorNote) {
-        if(flavorNote == null) {
-            return null;
-        }
-        return coffee.flavorNote.containsIgnoreCase(flavorNote);
+    private BooleanBuilder containsCoffeeFlavorNotes(List<String> flavorNotes) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        flavorNotes.forEach(flavorNote -> booleanBuilder.or(coffee.flavorNote.containsIgnoreCase(flavorNote)));
+        return booleanBuilder;
     }
 
-    private BooleanExpression containsCapsuleFlavorNote(String flavorNote) {
-        if (flavorNote == null) {
-            return null;
-        }
-        return capsule.flavorNote.containsIgnoreCase(flavorNote);
+    private BooleanBuilder containsCapsuleFlavorNotes(List<String> flavorNotes) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+
+        flavorNotes.forEach(flavorNote -> booleanBuilder.or(capsule.flavorNote.containsIgnoreCase(flavorNote)));
+        return booleanBuilder;
     }
 
     private BooleanBuilder makeConditionsOfRoastWithAcidityWithBody(
@@ -109,7 +112,6 @@ public class SearchQueryRepository {
 
         bodies.forEach(body -> booleanBuilder.or(coffeeCriteria.body.gt(body.getMinValue())
                 .and(coffeeCriteria.body.loe(body.getMaxValue()))));
-
         return booleanBuilder;
     }
 }

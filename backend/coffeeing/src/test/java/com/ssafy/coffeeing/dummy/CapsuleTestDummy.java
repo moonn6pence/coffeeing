@@ -146,7 +146,7 @@ public class CapsuleTestDummy {
         expected.add(1);
         expected.add(2);
         expected.add(1);
-        expected.add(1);
+        expected.add(3);
         expected.add(3);
         expected.add(2);
         expected.add(2);
