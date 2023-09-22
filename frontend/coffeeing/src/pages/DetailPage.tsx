@@ -3,18 +3,19 @@ import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
 import { Pagination } from 'components/Pagination';
 import { CapsuleCard } from 'components/CapsuleCard';
-import { publicRequest } from 'util/axios';
+import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useLocation } from 'react-router-dom';
 
 export const DetailPage = () => {
   const location = useLocation();
   const id = location.state.id;
+  const product = 'capsule';
 
   // 상품 정보 불러오기
   useEffect(() => {
     publicRequest
-      .get(`${API_URL}/product/capsule/${id}`)
+      .get(`${API_URL}/product/${product}/${id}`)
       .then((res) => {
         setCapsule(res.data.data);
       })
@@ -48,11 +49,24 @@ export const DetailPage = () => {
 
   // 리뷰들 불러오기
   useEffect(() => {
-    publicRequest
-      .get(`${API_URL}/product/capsule/${id}/review`, { params: { page: 0 } })
+    privateRequest
+      .get(`${API_URL}/product/${product}/${id}/review`, {
+        params: { page: 0 },
+      })
       .then((res) => {
         // console.log(res.data.data.reviews);
         setReviews(res.data.data.reviews);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    privateRequest
+      .get(`${API_URL}/product/${product}/${id}/similar`)
+      .then((res) => {
+        setSimilarList(res.data.data.products);
+      })
+      .catch((error) => {
+        console.log(error);
       });
   }, [capsule]);
 
@@ -67,12 +81,9 @@ export const DetailPage = () => {
     },
   ]);
 
-  const similarList = [
-    { name: '아르페지오', brand: '네스프레소', capsule_id: 1, imgLink: '/' },
-    { name: '니카라과', brand: '네스프레소', capsule_id: 2, imgLink: '/' },
-    { name: '코지', brand: '네스프레소', capsule_id: 3, imgLink: '/' },
-    { name: '인도네시아', brand: '네스프레소', capsule_id: 4, imgLink: '/' },
-  ];
+  const [similarList, setSimilarList] = useState([
+    { id: 0, imageUrl: '', subtitle: '', title: '' },
+  ]);
 
   const beanDetail = {
     roast: capsule.roast * 5,
@@ -107,10 +118,10 @@ export const DetailPage = () => {
         <div className="flex w-300 justify-between">
           {similarList.map((item, index) => (
             <CapsuleCard
-              brand={item.brand}
-              name={item.name}
-              capsule_id={item.capsule_id}
-              imgLink={item.imgLink}
+              brand={item.subtitle}
+              name={item.title}
+              capsule_id={item.id}
+              imgLink={item.imageUrl}
               key={index}
             />
           ))}
