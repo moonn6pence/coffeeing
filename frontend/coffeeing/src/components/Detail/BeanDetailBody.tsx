@@ -3,12 +3,14 @@ import { BeanRating } from './BeanRating';
 import { CapsuleCard } from 'components/CapsuleCard';
 import bookmarkOn from 'assets/bookmark_on.png';
 import bookmarkOff from 'assets/detail/bookmark_off.png';
+import { privateRequest } from 'util/axios';
+import { API_URL } from 'util/constants';
 
 type BeanDetailBodyProps = {
   roast: number;
   body: number;
   acidity: number;
-  brand: string;
+  subtitle: string;
   name: string;
   isBookmarked: boolean;
   imageUrl: string;
@@ -21,7 +23,7 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
     roast,
     body,
     acidity,
-    brand,
+    subtitle,
     name,
     isBookmarked,
     imageUrl,
@@ -37,11 +39,15 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
 
   const aromaList = aroma.split(', ');
 
+  const handleBookmark = () => {
+    privateRequest.post(`${API_URL}/product/`);
+  };
+
   return (
     <div className="bg-light flex w-300 h-450px justify-around mx-auto mt-10 items-center">
       <CapsuleCard
         capsule_id={0}
-        brand={brand}
+        subtitle={subtitle}
         name={name}
         imgLink={imageUrl}
       />
@@ -49,7 +55,8 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
         <img
           src={isBookmarked ? bookmarkOn : bookmarkOff}
           alt="북마크"
-          className="w-9 h-9 flex mr-0"
+          className="w-9 h-9 flex mr-0 cursor-pointer"
+          onClick={handleBookmark}
         />
         <div className="space-y-3 w-full">
           {beanCharac.map((charac) => (

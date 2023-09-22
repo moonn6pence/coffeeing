@@ -89,7 +89,7 @@ export const DetailPage = () => {
     roast: capsule.roast * 5,
     body: capsule.body * 5,
     acidity: capsule.acidity * 5,
-    brand: capsule.brand,
+    subtitle: capsule.brand,
     name: capsule.nameKr,
     isBookmarked: capsule.isBookmarked,
     imageUrl: capsule.imageUrl,
@@ -118,7 +118,7 @@ export const DetailPage = () => {
         <div className="flex w-300 justify-between">
           {similarList.map((item, index) => (
             <CapsuleCard
-              brand={item.subtitle}
+              subtitle={item.subtitle}
               name={item.title}
               capsule_id={item.id}
               imgLink={item.imageUrl}

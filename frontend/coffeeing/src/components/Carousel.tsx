@@ -72,21 +72,36 @@ export default class Carousel extends Component {
 
     // 더미데이터, 나중에 실제 데이터 받아와서 연결해줘야함
     const capsuleList = [
-      { name: '아르페지오', brand: '네스프레소', capsule_id: 1, imgLink: '/' },
-      { name: '니카라과', brand: '네스프레소', capsule_id: 2, imgLink: '/' },
-      { name: '코지', brand: '네스프레소', capsule_id: 3, imgLink: '/' },
-      { name: '인도네시아', brand: '네스프레소', capsule_id: 4, imgLink: '/' },
-      { name: '볼루토', brand: '네스프레소', capsule_id: 5, imgLink: '/' },
-      { name: '베네치아', brand: '네스프레소', capsule_id: 6, imgLink: '/' },
-      { name: '리반토', brand: '네스프레소', capsule_id: 7, imgLink: '/' },
-      { name: '리스트레토', brand: '네스프레소', capsule_id: 8, imgLink: '/' },
+      {
+        name: '아르페지오',
+        subtitle: '네스프레소',
+        capsule_id: 1,
+        imgLink: '/',
+      },
+      { name: '니카라과', subtitle: '네스프레소', capsule_id: 2, imgLink: '/' },
+      { name: '코지', subtitle: '네스프레소', capsule_id: 3, imgLink: '/' },
+      {
+        name: '인도네시아',
+        subtitle: '네스프레소',
+        capsule_id: 4,
+        imgLink: '/',
+      },
+      { name: '볼루토', subtitle: '네스프레소', capsule_id: 5, imgLink: '/' },
+      { name: '베네치아', subtitle: '네스프레소', capsule_id: 6, imgLink: '/' },
+      { name: '리반토', subtitle: '네스프레소', capsule_id: 7, imgLink: '/' },
+      {
+        name: '리스트레토',
+        subtitle: '네스프레소',
+        capsule_id: 8,
+        imgLink: '/',
+      },
     ];
 
     return (
       <Slider {...settings} className="w-320 flex justify-center pl-10">
         {capsuleList.map((capsule) => (
           <CapsuleCard
-            brand={capsule.brand}
+            subtitle={capsule.subtitle}
             capsule_id={capsule.capsule_id}
             name={capsule.name}
             imgLink={eximg}
