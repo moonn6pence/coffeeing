@@ -12,6 +12,7 @@ import { DetailPage } from 'pages/DetailPage';
 import { OauthPage } from 'pages/OauthPage';
 import { AfterSignupPage } from 'pages/AfterSignupPage';
 import { MemberPage } from 'pages/MemberPage';
+import { FeedPage } from 'pages/FeedPage';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           element={<AfterSignupPage />}
         ></Route>
         <Route path="/member/:id" element={<MemberPage />}></Route>
+        <Route path="/feeds" element={<FeedPage />}></Route>
       </Routes>
     </div>
   );
