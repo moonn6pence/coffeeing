@@ -9,7 +9,7 @@ const initialState:SurveyType = {
   acidity:0,
   flavorNote:'',
   body:0,
-  machine:0,
+  machine:1,
   isCapsule:false,
 }
 
@@ -27,6 +27,9 @@ const surveySlice = createSlice({
     },
     minusCurrentPage(state){
       state.currentPage -= 1
+    },
+    saveIsCapsule(state){
+      state.isCapsule = true;
     },
     saveRoasting(state, action:PayloadAction<number>){
       state.roasting = action.payload
@@ -49,4 +52,4 @@ const surveySlice = createSlice({
 })
 
 export default surveySlice.reducer;
-export const {setTotalPage,addCurrentPage,minusCurrentPage,saveRoasting,saveAcidity,saveBody,resetSurvey,saveFlavorNote} = surveySlice.actions;
+export const {setTotalPage,addCurrentPage,minusCurrentPage,saveIsCapsule,saveRoasting,saveAcidity,saveBody,resetSurvey,saveFlavorNote} = surveySlice.actions;
