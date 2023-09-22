@@ -12,6 +12,8 @@ public class RandomUtil {
 
     private final List<CurationType> capsuleCharacteristicCurations;
     private final List<CurationType> coffeeCharacteristicCurations;
+    private final List<CurationType> capsuleKeywordCurations;
+    private final List<CurationType> coffeeKeywordCurations;
     private final List<String> flavors;
 
     private final Random random;
@@ -19,6 +21,8 @@ public class RandomUtil {
     public RandomUtil() {
         this.capsuleCharacteristicCurations = new ArrayList<>();
         this.coffeeCharacteristicCurations = new ArrayList<>();
+        this.capsuleKeywordCurations = new ArrayList<>();
+        this.coffeeKeywordCurations = new ArrayList<>();
         this.flavors = new ArrayList<>();
         this.random = new Random();
 
@@ -37,6 +41,12 @@ public class RandomUtil {
         this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ROAST_DARK);
         this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ROAST_LIGHT);
         this.coffeeCharacteristicCurations.add(CurationType.CAPSULE_FLAVOR);
+
+        this.capsuleKeywordCurations.add(CurationType.CAPSULE_AGE_GENDER);
+        this.capsuleKeywordCurations.add(CurationType.CAPSULE_LIKED_PRODUCT);
+
+        this.coffeeKeywordCurations.add(CurationType.COFFEE_AGE_GENDER);
+        this.coffeeKeywordCurations.add(CurationType.COFFEE_LIKED_PRODUCT);
 
         this.flavors.add("fruity");
         this.flavors.add("sweety");
@@ -59,7 +69,17 @@ public class RandomUtil {
         return coffeeCharacteristicCurations.get(generate(coffeeCharacteristicCurations.size()));
     }
 
+    public CurationType getRandomKeywordCuration(Boolean isCapsule) {
+
+        if (isCapsule) {
+            return capsuleKeywordCurations.get(generate(capsuleKeywordCurations.size()));
+        }
+
+        return coffeeCharacteristicCurations.get(generate(coffeeKeywordCurations.size()));
+    }
+
     public String getRandomFlavor() {
         return flavors.get(generate(flavors.size()));
     }
+
 }
