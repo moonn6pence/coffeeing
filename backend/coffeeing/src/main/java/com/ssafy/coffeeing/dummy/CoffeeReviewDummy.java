@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-@Profile("dev")
+@Profile("test")
 @RequiredArgsConstructor
 @Component
 public class CoffeeReviewDummy {
