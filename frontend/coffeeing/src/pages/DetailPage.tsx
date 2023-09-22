@@ -5,17 +5,15 @@ import { Pagination } from 'components/Pagination';
 import { CapsuleCard } from 'components/CapsuleCard';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export const DetailPage = () => {
-  const location = useLocation();
-  const id = location.state.id;
-  const product = 'capsule';
+  const { beans, id } = useParams();
 
   // 상품 정보 불러오기
   useEffect(() => {
     publicRequest
-      .get(`${API_URL}/product/${product}/${id}`)
+      .get(`${API_URL}/product/${beans}/${id}`)
       .then((res) => {
         setCapsule(res.data.data);
       })
@@ -50,7 +48,7 @@ export const DetailPage = () => {
   // 리뷰들 불러오기
   useEffect(() => {
     privateRequest
-      .get(`${API_URL}/product/${product}/${id}/review`, {
+      .get(`${API_URL}/product/${beans}/${id}/review`, {
         params: { page: 0 },
       })
       .then((res) => {
@@ -61,7 +59,7 @@ export const DetailPage = () => {
         console.log(error);
       });
     privateRequest
-      .get(`${API_URL}/product/${product}/${id}/similar`)
+      .get(`${API_URL}/product/${beans}/${id}/similar`)
       .then((res) => {
         setSimilarList(res.data.data.products);
       })
@@ -95,6 +93,8 @@ export const DetailPage = () => {
     imageUrl: capsule.imageUrl,
     description: capsule.description,
     aroma: capsule.aroma,
+    product: beans || '',
+    id: capsule.id,
   };
 
   return (

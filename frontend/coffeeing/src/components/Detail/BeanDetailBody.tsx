@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BeanRating } from './BeanRating';
 import { CapsuleCard } from 'components/CapsuleCard';
 import bookmarkOn from 'assets/bookmark_on.png';
@@ -16,6 +16,8 @@ type BeanDetailBodyProps = {
   imageUrl: string;
   description: string;
   aroma: string;
+  product: string;
+  id: number;
 };
 
 export const BeanDetailBody = (props: BeanDetailBodyProps) => {
@@ -29,7 +31,11 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
     imageUrl,
     description,
     aroma,
+    product,
+    id,
   } = props;
+
+  const [isBooked, setIsBooked] = useState(isBookmarked);
 
   const beanCharac = [
     { name: '로스팅', value: roast },
@@ -40,7 +46,15 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
   const aromaList = aroma.split(', ');
 
   const handleBookmark = () => {
-    privateRequest.post(`${API_URL}/product/`);
+    privateRequest
+      .post(`${API_URL}/product/${product}/${id}/bookmark`)
+      .then((res) => {
+        if (res.data.data.result) {
+          setIsBooked(true);
+        } else {
+          setIsBooked(false);
+        }
+      });
   };
 
   return (
@@ -53,7 +67,7 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
       />
       <div className="flex flex-col items-end space-y-6 w-532px">
         <img
-          src={isBookmarked ? bookmarkOn : bookmarkOff}
+          src={isBooked ? bookmarkOn : bookmarkOff}
           alt="북마크"
           className="w-9 h-9 flex mr-0 cursor-pointer"
           onClick={handleBookmark}
