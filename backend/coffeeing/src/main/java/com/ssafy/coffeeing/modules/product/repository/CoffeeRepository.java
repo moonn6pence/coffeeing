@@ -11,4 +11,6 @@ import java.util.List;
 public interface CoffeeRepository extends JpaRepository<Coffee, Long> {
 
     List<Coffee> findCoffeesByCoffeeNameKrContainingIgnoreCase(String keyword, Pageable pageable);
+
+    List<Coffee> findTop10CapsulesByOrderByPopularityDesc();
 }
