@@ -46,8 +46,14 @@ public class Coffee extends BaseEntity {
     private String productDescription;
 
     @Column
-    private Double totalScore;
+    @Builder.Default
+    private Double totalScore = 0.0;
 
     @Column
-    private Integer totalReviewer;
+    @Builder.Default
+    private Integer totalReviewer = 0;
+
+    @Column
+    @Builder.Default
+    private Integer popularity = 0;
 }
