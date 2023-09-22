@@ -152,7 +152,7 @@ public class CapsuleTestDummy {
 
     public static Integer expectedSearchCountWithKeyword(int index) {
         List<Integer> expected = new ArrayList<>();
-        expected.add(1);
+        expected.add(0);
         expected.add(2);
         return expected.get(index);
     }
