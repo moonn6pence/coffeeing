@@ -5,14 +5,15 @@ import { minusCurrentPage } from 'store/surveySlice'
 
 type NextButtonProps = {
   handleClick:()=>void;
+  label:string
 }
 
-export const NextButton = ({handleClick}:NextButtonProps)=>{
+export const NextButton = ({handleClick, label}:NextButtonProps)=>{
   return(
     <button 
       className='w-40 h-12 text-white font-bold rounded-3xl bg-half-light text-xl'
       onClick={()=>handleClick()}
-      >다음</button>
+      >{label}</button>
   )
 }
 
