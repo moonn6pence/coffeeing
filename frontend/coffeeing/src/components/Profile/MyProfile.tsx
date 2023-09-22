@@ -15,6 +15,7 @@ export const MyProfile = (props: ProfileProps) => {
   const [nickChange, setNickChange] = useState(nickname);
   const [existNickname, setExistNickname] = useState(false);
   const [message, setMessage] = useState('이미 존재하는 닉네임입니다');
+  const [profileImage, setProfileImg] = useState(undefined);
   const imageRef = useRef<HTMLInputElement>(null);
 
   // 닉네임 변경상태 받기
@@ -58,31 +59,35 @@ export const MyProfile = (props: ProfileProps) => {
   // 이미지 변경하기
   const changeProfileImage = () => {
     if (imageRef.current) {
-      console.log("am i wokring?")
+      console.log('am i wokring?');
       imageRef.current.click();
     }
   };
 
   const launchImageChange = () => {
-    console.log("Image change go!");
+    console.log('Image change go!');
     const reader = new FileReader();
-    reader.addEventListener("load",()=>{
-      console.log("go conversion!")
-      convertToWebp(reader.result,sendToS3);
-    })
-    if(imageRef.current?.files){
-      console.log("image file exists");
+    reader.addEventListener('load', () => {
+      console.log('go conversion!');
+      convertToWebp(reader.result, sendToS3);
+    });
+    if (imageRef.current?.files) {
+      console.log('image file exists');
       const file = imageRef.current.files[0];
-      if(file){
+      if (file) {
         reader.readAsDataURL(file);
       }
     }
   };
 
-  const convertToWebp = (imgUrl: string | ArrayBuffer | null, callback: any) => {
+  const convertToWebp = (
+    imgUrl: string | ArrayBuffer | null,
+    callback: any,
+  ) => {
+    console.log("converttowebp");
     const img = new Image();
-    img.onload = () => {
-      console.log("throwing random bullshit");
+    img.onload = () => { // 여기가 실행 안됨
+      console.log('throwing random bullshit');
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
       canvas.height = img.height;
@@ -93,9 +98,10 @@ export const MyProfile = (props: ProfileProps) => {
     };
   };
 
-  const sendToS3=(imageUrl:string)=>{
-    console.log("do stuff like send to s3");
-  }
+  const sendToS3 = (imageUrl: string) => {
+    console.log('do stuff like send to s3');
+
+  };
 
   return (
     <div className="w-72 flex flex-col items-center">
@@ -116,7 +122,10 @@ export const MyProfile = (props: ProfileProps) => {
         accept="image/png, image/jpeg, image/jpg"
         ref={imageRef}
         className="collapse"
-        onChange={()=>launchImageChange()}
+        onInput={() => {
+          console.log('CATCH!');
+          launchImageChange();
+        }}
       />
 
       {edit ? (
