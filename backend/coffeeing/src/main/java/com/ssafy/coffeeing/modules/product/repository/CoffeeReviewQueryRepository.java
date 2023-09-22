@@ -9,4 +9,6 @@ import org.springframework.data.domain.Pageable;
 public interface CoffeeReviewQueryRepository {
 
     Page<CoffeeReview> findOthersCoffeeReviews(Coffee coffee, Member member, Pageable pageable);
+
+    Coffee findRandomHighScoredCoffee(Member member);
 }

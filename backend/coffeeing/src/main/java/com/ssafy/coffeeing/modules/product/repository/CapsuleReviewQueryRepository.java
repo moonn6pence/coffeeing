@@ -9,4 +9,5 @@ import org.springframework.data.domain.Pageable;
 public interface CapsuleReviewQueryRepository {
     Page<CapsuleReview> findOthersCapsuleReviews(Capsule capsule, Member member, Pageable pageable);
 
+    Capsule findRandomHighScoredCapsule(Member member);
 }
