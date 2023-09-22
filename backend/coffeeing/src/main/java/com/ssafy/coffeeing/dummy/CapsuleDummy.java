@@ -64,7 +64,7 @@ public class CapsuleDummy {
     }
 
     private Capsule createCapsule(String brandKr, String brandEng, String capsuleNameKr, String capsuleNameEng, CoffeeCriteria coffeeCriteria,
-                                  String aroma, Integer machineType, String imageUrl, String description,
+                                  String flavorNote, Integer machineType, String imageUrl, String description,
                                   Double totalScore, Integer totalReviewer) {
 
         return Capsule.builder()

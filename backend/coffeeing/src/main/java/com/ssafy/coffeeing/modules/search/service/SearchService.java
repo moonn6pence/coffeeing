@@ -54,7 +54,7 @@ public class SearchService {
         Page<ProductSearchElement> productSearchElements;
 
         if(searchProductRequest.tagType() == TagType.BEAN) {
-            productSearchElements = searchByBeanConditions(
+            productSearchElements = searchBeanByConditions(
                     searchProductRequest.roast(),
                     searchProductRequest.acidity(),
                     searchProductRequest.body(),
@@ -64,7 +64,7 @@ public class SearchService {
             return SearchMapper.supplySearchProductResponseOf(productSearchElements.getContent(), productSearchElements.getTotalPages());
         }
         if(searchProductRequest.tagType() == TagType.CAPSULE) {
-            productSearchElements = searchByCapsuleConditions(
+            productSearchElements = searchCapsuleByConditions(
                     searchProductRequest.roast(),
                     searchProductRequest.acidity(),
                     searchProductRequest.body(),
@@ -77,8 +77,8 @@ public class SearchService {
         throw new BusinessException(SearchErrorInfo.NOT_EXIST_TAG_TYPE);
     }
 
-    private Page<ProductSearchElement> searchByBeanConditions(String roast, String acidity, String body, String flavorNote,
-                                                             Integer page, Integer size) {
+    private Page<ProductSearchElement> searchBeanByConditions(String roast, String acidity, String body, String flavorNote,
+                                                              Integer page, Integer size) {
         return searchDynamicRepository.searchByBeanConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),
@@ -87,8 +87,8 @@ public class SearchService {
                 PageRequest.of(page, size));
     }
 
-    private Page<ProductSearchElement> searchByCapsuleConditions(String roast, String acidity, String body, String flavorNote,
-                                                             Integer page, Integer size) {
+    private Page<ProductSearchElement> searchCapsuleByConditions(String roast, String acidity, String body, String flavorNote,
+                                                                 Integer page, Integer size) {
         return searchDynamicRepository.searchByCapsuleConditions(
                 roastStringToList(roast),
                 acidityStringToList(acidity),

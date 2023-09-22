@@ -36,7 +36,7 @@ public class SearchDynamicRepositoryImpl implements SearchDynamicRepository {
 
         List<ProductSearchElement> coffees = jpaQueryFactory
                 .select(Projections.fields(ProductSearchElement.class,
-                        coffee.id.as("id"), coffee.coffeeName.as("name"), coffee.imageUrl.as("imageUrl")))
+                        coffee.id.as("id"), coffee.coffeeNameKr.as("name"), coffee.imageUrl.as("imageUrl")))
                 .from(coffee)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
                         .or(containsCoffeeFlavorNote(flavorNote)))
@@ -64,7 +64,7 @@ public class SearchDynamicRepositoryImpl implements SearchDynamicRepository {
 
         List<ProductSearchElement> capsules = jpaQueryFactory
                 .select(Projections.fields(ProductSearchElement.class,
-                        capsule.id.as("id"), capsule.capsuleName.as("name"), capsule.imageUrl.as("imageUrl")))
+                        capsule.id.as("id"), capsule.capsuleNameKr.as("name"), capsule.imageUrl.as("imageUrl")))
                 .from(capsule)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
                         .or(containsCapsuleFlavorNote(flavorNote)))

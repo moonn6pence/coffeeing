@@ -12,13 +12,13 @@ public class FeedPageElement {
     String content;
     Tag tag;
     Long registerId;
-    Long likeCount;
+    Integer likeCount;
     String registerName;
     String registerProfileImg;
     Boolean isLike = false;
     Boolean isMine = false;
 
-    public FeedPageElement(Long feedId, List<ImageElement> images, String content, Tag tag, Long registerId, Long likeCount,
+    public FeedPageElement(Long feedId, List<ImageElement> images, String content, Tag tag, Long registerId, Integer likeCount,
                            String registerName, String registerProfileImg) {
         this.feedId = feedId;
         this.images = images;

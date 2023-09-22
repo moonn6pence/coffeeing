@@ -20,7 +20,7 @@ public class FeedMapper {
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
-                .likeCount(0L)
+                .likeCount(0)
                 .build();
     }
 
@@ -29,7 +29,7 @@ public class FeedMapper {
                 .member(member)
                 .content(content)
                 .imageUrl(imageUrl)
-                .likeCount(0L)
+                .likeCount(0)
                 .tagId(tag.tagId())
                 .tagType(tag.category())
                 .tagName(tag.name())

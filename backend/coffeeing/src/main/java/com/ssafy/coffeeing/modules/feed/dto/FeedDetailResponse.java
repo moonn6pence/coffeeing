@@ -10,7 +10,7 @@ public record FeedDetailResponse(
         String content,
         Tag tag,
         Long registerId,
-        Long likeCount,
+        Integer likeCount,
         String registerName,
         String registerProfileImg,
         Boolean isLike,

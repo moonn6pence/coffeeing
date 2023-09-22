@@ -285,7 +285,7 @@ class FeedServiceTest extends ServiceTest {
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        Long beforeLikeCount = feed.getLikeCount();
+        Integer beforeLikeCount = feed.getLikeCount();
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
@@ -311,7 +311,7 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         FeedLike feedLike = feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
         feed.increaseLikeCount();
-        Long beforeLikeCount = feed.getLikeCount();
+        Integer beforeLikeCount = feed.getLikeCount();
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());

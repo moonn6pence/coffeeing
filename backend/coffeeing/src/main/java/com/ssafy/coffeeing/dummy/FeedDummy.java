@@ -48,7 +48,7 @@ public class FeedDummy {
                         .member(members.get(i))
                         .content(i + feedContent)
                         .imageUrl(feedUtil.makeImageElementToJsonString(images))
-                        .likeCount(0L)
+                        .likeCount(0)
                         .build());
             }
         }
