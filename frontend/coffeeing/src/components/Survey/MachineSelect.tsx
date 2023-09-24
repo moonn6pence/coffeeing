@@ -26,7 +26,7 @@ export const MachineSelect = () => {
     {src:nespresso, label:'네스프레소',isSelected:selectedNespresso, setIsSelected:setSelectedNespresso,num:1},
     {src:nespresso_burtuo, label:'네스프레소 버추오',isSelected:selectedNespressoB, setIsSelected:setSelectedNespressoB, num:2},
     {src:dolce, label:'돌체구스토',isSelected:selectedDolce, setIsSelected:setSelectedDolce, num:3},
-    {src:illi, label:'네스프레소',isSelected:selectedIlli, setIsSelected:setSelectedIlli, num:4},
+    {src:illi, label:'일리',isSelected:selectedIlli, setIsSelected:setSelectedIlli, num:4},
     {src:balmuda, label:'기타', isSelected:selectedUnknown,setIsSelected:setSelectedUnknown, num:5}
   ]
 
