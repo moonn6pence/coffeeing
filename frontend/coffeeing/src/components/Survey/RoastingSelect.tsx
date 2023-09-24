@@ -104,19 +104,19 @@ export const RoastingSelect = () => {
           const { src, label, isSelected, setIsSelected, num } = item;
           return (
             <div
-              className={`w-64 h-60 flex flex-col items-center ${
+              className={`w-64 h-60 flex flex-col items-center justify-end ${
                 isSelected ? 'bg-select-img' : ''
               } rounded-xl`}
               key={num}
             >
               <img
-                className={`w-52 h-52 origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
+                className={`w-48 h-48 origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
                 src={src}
                 onClick={() =>
                   handleRoastSelect(num, isSelected, setIsSelected)
                 }
               />
-              <p>{label}</p>
+              <p className='mb-2'>{label}</p>
             </div>
           );
         })}
