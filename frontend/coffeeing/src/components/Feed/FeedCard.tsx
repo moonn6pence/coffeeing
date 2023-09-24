@@ -7,10 +7,23 @@ import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import { FeedDetail } from "service/feed/types";
 
 interface FeedCardProps {
-    feedDetail: FeedDetail
+    feedDetail: FeedDetail,
 }
 
 function FeedCard ({ feedDetail }: FeedCardProps) {
+  const editEventHandler = () => {
+      alert("edit");
+  }
+
+  const deleteEventHandler = () => {
+      alert("delete");
+  }
+
+  const likeToggleEventHandler = () => {
+      alert("Toggle");
+  }
+
+
   return(
     <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting">
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
@@ -29,9 +42,13 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
             </div>
             {
                 feedDetail.isMine ?
-                <div className="feed-control-button flex flex-row gap-1">
-                    <img src = {WriteIcon} />
-                    <img src = {DeleteIcon} />
+                <div className="feed-control-button flex flex-row gap-4">
+                    <div className="write-icon-wrapper cursor-pointer rounded-xl" onClick={editEventHandler}>
+                        <img src = {WriteIcon} />
+                    </div>
+                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={deleteEventHandler}>
+                        <img src = {DeleteIcon} />
+                    </div>
                 </div>
                 : ""
             }
@@ -44,7 +61,9 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
 
             <div className="feed-content-wrapper flex flex-col px-6">
                 <div className="feed-like-wrapper w-full mx-1">
-                    { <img src = {FeedUnlike} /> }
+                    <div className="cursor-pointer w-fit rounded-xl"  onClick={likeToggleEventHandler}>
+                        { <img src = {FeedUnlike} /> }
+                    </div>
                 </div>
 
                 <div className="feed-text-wrapper flex flex-row w-full min-h-max">
