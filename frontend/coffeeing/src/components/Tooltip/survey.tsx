@@ -2,11 +2,16 @@ import React from 'react';
 import { Tooltip } from 'react-tooltip';
 import IonIcon from '@reacticons/ionicons';
 
-export const RoastingTooltip = () =>{
-  return(
-    <a data-tooltip-id='roasting' data-tooltip-content='라이트 로스팅:강한 신맛이 나고 품종의 특성이 잘 나타납니다.'>
-        <Tooltip id='roasting'/>
-        <IonIcon name="help-circle-outline" size='large'></IonIcon>
-    </a>
-  )
+type ToolTipPros = {
+  label:string|undefined
 }
+
+export const RoastingTooltip = ({label}:ToolTipPros) => {
+
+  return (
+    <a className='ml-1' data-tooltip-id='roasting' data-tooltip-place='bottom'  data-tooltip-content={label}>
+      <Tooltip id='roasting' />
+      <IonIcon name="help-circle-outline"  ></IonIcon>
+    </a>
+  );
+};
