@@ -1,11 +1,23 @@
-import React,{ useState } from "react";
+import React,{ useEffect, useState } from "react";
 import Button from "components/Button";
 import FeedCard from "components/Feed/FeedCard";
+import { getFeedDetailMock } from "../service/feed/mock"
+import { FeedDetail } from "service/feed/types";
 
 export const FeedPage = () => {
+  const [feeds, setFeeds] = useState<FeedDetail[]>([]);
+
   const createFeeds = () => {
-    alert("@")
+      alert("TODO CONNECT FEED API")
   }
+
+  useEffect(()=>{
+    const mockData = [];
+    for(let i=0; i<5; ++i) {
+        mockData.push(getFeedDetailMock());
+    }
+    setFeeds(mockData);
+  }, []);
 
   return(
     <div className="main-container w-320 pt-10 items-center mx-auto mt-32">
@@ -21,8 +33,10 @@ export const FeedPage = () => {
             </div>
 
             {/** Feed Card Component (Infinite Scroll)*/}
-            <div className="feeds-scroll-container w-full min-h-fit gap-1 pb-5">
-                <FeedCard />
+            <div className="feeds-scroll-container flex flex-col w-full min-h-fit gap-1 pb-5">
+                {
+                    feeds.map((feedDetail)=>(<FeedCard feedDetail={ feedDetail } key={feedDetail.feedId}/>))
+                }
             </div>
         </div>
     </div>
