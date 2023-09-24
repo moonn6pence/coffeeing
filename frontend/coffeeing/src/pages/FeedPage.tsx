@@ -3,17 +3,30 @@ import Button from "components/Button";
 import FeedCard from "components/Feed/FeedCard";
 import { getFeedDetailMock } from "../service/feed/mock"
 import { FeedDetail } from "service/feed/types";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export const FeedPage = () => {
   const [feeds, setFeeds] = useState<FeedDetail[]>([]);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   const createFeeds = () => {
       alert("TODO CONNECT FEED API")
   }
 
-  useEffect(()=>{
+  const loadFeeds = () => {
     const mockData = [];
     for(let i=0; i<5; ++i) {
+        mockData.push(getFeedDetailMock());
+    }
+
+    const newList = [...feeds, ...mockData];
+    setFeeds(newList);
+    setHasMore(false);
+  }
+
+  useEffect(()=>{
+    const mockData = [];
+    for(let i=0; i<1; ++i) {
         mockData.push(getFeedDetailMock());
     }
     setFeeds(mockData);
@@ -34,9 +47,18 @@ export const FeedPage = () => {
 
             {/** Feed Card Component (Infinite Scroll)*/}
             <div className="feeds-scroll-container flex flex-col w-full min-h-fit gap-1 pb-5">
-                {
-                    feeds.map((feedDetail)=>(<FeedCard feedDetail={ feedDetail } key={feedDetail.feedId}/>))
-                }
+                <InfiniteScroll
+                    dataLength={feeds.length}
+                    next={loadFeeds}
+                    hasMore={hasMore}
+                    loader={
+                        <h4>Loading...</h4>
+                    }
+                >
+                    {
+                        feeds.map((feedDetail)=>(<FeedCard feedDetail={ feedDetail } key={feedDetail.feedId}/>))
+                    }
+                </InfiniteScroll>
             </div>
         </div>
     </div>
