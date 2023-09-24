@@ -6,6 +6,7 @@ import lombok.Builder;
 import java.util.Objects;
 
 public record SearchProductRequest(
+        String keyword,
         String roast,
         String acidity,
         String body,
@@ -17,7 +18,7 @@ public record SearchProductRequest(
 ) {
 
     @Builder
-    public SearchProductRequest(String roast, String acidity, String body, String flavorNote,
+    public SearchProductRequest(String keyword, String roast, String acidity, String body, String flavorNote,
                                 TagType tagType, Integer page, Integer size) {
         if(Objects.isNull(tagType)) {
             tagType = TagType.BEAN;
@@ -28,6 +29,7 @@ public record SearchProductRequest(
         if(Objects.isNull(size)) {
             size = 8;
         }
+        this.keyword = keyword;
         this.roast = roast;
         this.acidity = acidity;
         this.body = body;

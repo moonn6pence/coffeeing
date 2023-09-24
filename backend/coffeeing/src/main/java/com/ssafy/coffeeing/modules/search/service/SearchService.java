@@ -55,6 +55,7 @@ public class SearchService {
 
         if(searchProductRequest.tagType() == TagType.BEAN) {
             productSearchElements = searchBeanByConditions(
+                    searchProductRequest.keyword(),
                     searchProductRequest.roast(),
                     searchProductRequest.acidity(),
                     searchProductRequest.body(),
@@ -71,6 +72,7 @@ public class SearchService {
         }
         if(searchProductRequest.tagType() == TagType.CAPSULE) {
             productSearchElements = searchCapsuleByConditions(
+                    searchProductRequest.keyword(),
                     searchProductRequest.roast(),
                     searchProductRequest.acidity(),
                     searchProductRequest.body(),
@@ -90,9 +92,10 @@ public class SearchService {
         throw new BusinessException(SearchErrorInfo.NOT_EXIST_TAG_TYPE);
     }
 
-    private Page<ProductSearchElement> searchBeanByConditions(String roast, String acidity, String body, String flavorNote,
-                                                              Integer page, Integer size) {
+    private Page<ProductSearchElement> searchBeanByConditions(
+            String keyword, String roast, String acidity, String body, String flavorNote, Integer page, Integer size) {
         return searchQueryRepository.searchByBeanConditions(
+                keyword,
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
@@ -100,9 +103,10 @@ public class SearchService {
                 PageRequest.of(page, size));
     }
 
-    private Page<ProductSearchElement> searchCapsuleByConditions(String roast, String acidity, String body, String flavorNote,
-                                                                 Integer page, Integer size) {
+    private Page<ProductSearchElement> searchCapsuleByConditions(
+            String keyword, String roast, String acidity, String body, String flavorNote, Integer page, Integer size) {
         return searchQueryRepository.searchByCapsuleConditions(
+                keyword,
                 roastStringToList(roast),
                 acidityStringToList(acidity),
                 bodyStringToList(body),
