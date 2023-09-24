@@ -27,6 +27,7 @@ export const RoastingSelect = () => {
       isSelected: selectedLight,
       setIsSelected: setSelectedLight,
       num: 0.3,
+      toolTipDescription: '강한 신맛이 나고 품종의 특성이 잘 나타납니다.'
     },
     {
       src: mediumRoast,
@@ -34,6 +35,7 @@ export const RoastingSelect = () => {
       isSelected: selectedMedium,
       setIsSelected: setSelectedMedium,
       num: 0.6,
+      toolTipDescription : '산뜻한 신맛이 나고 품종의 특성이 약하게 나타납니다.'
     },
     {
       src: darkRoast,
@@ -41,6 +43,7 @@ export const RoastingSelect = () => {
       isSelected: selectedDark,
       setIsSelected: setSelectedDark,
       num: 0.9,
+      toolTipDescription: '신맛이 약해지고 단맛과 쓴맛이 강해집니다.'
     },
     {
       src: unknownRoast,
@@ -90,7 +93,6 @@ export const RoastingSelect = () => {
           <p className=" text-2xl font-bold">
             선호하는 로스팅 단계를 선택해주세요
           </p>
-          <RoastingTooltip />
         </div>
         <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
@@ -101,7 +103,7 @@ export const RoastingSelect = () => {
       {/* 설문 사진 */}
       <div className="flex flex-row gap-10">
         {data.map((item) => {
-          const { src, label, isSelected, setIsSelected, num } = item;
+          const { src, label, isSelected, setIsSelected, num, toolTipDescription } = item;
           return (
             <div
               className={`w-64 h-60 flex flex-col items-center justify-end ${
@@ -116,7 +118,11 @@ export const RoastingSelect = () => {
                   handleRoastSelect(num, isSelected, setIsSelected)
                 }
               />
-              <p className='mb-2'>{label}</p>
+              <p className='mb-2'>{label} 
+              {toolTipDescription&&
+                <RoastingTooltip label={toolTipDescription}/>
+              }
+              </p>
             </div>
           );
         })}
