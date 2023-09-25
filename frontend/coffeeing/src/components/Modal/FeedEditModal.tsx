@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import UploadImageIcon from "assets/upload-img-icon.svg"
 import QuitModalIcon from "assets/quit-modal-icon.svg"
+import DefaultProfile from 'assets/feed/default-profile.svg'
 import classNames from 'classnames';
+import { useDebounce } from '@react-hooks-hub/use-debounce';
 
 interface FeedEditModalProps {
     isOpen: boolean,
@@ -16,30 +18,60 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
   const [step, setStep] = useState<number>(1);
   const [isActive, setActive] = useState<boolean>(false);
   const [uploadImage, setUploadImage] = useState<File>();
-  // const [preview, setPreview] = useState<any>();
+  const [preview, setPreview] = useState<any>();
 
-  const handleDragStart = () => setActive(true);
-  const handleDragEnd = () => setActive(false);
-  const handleDragOver = (event: any) => {
+  const debouncedSearch = useDebounce(()=>{
+    console.log("debound");
+  }, 300);
+
+
+  const handleDragStart = () => {
+    setActive(true);
+  }
+  const handleDragEnd = () => {
+    setActive(false);
+  }
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
   };
-  const handleDrop = (event: any) => {
+  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault(); 
-    setUploadImage(event.dataTransfer.files[0]);
-    setStep(2);
+    const image = event.dataTransfer.files[0];
+    if(image) {
+      setUploadImage(image);
+      const reader = new FileReader();
+      reader.readAsDataURL(image);
+      reader.onload = () => {
+        setPreview(reader.result);
+      }
+    }
     setActive(false);
   };
+  
 
-  const handleUpload = (event: any) => {
-    setUploadImage(event.target.files[0]);
-    setStep(2);
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if(event.target.files) {
+      setUploadImage(event.target.files[0]);
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = () => {
+        setPreview(reader.result);
+      }
+    }
   };
+
+  useEffect(()=>{
+    if(preview) {
+      setStep(2);
+    }
+  }, [preview]);
   
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={()=>{
         setIsOpen(false);
         setStep(1);
+        setPreview(null);
       }}>
         <Transition.Child
           as={Fragment}
@@ -76,13 +108,13 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                               <div className="flex-none cursor-pointer" onClick={() => {
                                     setIsOpen(false);
                                     setStep(1);
+                                    setPreview(null);
                               }}>
                                 <img src={QuitModalIcon} />
                               </div>
                             </div>
-                       </Dialog.Title>
+                      </Dialog.Title>
 
-           
                       <div className="mt-2 border-b border-gray-200"></div>
                       { (step === 1) ? 
                         <div className={
@@ -116,10 +148,39 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                           leaveFrom="opacity-100 translate-y-0"
                           leaveTo="opacity-0 translate-y-4">
 
-                          <div className="w-560px h-30">
-                            {/* <img src={preview} /> */}
+                          <div className="w-1056px h-fit">
+                            <div className='flex'>
+                              <div className='w-2/3 h-560px'>
+                                <img src={preview} className='h-full aspect-video object-cover'/>
+                              </div>
+
+                              {/* insert  */}
+                              <div className='w-1/3 flex flex-col'>
+                                <div className='current-member-info flex-none flex flex-row w-full px-5 py-3'>
+                                  <div className='mr-4'>
+                                    <img src={DefaultProfile} />
+                                  </div>
+                                  <div className='flex justify-center items-center font-semibold'>
+                                      닉네임
+                                  </div>
+                                </div>
+
+                                <div className='w-full grow'>
+                                  <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...' onChange={debouncedSearch}>
+                                  </textarea>
+                                  <div className='w-full'>
+                                    텍스트 영역
+                                  </div>
+                                </div>
+
+                                <div className='w-full flex flex-row-reverse flex-none mt-4 pr-4'>
+                                  <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting">
+                                    등록하기
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        
                         </Transition.Child>
                       }
                       </div>
