@@ -1,5 +1,5 @@
 import React, { ElementType, useState } from "react";
-import { Dialog, Transition, Disclosure } from '@headlessui/react'
+import { Transition, Disclosure } from '@headlessui/react'
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag, TagType } from 'service/search/types';
 import { getTagsByKeyword } from 'service/search/search';
