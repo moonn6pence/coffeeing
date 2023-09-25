@@ -1,6 +1,5 @@
 import React, { ElementType, useState } from "react";
 import { Transition, Disclosure } from '@headlessui/react'
-import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag, TagType } from 'service/search/types';
 import OpenAccordianIcon from "assets/accordian/open.svg"
 import CloseAccordianIcon from "assets/accordian/close.svg"
