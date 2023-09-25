@@ -69,19 +69,23 @@ public class JWTFilter extends OncePerRequestFilter {
 		IOException {
 
 		boolean skipCondition = isPreFlightRequest(request) || isPermitAllRequest(request);
-		if(!skipCondition) {
-			String accessToken = resolveToken(request);
-			if (!jwtUtils.validateToken(accessToken)) {
+
+		String accessToken = resolveToken(request);
+		try {
+			if(!jwtUtils.validateToken(accessToken) && !skipCondition) {
 				throw new BusinessException(AuthErrorInfo.ACCESS_TOKEN_EXPIRED);
 			}
-
-			if (accessToken != null && jwtUtils.validateToken(accessToken)) {
-				Authentication authentication = jwtUtils.getAuthentication(accessToken);
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			} else {
-				log.debug("Not found member access token. Request uri: {}", request.getRequestURI());
-			}
+		} catch (Exception e) {
+			if(!skipCondition) throw new BusinessException(AuthErrorInfo.NOT_VALID_TOKEN);
 		}
+
+		if (accessToken != null) {
+			Authentication authentication = jwtUtils.getAuthentication(accessToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
+		} else {
+			log.debug("Not found member access token. Request uri: {}", request.getRequestURI());
+		}
+
 		filterChain.doFilter(request, response);
 	}
 
