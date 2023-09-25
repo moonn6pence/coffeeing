@@ -21,7 +21,7 @@ public class FeedController {
     private final FeedService feedService;
 
     @PostMapping
-    @ApiOperation(value = "피드 업로드")
+    @ApiOperation(value = "피드 업로드 요청")
     public BaseResponse<UploadFeedResponse> uploadFeedRequest(@Valid @RequestBody UploadFeedRequest uploadFeedRequest) {
         return BaseResponse.<UploadFeedResponse>builder()
                 .data(feedService.uploadFeedByMember(uploadFeedRequest))
@@ -39,7 +39,7 @@ public class FeedController {
     }
 
     @DeleteMapping("/{feedId}")
-    @ApiOperation(value = "피드 삭제")
+    @ApiOperation(value = "피드 삭제 요청")
     public BaseResponse<Void> deleteFeed(@PathVariable @NumberFormat Long feedId) {
         feedService.deleteFeedById(feedId);
         return BaseResponse.<Void>builder()
@@ -47,7 +47,7 @@ public class FeedController {
     }
 
     @PostMapping("/{feedId}/like")
-    @ApiOperation(value = "피드 좋아요 토글")
+    @ApiOperation(value = "피드 좋아요 토글 요청")
     public BaseResponse<ToggleResponse> toggleFeedLike(@PathVariable @NumberFormat Long feedId) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(feedService.toggleFeedLike(feedId))
@@ -111,7 +111,7 @@ public class FeedController {
                     )
             })
     @GetMapping("/{memberId}/list")
-    @ApiOperation(value = "다른 멤버의 피드 리스트 조회")
+    @ApiOperation(value = "다른 멤버의 피드 리스트 조회 요청")
     public BaseResponse<ProfileFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
                 .data(feedService.getFeedsByMemberId(memberFeedsRequest))
@@ -119,7 +119,7 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    @ApiOperation(value = "피드 상세 조회")
+    @ApiOperation(value = "피드 상세 조회 요청")
     public BaseResponse<FeedDetailResponse> getFeedDetailById(@PathVariable @NumberFormat Long feedId) {
         return BaseResponse.<FeedDetailResponse>builder()
                 .data(feedService.getFeedDetailById(feedId))
@@ -146,7 +146,7 @@ public class FeedController {
                             , defaultValue = "10"
                     )
             })
-    @ApiOperation(value = "피드 리스트 조회")
+    @ApiOperation(value = "피드 리스트 조회 요청")
     @GetMapping
     public BaseResponse<FeedPageResponse> getFeedsByFeedPage(@Valid FeedsRequest feedsRequest) {
         return BaseResponse.<FeedPageResponse>builder()
