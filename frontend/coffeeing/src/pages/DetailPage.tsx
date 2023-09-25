@@ -7,9 +7,14 @@ import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
 import { MyReview } from 'components/Detail/MyReview';
+import { ReviewEditModal } from 'components/Detail/ReviewEditModal';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
+  const [seeModal, setSeeModal] = useState(false);
+  const handleModal = () => {
+    setSeeModal(!seeModal);
+  };
 
   // 상품 정보 불러오기
   useEffect(() => {
@@ -46,8 +51,8 @@ export const DetailPage = () => {
     roast: 0,
   });
 
-  // 리뷰들 불러오기
   useEffect(() => {
+    // 리뷰들 불러오기
     privateRequest
       .get(`${API_URL}/product/${beans}/${id}/review`, {
         params: { page: 0 },
@@ -59,6 +64,7 @@ export const DetailPage = () => {
       .catch((error) => {
         console.log(error);
       });
+    // 비슷한 상품 받아오기
     privateRequest
       .get(`${API_URL}/product/${beans}/${id}/similar`)
       .then((res) => {
@@ -104,9 +110,26 @@ export const DetailPage = () => {
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
         {capsule.isReviewed ? (
-          <MyReview memberReview={capsule.memberReview} />
+          <MyReview
+            memberReview={capsule.memberReview}
+            handleModal={handleModal}
+          />
         ) : (
-          <ReviewForm />
+          <ReviewForm product_id={id} beans={beans} />
+        )}
+        {seeModal ? (
+          <ReviewEditModal
+            score={3}
+            content="마시씀"
+            beans={beans}
+            reviewId={1}
+            handleModal={handleModal}
+            // reviewId={capsule.memberReview.reviewId}
+            // score={capsule.memberReview.score}
+            // content={capsule.memberReview.content}
+          />
+        ) : (
+          ''
         )}
       </div>
       <div className="w-fit mt-10 mx-auto">
@@ -119,7 +142,9 @@ export const DetailPage = () => {
         </div>
       </div>
       <div className="w-fit mt-10 mx-auto">
-        <p className="text-2xl font-bold mb-3">비슷한</p>
+        <p className="text-2xl font-bold mb-3">
+          비슷한 {beans === 'capsule' ? '캡슐' : '원두'}
+        </p>
         <div className="flex w-300 justify-between">
           {similarList.map((item, index) => (
             <CapsuleCard
