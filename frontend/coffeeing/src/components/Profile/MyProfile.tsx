@@ -19,9 +19,8 @@ export const MyProfile = (props: ProfileProps) => {
   const [nickChange, setNickChange] = useState(nickname);
   const [existNickname, setExistNickname] = useState(false);
   const [message, setMessage] = useState('이미 존재하는 닉네임입니다');
-  const [profileImage, setProfileImg] = useState(undefined);
   const imageRef = useRef<HTMLInputElement>(null);
-
+  const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const dispatch = useDispatch();
 
   // 닉네임 변경상태 받기
@@ -73,9 +72,18 @@ export const MyProfile = (props: ProfileProps) => {
   const handleImageOnInput = () => {
     console.log('Image change go!');
     const reader: FileReader = new FileReader();
-    reader.addEventListener('load', () => {
+    reader.addEventListener('load', async () => {
       console.log('go conversion!');
-      createNewImage(reader.result, sendToS3);
+      if (imgLink) {
+        createNewImage(reader.result, imgLink, callbackProfileImageUpload);
+      } else {
+        // generate new AWS S3 image url
+        const awsData = await privateRequest.get(`${API_URL}/aws/img`);
+        const awsS3Urls = awsData.data.data;
+        console.log(awsS3Urls);
+        const imageUrl = awsS3Urls.imageUrl;
+        createNewImage(reader.result, imageUrl, callbackProfileImageUpload);
+      }
     });
     if (imageRef.current?.files) {
       console.log('image file exists');
@@ -88,7 +96,8 @@ export const MyProfile = (props: ProfileProps) => {
 
   const createNewImage = (
     imgUrl: string | ArrayBuffer | null,
-    callback: (imageUrl: string) => void,
+    awsUrl: string,
+    callback: void | ((awsUrl: string, localImageUrl: string) => any),
   ) => {
     console.log('converttowebp');
     const img = new Image();
@@ -96,10 +105,10 @@ export const MyProfile = (props: ProfileProps) => {
       img.src = imgUrl;
     }
     if (img.complete) {
-      convertToWebp(img, callback);
+      convertToWebp(img, awsUrl, callback);
     } else {
       img.onload = () => {
-        convertToWebp(img, callback);
+        convertToWebp(img, awsUrl, callback);
       };
     }
   };
@@ -107,7 +116,8 @@ export const MyProfile = (props: ProfileProps) => {
   // 이미지를 Webp 형식으로 변경
   const convertToWebp = (
     img: HTMLImageElement,
-    callback: (localImageUrl: string) => void,
+    awsUrl: string,
+    callback: void | ((awsUrl: string, localImageUrl: string) => any),
   ) => {
     const canvas = document.createElement('canvas');
     canvas.width = img.width;
@@ -116,30 +126,45 @@ export const MyProfile = (props: ProfileProps) => {
     ctx?.drawImage(img, 0, 0);
     const localImageUrl = canvas.toDataURL('image/webp');
     console.log(localImageUrl);
-    callback(localImageUrl);
+    sendToS3(localImageUrl, awsUrl, callback);
   };
 
-  const sendToS3 = async (localImageUrl: string) => {
+  const sendToS3 = async (
+    localImageUrl: string,
+    awsUrl: string,
+    callback: void | ((awsUrl: string, localImageUrl: string) => any),
+  ) => {
     console.log('do stuff like send to s3');
-    const awsData = await privateRequest.get(`${API_URL}/aws/img`);
-    const imageUrl = awsData.data.data;
-    console.log(imageUrl);
-    const presignedUrl = imageUrl.presignedUrl;
-    console.log('Get presigned Url : ', presignedUrl);
+
+    // upload image to AWS S3
     fetch(localImageUrl)
       .then((response) => response.blob())
       .then((blob) => {
-        const imageFile = new File([blob], 'local-webp.webp', { type: blob.type });
+        console.log("Convert url to blob");
+        const imageFile = new File([blob], 'local-webp.webp', {
+          type: blob.type,
+        });
+        console.log(awsUrl);
         return publicRequest.put(
-          presignedUrl,
-          imageFile
+          // presignedUrl,
+          awsUrl,
+          imageFile,
         );
       })
-      .then((imageUploadResponse)=>{
+      .then((imageUploadResponse) => {
         console.log(imageUploadResponse);
-      })
-    // upload image to AWS S3
-    dispatch(setMyProfileImage(localImageUrl));
+        console.log(callback);
+        if (callback) {
+          callback(awsUrl, localImageUrl);
+        }
+      });
+  };
+
+  const callbackProfileImageUpload = (aws: string, _local: string) => {
+    console.log("Callback called!!");
+    dispatch(setMyProfileImage(aws));
+    privateRequest.put(`${API_URL}/member/profile`, { profileImageUrl: aws });
+    setImageRefreshKey(Date.now());
   };
 
   return (
@@ -151,6 +176,7 @@ export const MyProfile = (props: ProfileProps) => {
         {imgLink ? (
           <img
             src={imgLink}
+            key={imageRefreshKey}
             alt="프로필이미지"
             className="w-44 h-44 rounded-full border-2"
           />
