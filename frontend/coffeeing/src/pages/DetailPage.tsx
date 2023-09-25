@@ -8,9 +8,13 @@ import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
 import { MyReview } from 'components/Detail/MyReview';
 import { ReviewEditModal } from 'components/Detail/ReviewEditModal';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
+  const isLogin = useSelector((state: RootState) => state.member.isLogin);
+
   const [seeModal, setSeeModal] = useState(false);
   const handleModal = () => {
     setSeeModal(!seeModal);
@@ -105,8 +109,9 @@ export const DetailPage = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <BeanDetailBody {...beanDetail} />
+      {isLogin ? '' : ''}
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
         {capsule.isReviewed ? (
