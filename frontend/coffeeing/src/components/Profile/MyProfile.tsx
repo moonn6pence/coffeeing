@@ -1,11 +1,12 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import noImage from 'assets/no_image.png';
 import editIcon from 'assets/edit.svg';
-import { privateRequest, publicRequest } from 'util/axios';
+import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMyProfileImage } from 'store/memberSlice';
 import { RootState } from 'store/store';
+import { uploadImage } from 'util/imageUtils';
 
 type ProfileProps = {
   id: number | undefined;
@@ -79,14 +80,14 @@ export const MyProfile = (props: ProfileProps) => {
     reader.addEventListener('load', async () => {
       console.log('go conversion!');
       if (profileImage) {
-        createNewImage(reader.result, profileImage, callbackProfileImageUpload);
+        uploadImage(reader.result, profileImage, callbackProfileImageUpload);
       } else {
         // generate new AWS S3 image url
         const awsData = await privateRequest.get(`${API_URL}/aws/img`);
         const awsS3Urls = awsData.data.data;
         console.log(awsS3Urls);
         const imageUrl = awsS3Urls.imageUrl;
-        createNewImage(reader.result, imageUrl, callbackProfileImageUpload);
+        uploadImage(reader.result, imageUrl, callbackProfileImageUpload);
       }
     });
     if (imageRef.current?.files) {
@@ -98,72 +99,9 @@ export const MyProfile = (props: ProfileProps) => {
     }
   };
 
-  const createNewImage = (
-    imgUrl: string | ArrayBuffer | null,
-    awsUrl: string,
-    callback: void | ((awsUrl: string, localImageUrl: string) => any),
-  ) => {
-    console.log('converttowebp');
-    const img = new Image();
-    if (typeof imgUrl === 'string') {
-      img.src = imgUrl;
-    }
-    if (img.complete) {
-      convertToWebp(img, awsUrl, callback);
-    } else {
-      img.onload = () => {
-        convertToWebp(img, awsUrl, callback);
-      };
-    }
-  };
+  
 
-  // 이미지를 Webp 형식으로 변경
-  const convertToWebp = (
-    img: HTMLImageElement,
-    awsUrl: string,
-    callback: void | ((awsUrl: string, localImageUrl: string) => any),
-  ) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx?.drawImage(img, 0, 0);
-    const localImageUrl = canvas.toDataURL('image/webp');
-    console.log(localImageUrl);
-    sendToS3(localImageUrl, awsUrl, callback);
-  };
-
-  const sendToS3 = async (
-    localImageUrl: string,
-    awsUrl: string,
-    callback: void | ((awsUrl: string, localImageUrl: string) => any),
-  ) => {
-    console.log('do stuff like send to s3');
-
-    // upload image to AWS S3
-    fetch(localImageUrl)
-      .then((response) => response.blob())
-      .then((blob) => {
-        console.log('Convert url to blob');
-        const imageFile = new File([blob], 'local-webp.webp', {
-          type: blob.type,
-        });
-        console.log(awsUrl);
-        return publicRequest.put(
-          // presignedUrl,
-          awsUrl,
-          imageFile,
-        );
-      })
-      .then((imageUploadResponse) => {
-        console.log(imageUploadResponse);
-        console.log(callback);
-        if (callback) {
-          callback(awsUrl, localImageUrl);
-        }
-      });
-  };
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const callbackProfileImageUpload = (aws: string, _local: string) => {
     console.log('Callback called!!');
     dispatch(setMyProfileImage(aws));
