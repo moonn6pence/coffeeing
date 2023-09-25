@@ -52,8 +52,9 @@ public class SearchService {
     @Transactional(readOnly = true)
     public SearchProductResponse getProductsBySearch(SearchProductRequest searchProductRequest) {
         Page<ProductSearchElement> productSearchElements;
+        TagType productType = TagType.valueOf(searchProductRequest.productType().toUpperCase());
 
-        if(searchProductRequest.tagType() == TagType.BEAN) {
+        if(productType == TagType.BEAN) {
             productSearchElements = searchBeanByConditions(
                     searchProductRequest.keyword(),
                     searchProductRequest.roast(),
@@ -70,7 +71,7 @@ public class SearchService {
                     isLast,
                     productSearchElements.getTotalPages());
         }
-        if(searchProductRequest.tagType() == TagType.CAPSULE) {
+        if(productType == TagType.CAPSULE) {
             productSearchElements = searchCapsuleByConditions(
                     searchProductRequest.keyword(),
                     searchProductRequest.roast(),
