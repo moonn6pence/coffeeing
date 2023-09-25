@@ -1,5 +1,7 @@
 package com.ssafy.coffeeing.modules.search.controller;
 
+import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
+import com.ssafy.coffeeing.modules.search.dto.SearchProductResponse;
 import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
 import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
 import com.ssafy.coffeeing.modules.search.service.SearchService;
@@ -20,6 +22,13 @@ public class SearchController {
     public BaseResponse<TagsResponse> getProductsBySuggestion(SearchTagRequest searchTagRequest) {
         return BaseResponse.<TagsResponse>builder()
                 .data(searchService.getProductsBySuggestion(searchTagRequest))
+                .build();
+    }
+
+    @GetMapping("/products")
+    public BaseResponse<SearchProductResponse> getProductsBySearch(SearchProductRequest searchProductRequest) {
+        return BaseResponse.<SearchProductResponse>builder()
+                .data(searchService.getProductsBySearch(searchProductRequest))
                 .build();
     }
 }
