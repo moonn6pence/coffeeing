@@ -1,7 +1,14 @@
 import React, { FormEvent, useState } from 'react';
 import { StarRating } from './StarRating';
+import { privateRequest } from 'util/axios';
+import { API_URL } from 'util/constants';
 
-export const ReviewForm = () => {
+type ReviewFormProps = {
+  product_id?: string;
+  beans?: string;
+};
+
+export const ReviewForm = ({ product_id, beans }: ReviewFormProps) => {
   // 리뷰 내용 state
   const [description, setDescription] = useState('');
   // 리뷰 내용 변경상태 받기
@@ -16,14 +23,25 @@ export const ReviewForm = () => {
     setRating(newRating);
   };
 
-  const submitReview = () => {
+  const submitReview = (event: FormEvent) => {
+    event.preventDefault();
     // 별점, 내용 담아서 보내는 거 연결할 예정
     if (!rating) {
       alert('별점을 입력해주세요');
     } else if (!description) {
       alert('내용을 입력해주세요');
     } else {
-      console.log('제출');
+      privateRequest
+        .post(`${API_URL}/product/${beans}/${product_id}/review`, {
+          content: description,
+          score: rating,
+        })
+        .then((res) => {
+          console.log(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
