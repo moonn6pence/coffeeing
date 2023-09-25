@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.auth.controller;
 
 import javax.validation.Valid;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class AuthController {
 	private final AuthenticationManager authenticationManager;
 
 	@PostMapping("/sign-in")
+	@ApiOperation(value = "로그인 요청")
 	public BaseResponse<SignInResponse> signIn(@Valid @RequestBody SignInRequest signInRequest) {
 		Authentication authentication = authenticationManager.authenticate(signInRequest.getMemberEmailAndPasswordAuthentication());
 
@@ -38,6 +40,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/sign-up")
+	@ApiOperation(value = "회원가입 요청")
 	public BaseResponse<SignUpResponse> signUp(@RequestBody SignUpRequest signUpRequest) {
 		return BaseResponse.<SignUpResponse>builder()
 			.data(authService.signUp(signUpRequest))
@@ -45,6 +48,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/reissue")
+	@ApiOperation(value = "토큰 재발급 요청")
 	public BaseResponse<ReissueResponse> reissueAccessToken(@RequestBody ReissueRequest reissueRequest) {
 		return BaseResponse.<ReissueResponse>builder()
 			.data(authService.reissueAccessToken(reissueRequest))

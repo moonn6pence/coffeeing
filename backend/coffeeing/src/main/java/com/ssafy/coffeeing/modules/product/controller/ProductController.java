@@ -14,6 +14,7 @@ import com.ssafy.coffeeing.modules.product.service.CoffeeReviewService;
 import com.ssafy.coffeeing.modules.product.service.CoffeeService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,6 +42,7 @@ public class ProductController {
     private final CoffeeReviewService coffeeReviewService;
 
     @GetMapping("/capsule/{capsuleId}")
+    @ApiOperation(value = "캡슐 상세 정보 조회 요청")
     public BaseResponse<CapsuleResponse> getCapsuleDetail(@PathVariable @NumberFormat Long capsuleId) {
         return BaseResponse.<CapsuleResponse>builder()
                 .data(capsuleService.getDetail(capsuleId))
@@ -48,6 +50,7 @@ public class ProductController {
     }
 
     @GetMapping("/coffee/{coffeeId}")
+    @ApiOperation(value = "원두 상세 정보 조회 요청")
     public BaseResponse<CoffeeResponse> getCoffeeDetail(@PathVariable @NumberFormat Long coffeeId) {
         return BaseResponse.<CoffeeResponse>builder()
                 .data(coffeeService.getDetail(coffeeId))
@@ -55,6 +58,7 @@ public class ProductController {
     }
 
     @PostMapping("/capsule/{capsuleId}/bookmark")
+    @ApiOperation(value = "캡슐 북마크 토글 요청")
     public BaseResponse<ToggleResponse> toggleCapsuleBookmark(@PathVariable @NumberFormat Long capsuleId) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(capsuleService.toggleBookmark(capsuleId))
@@ -62,6 +66,7 @@ public class ProductController {
     }
 
     @PostMapping("/coffee/{coffeeId}/bookmark")
+    @ApiOperation(value = "원두 북마크 토글 요청")
     public BaseResponse<ToggleResponse> toggleCoffeeBookmark(@PathVariable @NumberFormat Long coffeeId) {
         return BaseResponse.<ToggleResponse>builder()
                 .data(coffeeService.toggleBookmark(coffeeId))
@@ -70,6 +75,7 @@ public class ProductController {
 
     @ApiImplicitParam(name = "page", dataType = "integer", value = "페이지 번호", paramType = "query")
     @GetMapping("/capsule/{capsuleId}/review")
+    @ApiOperation(value = "캡슐 리뷰 리스트 페이지네이션 요청")
     public BaseResponse<ProductReviewResponse> getCapsuleReviews(@PathVariable @NumberFormat Long capsuleId,
                                                                  @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
@@ -79,6 +85,7 @@ public class ProductController {
 
     @ApiImplicitParam(name = "page", dataType = "integer", value = "페이지 번호", paramType = "query")
     @GetMapping("/coffee/{coffeeId}/review")
+    @ApiOperation(value = "원두 리뷰 리스트 페이지네이션 요청")
     public BaseResponse<ProductReviewResponse> getCoffeeReviews(@PathVariable @NumberFormat Long coffeeId,
                                                                 @Valid PageInfoRequest pageInfoRequest) {
         return BaseResponse.<ProductReviewResponse>builder()
@@ -87,6 +94,7 @@ public class ProductController {
     }
 
     @GetMapping("/capsule/{capsuleId}/similar")
+    @ApiOperation(value = "캡슐 ID와 유사 제품 리스트 요청")
     public BaseResponse<SimilarProductResponse> getSimilarCapsules(@PathVariable @NumberFormat Long capsuleId) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(capsuleService.getSimilarCapsules(capsuleId))
@@ -94,6 +102,7 @@ public class ProductController {
     }
 
     @GetMapping("/coffee/{coffeeId}/similar")
+    @ApiOperation(value = "원두 ID와 유사 제품 리스트 요청")
     public BaseResponse<SimilarProductResponse> getSimilarCoffees(@PathVariable @NumberFormat Long coffeeId) {
         return BaseResponse.<SimilarProductResponse>builder()
                 .data(coffeeService.getSimilarCoffees(coffeeId))
@@ -101,6 +110,7 @@ public class ProductController {
     }
 
     @PostMapping("/capsule/{capsuleId}/review")
+    @ApiOperation(value = "캡슐 리뷰 작성 요청")
     public BaseResponse<CreationResponse> createCapsuleReview(@PathVariable @NumberFormat Long capsuleId,
                                                               @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -110,6 +120,7 @@ public class ProductController {
     }
 
     @PostMapping("/coffee/{coffeeId}/review")
+    @ApiOperation(value = "원두 리뷰 작성 요청")
     public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long id,
                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -119,6 +130,7 @@ public class ProductController {
     }
 
     @PutMapping("/capsule/review/{reviewId}")
+    @ApiOperation(value = "캡슐 리뷰 수정 요청")
     public BaseResponse<Void> editCapsuleReview(@PathVariable @NumberFormat Long reviewId,
                                                 @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -127,6 +139,7 @@ public class ProductController {
     }
 
     @PutMapping("/coffee/review/{reviewId}")
+    @ApiOperation(value = "원두 리뷰 수정 요청")
     public BaseResponse<Void> editCoffeeReview(@PathVariable @NumberFormat Long reviewId,
                                                @Valid @RequestBody ReviewRequest reviewRequest) {
 
@@ -135,6 +148,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/capsule/review/{reviewId}")
+    @ApiOperation(value = "캡슐 리뷰 삭제")
     public BaseResponse<Void> deleteCapsuleReview(@PathVariable @NumberFormat Long reviewId) {
 
         capsuleReviewService.deleteReview(reviewId);
@@ -142,6 +156,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/coffee/review/{reviewId}")
+    @ApiOperation(value = "원두 리뷰 삭제")
     public BaseResponse<Void> deleteCoffeeReview(@PathVariable @NumberFormat Long reviewId) {
 
         coffeeReviewService.deleteReview(reviewId);
