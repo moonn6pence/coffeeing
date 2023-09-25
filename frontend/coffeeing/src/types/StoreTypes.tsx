@@ -4,11 +4,9 @@ export type SurveyType = {
   roasting:number;
   acidity:number;
   body:number;
-  userId:number;
   machine:number;
-  flavorNote:Array<string>
-  // 원두 or 캡슐 type
-  type:number; 
+  flavorNote:string,
+  isCapsule:boolean; 
 }
 
 export type SearchType = {

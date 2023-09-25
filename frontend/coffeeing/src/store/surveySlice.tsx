@@ -7,12 +7,10 @@ const initialState:SurveyType = {
   totalPage:0,
   roasting:0,
   acidity:0,
-  flavorNote:[],
+  flavorNote:'',
   body:0,
-  userId:0,
-  machine:0,
-  // 원두 or 캡슐 type
-  type:0,
+  machine:1,
+  isCapsule:false,
 }
 
 const surveySlice = createSlice({
@@ -27,6 +25,12 @@ const surveySlice = createSlice({
       state.currentPage += 1
       console.log('current page', state.currentPage)
     },
+    minusCurrentPage(state){
+      state.currentPage -= 1
+    },
+    saveIsCapsule(state){
+      state.isCapsule = true;
+    },
     saveRoasting(state, action:PayloadAction<number>){
       state.roasting = action.payload
       console.log('roasting',state.roasting)
@@ -39,13 +43,17 @@ const surveySlice = createSlice({
       state.body=action.payload
       console.log('body', state.body)
     },
-    saveFlavorNote(state, action:PayloadAction<Array<string>>){
+    saveFlavorNote(state, action:PayloadAction<string>){
       state.flavorNote = action.payload
       console.log('flavorNote', state.flavorNote)
+    },
+    saveMachineType(state, action:PayloadAction<number>){
+      state.machine = action.payload
+      console.log('machine type', state.machine)
     },
     resetSurvey:()=>initialState
   },
 })
 
 export default surveySlice.reducer;
-export const {setTotalPage,addCurrentPage,saveRoasting,saveAcidity,saveBody,resetSurvey,saveFlavorNote} = surveySlice.actions;
+export const {setTotalPage,addCurrentPage,minusCurrentPage,saveIsCapsule,saveRoasting,saveAcidity,saveBody,resetSurvey,saveFlavorNote,saveMachineType} = surveySlice.actions;
