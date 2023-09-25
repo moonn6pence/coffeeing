@@ -8,23 +8,38 @@ import flavorNote from '../assets/search/free-icon-tongue-599326.png'
 import { SelectedFilterTag } from "components/Search/SelectedTag"; 
 import { ROAST_ITEMS, ACIDITY_ITEMS, BODY_ITEMS, FLAVOR_NOTE_ITEMS } from "util/constants";
 import searchIcon from '../assets/search/search.png'
-
+import { requestFilterResult } from "service/filter/request";
+import { FilterProps } from "service/filter/types";
 export const SearchPage = () =>{
   const [selectedRoast, setSelectedRoast] = useState([{label:'미선택', name:'미선택'}])
   const [selectedAcid, setSelectedAcid] = useState([{label:'미선택', name:'미선택'}])
   const [selectedBody, setSelectedBody] = useState([{label:'미선택', name:'미선택'}])
   const [selectedFlavorNote, setSelectedFlavorNote] = useState([{label:'미선택', name:'미선택'}])
-  const [title, setTitle] = useState('')
+  const [keyword, setKeyword] = useState('')
   const handleTextChange = (e:ChangeEvent<HTMLInputElement>) =>{
-    setTitle(e.target.value)
+    setKeyword(e.target.value)
   }
-
-  useEffect(()=>{
-    const sendRoast = selectedRoast.slice(1,).map(item => item.label).join(', ');
-    const sendAcidity = selectedAcid.slice(1,).map(item => item.label).join(', ');
-    const sendBody = selectedBody.slice(1,).map(item => item.label).join(', ');
-    const sendFlavorNote = selectedFlavorNote.slice(1,).map(item=>item.label).join(',');
-  },[selectedRoast,selectedAcid,selectedBody,selectedFlavorNote])
+  // 필터 결과 가져오기
+  const getResult = async () => {
+    const filterProps: FilterProps = {
+      selectedRoast,
+      selectedAcid,
+      selectedBody,
+      selectedFlavorNote,
+      keyword,
+      productType: 'BEAN', 
+      page: 1, 
+      size: 10,
+    };
+  
+    const result = await requestFilterResult(filterProps);
+  }
+  
+  
+  // 검색 결과 가져오기
+  useEffect(() =>  {  
+    getResult()
+  }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote]);
 
   return(
     <div className="mt-20 flex flex-col items-center">
@@ -39,7 +54,7 @@ export const SearchPage = () =>{
             className="block py-4 pl-2 w-full focus:outline-none"
             type="text" 
             placeholder="검색어를 입력하세요."
-            value={title}
+            value={keyword}
             onChange={(e)=>handleTextChange(e)}
           />
         </div>
