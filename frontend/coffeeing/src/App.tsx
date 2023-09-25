@@ -34,7 +34,7 @@ function App() {
           path="/signup/additonal-info"
           element={<AfterSignupPage />}
         ></Route>
-        <Route path="/member/:id" element={<MemberPage />}></Route>
+        <Route path="/member/:id" element={<MemberPage />} />
         <Route path="/feeds" element={<FeedPage />}></Route>
       </Routes>
     </div>

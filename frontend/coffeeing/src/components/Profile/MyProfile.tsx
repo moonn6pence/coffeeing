@@ -1,20 +1,24 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import profile from 'assets/막내.png';
 import noImage from 'assets/no_image.png';
 import editIcon from 'assets/edit.svg';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMyProfileImage } from 'store/memberSlice';
-import axios from 'axios';
+import { RootState } from 'store/store';
 
 type ProfileProps = {
+  id: number | undefined;
   nickname: string;
-  imgLink: string | undefined;
+  profileImage: string;
 };
 
 export const MyProfile = (props: ProfileProps) => {
-  const { nickname, imgLink } = props;
+  const { id,nickname,profileImage } = props;
+  const { memberId } = useSelector(
+    (state: RootState) => state.member,
+  );
+
   const [edit, setEdit] = useState(false);
   const [nickChange, setNickChange] = useState(nickname);
   const [existNickname, setExistNickname] = useState(false);
@@ -74,8 +78,8 @@ export const MyProfile = (props: ProfileProps) => {
     const reader: FileReader = new FileReader();
     reader.addEventListener('load', async () => {
       console.log('go conversion!');
-      if (imgLink) {
-        createNewImage(reader.result, imgLink, callbackProfileImageUpload);
+      if (profileImage) {
+        createNewImage(reader.result, profileImage, callbackProfileImageUpload);
       } else {
         // generate new AWS S3 image url
         const awsData = await privateRequest.get(`${API_URL}/aws/img`);
@@ -140,7 +144,7 @@ export const MyProfile = (props: ProfileProps) => {
     fetch(localImageUrl)
       .then((response) => response.blob())
       .then((blob) => {
-        console.log("Convert url to blob");
+        console.log('Convert url to blob');
         const imageFile = new File([blob], 'local-webp.webp', {
           type: blob.type,
         });
@@ -161,7 +165,7 @@ export const MyProfile = (props: ProfileProps) => {
   };
 
   const callbackProfileImageUpload = (aws: string, _local: string) => {
-    console.log("Callback called!!");
+    console.log('Callback called!!');
     dispatch(setMyProfileImage(aws));
     privateRequest.put(`${API_URL}/member/profile`, { profileImageUrl: aws });
     setImageRefreshKey(Date.now());
@@ -170,12 +174,18 @@ export const MyProfile = (props: ProfileProps) => {
   return (
     <div className="w-72 flex flex-col items-center">
       <div
-        className="img-wrapper rounded-full hover:cursor-pointer"
-        onClick={() => handleProfileImageChangeClick()}
+        className={`img-wrapper rounded-full ${
+          memberId === id ? 'hover:cursor-pointer' : ''
+        }`}
+        onClick={() => {
+          if (memberId === id) {
+            handleProfileImageChangeClick();
+          }
+        }}
       >
-        {imgLink ? (
+        {profileImage ? (
           <img
-            src={imgLink}
+            src={profileImage}
             key={imageRefreshKey}
             alt="프로필이미지"
             className="w-44 h-44 rounded-full border-2"
