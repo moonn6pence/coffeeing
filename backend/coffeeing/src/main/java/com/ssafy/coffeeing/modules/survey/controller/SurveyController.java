@@ -6,6 +6,7 @@ import com.ssafy.coffeeing.modules.survey.service.SurveyService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class SurveyController {
             @ApiImplicitParam(name = "flavorNote", dataType = "String", value = "아로마 맛 노트", paramType = "query")
     })
     @PostMapping("/recommend")
+    @ApiOperation(value = "설문 기반 추천 요청")
     public BaseResponse<SurveyResponse> recommendBySurvey(@Valid PreferenceRequest preferenceRequest) {
         
         return BaseResponse.<SurveyResponse>builder()
@@ -43,6 +45,7 @@ public class SurveyController {
             @ApiImplicitParam(name = "flavorNote", dataType = "String", value = "아로마 맛 노트", paramType = "query")
     })
     @PostMapping("/save")
+    @ApiOperation(value = "멤버의 선호도 저장 요청")
     public BaseResponse<Void> savePreference(@Valid PreferenceRequest preferenceRequest){
         surveyService.savePreference(preferenceRequest);
         return BaseResponse.<Void>builder().build();
