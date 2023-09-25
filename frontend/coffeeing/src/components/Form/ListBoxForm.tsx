@@ -1,13 +1,13 @@
 import React, { useState, Fragment } from 'react'
 import { Listbox } from '@headlessui/react'
-import {Item} from '../../util/constants'
+import {FilterItem } from '../../util/constants'
 import IonIcon from '@reacticons/ionicons'
 
 type ListBoxProps = {
   label:string,
-  selectedItem:Item[],
+  selectedItem:FilterItem[],
   setSelectedItem:any,
-  itemList:Item[];
+  itemList:FilterItem[];
   src:string;
 }
 
@@ -34,7 +34,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
       {/* 드롭다운 */}
       <Listbox.Options className="w-full absolute mt-2 py-2 bg-white border border-gray-300 rounded-xl">
         {itemList.map((item) => (
-          <Listbox.Option key={item.value} value={item}>
+          <Listbox.Option key={item.name} value={item}>
             {({ selected }) => (
               <li
                 className={`${

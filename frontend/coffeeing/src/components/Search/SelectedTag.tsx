@@ -1,9 +1,9 @@
 import React from "react";
-import { Item } from "util/constants";
+import { FilterItem } from "util/constants";
 
 type SelectedTagProps = {
   src: string;
-  selectedItem: Item[];
+  selectedItem: FilterItem[];
 };
 
 export const SelectedFilterTag = ({ src, selectedItem }: SelectedTagProps) => {
@@ -12,7 +12,7 @@ export const SelectedFilterTag = ({ src, selectedItem }: SelectedTagProps) => {
       {selectedItem
         .slice(1,)
         .map((item) => (
-        <div key={item.value} className="w-fit p-4 h-8 border border-cinamon-roasting rounded-3xl flex gap-2 items-center justify-center">
+        <div key={item.name} className="w-fit p-4 h-8 border border-cinamon-roasting rounded-3xl flex gap-2 items-center justify-center">
           <img src={src} alt={item.name} className="w-4 h-5" />
           {item.name}
         </div>
