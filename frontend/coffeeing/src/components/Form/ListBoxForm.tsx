@@ -5,7 +5,7 @@ import IonIcon from '@reacticons/ionicons'
 
 type ListBoxProps = {
   label:string,
-  selectedItem:Item,
+  selectedItem:Item[],
   setSelectedItem:any,
   itemList:Item[];
   src:string;
@@ -15,7 +15,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
   return (
     <Listbox
       value={selectedItem}
-      onChange={(newSelectedItems) => setSelectedItem(newSelectedItems)}
+      onChange={setSelectedItem}
       multiple
     >
 
@@ -27,7 +27,6 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
         <Listbox.Button
           className="cursor-pointer"
           aria-label="Toggle listbox"
-          onClick={() => setSelectedItem([])} 
         >
           ⌄
         </Listbox.Button>
@@ -36,7 +35,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
       <Listbox.Options className="w-full absolute mt-2 py-2 bg-white border border-gray-300 rounded-xl">
         {itemList.map((item) => (
           <Listbox.Option key={item.value} value={item}>
-            {({ active, selected }) => (
+            {({ selected }) => (
               <li
                 className={`${
                   selected
