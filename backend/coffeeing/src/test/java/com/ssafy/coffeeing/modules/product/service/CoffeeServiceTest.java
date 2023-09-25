@@ -5,7 +5,6 @@ import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -45,8 +43,6 @@ class CoffeeServiceTest extends ServiceTest {
 
     @Autowired
     private CoffeeBookmarkQueryRepository coffeeBookmarkQueryRepository;
-    @MockBean
-    private SecurityContextUtils securityContextUtils;
 
     private Coffee coffee;
 
@@ -184,7 +180,7 @@ class CoffeeServiceTest extends ServiceTest {
         );
 
         // then
-        assertEquals(expectedCoffeeBookmarkResponse,actualCoffeeBookmarkResponse);
+        assertEquals(expectedCoffeeBookmarkResponse, actualCoffeeBookmarkResponse);
         assertEquals(BOOKMARK_PAGE_SIZE, actualCoffeeBookmarkResponse.bookmarkedElements().size());
 
 

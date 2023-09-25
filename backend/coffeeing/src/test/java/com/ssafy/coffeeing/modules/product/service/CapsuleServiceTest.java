@@ -5,7 +5,6 @@ import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -45,9 +43,6 @@ class CapsuleServiceTest extends ServiceTest {
 
     @Autowired
     private CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
-
-    @MockBean
-    private SecurityContextUtils securityContextUtils;
 
     private Capsule capsule;
 

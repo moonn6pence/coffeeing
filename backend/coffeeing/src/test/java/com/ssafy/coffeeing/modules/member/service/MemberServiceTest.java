@@ -4,12 +4,11 @@ import com.ssafy.coffeeing.dummy.MemberTestDummy;
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
-import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.domain.MemberState;
 import com.ssafy.coffeeing.modules.member.dto.ExistNickNameResponse;
-import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.NicknameChangeRequest;
 import com.ssafy.coffeeing.modules.member.dto.OnboardRequest;
 import com.ssafy.coffeeing.modules.member.dto.OnboardResponse;
@@ -22,12 +21,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @RecordApplicationEvents
 class MemberServiceTest extends ServiceTest {
@@ -36,9 +37,6 @@ class MemberServiceTest extends ServiceTest {
 
     @Autowired
     private MemberUtil memberUtil;
-
-    @MockBean
-    private SecurityContextUtils securityContextUtils;
 
     @Autowired
     private MemberService memberService;

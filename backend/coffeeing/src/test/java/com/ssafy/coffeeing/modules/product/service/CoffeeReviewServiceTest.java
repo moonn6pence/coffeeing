@@ -8,7 +8,6 @@ import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.AuthErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
@@ -32,7 +30,10 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 
 @RecordApplicationEvents
@@ -53,13 +54,10 @@ class CoffeeReviewServiceTest extends ServiceTest {
     @Autowired
     private ApplicationEvents applicationEvents;
 
-    @MockBean
-    private SecurityContextUtils securityContextUtils;
-
     private Coffee coffee;
 
     @BeforeEach
-    void setUpCoffeeReviews(){
+    void setUpCoffeeReviews() {
         coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeKenyaAA());
     }
 
@@ -95,7 +93,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
 
         // then
-        assertEquals(1, (int)applicationEvents.stream(ExperienceEvent.class).count());
+        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
     }
 
     @Test
