@@ -1,5 +1,4 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import {SearchBar} from "components/Search/SearchBar";
 import { ListBox } from "components/Form/ListBoxForm";
 import roast from '../assets/search/free-icon-coffee-beans-3219300.png'
 import acidity from '../assets/search/free-icon-lemon-7761399.png'
@@ -33,6 +32,7 @@ export const SearchPage = () =>{
     };
   
     const result = await requestFilterResult(filterProps);
+    return result
   }
   
   
