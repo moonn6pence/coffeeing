@@ -1,8 +1,8 @@
 export interface MyInfo {
     memberId: number,
     state: MemberState,
-    nickname: string|undefined,
-    profileImage: string|undefined,
+    nickname: string,
+    profileImage: string,
 }
 
 export interface UniqueNickname {
