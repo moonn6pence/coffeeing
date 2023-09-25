@@ -16,3 +16,13 @@ export interface FeedDetail {
     isLike: boolean,
     isMine: boolean
 }
+
+export interface PostFeedReq {
+    content: string,
+    images: ImageElement[],
+    tag: Tag | undefined
+}
+
+export interface PostFeedRes {
+    feedId: number
+}

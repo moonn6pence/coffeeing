@@ -5,6 +5,9 @@ import OpenAccordianIcon from "assets/accordian/open.svg"
 import CloseAccordianIcon from "assets/accordian/close.svg"
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import { TagComboBox } from "../TagComboBox"
+import { getS3PreSignedURL } from "service/aws/awsUtil"
+import { uploadImage } from 'util/imageUtils';
+import { postFeed } from "service/feed/feed";
 
 interface FeedEditorProps {
     fragment: ElementType<any>,
@@ -28,15 +31,28 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } :
     });
   };
 
-  const handleSubmit = () => {
-      const params = {
-          "content" : content,
-          "images": [{
-              "imageUrl": preview
-          }],
-      }
+  const handleSubmit = async () => {
+    if(!preview) return;
 
-      console.log(params);
+    const awsS3Urls = await getS3PreSignedURL();
+
+    if(awsS3Urls) {
+        uploadImage(preview, awsS3Urls.imageUrl, async (awsUrl: string, localImageUrl: string)=>{
+            const tag = (selcetedTag.tagId !== -1) ? selcetedTag : undefined;
+            const params = {
+                "content" : content,
+                "images": [{
+                    "imageUrl": awsUrl
+                }],
+                "tag": tag
+            };
+            
+            const result = await postFeed(params);
+            if(result) {
+                window.location.reload();
+            }
+        });
+    }
   }
     
   return(
