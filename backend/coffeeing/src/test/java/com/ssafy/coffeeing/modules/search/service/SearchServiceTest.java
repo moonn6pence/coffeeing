@@ -7,7 +7,6 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
 import com.ssafy.coffeeing.modules.search.dto.SearchProductResponse;
 import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -71,7 +71,7 @@ class SearchServiceTest extends ServiceTest {
         //given
         capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
         SearchProductRequest searchProductRequest = new SearchProductRequest(null, roast, acidity, body,
-                flavorNote, TagType.CAPSULE, null, null);
+                flavorNote, "CAPSULE", null, null);
 
         //when
         SearchProductResponse searchProductResponse = searchService.getProductsBySearch(searchProductRequest);
@@ -90,7 +90,7 @@ class SearchServiceTest extends ServiceTest {
         //given
         capsuleRepository.saveAll(CapsuleTestDummy.createSearchResultExpectCapsules());
         SearchProductRequest searchProductRequest = new SearchProductRequest(keyword, roast, acidity, null,
-                null, TagType.CAPSULE, null, null);
+                null, "CAPSULE", null, null);
         //when
         SearchProductResponse searchProductResponse = searchService.getProductsBySearch(searchProductRequest);
 

@@ -1,6 +1,5 @@
 package com.ssafy.coffeeing.modules.search.dto;
 
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import lombok.Builder;
 
 import java.util.Objects;
@@ -11,7 +10,7 @@ public record SearchProductRequest(
         String acidity,
         String body,
         String flavorNote,
-        TagType tagType,
+        String productType,
         Integer page,
         Integer size
 
@@ -19,9 +18,9 @@ public record SearchProductRequest(
 
     @Builder
     public SearchProductRequest(String keyword, String roast, String acidity, String body, String flavorNote,
-                                TagType tagType, Integer page, Integer size) {
-        if(Objects.isNull(tagType)) {
-            tagType = TagType.BEAN;
+                                String productType, Integer page, Integer size) {
+        if(Objects.isNull(productType)) {
+            productType = "BEAN";
         }
         if(Objects.isNull(page)) {
             page = 0;
@@ -34,7 +33,7 @@ public record SearchProductRequest(
         this.acidity = acidity;
         this.body = body;
         this.flavorNote = flavorNote;
-        this.tagType = tagType;
+        this.productType = productType;
         this.page = page;
         this.size = size;
     }
