@@ -1,5 +1,5 @@
+import { StarIcons } from 'components/StarIcons';
 import React from 'react';
-import star from 'assets/detail/star.svg';
 import { useNavigate } from 'react-router-dom';
 
 export type ReviewProps = {
@@ -19,11 +19,6 @@ export const ReviewCard = ({ memberReview }: MemberReviewProps) => {
   const { content, memberId, nickname, score, profileImageUrl } = memberReview;
   const navigate = useNavigate();
 
-  const starIcons = [];
-  for (let i = 0; i < score; i++) {
-    starIcons.push(<img src={star} alt="별" key={i} className="w-3.5 h-3.5" />);
-  }
-
   return (
     <div className="w-96 p-3">
       <div className="flex mb-6">
@@ -36,7 +31,7 @@ export const ReviewCard = ({ memberReview }: MemberReviewProps) => {
         />
         <div className="ml-3">
           <p className="text-sm">{nickname}</p>
-          <div className="flex">{starIcons}</div>
+          <StarIcons score={score} />
         </div>
       </div>
       <div className="bg-light rounded-lg p-3 h-104px">
