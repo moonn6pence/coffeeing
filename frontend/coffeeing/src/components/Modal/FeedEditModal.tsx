@@ -1,89 +1,37 @@
 import React, { useEffect } from 'react';
 import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition, Disclosure } from '@headlessui/react'
-import UploadImageIcon from "assets/upload-img-icon.svg"
+import { Dialog, Transition } from '@headlessui/react'
+
 import QuitModalIcon from "assets/quit-modal-icon.svg"
-import DefaultProfile from 'assets/feed/default-profile.svg'
-import classNames from 'classnames';
-import { useDebounce } from '@react-hooks-hub/use-debounce';
-import OpenAccordianIcon from "assets/accordian/open.svg"
-import CloseAccordianIcon from "assets/accordian/close.svg"
-import { TagComboBox } from "../TagComboBox"
-import { getTagsByKeyword } from 'service/search/search';
-import { Tag, TagType } from 'service/search/types';
+import { DragDropUploader } from 'components/Feed/DragDropUploader';
+import { FeedEditor } from 'components/Feed/FeedEditor';
+import { Tag } from 'service/search/types';
 
 interface FeedEditModalProps {
     isOpen: boolean,
-    setIsOpen: any
+    setIsOpen: any,
+    suggestions: Tag[]
+    debouncedSearch: (keyword: string) => void,
 }
 
-export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
+export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch }:FeedEditModalProps) => {
 
   const cancelButtonRef = useRef(null);
   const [step, setStep] = useState<number>(1);
-  const [isActive, setActive] = useState<boolean>(false);
-  const [openAccordian, setOpenAccordian] = useState<boolean>(false);
   const [uploadImage, setUploadImage] = useState<File>();
-  const [preview, setPreview] = useState<any>();
+  const [preview, setPreview] = useState<string>();
 
-  const [selcetedTag, setSelectedTag] = useState<Tag>({
-    tagId: -1,
-    name: "",
-    category: TagType.BEAN
-  });
-  const [suggestions, setSuggestions] = useState<Tag[]>([]);
-  const changeSuggestions = async (keyword: string) => {
-    const result = await getTagsByKeyword(keyword);
-    if(result) {
-      setSuggestions(result.tags);
-    }
-  };
-
-  const toggleAccordianIcon = () => {
-    setOpenAccordian((prev)=>{
-      return !prev;
-    });
-  };
-
-  const debouncedSearch = useDebounce((keyword: string)=>{
-    changeSuggestions(keyword);
-  }, 300);
-
-
-  const handleDragStart = () => {
-    setActive(true);
-  }
-  const handleDragEnd = () => {
-    setActive(false);
-  }
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
-  const handleDrop = async (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault(); 
-    const image = event.dataTransfer.files[0];
-    if(image) {
-      setUploadImage(image);
+  useEffect(()=>{
+    if(uploadImage) {
       const reader = new FileReader();
-      reader.readAsDataURL(image);
+      reader.readAsDataURL(uploadImage);
       reader.onload = () => {
-        setPreview(reader.result);
+        if(reader.result) {
+          setPreview(reader.result as string);
+        }
       }
     }
-    setActive(false);
-  };
-  
-
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if(event.target.files) {
-      setUploadImage(event.target.files[0]);
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = () => {
-        setPreview(reader.result);
-      }
-    }
-  };
+  }, [uploadImage]);
 
   useEffect(()=>{
     if(preview) {
@@ -96,7 +44,7 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={()=>{
         setIsOpen(false);
         setStep(1);
-        setPreview(null);
+        setPreview("");
       }}>
         <Transition.Child
           as={Fragment}
@@ -133,7 +81,7 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                               <div className="flex-none cursor-pointer" onClick={() => {
                                     setIsOpen(false);
                                     setStep(1);
-                                    setPreview(null);
+                                    setPreview("");
                               }}>
                                 <img src={QuitModalIcon} />
                               </div>
@@ -142,85 +90,8 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
 
                       <div className="mt-2 border-b border-gray-200"></div>
                       { (step === 1) ? 
-                        <div className={
-                          classNames(
-                            isActive ? 'bg-gray-200' : '',
-                            "mt-2 flex flex-col w-560px items-center aspect-square justify-center"
-                          )}
-                          onDragEnter={ handleDragStart }
-                          onDragLeave={ handleDragEnd }
-                          onDragOver={ handleDragOver }  
-                          onDrop={ handleDrop }
-                          >
-                          <img src={UploadImageIcon} />
-                          <p className="text-xl text-gray-500 mt-4">
-                            사진을 여기에 끌어다 놓으세요
-                          </p>
-                          
-                          <label htmlFor="imageInput">
-                            <div className="w-fit justify-center mt-6 px-12 py-3  rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting">
-                                  컴퓨터에서 선택
-                            </div>
-                          </label>
-                          <input id="imageInput" className="hidden" type="file" accept="image/*" onChange={handleUpload}/>
-                        </div> :   
-                        <Transition.Child
-                          as={Fragment}
-                          enter="ease-out duration-300"
-                          enterFrom="opacity-0 translate-y-0"
-                          enterTo="opacity-100 translate-y-0"
-                          leave="ease-in duration-200"
-                          leaveFrom="opacity-100 translate-y-0"
-                          leaveTo="opacity-0 translate-y-4">
-
-                          <div className="w-1056px h-fit">
-                            <div className='flex'>
-                              <div className='w-2/3 h-560px'>
-                                <img src={preview} className='h-full aspect-video object-cover'/>
-                              </div>
-
-                              {/* insert  */}
-                              <div className='w-1/3 flex flex-col'>
-                                <div className='current-member-info flex-none flex flex-row w-full px-5 py-3'>
-                                  <div className='mr-4'>
-                                    <img src={DefaultProfile} />
-                                  </div>
-                                  <div className='flex justify-center items-center font-semibold'>
-                                      닉네임
-                                  </div>
-                                </div>
-
-                                <div className='w-full grow'>
-                                  <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...'>
-                                  </textarea>
-                                  <div className='w-full'>
-                                    <Disclosure>
-                                      <div className='flex w-full' onClick={toggleAccordianIcon}>
-                                        <div className='w-full px-2 border-b border-gray-200 pb-1'>
-                                          <Disclosure.Button className="flex w-full justify-between items-center">
-                                              <div className='font-semibold'>
-                                                [원두/캡슐] 태그 검색
-                                              </div>
-                                              {openAccordian ? <img src={ OpenAccordianIcon }/> :<img src={ CloseAccordianIcon } />}
-                                          </Disclosure.Button>
-                                        </div>
-                                      </div>
-                                      <Disclosure.Panel className="text-gray-500 pt-2">
-                                        <TagComboBox suggestions={suggestions} onChange={debouncedSearch} selectedTag={ selcetedTag } changeSelectedTag={setSelectedTag}/>
-                                      </Disclosure.Panel>
-                                    </Disclosure>
-                                  </div>
-                                </div>
-
-                                <div className='w-full flex flex-row-reverse flex-none mt-4 pr-4'>
-                                  <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting">
-                                    등록하기
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </Transition.Child>
+                        <DragDropUploader setImage={setUploadImage}/> :   
+                        preview ? <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch}/> : ""
                       }
                       </div>
                   </div>

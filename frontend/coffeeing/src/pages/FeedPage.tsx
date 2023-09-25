@@ -1,10 +1,12 @@
 import React,{ useEffect, useState } from "react";
-import Button from "components/Button";
 import FeedCard from "components/Feed/FeedCard";
 import { getFeedDetailMock } from "../service/feed/mock"
 import { FeedDetail } from "service/feed/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FeedEditModal } from "../components/Modal/FeedEditModal"
+import { useDebounce } from '@react-hooks-hub/use-debounce';
+import { Tag } from 'service/search/types';
+import { getTagsByKeyword } from 'service/search/search';
 
 export const FeedPage = () => {
   const [feeds, setFeeds] = useState<FeedDetail[]>([]);
@@ -25,6 +27,18 @@ export const FeedPage = () => {
     setFeeds(newList);
     setHasMore(false);
   }
+
+  const [suggestions, setSuggestions] = useState<Tag[]>([]);
+  const changeSuggestions = async (keyword: string) => {
+    const result = await getTagsByKeyword(keyword);
+    if(result) {
+      setSuggestions(result.tags);
+    }
+  };
+
+  const debouncedSearch = useDebounce((keyword: string)=>{
+    changeSuggestions(keyword);
+  }, 300);
 
   useEffect(()=>{
     const mockData = [];
@@ -65,7 +79,8 @@ export const FeedPage = () => {
                 </div>
             </div>
         </div>
-        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } />
+
+        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} />
     </>
   )
 }
