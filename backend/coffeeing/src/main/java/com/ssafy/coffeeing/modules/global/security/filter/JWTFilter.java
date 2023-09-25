@@ -36,6 +36,8 @@ public class JWTFilter extends OncePerRequestFilter {
 			"/favicon.ico",
 			"/product",
 			"/survey/recommend",
+			"/curation/open",
+			"/survey/recommend",
 			"/v1/api-docs",
 			"/v2/api-docs",
 			"/swagger-resources",
