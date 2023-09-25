@@ -57,4 +57,14 @@ public class Coffee extends BaseEntity {
     @Column
     @Builder.Default
     private Integer popularity = 0;
+
+    public void addReview(Integer score) {
+        this.totalScore += score;
+        this.totalReviewer++;
+    }
+
+    public void deleteReview(Double score) {
+        this.totalScore -= score;
+        this.totalReviewer--;
+    }
 }

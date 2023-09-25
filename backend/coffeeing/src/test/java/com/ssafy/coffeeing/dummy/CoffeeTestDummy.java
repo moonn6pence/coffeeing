@@ -62,6 +62,27 @@ public class CoffeeTestDummy {
         return coffees;
     }
 
+    public static List<Coffee> create10SpecifiedFlavorCoffees(String flavorNote) {
+        List<Coffee> coffees = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            coffees.add(Coffee.builder()
+                    .coffeeNameKr("제네렉 커피 " + i)
+                    .coffeeNameEng("Generic Coffee " + i)
+                    .regionKr("제네렉 지역 " + i)
+                    .regionEng("Generic Region " + i)
+                    .coffeeCriteria(new CoffeeCriteria(0.4, 0.9, 0.8))
+                    .flavorNote(flavorNote)
+                    .imageUrl("Generic Url " + i)
+                    .productDescription("Generic Description")
+                    .totalScore(81.2 + i)
+                    .totalReviewer(20)
+                    .build()
+            );
+        }
+        return coffees;
+    }
+
     public static Coffee createMockCoffeeRoma() {
         return Coffee.builder()
                 .coffeeNameKr("로마 카프리치오")

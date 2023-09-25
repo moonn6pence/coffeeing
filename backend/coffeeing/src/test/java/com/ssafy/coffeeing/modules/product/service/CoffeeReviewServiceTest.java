@@ -68,6 +68,8 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        double expectedTotalScore = coffee.getTotalScore() + reviewRequest.score();
+        int expectedTotalReviewer = coffee.getTotalReviewer() + 1;
 
         // when
         CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
@@ -77,7 +79,9 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         assertAll(
                 () -> assertEquals(actualReview.getCoffee(), coffee),
-                () -> assertEquals(actualReview.getMember(), generalMember)
+                () -> assertEquals(actualReview.getMember(), generalMember),
+                () -> assertEquals(expectedTotalScore, coffee.getTotalScore()),
+                () -> assertEquals(expectedTotalReviewer, coffee.getTotalReviewer())
         );
     }
 
@@ -247,17 +251,24 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
-                .score(3.5)
+                .score(3.0)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
+        coffee.addReview((int) (double) review.getScore());
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        double expectedTotalScore = coffee.getTotalScore() - review.getScore();
+        int expectedTotalReviewer = coffee.getTotalReviewer() - 1;
 
         // when
         coffeeReviewService.deleteReview(review.getId());
 
         // then
-        assertNull(coffeeReviewRepository.findById(review.getId()).orElse(null));
+        assertAll(
+                () -> assertNull(coffeeReviewRepository.findById(review.getId()).orElse(null)),
+                () -> assertEquals(expectedTotalScore, coffee.getTotalScore()),
+                () -> assertEquals(expectedTotalReviewer, coffee.getTotalReviewer())
+        );
     }
 
     @Test

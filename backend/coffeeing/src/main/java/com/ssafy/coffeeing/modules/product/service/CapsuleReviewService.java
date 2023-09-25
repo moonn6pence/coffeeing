@@ -48,6 +48,8 @@ public class CapsuleReviewService {
         CapsuleReview review = capsuleReviewRepository.save(
                 ProductMapper.supplyCapsuleReviewOf(capsule, member, reviewRequest));
 
+        capsule.addReview(reviewRequest.score());
+
         applicationEventPublisher.publishEvent(new ExperienceEvent(REVIEW_EXPERIENCE,member.getId()));
 
         return ProductMapper.supplyCreationResponseFrom(review);
@@ -88,6 +90,8 @@ public class CapsuleReviewService {
 
         CapsuleReview review = capsuleReviewRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        review.getCapsule().deleteReview(review.getScore());
 
         if (!review.getMember().getId().equals(member.getId())) {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);

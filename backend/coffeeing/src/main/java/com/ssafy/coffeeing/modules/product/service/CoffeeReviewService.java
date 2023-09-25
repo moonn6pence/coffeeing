@@ -48,6 +48,8 @@ public class CoffeeReviewService {
         CoffeeReview review = coffeeReviewRepository.save(
                 ProductMapper.supplyCoffeeReviewOf(coffee, member, reviewRequest));
 
+        coffee.addReview(reviewRequest.score());
+
         applicationEventPublisher.publishEvent(new ExperienceEvent(REVIEW_EXPERIENCE,member.getId()));
 
         return ProductMapper.supplyCreationResponseFrom(review);
@@ -89,6 +91,8 @@ public class CoffeeReviewService {
 
         CoffeeReview review = coffeeReviewRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
+
+        review.getCoffee().deleteReview(review.getScore());
 
         if (!review.getMember().getId().equals(member.getId())) {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);

@@ -69,6 +69,8 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        double expectedTotalScore = capsule.getTotalScore() + reviewRequest.score();
+        int expectedTotalReviewer = capsule.getTotalReviewer() + 1;
 
         // when
         CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
@@ -77,8 +79,10 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview actualReview = capsuleReviewRepository.findById(actual.id()).get();
 
         assertAll(
-                () -> assertEquals(actualReview.getCapsule(), capsule),
-                () -> assertEquals(actualReview.getMember(), generalMember)
+                () -> assertEquals(capsule, actualReview.getCapsule()),
+                () -> assertEquals(generalMember, actualReview.getMember()),
+                () -> assertEquals(expectedTotalScore, capsule.getTotalScore()),
+                () -> assertEquals(expectedTotalReviewer, capsule.getTotalReviewer())
         );
     }
 
@@ -248,17 +252,24 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
-                .score(3.5)
+                .score(3.0)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
+        capsule.addReview((int) (double) review.getScore());
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        double expectedTotalScore = capsule.getTotalScore() - review.getScore();
+        int expectedTotalReviewer = capsule.getTotalReviewer() - 1;
 
         // when
         capsuleReviewService.deleteReview(review.getId());
 
         // then
-        assertNull(capsuleReviewRepository.findById(review.getId()).orElse(null));
+        assertAll(
+                () -> assertNull(capsuleReviewRepository.findById(review.getId()).orElse(null)),
+                () -> assertEquals(expectedTotalScore, capsule.getTotalScore()),
+                () -> assertEquals(expectedTotalReviewer, capsule.getTotalReviewer())
+        );
     }
 
     @Test
