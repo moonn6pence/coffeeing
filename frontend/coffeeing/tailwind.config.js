@@ -39,6 +39,7 @@ module.exports = {
         '1056px': '1056px',
       },
       height: {
+        '100px' : '100px',
         '560px' : '560px',
       }
     },

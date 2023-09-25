@@ -8,6 +8,9 @@ import classNames from 'classnames';
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import OpenAccordianIcon from "assets/accordian/open.svg"
 import CloseAccordianIcon from "assets/accordian/close.svg"
+import { TagComboBox } from "../TagComboBox"
+import { getTagsByKeyword } from 'service/search/search';
+import { Tag, TagType } from 'service/search/types';
 
 interface FeedEditModalProps {
     isOpen: boolean,
@@ -23,14 +26,27 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
   const [uploadImage, setUploadImage] = useState<File>();
   const [preview, setPreview] = useState<any>();
 
+  const [selcetedTag, setSelectedTag] = useState<Tag>({
+    tagId: -1,
+    name: "",
+    category: TagType.BEAN
+  });
+  const [suggestions, setSuggestions] = useState<Tag[]>([]);
+  const changeSuggestions = async (keyword: string) => {
+    const result = await getTagsByKeyword(keyword);
+    if(result) {
+      setSuggestions(result.tags);
+    }
+  };
+
   const toggleAccordianIcon = () => {
     setOpenAccordian((prev)=>{
       return !prev;
     });
   };
 
-  const debouncedSearch = useDebounce(()=>{
-    console.log("debound");
+  const debouncedSearch = useDebounce((keyword: string)=>{
+    changeSuggestions(keyword);
   }, 300);
 
 
@@ -175,11 +191,11 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                                 </div>
 
                                 <div className='w-full grow'>
-                                  <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...' onChange={debouncedSearch}>
+                                  <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...'>
                                   </textarea>
-                                  <div className='w-full' onClick={toggleAccordianIcon}>
+                                  <div className='w-full'>
                                     <Disclosure>
-                                      <div className='flex w-full'>
+                                      <div className='flex w-full' onClick={toggleAccordianIcon}>
                                         <div className='w-full px-2 border-b border-gray-200 pb-1'>
                                           <Disclosure.Button className="flex w-full justify-between items-center">
                                               <div className='font-semibold'>
@@ -190,7 +206,7 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                                         </div>
                                       </div>
                                       <Disclosure.Panel className="text-gray-500 pt-2">
-                                        {/** tag input area */}
+                                        <TagComboBox suggestions={suggestions} onChange={debouncedSearch} selectedTag={ selcetedTag } changeSelectedTag={setSelectedTag}/>
                                       </Disclosure.Panel>
                                     </Disclosure>
                                   </div>
