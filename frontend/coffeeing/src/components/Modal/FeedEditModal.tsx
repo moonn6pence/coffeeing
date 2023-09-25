@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import { Fragment, useRef, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Dialog, Transition, Disclosure } from '@headlessui/react'
 import UploadImageIcon from "assets/upload-img-icon.svg"
 import QuitModalIcon from "assets/quit-modal-icon.svg"
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import classNames from 'classnames';
 import { useDebounce } from '@react-hooks-hub/use-debounce';
+import OpenAccordianIcon from "assets/accordian/open.svg"
+import CloseAccordianIcon from "assets/accordian/close.svg"
 
 interface FeedEditModalProps {
     isOpen: boolean,
@@ -17,8 +19,15 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
   const cancelButtonRef = useRef(null);
   const [step, setStep] = useState<number>(1);
   const [isActive, setActive] = useState<boolean>(false);
+  const [openAccordian, setOpenAccordian] = useState<boolean>(false);
   const [uploadImage, setUploadImage] = useState<File>();
   const [preview, setPreview] = useState<any>();
+
+  const toggleAccordianIcon = () => {
+    setOpenAccordian((prev)=>{
+      return !prev;
+    });
+  };
 
   const debouncedSearch = useDebounce(()=>{
     console.log("debound");
@@ -168,8 +177,22 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                                 <div className='w-full grow'>
                                   <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...' onChange={debouncedSearch}>
                                   </textarea>
-                                  <div className='w-full'>
-                                    텍스트 영역
+                                  <div className='w-full' onClick={toggleAccordianIcon}>
+                                    <Disclosure>
+                                      <div className='flex w-full'>
+                                        <div className='w-full px-2 border-b border-gray-200 pb-1'>
+                                          <Disclosure.Button className="flex w-full justify-between items-center">
+                                              <div className='font-semibold'>
+                                                [원두/캡슐] 태그 검색
+                                              </div>
+                                              {openAccordian ? <img src={ OpenAccordianIcon }/> :<img src={ CloseAccordianIcon } />}
+                                          </Disclosure.Button>
+                                        </div>
+                                      </div>
+                                      <Disclosure.Panel className="text-gray-500 pt-2">
+                                        {/** tag input area */}
+                                      </Disclosure.Panel>
+                                    </Disclosure>
                                   </div>
                                 </div>
 
