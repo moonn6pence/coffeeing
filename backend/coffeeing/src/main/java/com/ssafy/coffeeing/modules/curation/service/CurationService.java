@@ -46,8 +46,10 @@ public class CurationService {
 
         List<CurationElement> curations = new ArrayList<>();
 
+        // 인기도 큐레이션
         curations.add(findByPopularity(isCapsule ? CurationType.CAPSULE_POPULAR : CurationType.COFFEE_POPULAR));
 
+        // 지표별 유사제품군 큐레이션
         CurationType randomCuration = randomUtil.getRandomCharacteristicCuration(isCapsule);
 
         if (randomCuration.equals(CurationType.CAPSULE_FLAVOR) || randomCuration.equals(CurationType.COFFEE_FLAVOR)) {
@@ -69,11 +71,13 @@ public class CurationService {
         CurationType randomCuration = randomUtil.getRandomKeywordCuration(isCapsule);
 
         if (isCapsule) {
+            // 고평가 제품과 유사한 제품 큐레이션
             Capsule capsule = capsuleReviewQueryRepository.findRandomHighScoredCapsule(member);
 
             if (capsule != null && randomCuration.equals(CurationType.CAPSULE_LIKED_PRODUCT)) {
                 curations.add(findByMemberLikedProduct(randomCuration, capsule));
             } else {
+                // 나이+성별 그룹의 취향 평균으로 큐레이션
                 curations.add(findByAgeAndGender(CurationType.CAPSULE_AGE_GENDER, member.getAge(), member.getGender()));
             }
         } else {
@@ -154,7 +158,7 @@ public class CurationService {
         RecommendResponse recommendResponse = recommendService.pickBySimilarity(true, capsule.getId());
 
         return CurationMapper.supplyCapsuleCurationElementOf(true,
-                new StringBuilder().append(prefix)
+                new StringBuffer().append(prefix)
                         .append(capsule.getCapsuleNameKr())
                         .append(curation.getTitle()).toString(),
                 capsuleRepository.findAllById(recommendResponse.results()));
@@ -165,7 +169,7 @@ public class CurationService {
         RecommendResponse recommendResponse = recommendService.pickBySimilarity(false, coffee.getId());
 
         return CurationMapper.supplyCoffeeCurationElementOf(true,
-                new StringBuilder().append(prefix)
+                new StringBuffer().append(prefix)
                         .append(coffee.getCoffeeNameKr())
                         .append(curation.getTitle()).toString(),
                 coffeeRepository.findAllById(recommendResponse.results()));
