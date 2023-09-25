@@ -1,18 +1,21 @@
 import { Action, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SignInMemberInfo } from '../service/auth/types';
-import { MyInfo } from 'service/member/types';
+import { MemberState, MyInfo } from 'service/member/types';
 
-type LoginState = SignInMemberInfo & {
-  isLogin: boolean;
-  myInfo: MyInfo | void;
-};
+type LoginState = SignInMemberInfo &
+  MyInfo & {
+    isLogin: boolean;
+  };
 
 const initialState: LoginState = {
   isLogin: false,
   accessToken: '',
   refreshToken: localStorage.getItem('refreshToken') || '',
   grantType: '',
-  myInfo: undefined,
+  memberId: -1,
+  nickname: '',
+  profileImage: '',
+  state: MemberState.BEFORE_ADDITIONAL_DATA,
 };
 
 const memberSlice = createSlice({
@@ -45,11 +48,19 @@ const memberSlice = createSlice({
       const { payload } = action;
       return {
         ...state,
-        myInfo: payload,
+        ...payload,
+      };
+    },
+    setMyProfileImage(state, action: PayloadAction<string>) {
+      const { payload: newImageUrl } = action;
+      return {
+        ...state,
+        profileImage: newImageUrl,
       };
     },
   },
 });
 
 export default memberSlice.reducer;
-export const { setMemberToken, logout,setMyInfo } = memberSlice.actions;
+export const { setMemberToken, logout, setMyInfo, setMyProfileImage } =
+  memberSlice.actions;

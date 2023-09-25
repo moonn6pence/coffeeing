@@ -1,12 +1,16 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import profile from 'assets/막내.png';
+import noImage from 'assets/no_image.png';
 import editIcon from 'assets/edit.svg';
-import { privateRequest } from 'util/axios';
+import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
+import { useDispatch } from 'react-redux';
+import { setMyProfileImage } from 'store/memberSlice';
+import axios from 'axios';
 
 type ProfileProps = {
   nickname: string;
-  imgLink: string;
+  imgLink: string | undefined;
 };
 
 export const MyProfile = (props: ProfileProps) => {
@@ -17,6 +21,8 @@ export const MyProfile = (props: ProfileProps) => {
   const [message, setMessage] = useState('이미 존재하는 닉네임입니다');
   const [profileImage, setProfileImg] = useState(undefined);
   const imageRef = useRef<HTMLInputElement>(null);
+
+  const dispatch = useDispatch();
 
   // 닉네임 변경상태 받기
   const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,20 +62,20 @@ export const MyProfile = (props: ProfileProps) => {
     setEdit(false);
   };
 
-  // 이미지 변경하기
-  const changeProfileImage = () => {
+  // Image onClick handler
+  const handleProfileImageChangeClick = () => {
     if (imageRef.current) {
-      console.log('am i wokring?');
       imageRef.current.click();
     }
   };
 
-  const launchImageChange = () => {
+  // image change entrypoint onInput handler
+  const handleImageOnInput = () => {
     console.log('Image change go!');
-    const reader = new FileReader();
+    const reader: FileReader = new FileReader();
     reader.addEventListener('load', () => {
       console.log('go conversion!');
-      convertToWebp(reader.result, sendToS3);
+      createNewImage(reader.result, sendToS3);
     });
     if (imageRef.current?.files) {
       console.log('image file exists');
@@ -80,40 +86,81 @@ export const MyProfile = (props: ProfileProps) => {
     }
   };
 
-  const convertToWebp = (
+  const createNewImage = (
     imgUrl: string | ArrayBuffer | null,
-    callback: any,
+    callback: (imageUrl: string) => void,
   ) => {
-    console.log("converttowebp");
+    console.log('converttowebp');
     const img = new Image();
-    img.onload = () => { // 여기가 실행 안됨
-      console.log('throwing random bullshit');
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx?.drawImage(img, 0, 0);
-      const webpDataUrl = canvas.toDataURL('image/webp');
-      callback(webpDataUrl);
-    };
+    if (typeof imgUrl === 'string') {
+      img.src = imgUrl;
+    }
+    if (img.complete) {
+      convertToWebp(img, callback);
+    } else {
+      img.onload = () => {
+        convertToWebp(img, callback);
+      };
+    }
   };
 
-  const sendToS3 = (imageUrl: string) => {
-    console.log('do stuff like send to s3');
+  // 이미지를 Webp 형식으로 변경
+  const convertToWebp = (
+    img: HTMLImageElement,
+    callback: (localImageUrl: string) => void,
+  ) => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx?.drawImage(img, 0, 0);
+    const localImageUrl = canvas.toDataURL('image/webp');
+    console.log(localImageUrl);
+    callback(localImageUrl);
+  };
 
+  const sendToS3 = async (localImageUrl: string) => {
+    console.log('do stuff like send to s3');
+    const awsData = await privateRequest.get(`${API_URL}/aws/img`);
+    const imageUrl = awsData.data.data;
+    console.log(imageUrl);
+    const presignedUrl = imageUrl.presignedUrl;
+    console.log('Get presigned Url : ', presignedUrl);
+    fetch(localImageUrl)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const imageFile = new File([blob], 'local-webp.webp', { type: blob.type });
+        return publicRequest.put(
+          presignedUrl,
+          imageFile
+        );
+      })
+      .then((imageUploadResponse)=>{
+        console.log(imageUploadResponse);
+      })
+    // upload image to AWS S3
+    dispatch(setMyProfileImage(localImageUrl));
   };
 
   return (
     <div className="w-72 flex flex-col items-center">
       <div
         className="img-wrapper rounded-full hover:cursor-pointer"
-        onClick={() => changeProfileImage()}
+        onClick={() => handleProfileImageChangeClick()}
       >
-        <img
-          src={profile}
-          alt="프로필이미지"
-          className="w-44 h-44 rounded-full"
-        />
+        {imgLink ? (
+          <img
+            src={imgLink}
+            alt="프로필이미지"
+            className="w-44 h-44 rounded-full border-2"
+          />
+        ) : (
+          <img
+            src={noImage}
+            alt="프로필이미지"
+            className="w-44 h-44 rounded-full border-2"
+          />
+        )}
       </div>
       <input
         type="file"
@@ -123,8 +170,7 @@ export const MyProfile = (props: ProfileProps) => {
         ref={imageRef}
         className="collapse"
         onInput={() => {
-          console.log('CATCH!');
-          launchImageChange();
+          handleImageOnInput();
         }}
       />
 

@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { MyProfile } from 'components/Profile/MyProfile';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
 export const MemberPage = () => {
   const [nickname, setNickname] = useState('하이');
-  const [imgLink, setImgLink] = useState('');
+  const imgLink = useSelector((state:RootState)=>state.member.profileImage);
 
   // 나중에 연결할 예정
   // useEffect(() => {

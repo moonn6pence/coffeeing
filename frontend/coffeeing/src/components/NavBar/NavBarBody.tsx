@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const NavBarBody = () => {
   const isLogin = useSelector((state: RootState) => state.member.isLogin);
-  const myInfo = useSelector((state:RootState) => state.member.myInfo);
+  const myInfo = useSelector((state:RootState) => state.member);
   const navigate = useNavigate();
   return (
     <div className="w-screen h-16 border-b border-light-roasting py-2 px-30">
