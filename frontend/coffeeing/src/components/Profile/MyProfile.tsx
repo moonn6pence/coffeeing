@@ -98,15 +98,22 @@ export const MyProfile = (props: ProfileProps) => {
       }
     }
   };
-
   
-
+  /**
+   * 
+   * @param aws aws주소
+   * @param _local 데이터의 localUrl 주소
+   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const callbackProfileImageUpload = (aws: string, _local: string) => {
+  const callbackProfileImageUpload = async (aws: string, _local: string) => {
     console.log('Callback called!!');
     dispatch(setMyProfileImage(aws));
-    privateRequest.put(`${API_URL}/member/profile`, { profileImageUrl: aws });
-    setImageRefreshKey(Date.now());
+    await privateRequest.put(`${API_URL}/member/profile`, { profileImageUrl: aws });
+    if(profileImage){
+      setImageRefreshKey(Date.now());
+    }else{
+      window.location.reload();
+    }
   };
 
   return (
