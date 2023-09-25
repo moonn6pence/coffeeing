@@ -5,13 +5,16 @@ import { Dialog, Transition } from '@headlessui/react'
 import QuitModalIcon from "assets/quit-modal-icon.svg"
 import { DragDropUploader } from 'components/Feed/DragDropUploader';
 import { FeedEditor } from 'components/Feed/FeedEditor';
+import { Tag } from 'service/search/types';
 
 interface FeedEditModalProps {
     isOpen: boolean,
-    setIsOpen: any
+    setIsOpen: any,
+    suggestions: Tag[]
+    debouncedSearch: (keyword: string) => void,
 }
 
-export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
+export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch }:FeedEditModalProps) => {
 
   const cancelButtonRef = useRef(null);
   const [step, setStep] = useState<number>(1);
@@ -88,7 +91,7 @@ export const FeedEditModal = ({ isOpen, setIsOpen }:FeedEditModalProps) => {
                       <div className="mt-2 border-b border-gray-200"></div>
                       { (step === 1) ? 
                         <DragDropUploader setImage={setUploadImage}/> :   
-                        preview ? <FeedEditor fragment={Fragment} preview={preview}/> : ""
+                        preview ? <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch}/> : ""
                       }
                       </div>
                   </div>

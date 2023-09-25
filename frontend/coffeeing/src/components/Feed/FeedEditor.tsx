@@ -2,7 +2,6 @@ import React, { ElementType, useState } from "react";
 import { Transition, Disclosure } from '@headlessui/react'
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag, TagType } from 'service/search/types';
-import { getTagsByKeyword } from 'service/search/search';
 import OpenAccordianIcon from "assets/accordian/open.svg"
 import CloseAccordianIcon from "assets/accordian/close.svg"
 import DefaultProfile from 'assets/feed/default-profile.svg'
@@ -10,34 +9,37 @@ import { TagComboBox } from "../TagComboBox"
 
 interface FeedEditorProps {
     fragment: ElementType<any>,
-    preview: string
+    preview: string,
+    suggestions: Tag[]
+    debouncedSearch: (keyword: string) => void,
 }
 
-export const FeedEditor = ({ fragment, preview } : FeedEditorProps) => {
-    const [openAccordian, setOpenAccordian] = useState<boolean>(false);
-    const [selcetedTag, setSelectedTag] = useState<Tag>({
-      tagId: -1,
-      name: "",
-      category: TagType.BEAN
-    });
-    const [suggestions, setSuggestions] = useState<Tag[]>([]);
-    const changeSuggestions = async (keyword: string) => {
-      const result = await getTagsByKeyword(keyword);
-      if(result) {
-        setSuggestions(result.tags);
-      }
-    };
-  
-    const toggleAccordianIcon = () => {
-      setOpenAccordian((prev)=>{
-        return !prev;
-      });
-    };
-  
-    const debouncedSearch = useDebounce((keyword: string)=>{
-      changeSuggestions(keyword);
-    }, 300);
+export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } : FeedEditorProps) => {
+  const [openAccordian, setOpenAccordian] = useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
+  const [selcetedTag, setSelectedTag] = useState<Tag>({
+    tagId: -1,
+    name: "",
+    category: TagType.BEAN
+  });
 
+  const toggleAccordianIcon = () => {
+    setOpenAccordian((prev)=>{
+      return !prev;
+    });
+  };
+
+  const handleSubmit = () => {
+      const params = {
+          "content" : content,
+          "images": [{
+              "imageUrl": preview
+          }],
+      }
+
+      console.log(params);
+  }
+    
   return(
     <>
         <Transition.Child
@@ -67,7 +69,11 @@ export const FeedEditor = ({ fragment, preview } : FeedEditorProps) => {
                 </div>
 
                 <div className='w-full grow'>
-                    <textarea rows={8} className='w-full border-y border-gray-200 resize-none focus:outline-none' placeholder='문구를 입력하세요...'>
+                    <textarea rows={8} 
+                              className='w-full border-y border-gray-200 resize-none focus:outline-none' 
+                              placeholder='문구를 입력하세요...'
+                              value={content}
+                              onChange={(event)=>{setContent(event.target.value)}}>
                     </textarea>
                     <div className='w-full'>
                     <Disclosure>
@@ -75,7 +81,7 @@ export const FeedEditor = ({ fragment, preview } : FeedEditorProps) => {
                         <div className='w-full px-2 border-b border-gray-200 pb-1'>
                             <Disclosure.Button className="flex w-full justify-between items-center">
                                 <div className='font-semibold'>
-                                [원두/캡슐] 태그 검색
+                                    [원두/캡슐] 태그 검색
                                 </div>
                                 {openAccordian ? <img src={ OpenAccordianIcon }/> :<img src={ CloseAccordianIcon } />}
                             </Disclosure.Button>
@@ -89,8 +95,9 @@ export const FeedEditor = ({ fragment, preview } : FeedEditorProps) => {
                 </div>
 
                 <div className='w-full flex flex-row-reverse flex-none mt-4 pr-4'>
-                    <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting">
-                    등록하기
+                    <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting"
+                            onClick={handleSubmit}>
+                        등록하기
                     </button>
                 </div>
                 </div>

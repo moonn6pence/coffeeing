@@ -7,7 +7,7 @@ interface TagComboBoxProps {
   selectedTag: Tag,
   changeSelectedTag: any,
   suggestions: Tag[],
-  onChange: any,
+  onChange: (keyword: string) => void,
 }
 
 export const TagComboBox = ({selectedTag, changeSelectedTag, suggestions, onChange}: TagComboBoxProps) => {
