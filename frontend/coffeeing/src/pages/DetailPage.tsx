@@ -10,6 +10,7 @@ import { MyReview } from 'components/Detail/MyReview';
 import { ReviewEditModal } from 'components/Detail/ReviewEditModal';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
+import IonIcon from '@reacticons/ionicons';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
@@ -158,7 +159,14 @@ export const DetailPage = () => {
           <span className="text-[#BE9E8B]">/ 5.0</span>
         </p>
         <div className="flex space-x-6">
-          <Pagination limit={6} contentList={reviews} />
+          {reviews[0] ? (
+            <Pagination limit={6} contentList={reviews} />
+          ) : (
+            <div className="w-300 flex flex-col h-30 items-center justify-center space-y-6">
+              <IonIcon name="chatbubble-ellipses-outline" size="large" />
+              <p>첫 리뷰를 남겨보세요</p>
+            </div>
+          )}
         </div>
       </div>
       <div className="w-fit mt-10 mx-auto">
