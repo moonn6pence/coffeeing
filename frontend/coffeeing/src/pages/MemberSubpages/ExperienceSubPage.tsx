@@ -30,7 +30,25 @@ export const ExperienceSubPage = () => {
     <div className="sub-wrapper">
       {experienceInfo ? (
         <div className="wrapper">
-          <div className='font-bold text-3xl'>LV : {experienceInfo.memberLevel}</div>
+          <div className="header">
+            <div className="font-bold text-3xl">
+              LV : {experienceInfo.memberLevel}
+            </div>
+          </div>
+          <div className="image-wrapper">
+            PLACEHOLDER FOR IMAGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGE
+          </div>
+          <div className="progress-wrapper">
+            <div className="progress-white w-full bg-light h-10 rounded-xl">
+              <div
+                className={`progress-inner w-[${
+                  (experienceInfo.experience /
+                    experienceInfo.experienceForLevelUp) *
+                  100
+                }%] bg-light-roasting h-10 rounded-xl`}
+              ></div>
+            </div>
+          </div>
         </div>
       ) : (
         <div> halp</div>
