@@ -10,17 +10,19 @@ import searchIcon from '../assets/search/search.png'
 import { requestFilterResult } from "service/filter/request";
 import { FilterProps } from "service/filter/types";
 import { PaginationNew } from "components/PaginationNew";
-
+import noResult from '../assets/search/NoFilterResult.svg'
+import { NoResult } from "components/NoResult";
 export const SearchPage = () =>{
   const [selectedRoast, setSelectedRoast] = useState([{label:'미선택', name:'미선택'}])
   const [selectedAcid, setSelectedAcid] = useState([{label:'미선택', name:'미선택'}])
   const [selectedBody, setSelectedBody] = useState([{label:'미선택', name:'미선택'}])
   const [selectedFlavorNote, setSelectedFlavorNote] = useState([{label:'미선택', name:'미선택'}])
   const [keyword, setKeyword] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = useState(0)
   const [totalPage, setTotalPage] = useState(0)
-  const [isLast, setIsLast] = useState(false)
+  const [productType, setProductType] = useState('BEAN')
   const [products, setProducts] = useState([])
+  const [showResult, setShowResult] = useState(true)
   const handleTextChange = (e:ChangeEvent<HTMLInputElement>) =>{
     setKeyword(e.target.value)
   }
@@ -32,19 +34,26 @@ export const SearchPage = () =>{
       selectedBody,
       selectedFlavorNote,
       keyword,
-      productType: 'CAPSULE', 
+      productType,
       page: currentPage, 
       size: 8,
     };
     const result = await requestFilterResult(filterProps);
-    console.log(result)
+    console.log('filtered result',result)
+    if (result.totalPage===-1) {
+      setShowResult(false)
+    } else {
+      setShowResult(true)
+    }
     setProducts(result.products)
     setTotalPage(result.totalPage)
   }
+
+
+  // 페이지네이션 페이지 바뀔 때 마다 필터링 결과 가져오기
   useEffect(()=>{
-    console.log('현재 페이지',currentPage)
     getResult()
-  },[currentPage])
+  },[currentPage,productType])
 
   // 필터 조건 바뀔 때 마다 가져오기
   useEffect(() =>  {  
@@ -52,67 +61,100 @@ export const SearchPage = () =>{
   }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote]);
 
   return(
-    <div className="mt-20 flex flex-col items-center">
-      <div className="flex flex-col gap-2">
-        {/* 검색바 */}
-        <div className="flex flex-col justify-center">
-          <div className="flex items-center border border-light-roasting w-790px h-16 rounded-md">
-          <span className="flex items-center pl-2">
-            <img className="w-5 h-5" src={searchIcon} alt="Search Icon" />
-          </span>
-          <input 
-            className="block py-4 pl-2 w-full focus:outline-none"
-            type="text" 
-            placeholder="검색어를 입력하세요."
-            value={keyword}
-            onChange={(e)=>handleTextChange(e)}
-          />
-        </div>
-        </div>
-        {/* 필터 listbox */}
-        <div className="flex flex-row gap-2 items-start">
-          <ListBox 
-            label="로스팅" 
-            selectedItem={selectedRoast} 
-            setSelectedItem={setSelectedRoast} 
-            itemList={ROAST_ITEMS}
-            src={roast}
-          />
-          <ListBox 
-            label="산미" 
-            selectedItem={selectedAcid} 
-            setSelectedItem={setSelectedAcid} 
-            itemList={ACIDITY_ITEMS}
-            src={acidity}
-          />
-          <ListBox 
-            label="바디감" 
-            selectedItem={selectedBody} 
-            setSelectedItem={setSelectedBody} 
-            itemList={BODY_ITEMS}
-            src={body}
-          />
-          <ListBox 
-            label="테이스팅 노트" 
-            selectedItem={selectedFlavorNote} 
-            setSelectedItem={setSelectedFlavorNote} 
-            itemList={FLAVOR_NOTE_ITEMS}
-            src={flavorNote}
-          />
-        </div>
-        <hr className=" border-half-light" />
-        {/* 선택된 태그들 */}
-        <div className="flex flex-wrap w-790px gap-1">
-          <SelectedFilterTag src={roast} selectedItem={selectedRoast}/>
-          <SelectedFilterTag src={acidity} selectedItem={selectedAcid}/>
-          <SelectedFilterTag src={body} selectedItem={selectedBody}/>
-          <SelectedFilterTag src={flavorNote} selectedItem={selectedFlavorNote}/>
+    <div >
+      <div className="mt-20 flex flex-col items-center">
+        <div className="flex flex-col gap-2">
+          {/* 검색바 */}
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center border border-light-roasting w-790px h-16 rounded-md">
+            <span className="flex items-center pl-2">
+              <img className="w-5 h-5" src={searchIcon} alt="Search Icon" />
+            </span>
+            <input 
+              className="block py-4 pl-2 w-full focus:outline-none"
+              type="text" 
+              placeholder="검색어를 입력하세요."
+              value={keyword}
+              onChange={(e)=>handleTextChange(e)}
+            />
+          </div>
+          </div>
+          {/* 필터 listbox */}
+          <div className="flex flex-row gap-2 items-start">
+            <ListBox 
+              label="로스팅" 
+              selectedItem={selectedRoast} 
+              setSelectedItem={setSelectedRoast} 
+              itemList={ROAST_ITEMS}
+              src={roast}
+            />
+            <ListBox 
+              label="산미" 
+              selectedItem={selectedAcid} 
+              setSelectedItem={setSelectedAcid} 
+              itemList={ACIDITY_ITEMS}
+              src={acidity}
+            />
+            <ListBox 
+              label="바디감" 
+              selectedItem={selectedBody} 
+              setSelectedItem={setSelectedBody} 
+              itemList={BODY_ITEMS}
+              src={body}
+            />
+            <ListBox 
+              label="테이스팅 노트" 
+              selectedItem={selectedFlavorNote} 
+              setSelectedItem={setSelectedFlavorNote} 
+              itemList={FLAVOR_NOTE_ITEMS}
+              src={flavorNote}
+            />
+          </div>
+          <hr className=" border-half-light" />
+          {/* 선택된 태그들 */}
+          <div className="flex flex-wrap w-790px gap-1">
+            <SelectedFilterTag src={roast} selectedItem={selectedRoast}/>
+            <SelectedFilterTag src={acidity} selectedItem={selectedAcid}/>
+            <SelectedFilterTag src={body} selectedItem={selectedBody}/>
+            <SelectedFilterTag src={flavorNote} selectedItem={selectedFlavorNote}/>
+          </div>
         </div>
       </div>
+
       {/* 검색 결과 페이지네이션 */}
-      <div>
-        <PaginationNew currentPage={currentPage} totalPage={totalPage} products={products} setCurrentPage={setCurrentPage} />
+      {/* 원두 | 캡슐 */}
+      <div className="text-3xl font-bold space-x-10 mt-5 bg-orange-400 ml-10%">
+        <span 
+          className={productType==='BEAN'?`text-black`:`text-[#7A88A3]`}
+          onClick={()=>setProductType('BEAN')}
+          >원두</span>
+        <span 
+          className={productType==='CAPSULE'?`text-black`:`text-[#7A88A3]`}
+          onClick={()=>setProductType('CAPSULE')}
+          >캡슐</span>
       </div>
+      {/* 검색 결고 없을 때 */}
+      {!showResult&& <NoResult label="검색 결과가 없습니다"/>}
+
+      {productType==='BEAN'&&(
+        <PaginationNew 
+          currentPage={currentPage} 
+          totalPage={totalPage} 
+          products={products} 
+          isCapsule={false}
+          setCurrentPage={setCurrentPage} 
+        />
+      )}
+      {productType=='CAPSULE'&&(
+        <PaginationNew 
+          currentPage={currentPage} 
+          totalPage={totalPage} 
+          products={products} 
+          isCapsule={true}
+          setCurrentPage={setCurrentPage} 
+        />
+      )}
+
     </div>
   )
 }
