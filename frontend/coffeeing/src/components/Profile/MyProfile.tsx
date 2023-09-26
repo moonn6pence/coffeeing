@@ -22,7 +22,7 @@ type ProfileSetters ={
 }
 
 export const MyProfile = (props: ProfileProps) => {
-  const { id, nickname, profileImage } = props;
+  const { id, nickname, profileImage, setters } = props;
   const { memberId } = useSelector((state: RootState) => state.member);
   const [nicknameInput, setNicknameInput] = useState('');
   const [edit, setEdit] = useState(false);
@@ -92,7 +92,10 @@ export const MyProfile = (props: ProfileProps) => {
     const result = await privateRequest.put(`${API_URL}/member/nickname`, data);
     if (result.data.code === '200') {
       setEdit(false);
-      window.location.reload();
+      setters.setUserData({
+        profileImage:profileImage,
+        nickname:nicknameInput
+      })
     } else {
       alert('닉네임 변경에 실패했습니다!');
     }
