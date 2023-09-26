@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MyProfile } from 'components/Profile/MyProfile';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { useParams } from 'react-router-dom';
+import { NavLink, Outlet, useParams } from 'react-router-dom';
 
 export type UserData = {
   nickname: string;
@@ -31,22 +31,40 @@ export const MemberPage = () => {
       });
   }, []);
 
-  return (
-    <div className="w-300 bg-light h-80 flex items-center">
-      {userExists ? (
-        <MyProfile
-          id={typeof id === 'string' ? Number.parseInt(id) : undefined}
-          nickname={userData.nickname}
-          profileImage={userData.profileImage}
-          setters={{
-            setUserData:setUserData
-          }}
-        />
-      ) : (
-        <div className="text-center w-screen">
-          <h3>해당 유저가 존재하지 않습니다.</h3>
+  if (userExists) {
+    return (
+      <div className="wrapper w-full flex items-center flex-col">
+        <div className="w-300 bg-light h-80 flex items-center">
+          <MyProfile
+            id={typeof id === 'string' ? Number.parseInt(id) : undefined}
+            nickname={userData.nickname}
+            profileImage={userData.profileImage}
+            setters={{
+              setUserData: setUserData,
+            }}
+          />
         </div>
-      )}
-    </div>
-  );
+        <div className="sub-section w-300 mt-12">
+          <nav>
+            <NavLink to={`/member/${id}`}>
+              경험치
+            </NavLink>
+            <NavLink to={`/member/${id}/bookmark`}>북마크</NavLink>
+            <NavLink to={`/member/${id}/feed`}>피드</NavLink>
+          </nav>
+          <Outlet />
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex justify-center">
+        <div className="w-300 bg-light h-80 flex items-center">
+          <div className="text-center w-screen">
+            <h3>해당 유저가 존재하지 않습니다.</h3>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };

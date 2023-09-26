@@ -14,6 +14,9 @@ import { AfterSignupPage } from 'pages/AfterSignupPage';
 import { MemberPage } from 'pages/MemberPage';
 import { FeedPage } from 'pages/FeedPage';
 import { MainPage } from 'pages/MainPage';
+import { BookmarkSubPage } from 'pages/MemberSubpages/BookmarkSubPage';
+import { FeedSubPage } from 'pages/MemberSubpages/FeedSubPage';
+import { ExperienceSubPage } from 'pages/MemberSubpages/ExperienceSubPage';
 
 function App() {
   return (
@@ -35,7 +38,14 @@ function App() {
           path="/signup/additonal-info"
           element={<AfterSignupPage />}
         ></Route>
-        <Route path="/member/:id" element={<MemberPage />} />
+        <Route path="/member/:id" element={<MemberPage />}>
+          <Route
+            index
+            element={<ExperienceSubPage />}
+          ></Route>
+          <Route path="bookmark" element={<BookmarkSubPage />}></Route>
+          <Route path="feed" element={<FeedSubPage />}></Route>
+        </Route>
         <Route path="/feeds" element={<FeedPage />}></Route>
         <Route path="/" element={<MainPage />}></Route>
       </Routes>
