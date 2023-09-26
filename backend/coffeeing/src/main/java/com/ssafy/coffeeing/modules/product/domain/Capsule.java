@@ -70,4 +70,8 @@ public class Capsule extends BaseEntity {
         this.totalScore -= score;
         this.totalReviewer--;
     }
+
+    public void editReview(Integer diff) {
+        this.totalScore += diff;
+    }
 }

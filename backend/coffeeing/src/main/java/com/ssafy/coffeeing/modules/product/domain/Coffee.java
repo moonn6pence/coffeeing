@@ -67,4 +67,8 @@ public class Coffee extends BaseEntity {
         this.totalScore -= score;
         this.totalReviewer--;
     }
+
+    public void editReview(Integer diff) {
+        this.totalScore += diff;
+    }
 }
