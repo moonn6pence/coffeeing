@@ -4,7 +4,7 @@ import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
 
-type UserData = {
+export type UserData = {
   nickname: string;
   profileImage: string;
 };
@@ -33,19 +33,20 @@ export const MemberPage = () => {
 
   return (
     <div className="w-300 bg-light h-80 flex items-center">
-      {
-        userExists?(
-          <MyProfile
-            id={typeof id === 'string' ? Number.parseInt(id) : undefined}
-            nickname={userData.nickname}
-            profileImage={userData.profileImage}
-          />
-        ):(
-          <div className='text-center w-screen'>
-            <h3>해당 유저가 존재하지 않습니다.</h3>
-          </div>
-        )
-      }
+      {userExists ? (
+        <MyProfile
+          id={typeof id === 'string' ? Number.parseInt(id) : undefined}
+          nickname={userData.nickname}
+          profileImage={userData.profileImage}
+          setters={{
+            setUserData:setUserData
+          }}
+        />
+      ) : (
+        <div className="text-center w-screen">
+          <h3>해당 유저가 존재하지 않습니다.</h3>
+        </div>
+      )}
     </div>
   );
 };
