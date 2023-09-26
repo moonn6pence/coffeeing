@@ -6,7 +6,10 @@ import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.service.CapsuleService;
 import com.ssafy.coffeeing.modules.product.service.CoffeeService;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,24 +71,44 @@ public class MemberController {
 
     @PutMapping("/nickname")
     @ApiOperation(value = "멤버 닉네임 업데이트 요청")
-    public BaseResponse<Void> updateMemberNickname(@Valid @RequestBody NicknameChangeRequest nicknameChangeRequest){
+    public BaseResponse<Void> updateMemberNickname(@Valid @RequestBody NicknameChangeRequest nicknameChangeRequest) {
         memberService.updateMemberNickname(nicknameChangeRequest);
         return BaseResponse.<Void>builder().build();
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "page"
+                    , value = "페이지 번호"
+                    , required = true
+                    , dataType = "Integer"
+                    , paramType = "query"
+                    , defaultValue = ""
+            )
+    })
     @GetMapping("/coffee/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 원두 리스트 요청")
     public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long memberId,
-                                                             @Valid @RequestBody PageInfoRequest pageInfoRequest) {
+                                                             @Valid @ModelAttribute PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkResponse>builder()
                 .data(coffeeService.getBookmarkedCoffees(memberId, pageInfoRequest))
                 .build();
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(
+                    name = "page"
+                    , value = "페이지 번호"
+                    , required = true
+                    , dataType = "Integer"
+                    , paramType = "query"
+                    , defaultValue = ""
+            )
+    })
     @GetMapping("/capsule/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 캡슐 리스트 요청")
     public BaseResponse<BookmarkResponse> getBookmarkCapsules(@PathVariable @NumberFormat Long memberId,
-                                                              @Valid @RequestBody PageInfoRequest pageInfoRequest) {
+                                                              @Valid @ModelAttribute PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkResponse>builder()
                 .data(capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest))
                 .build();
@@ -95,8 +118,8 @@ public class MemberController {
     @ApiOperation(value = "나의 정보 요청")
     public BaseResponse<MyInfoResponse> getMyInfo() {
         return BaseResponse.<MyInfoResponse>builder()
-            .data(memberService.getCurrentMemberInfo())
-            .build();
+                .data(memberService.getCurrentMemberInfo())
+                .build();
     }
 }
 
