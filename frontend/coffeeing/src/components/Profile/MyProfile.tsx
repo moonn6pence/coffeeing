@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useRef, useState } from 'react';
 import noImage from 'assets/no_image.png';
 import editIcon from 'assets/edit.svg';
 import { privateRequest } from 'util/axios';
@@ -8,19 +8,24 @@ import { setMyProfileImage } from 'store/memberSlice';
 import { RootState } from 'store/store';
 import { uploadImage } from 'util/imageUtils';
 import { ValidateNicknameResult, validateNickname } from 'util/regexUtils';
+import { UserData } from 'pages/MemberPage';
 
 type ProfileProps = {
   id: number | undefined;
   nickname: string;
   profileImage: string;
+  setters:ProfileSetters
 };
+
+type ProfileSetters ={
+  setUserData:React.Dispatch<React.SetStateAction<UserData>>
+}
 
 export const MyProfile = (props: ProfileProps) => {
   const { id, nickname, profileImage } = props;
   const { memberId } = useSelector((state: RootState) => state.member);
-
+  const [nicknameInput, setNicknameInput] = useState('');
   const [edit, setEdit] = useState(false);
-  const [nickChange, setNickChange] = useState(nickname);
   const [nicknameUseable, setNicknameUsable] = useState(false);
   const [message, setMessage] = useState('');
   const imageRef = useRef<HTMLInputElement>(null);
@@ -47,6 +52,7 @@ export const MyProfile = (props: ProfileProps) => {
     }
 
     setMessage('');
+    setNicknameInput(nicknameCandidate);
     setNicknameUsable(true);
   };
 
@@ -80,15 +86,16 @@ export const MyProfile = (props: ProfileProps) => {
     }
   };
 
-  useEffect(() => {
-    if (nickname.length > 0 && nickname.length < 11) {
-      checkNickExist;
-    }
-  }, [nickChange]);
-
   // 닉네임 변경하기
-  const editNickname = () => {
-    setEdit(false);
+  const editNickname = async () => {
+    const data = { nickname: nicknameInput };
+    const result = await privateRequest.put(`${API_URL}/member/nickname`, data);
+    if (result.data.code === '200') {
+      setEdit(false);
+      window.location.reload();
+    } else {
+      alert('닉네임 변경에 실패했습니다!');
+    }
   };
   // --------------------------------- PROFILE IMAGE ------------------------------- //
   // Image onClick handler

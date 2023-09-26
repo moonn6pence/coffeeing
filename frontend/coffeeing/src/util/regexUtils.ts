@@ -12,16 +12,16 @@ export type ValidateNicknameResult = {
  *
  */
 export const validateNickname = (candidate: string): ValidateNicknameResult => {
-  const spaces = /(^\s|\s$|\s{2,})/;
-  if (spaces.test(candidate)) {
+  const spaces = /^(?!\s)(?!.*\s$)(?!.*\s{2}).*$/;
+  if (!spaces.test(candidate)) {
     return {
       isValid: false,
       message: '공백으로 시작, 끝이 불가하며 2개 이상의 공백을 연달아 사용할 수 없습니다.',
     };
   }
 
-  const characters = /[^\w 가-힣ㄱ-ㅎ]/;
-  if (characters.test(candidate)) {
+  const characters = /^[\w\s가-힣ㄱ-ㅎ]*$/;
+  if (!characters.test(candidate)) {
     return {
       isValid: false,
       message: '한글, 영문, 숫자, _, 공백만 사용할 수 있습니다.',
