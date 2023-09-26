@@ -96,6 +96,7 @@ jacocoTestReport {
 							'com/ssafy/coffeeing/modules/global/security/**',
 							'com/ssafy/coffeeing/modules/global/dto/**',
 							'com/ssafy/coffeeing/modules/global/exception/**',
+							'com/ssafy/coffeeing/modules/recommend/**',
 							'com/ssafy/coffeeing/CoffeeingApplication'
 					] + QDomains)
 				})

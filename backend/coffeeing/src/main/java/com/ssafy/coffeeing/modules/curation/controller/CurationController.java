@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -18,17 +19,17 @@ public class CurationController {
 
     @GetMapping("/open")
     @ApiOperation(value = "메인 페이지 인증 여부 상관없이 추천")
-    public BaseResponse<CurationResponse> getOpenCuration() {
+    public BaseResponse<CurationResponse> getOpenCuration(@RequestParam Boolean isCapsule) {
         return BaseResponse.<CurationResponse>builder()
-                .data(curationService.getOpenCuration())
+                .data(curationService.getOpenCuration(isCapsule))
                 .build();
     }
 
     @GetMapping("/custom")
     @ApiOperation(value = "사용자마다 커스텀 큐레이션 추천")
-    public BaseResponse<CurationResponse> getCustomCuration() {
+    public BaseResponse<CurationResponse> getCustomCuration(@RequestParam Boolean isCapsule) {
         return BaseResponse.<CurationResponse>builder()
-                .data(curationService.getCustomCuration())
+                .data(curationService.getCustomCuration(isCapsule))
                 .build();
     }
 }

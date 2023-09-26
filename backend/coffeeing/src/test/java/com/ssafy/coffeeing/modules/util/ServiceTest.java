@@ -2,9 +2,9 @@ package com.ssafy.coffeeing.modules.util;
 
 import com.ssafy.coffeeing.dummy.Dummy;
 import com.ssafy.coffeeing.dummy.MemberTestDummy;
+import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
-import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +24,13 @@ public class ServiceTest {
     private DatabaseCleaner databaseCleaner;
 
     @Autowired
-    private ProductMapper productMapper;
-
-    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
     protected EntityManager em;
+
+    @MockBean
+    protected SecurityContextUtils securityContextUtils;
 
     @MockBean
     private Dummy dummy;
@@ -49,7 +49,6 @@ public class ServiceTest {
         beforeResearchMember = memberRepository.save(MemberTestDummy
                 .createBeforeResearchMember("paul", "{noop}testPassword", "zase@naver.com"));
     }
-
 
     @AfterEach
     void clearDatabase() {

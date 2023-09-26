@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface CapsuleReviewRepository extends JpaRepository<CapsuleReview, Long> {
 
     CapsuleReview findCapsuleReviewByCapsuleAndMember(Capsule capsule, Member member);
+
+    boolean existsByCapsuleAndMember(Capsule capsule, Member member);
 }

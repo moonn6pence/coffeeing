@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
+import com.ssafy.coffeeing.modules.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,6 +21,7 @@ import static com.ssafy.coffeeing.modules.product.domain.QCoffeeReview.coffeeRev
 public class CoffeeReviewQueryRepositoryImpl implements CoffeeReviewQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
+    private final RandomUtil randomUtil;
 
     @Override
     public Page<CoffeeReview> findOthersCoffeeReviews(Coffee coffee, Member member, Pageable pageable) {
@@ -42,17 +44,41 @@ public class CoffeeReviewQueryRepositoryImpl implements CoffeeReviewQueryReposit
         return new PageImpl<>(reviews, pageable, totalCount);
     }
 
+    @Override
+    public Coffee findRandomHighScoredCoffee(Member member) {
+
+        Integer count = jpaQueryFactory
+                .select(coffeeReview.count())
+                .from(coffeeReview)
+                .where(
+                        coffeeReview.member.eq(member),
+                        coffeeReview.score.goe(3.5)
+                ).fetchFirst().intValue();
+
+        if (count == 0) {
+            return null;
+        }
+
+        return jpaQueryFactory
+                .select(coffeeReview.coffee)
+                .from(coffeeReview)
+                .where(
+                        coffeeReview.member.eq(member),
+                        coffeeReview.score.goe(3.5)
+                )
+                .offset(randomUtil.generate(count))
+                .fetchOne();
+    }
+
     private Long getPageCount(Coffee coffee, Member member) {
 
-        Long count = jpaQueryFactory
+        return jpaQueryFactory
                 .select(coffeeReview.count())
                 .from(coffeeReview)
                 .where(
                         coffeeReview.coffee.eq(coffee),
                         neMember(member)
                 ).fetchOne();
-
-        return count;
     }
 
     private BooleanExpression neMember(Member member) {

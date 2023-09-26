@@ -2,6 +2,8 @@ package com.ssafy.coffeeing.modules.recommend.service;
 
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.SurveyErrorInfo;
+import com.ssafy.coffeeing.modules.member.domain.Age;
+import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.property.RecSysProperty;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
@@ -26,7 +28,7 @@ public class DefaultRecommendService implements RecommendService {
     private final RestTemplate restTemplate;
 
     @Override
-    public RecommendResponse getRecommendationsByParameter(PreferenceRequest preferenceRequest) {
+    public RecommendResponse pickByPreference(PreferenceRequest preferenceRequest) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getCollaborativeFilteringUrl())
@@ -50,7 +52,7 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    public RecommendResponse getSimilarProduct(Boolean isCapsule, Long id) {
+    public RecommendResponse pickBySimilarity(Boolean isCapsule, Long id) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getContentBasedFilteringUrl())
@@ -67,5 +69,10 @@ public class DefaultRecommendService implements RecommendService {
         } catch (HttpServerErrorException e) {
             throw new BusinessException(SurveyErrorInfo.EXTERNAL_SERVER_ERROR);
         }
+    }
+
+    @Override
+    public RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute) {
+        return null;
     }
 }

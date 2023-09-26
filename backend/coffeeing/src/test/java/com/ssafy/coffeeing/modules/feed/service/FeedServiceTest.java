@@ -7,7 +7,15 @@ import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
-import com.ssafy.coffeeing.modules.feed.dto.*;
+import com.ssafy.coffeeing.modules.feed.dto.FeedDetailResponse;
+import com.ssafy.coffeeing.modules.feed.dto.FeedElement;
+import com.ssafy.coffeeing.modules.feed.dto.FeedPageResponse;
+import com.ssafy.coffeeing.modules.feed.dto.FeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.MemberFeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
+import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
@@ -15,7 +23,6 @@ import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
@@ -25,7 +32,6 @@ import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
@@ -36,7 +42,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -58,9 +67,6 @@ class FeedServiceTest extends ServiceTest {
 
     @Autowired
     private CoffeeRepository coffeeRepository;
-
-    @MockBean
-    private SecurityContextUtils securityContextUtils;
 
     @Autowired
     private ApplicationEvents applicationEvents;

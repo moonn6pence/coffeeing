@@ -38,7 +38,7 @@ public class SurveyService {
 
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
-        RecommendResponse recommendResponse = recommendService.getRecommendationsByParameter(preferenceRequest);
+        RecommendResponse recommendResponse = recommendService.pickByPreference(preferenceRequest);
 
         List<SimpleProductElement> products = preferenceRequest.isCapsule() ?
                 capsuleRepository.findAllById(recommendResponse.results())

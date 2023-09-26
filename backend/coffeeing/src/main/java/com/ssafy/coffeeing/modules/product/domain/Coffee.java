@@ -4,6 +4,7 @@ import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -46,8 +47,24 @@ public class Coffee extends BaseEntity {
     private String productDescription;
 
     @Column
-    private Double totalScore;
+    @Builder.Default
+    private Double totalScore = 0.0;
 
     @Column
-    private Integer totalReviewer;
+    @Builder.Default
+    private Integer totalReviewer = 0;
+
+    @Column
+    @Builder.Default
+    private Integer popularity = 0;
+
+    public void addReview(Integer score) {
+        this.totalScore += score;
+        this.totalReviewer++;
+    }
+
+    public void deleteReview(Double score) {
+        this.totalScore -= score;
+        this.totalReviewer--;
+    }
 }

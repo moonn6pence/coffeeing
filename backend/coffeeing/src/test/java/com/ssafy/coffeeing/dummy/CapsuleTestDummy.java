@@ -83,6 +83,30 @@ public class CapsuleTestDummy {
         return capsules;
     }
 
+
+
+    public static List<Capsule> create10SpecifiedFlavorCapsules(String flavorNote) {
+        List<Capsule> capsules = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            capsules.add(Capsule.builder()
+                    .brandKr("Generic 한국 브랜드" + i)
+                    .brandEng("Generic English brand " + i)
+                    .capsuleNameKr("제네릭 캡슐명 " + i)
+                    .capsuleNameEng("Generic Capsule Name " + i)
+                    .coffeeCriteria(new CoffeeCriteria(0.5, 0.5, 0.5))
+                    .flavorNote(flavorNote)
+                    .machineType(1)
+                    .imageUrl("Generic Url " + i)
+                    .productDescription("generic description " + i)
+                    .totalScore(50.0)
+                    .totalReviewer(12)
+                    .popularity(i * 10)
+                    .build()
+            );
+        }
+        return capsules;
+    }
+
     public static List<Capsule> createSearchResultExpectCapsules() {
         List<Capsule> capsules = new ArrayList<>();
         capsules.add(createMockCapsule(
