@@ -56,9 +56,9 @@ public class SearchService {
 
         return SearchMapper.supplySearchBeanResponseOf(
                 beanSearchElements.getContent(),
-                searchProductRequest.page() + 1,
+                searchProductRequest.page(),
                 isLast,
-                beanSearchElements.getTotalPages());
+                beanSearchElements.getTotalPages() - 1);
     }
 
     @Transactional(readOnly = true)
@@ -70,9 +70,9 @@ public class SearchService {
 
         return SearchMapper.supplySearchCapsuleResponseOf(
                 capsuleSearchElements.getContent(),
-                searchProductRequest.page() + 1,
+                searchProductRequest.page(),
                 isLast,
-                capsuleSearchElements.getTotalPages());
+                capsuleSearchElements.getTotalPages() - 1);
     }
 
     private Page<BeanSearchElement> searchBeanByConditions(SearchProductRequest searchProductRequest) {
