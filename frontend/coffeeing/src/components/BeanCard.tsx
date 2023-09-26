@@ -3,21 +3,23 @@ import bookmarkOn from 'assets/bookmark_on.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ICardProps {
-  capsule_id: number;
+  id: number;
   subtitle: string;
   name: string;
   imgLink: string;
+  isCapsule: boolean;
 }
 
-export const CapsuleCard = (props: ICardProps) => {
-  const { capsule_id, subtitle, name, imgLink } = props;
+export const BeanCard = (props: ICardProps) => {
+  const { id, subtitle, name, imgLink, isCapsule } = props;
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   // 디테일 페이지로 이동
   const goDetail = () => {
-    navigate(`/detail/capsule/${capsule_id}`, {
-      state: { id: `${capsule_id}` },
+    const beans = isCapsule ? 'capsule' : 'coffee';
+    navigate(`/detail/${beans}/${id}`, {
+      state: { id: `${id}` },
     });
   };
 
@@ -36,7 +38,7 @@ export const CapsuleCard = (props: ICardProps) => {
       )}
       <img
         src={imgLink}
-        alt="캡슐 사진"
+        alt="사진"
         className="w-36 h-36 m-auto mb-16 hover:scale-110"
       />
       <p className="text-sm text-center text-font-gray mb-2">{subtitle}</p>
