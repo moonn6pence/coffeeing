@@ -7,16 +7,12 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.dto.SearchCapsuleResponse;
-import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
-import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
-import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.dto.*;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -74,6 +70,42 @@ class SearchServiceTest extends ServiceTest {
         //then
         assertThat(searchCapsuleResponse.products().size())
                 .isEqualTo(CapsuleTestDummy.expectedSearchCount(index));
+    }
+
+    @DisplayName("원두 검색 시, 검색에 성공한다.")
+    @ParameterizedTest
+    @MethodSource("provideSearchProductRequestAboutBean")
+    void Given_WithKeywordRequest_When_SearchBean_Then_Success(
+            String keyword,
+            String roast,
+            String acidity,
+            String body,
+            String flavorNote
+    ) {
+        //given
+        coffeeRepository.saveAll(CoffeeTestDummy.create25GeneralCoffees());
+        SearchProductRequest searchProductRequest = new SearchProductRequest(keyword, roast, acidity, body,
+                flavorNote,null, null);
+
+        //when
+        SearchBeanResponse searchBeanResponse = searchService.getProductsBySearchBean(searchProductRequest);
+
+        //then
+        assertThat(searchBeanResponse.products().size())
+                .isEqualTo(8);
+    }
+
+    private static Stream<Arguments> provideSearchProductRequestAboutBean(
+    ) {
+        return Stream.of(
+                Arguments.of(null, null, null, null, null),
+                Arguments.of("제", null, null, null, null),
+                Arguments.of("제", "medium_light", null, null, null),
+                Arguments.of("제", null, "high", null, null),
+                Arguments.of("제", null, null, "heavy", null),
+                Arguments.of("제", null, null, null, "aroma"),
+                Arguments.of(null, null, null, "heavy", null)
+        );
     }
 
     private static Stream<Arguments> provideSearchProductRequestAboutCapsule() {
