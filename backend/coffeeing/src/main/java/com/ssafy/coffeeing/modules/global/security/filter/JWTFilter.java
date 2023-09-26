@@ -52,7 +52,8 @@ public class JWTFilter extends OncePerRequestFilter {
 			/* OAuth */
 			"/oauth2/authorization/google",
 			"/login/oauth2/code/google",
-			"/search"
+			"/search",
+			"/feeds"
 		);
 
 	public JWTFilter(@Value("${jwt.header}") String header,
