@@ -7,7 +7,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.search.domain.Acidity;
 import com.ssafy.coffeeing.modules.search.domain.Body;
 import com.ssafy.coffeeing.modules.search.domain.Roast;
-import com.ssafy.coffeeing.modules.search.dto.ProductSearchElement;
+import com.ssafy.coffeeing.modules.search.dto.BeanSearchElement;
+import com.ssafy.coffeeing.modules.search.dto.CapsuleSearchElement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,18 +28,20 @@ public class SearchQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Page<ProductSearchElement> searchByBeanConditions(
+    public Page<BeanSearchElement> searchByBeanConditions(
             String keyword,
             List<Roast> roasts,
             List<Acidity> acidities,
             List<Body> bodies,
             List<String> flavorNotes,
             Pageable pageable) {
-        List<ProductSearchElement> coffees = jpaQueryFactory
-                .select(Projections.fields(ProductSearchElement.class,
+        List<BeanSearchElement> coffees = jpaQueryFactory
+                .select(Projections.fields(BeanSearchElement.class,
                         coffee.id.as("id"),
                         coffee.coffeeNameKr.as("nameKr"),
                         coffee.coffeeNameEng.as("nameEng"),
+                        coffee.regionKr.as("regionKr"),
+                        coffee.regionEng.as("regionEng"),
                         coffee.imageUrl.as("imageUrl")))
                 .from(coffee)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies),
@@ -59,18 +62,20 @@ public class SearchQueryRepository {
         return new PageImpl<>(coffees, pageable, count);
     }
 
-    public Page<ProductSearchElement> searchByCapsuleConditions(
+    public Page<CapsuleSearchElement> searchByCapsuleConditions(
             String keyword,
             List<Roast> roasts,
             List<Acidity> acidities,
             List<Body> bodies,
             List<String> flavorNotes,
             Pageable pageable) {
-        List<ProductSearchElement> capsules = jpaQueryFactory
-                .select(Projections.fields(ProductSearchElement.class,
+        List<CapsuleSearchElement> capsules = jpaQueryFactory
+                .select(Projections.fields(CapsuleSearchElement.class,
                         capsule.id.as("id"),
                         capsule.capsuleNameKr.as("nameKr"),
                         capsule.capsuleNameEng.as("nameEng"),
+                        capsule.brandKr.as("brandKr"),
+                        capsule.brandEng.as("brandEng"),
                         capsule.imageUrl.as("imageUrl")))
                 .from(capsule)
                 .where(makeConditionsOfRoastWithAcidityWithBody(roasts, acidities, bodies)
