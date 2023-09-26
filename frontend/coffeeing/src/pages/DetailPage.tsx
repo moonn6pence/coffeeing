@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
 import { Pagination } from 'components/Pagination';
-import { CapsuleCard } from 'components/CapsuleCard';
+import { BeanCard } from 'components/BeanCard';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -186,11 +186,12 @@ export const DetailPage = () => {
         </p>
         <div className="flex w-300 justify-between">
           {similarList.map((item, index) => (
-            <CapsuleCard
+            <BeanCard
               subtitle={item.subtitle}
               name={item.title}
-              capsule_id={item.id}
+              id={item.id}
               imgLink={item.imageUrl}
+              isCapsule={beans === 'capsule' ? true : false}
               key={index}
             />
           ))}
