@@ -3,7 +3,7 @@ import FeedCard from "components/Feed/FeedCard";
 import { getFeeds } from "../service/feed/feed"
 import { FeedDetail } from "service/feed/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FeedEditModal } from "../components/Modal/FeedEditModal"
+import { FeedEditModal } from "components/Modal/FeedEditModal"
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag } from 'service/search/types';
 import { getTagsByKeyword } from 'service/search/search';
@@ -34,6 +34,8 @@ export const FeedPage = () => {
     return Array.from(feeds.values()).map((feedDetail)=>(
       <FeedCard feedDetail={ feedDetail } 
                 key={ feedDetail.feedId }
+                suggestions={ suggestions }
+                debouncedSearch={ debouncedSearch }
                 deleteEventHandler={deleteEventHandler}
                 likeToggleEventHandler={likeToggleEventHandler}
                 />
@@ -112,7 +114,7 @@ export const FeedPage = () => {
             </div>
         </div>
 
-        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} />
+        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} feedDetail={null} />
     </>
   )
 }

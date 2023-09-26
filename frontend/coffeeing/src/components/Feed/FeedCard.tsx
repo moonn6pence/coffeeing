@@ -6,18 +6,22 @@ import SampleImage from 'assets/surveyMainImg.png'
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
+import { FeedEditModal } from "components/Modal/FeedEditModal"
+import { Tag } from "service/search/types";
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
+    suggestions: Tag[],
     deleteEventHandler: (feedId: number)=>void,
-    likeToggleEventHandler: (feedId: number)=>Promise<boolean|null>
+    likeToggleEventHandler: (feedId: number)=>Promise<boolean|null>,
+    debouncedSearch: (keyword: string) => void,
 }
 
-function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler }: FeedCardProps) {
-
+function FeedCard ({ suggestions, feedDetail, deleteEventHandler, likeToggleEventHandler, debouncedSearch }: FeedCardProps) {
+  const [createFeedModalOpen, setCreateFeedModalOpen] = useState<boolean>(false);
   const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
   const editEventHandler = () => {
-      alert("edit");
+    setCreateFeedModalOpen(true);
   }
 
   const toggleLike = async () => {
@@ -28,6 +32,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler }: F
   }
 
   return(
+    <>
     <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting">
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
@@ -63,7 +68,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler }: F
 
         <div className="feed-body flex flex-col w-full py-3">
             <div className="feed-image-wrapper flex w-full">
-                <img src = {SampleImage} className="w-full"/>
+                <img src = {feedDetail.images[0].imageUrl} className="w-full"/>
             </div>
 
             <div className="feed-content-wrapper flex flex-col px-6">
@@ -81,6 +86,11 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler }: F
             </div>
         </div>
     </div>
+
+    {
+        feedDetail.isMine ? <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} feedDetail={feedDetail} /> : ""
+    }
+    </>
   )
 }
 

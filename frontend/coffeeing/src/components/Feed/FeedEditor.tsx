@@ -8,18 +8,20 @@ import { TagComboBox } from "../TagComboBox"
 import { getS3PreSignedURL } from "service/aws/awsUtil"
 import { uploadImage } from 'util/imageUtils';
 import { postFeed } from "service/feed/feed";
+import { FeedDetail } from "service/feed/types";
 
 interface FeedEditorProps {
     fragment: ElementType<any>,
-    preview: string,
-    suggestions: Tag[]
+    preview: string | undefined,
+    feedDetail: FeedDetail | null,
+    suggestions: Tag[],
     debouncedSearch: (keyword: string) => void,
 }
 
-export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } : FeedEditorProps) => {
+export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, feedDetail } : FeedEditorProps) => {
   const [openAccordian, setOpenAccordian] = useState<boolean>(false);
-  const [content, setContent] = useState<string>("");
-  const [selcetedTag, setSelectedTag] = useState<Tag>({
+  const [content, setContent] = useState<string>(feedDetail ? feedDetail.content : "");
+  const [selcetedTag, setSelectedTag] = useState<Tag>((feedDetail && feedDetail.tag) ? feedDetail.tag : {
     tagId: -1,
     name: "",
     category: TagType.BEAN
@@ -54,6 +56,10 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } :
         });
     }
   }
+
+  const handleEdit = async () => {
+    window.location.reload();
+  }
     
   return(
     <>
@@ -69,7 +75,10 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } :
             <div className="w-1056px h-fit">
             <div className='flex'>
                 <div className='w-2/3 h-560px'>
-                <img src={preview} className='h-full aspect-video object-cover'/>
+                    {
+                        preview ? <img src={preview} className='h-full aspect-video object-cover'/> : 
+                        (feedDetail)? <img src={feedDetail.images[0].imageUrl} className='h-full aspect-video object-cover'/>:""
+                    }
                 </div>
 
                 {/* insert  */}
@@ -110,10 +119,16 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch } :
                 </div>
 
                 <div className='w-full flex flex-row-reverse flex-none mt-4 pr-4'>
-                    <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting"
-                            onClick={handleSubmit}>
-                        등록하기
-                    </button>
+                    { feedDetail ?
+                        <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting"
+                            onClick={handleEdit}>
+                            수정하기
+                        </button> :
+                        <button className="w-fit px-12 py-3 rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting"
+                                onClick={handleSubmit}>
+                            등록하기
+                        </button>
+                    }
                 </div>
                 </div>
             </div>
