@@ -138,22 +138,18 @@ public class CapsuleTestDummy {
 
     public static Integer expectedSearchCount(int index) {
         List<Integer> expected = new ArrayList<>();
-        expected.add(3);
-        expected.add(1);
-        expected.add(1);
-        expected.add(2);
-        expected.add(1);
-        expected.add(3);
-        expected.add(3);
-        expected.add(2);
-        expected.add(2);
-        return expected.get(index);
-    }
-
-    public static Integer expectedSearchCountWithKeyword(int index) {
-        List<Integer> expected = new ArrayList<>();
         expected.add(0);
         expected.add(2);
+        expected.add(3);
+        expected.add(1);
+        expected.add(1);
+        expected.add(2);
+        expected.add(1);
+        expected.add(3);
+        expected.add(3);
+        expected.add(2);
+        expected.add(2);
+        expected.add(4);
         return expected.get(index);
     }
 }
