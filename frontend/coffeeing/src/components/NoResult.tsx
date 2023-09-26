@@ -7,9 +7,9 @@ type NoResultProps = {
 
 export const NoResult = ({label}:NoResultProps)=>{
   return(
-    <div>
+    <div className="flex flex-col items-center">
+      <img src={noResult} className="mx-auto"/>
       <p className="text-3xl">{label}</p>
-      <img src={noResult}/>
     </div>
   )
 }
