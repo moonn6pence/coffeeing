@@ -7,7 +7,7 @@ import DefaultProfile from 'assets/feed/default-profile.svg'
 import { TagComboBox } from "../TagComboBox"
 import { getS3PreSignedURL } from "service/aws/awsUtil"
 import { uploadImage } from 'util/imageUtils';
-import { postFeed } from "service/feed/feed";
+import { postFeed, updateFeeds } from "service/feed/feed";
 import { FeedDetail } from "service/feed/types";
 
 interface FeedEditorProps {
@@ -58,7 +58,17 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
   }
 
   const handleEdit = async () => {
-    window.location.reload();
+    if(feedDetail) {
+        const tag = (selcetedTag.tagId !== -1) ? selcetedTag : undefined;
+        const result = await updateFeeds(feedDetail.feedId, {
+            "content" : content,
+            "tag": tag
+        });
+
+        if(result) {
+            window.location.reload();
+        }
+    }
   }
     
   return(

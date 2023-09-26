@@ -32,3 +32,8 @@ export interface GetFeedRes {
     hasNext: boolean,
     nextCursor: number | undefined
 }
+
+export interface PatchFeedReq {
+    content: string,
+    tag: Tag | undefined
+}

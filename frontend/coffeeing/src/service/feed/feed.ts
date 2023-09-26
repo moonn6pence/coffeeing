@@ -2,7 +2,7 @@ import { isAxiosError } from "axios";
 import { privateRequest } from "util/axios";
 import { ApiSuccessResponse, ToggleResult } from "types/apis";
 import { API_URL } from "util/constants";
-import { PostFeedReq, PostFeedRes, GetFeedRes } from "./types";
+import { PostFeedReq, PostFeedRes, GetFeedRes, PatchFeedReq } from "./types";
 
 const FEED_PATH = "feeds";
 
@@ -53,11 +53,25 @@ export const getFeeds = (cursor: number|undefined, size: number):Promise<void|Ge
 
 export const deleteFeeds = (feedId: number):Promise<boolean>=>{
     return privateRequest
-    .delete(`${API_URL}/${FEED_PATH}/${feedId}`).then((res)=>{
+    .delete(`${API_URL}/${FEED_PATH}/${feedId}`)
+    .then(()=>{
         return true
     }).catch((error)=>{
         if(!isAxiosError(error)) {
             console.error("[delete request fail]: Unknown error");
+        }
+        return false;
+    });
+}
+
+export const updateFeeds = (feedId: number, params: PatchFeedReq):Promise<boolean>=>{
+    return privateRequest
+    .patch(`${API_URL}/${FEED_PATH}/${feedId}`, params)
+    .then(()=>{
+        return true
+    }).catch((error)=>{
+        if(!isAxiosError(error)) {
+            console.error("[update feed request fail]: Unknown error");
         }
         return false;
     });

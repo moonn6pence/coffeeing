@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
-import SampleImage from 'assets/surveyMainImg.png'
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";

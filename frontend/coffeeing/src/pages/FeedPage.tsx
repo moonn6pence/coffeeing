@@ -67,6 +67,7 @@ export const FeedPage = () => {
   }
 
   const [suggestions, setSuggestions] = useState<Tag[]>([]);
+  
   const changeSuggestions = async (keyword: string) => {
     const result = await getTagsByKeyword(keyword);
     if(result) {
