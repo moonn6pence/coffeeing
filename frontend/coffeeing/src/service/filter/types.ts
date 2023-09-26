@@ -17,7 +17,6 @@ export type FilterSend = {
   body?:string,
   flavorNote?:string,
   keyword?:string,
-  productType:string,
   page:number,
   size:number,
 }
