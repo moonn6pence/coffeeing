@@ -50,9 +50,9 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
       .post(`${API_URL}/product/${product}/${id}/bookmark`)
       .then((res) => {
         if (res.data.data.result) {
-          setIsBooked(true);
-        } else {
           setIsBooked(false);
+        } else {
+          setIsBooked(true);
         }
       });
   };

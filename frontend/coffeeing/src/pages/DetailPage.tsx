@@ -43,7 +43,7 @@ export const DetailPage = () => {
     description: 'string',
     id: 0,
     imageUrl: 'string',
-    isBookmarked: true,
+    isBookmarked: false,
     isReviewed: true,
     memberReview: {
       content: 'string',
