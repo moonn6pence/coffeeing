@@ -9,16 +9,22 @@ import { ROAST_ITEMS, ACIDITY_ITEMS, BODY_ITEMS, FLAVOR_NOTE_ITEMS } from "util/
 import searchIcon from '../assets/search/search.png'
 import { requestFilterResult } from "service/filter/request";
 import { FilterProps } from "service/filter/types";
+import { PaginationNew } from "components/PaginationNew";
+
 export const SearchPage = () =>{
   const [selectedRoast, setSelectedRoast] = useState([{label:'미선택', name:'미선택'}])
   const [selectedAcid, setSelectedAcid] = useState([{label:'미선택', name:'미선택'}])
   const [selectedBody, setSelectedBody] = useState([{label:'미선택', name:'미선택'}])
   const [selectedFlavorNote, setSelectedFlavorNote] = useState([{label:'미선택', name:'미선택'}])
   const [keyword, setKeyword] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(0)
+  const [isLast, setIsLast] = useState(false)
+  const [products, setProducts] = useState([])
   const handleTextChange = (e:ChangeEvent<HTMLInputElement>) =>{
     setKeyword(e.target.value)
   }
-  // 필터 결과 가져오기
+  // 필터 결과 가져오기 함수
   const getResult = async () => {
     const filterProps: FilterProps = {
       selectedRoast,
@@ -26,17 +32,18 @@ export const SearchPage = () =>{
       selectedBody,
       selectedFlavorNote,
       keyword,
-      productType: 'BEAN', 
-      page: 1, 
-      size: 10,
+      productType: 'CAPSULE', 
+      page: currentPage, 
+      size: 8,
     };
-  
     const result = await requestFilterResult(filterProps);
-    return result
+    setCurrentPage(result.currentPage)
+    setIsLast(result.isLast)
+    setProducts(result.products)
+    setTotalPage(result.totalPage)
   }
   
-  
-  // 검색 결과 가져오기
+  // 필터 조건 바뀔 때 마다 가져오기
   useEffect(() =>  {  
     getResult()
   }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote]);
@@ -98,6 +105,10 @@ export const SearchPage = () =>{
           <SelectedFilterTag src={body} selectedItem={selectedBody}/>
           <SelectedFilterTag src={flavorNote} selectedItem={selectedFlavorNote}/>
         </div>
+      </div>
+      {/* 검색 결과 페이지네이션 */}
+      <div>
+        <PaginationNew currentPage={currentPage} isLast={isLast} totalPage={totalPage} products={products} setCurrentPage={setCurrentPage} />
       </div>
     </div>
   )
