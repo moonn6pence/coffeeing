@@ -15,7 +15,7 @@ export const MyReview = (props: MyReviewProps) => {
   return (
     <div className="w-300 h-200px bg-light rounded-lg p-6 flex flex-col">
       <div className="flex justify-between">
-        <StarIcons score={3} size="big" />
+        <StarIcons score={memberReview.score} size="big" />
         <div>
           <button onClick={handleModal}>
             <img className="w-9 h-9" src={editImg} alt="수정" />
@@ -25,7 +25,7 @@ export const MyReview = (props: MyReviewProps) => {
           </button>
         </div>
       </div>
-      <p className="text-base h-10 w-full mt-3">내용</p>
+      <p className="text-base h-10 w-full mt-3">{memberReview.content}</p>
     </div>
   );
 };
