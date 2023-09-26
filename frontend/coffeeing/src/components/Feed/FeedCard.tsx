@@ -29,7 +29,11 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
                 <div className="feed-avater flex mr-10 justify-center items-center">
-                    <img src={DefaultProfile} />
+                    {
+                        feedDetail.registerProfileImg ? 
+                        <img src={feedDetail.registerProfileImg} className="w-10 h-10 rounded-full border-2"/> : 
+                        <img src={DefaultProfile} />
+                    }
                 </div>
                 <div className="feed-member-info flex flex-col">
                     <div>
