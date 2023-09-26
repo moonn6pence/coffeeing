@@ -78,6 +78,7 @@ public class FeedService {
         Feed feed = feedRepository.findByIdAndMember(feedId, member)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
+        feedLikeRepository.deleteFeedLikesByFeed(feed);
         feedRepository.delete(feed);
     }
 

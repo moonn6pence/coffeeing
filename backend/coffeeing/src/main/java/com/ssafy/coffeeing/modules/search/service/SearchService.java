@@ -1,7 +1,5 @@
 package com.ssafy.coffeeing.modules.search.service;
 
-import com.ssafy.coffeeing.modules.global.exception.BusinessException;
-import com.ssafy.coffeeing.modules.global.exception.info.SearchErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
@@ -50,69 +48,51 @@ public class SearchService {
     }
 
     @Transactional(readOnly = true)
-    public SearchProductResponse getProductsBySearch(SearchProductRequest searchProductRequest) {
-        Page<ProductSearchElement> productSearchElements;
-        TagType productType = TagType.valueOf(searchProductRequest.productType().toUpperCase());
+    public SearchBeanResponse getProductsBySearchBean(SearchProductRequest searchProductRequest) {
+        Page<BeanSearchElement> beanSearchElements;
 
-        if(productType == TagType.BEAN) {
-            productSearchElements = searchBeanByConditions(
-                    searchProductRequest.keyword(),
-                    searchProductRequest.roast(),
-                    searchProductRequest.acidity(),
-                    searchProductRequest.body(),
-                    searchProductRequest.flavorNote(),
-                    searchProductRequest.page(),
-                    searchProductRequest.size());
-            Boolean isLast = searchProductRequest.page() + 1 == productSearchElements.getTotalPages();
+        beanSearchElements = searchBeanByConditions(searchProductRequest);
+        Boolean isLast = searchProductRequest.page() + 1 == beanSearchElements.getTotalPages();
 
-            return SearchMapper.supplySearchProductResponseOf(
-                    productSearchElements.getContent(),
-                    searchProductRequest.page() + 1,
-                    isLast,
-                    productSearchElements.getTotalPages());
-        }
-        if(productType == TagType.CAPSULE) {
-            productSearchElements = searchCapsuleByConditions(
-                    searchProductRequest.keyword(),
-                    searchProductRequest.roast(),
-                    searchProductRequest.acidity(),
-                    searchProductRequest.body(),
-                    searchProductRequest.flavorNote(),
-                    searchProductRequest.page(),
-                    searchProductRequest.size());
-
-            Boolean isLast = searchProductRequest.page() + 1 == productSearchElements.getTotalPages();
-
-            return SearchMapper.supplySearchProductResponseOf(
-                    productSearchElements.getContent(),
-                    searchProductRequest.page() + 1,
-                    isLast,
-                    productSearchElements.getTotalPages());
-        }
-
-        throw new BusinessException(SearchErrorInfo.NOT_EXIST_TAG_TYPE);
+        return SearchMapper.supplySearchBeanResponseOf(
+                beanSearchElements.getContent(),
+                searchProductRequest.page(),
+                isLast,
+                beanSearchElements.getTotalPages() - 1);
     }
 
-    private Page<ProductSearchElement> searchBeanByConditions(
-            String keyword, String roast, String acidity, String body, String flavorNote, Integer page, Integer size) {
+    @Transactional(readOnly = true)
+    public SearchCapsuleResponse getProductsBySearchCapsule(SearchProductRequest searchProductRequest) {
+        Page<CapsuleSearchElement> capsuleSearchElements;
+
+        capsuleSearchElements = searchCapsuleByConditions(searchProductRequest);
+        Boolean isLast = searchProductRequest.page() + 1 == capsuleSearchElements.getTotalPages();
+
+        return SearchMapper.supplySearchCapsuleResponseOf(
+                capsuleSearchElements.getContent(),
+                searchProductRequest.page(),
+                isLast,
+                capsuleSearchElements.getTotalPages() - 1);
+    }
+
+    private Page<BeanSearchElement> searchBeanByConditions(SearchProductRequest searchProductRequest) {
         return searchQueryRepository.searchByBeanConditions(
-                keyword,
-                roastStringToList(roast),
-                acidityStringToList(acidity),
-                bodyStringToList(body),
-                flavorNoteToList(flavorNote),
-                PageRequest.of(page, size));
+                searchProductRequest.keyword(),
+                roastStringToList(searchProductRequest.roast()),
+                acidityStringToList(searchProductRequest.acidity()),
+                bodyStringToList(searchProductRequest.body()),
+                flavorNoteToList(searchProductRequest.flavorNote()),
+                PageRequest.of(searchProductRequest.page(), searchProductRequest.size()));
     }
 
-    private Page<ProductSearchElement> searchCapsuleByConditions(
-            String keyword, String roast, String acidity, String body, String flavorNote, Integer page, Integer size) {
+    private Page<CapsuleSearchElement> searchCapsuleByConditions(SearchProductRequest searchProductRequest) {
         return searchQueryRepository.searchByCapsuleConditions(
-                keyword,
-                roastStringToList(roast),
-                acidityStringToList(acidity),
-                bodyStringToList(body),
-                flavorNoteToList(flavorNote),
-                PageRequest.of(page, size));
+                searchProductRequest.keyword(),
+                roastStringToList(searchProductRequest.roast()),
+                acidityStringToList(searchProductRequest.acidity()),
+                bodyStringToList(searchProductRequest.body()),
+                flavorNoteToList(searchProductRequest.flavorNote()),
+                PageRequest.of(searchProductRequest.page(), searchProductRequest.size()));
     }
 
     private List<String> flavorNoteToList(String flavorNote) {
@@ -155,10 +135,8 @@ public class SearchService {
             List<Capsule> capsules,
             List<Coffee> coffees) {
         tags.addAll(capsules.stream().map(capsule ->
-                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()))
-                .toList());
+                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr())).toList());
         tags.addAll(coffees.stream().map(coffee ->
-                        new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()))
-                .toList());
+                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr())).toList());
     }
 }

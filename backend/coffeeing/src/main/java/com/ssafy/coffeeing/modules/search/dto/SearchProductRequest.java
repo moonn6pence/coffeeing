@@ -10,7 +10,6 @@ public record SearchProductRequest(
         String acidity,
         String body,
         String flavorNote,
-        String productType,
         Integer page,
         Integer size
 
@@ -18,10 +17,7 @@ public record SearchProductRequest(
 
     @Builder
     public SearchProductRequest(String keyword, String roast, String acidity, String body, String flavorNote,
-                                String productType, Integer page, Integer size) {
-        if(Objects.isNull(productType)) {
-            productType = "BEAN";
-        }
+                                Integer page, Integer size) {
         if(Objects.isNull(page)) {
             page = 0;
         }
@@ -33,7 +29,6 @@ public record SearchProductRequest(
         this.acidity = acidity;
         this.body = body;
         this.flavorNote = flavorNote;
-        this.productType = productType;
         this.page = page;
         this.size = size;
     }

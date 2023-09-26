@@ -46,8 +46,17 @@ public class FeedMapper {
             List<ImageElement> images,
             Boolean isLike,
             Boolean isMine) {
-        return new FeedDetailResponse(feed.getId(), images, feed.getContent(), tag, feed.getMember().getId(),
-                feed.getLikeCount(), feed.getMember().getNickname(), feed.getMember().getProfileImage(), isLike, isMine);
+        return new FeedDetailResponse(
+                feed.getId(),
+                images,
+                feed.getContent() == null ? "" : feed.getContent(),
+                tag,
+                feed.getMember().getId(),
+                feed.getLikeCount(),
+                feed.getMember().getNickname(),
+                feed.getMember().getProfileImage(),
+                isLike,
+                isMine);
     }
 
     public static FeedPageResponse supplyFeedPageEntityOf(List<FeedPageElement> images, Boolean hasNext, Long nextCursor) {

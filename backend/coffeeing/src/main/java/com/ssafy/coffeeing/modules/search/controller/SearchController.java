@@ -1,9 +1,6 @@
 package com.ssafy.coffeeing.modules.search.controller;
 
-import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
-import com.ssafy.coffeeing.modules.search.dto.SearchProductResponse;
-import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
-import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
+import com.ssafy.coffeeing.modules.search.dto.*;
 import com.ssafy.coffeeing.modules.search.service.SearchService;
 import com.ssafy.coffeeing.modules.util.base.BaseResponse;
 import io.swagger.annotations.ApiImplicitParam;
@@ -86,12 +83,74 @@ public class SearchController {
                             , defaultValue = "fruity, sweety"
                     ),
                     @ApiImplicitParam(
-                            name = "productType"
-                            , value = "BEAN/CAPSULE"
+                            name = "page"
+                            , value = "Integer"
+                            , required = false
+                            , dataType = "number"
+                            , paramType = "query"
+                            , defaultValue = "0"
+                    ),
+                    @ApiImplicitParam(
+                            name = "size"
+                            , value = "Integer"
+                            , required = false
+                            , dataType = "number"
+                            , paramType = "query"
+                            , defaultValue = "8"
+                    )
+            })
+    @ApiOperation(value = "캡슐 검색")
+    @GetMapping("/products/capsule")
+    public BaseResponse<SearchCapsuleResponse> getProductsBySearchCapsule(SearchProductRequest searchProductRequest) {
+        return BaseResponse.<SearchCapsuleResponse>builder()
+                .data(searchService.getProductsBySearchCapsule(searchProductRequest))
+                .build();
+    }
+
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "keyword"
+                            , value = "검색 키워드"
                             , required = false
                             , dataType = "string"
                             , paramType = "query"
-                            , defaultValue = "BEAN"
+                            , defaultValue = "None"
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "roast"
+                            , value = "로스팅 정도"
+                            , required = false
+                            , dataType = "string"
+                            , paramType = "query"
+                            , defaultValue = "LIGHT"
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "body"
+                            , value = "바디감 정도"
+                            , required = false
+                            , dataType = "string"
+                            , paramType = "query"
+                            , defaultValue = "HEAVY"
+                    ),
+                    @ApiImplicitParam(
+                            name = "acidity"
+                            , value = "산미 정도"
+                            , required = false
+                            , dataType = "string"
+                            , paramType = "query"
+                            , defaultValue = "LOW"
+                    )
+                    ,
+                    @ApiImplicitParam(
+                            name = "flavorNote"
+                            , value = "플레이버 노트"
+                            , required = false
+                            , dataType = "string"
+                            , paramType = "query"
+                            , defaultValue = "fruity, sweety"
                     ),
                     @ApiImplicitParam(
                             name = "page"
@@ -110,11 +169,11 @@ public class SearchController {
                             , defaultValue = "8"
                     )
             })
-    @ApiOperation(value = "캡슐 및 원두 검색")
-    @GetMapping("/products")
-    public BaseResponse<SearchProductResponse> getProductsBySearch(SearchProductRequest searchProductRequest) {
-        return BaseResponse.<SearchProductResponse>builder()
-                .data(searchService.getProductsBySearch(searchProductRequest))
+    @ApiOperation(value = "원두 검색")
+    @GetMapping("/products/bean")
+    public BaseResponse<SearchBeanResponse> getProductsBySearchBean(SearchProductRequest searchProductRequest) {
+        return BaseResponse.<SearchBeanResponse>builder()
+                .data(searchService.getProductsBySearchBean(searchProductRequest))
                 .build();
     }
 }

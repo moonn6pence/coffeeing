@@ -13,6 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+
 @ActiveProfiles("test")
 @SpringBootTest
 @Transactional
@@ -26,6 +28,9 @@ public class ServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    protected EntityManager em;
 
     @MockBean
     private Dummy dummy;
