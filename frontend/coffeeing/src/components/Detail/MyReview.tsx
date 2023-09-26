@@ -7,10 +7,12 @@ import { StarIcons } from 'components/StarIcons';
 type MyReviewProps = {
   memberReview: ReviewProps;
   handleModal: () => void;
+  beans?: string;
+  handleDelete: () => void;
 };
 
 export const MyReview = (props: MyReviewProps) => {
-  const { memberReview, handleModal } = props;
+  const { memberReview, handleModal, beans, handleDelete } = props;
 
   return (
     <div className="w-300 h-200px bg-light rounded-lg p-6 flex flex-col">
@@ -20,7 +22,7 @@ export const MyReview = (props: MyReviewProps) => {
           <button onClick={handleModal}>
             <img className="w-9 h-9" src={editImg} alt="수정" />
           </button>
-          <button>
+          <button onClick={handleDelete}>
             <img className="w-9 h-9" src={deleteImg} alt="삭제" />
           </button>
         </div>
