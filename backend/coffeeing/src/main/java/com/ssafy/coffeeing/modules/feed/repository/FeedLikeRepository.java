@@ -19,4 +19,6 @@ public interface FeedLikeRepository extends JpaRepository<FeedLike, Long> {
             "join fetch f.feed " +
             "where f.feed in :feeds and f.member = :viewer")
     List<FeedLike> findFeedLikesByFeedsAndMember(List<Feed> feeds, Member viewer);
+
+    void deleteFeedLikesByFeed(Feed feed);
 }

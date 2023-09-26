@@ -145,10 +145,17 @@ class FeedServiceTest extends ServiceTest {
     void Given_DeleteFeedRequest_When_DeleteFeed_Then_Success() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
+        feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, beforeResearchMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
-        //when, then
+        //when
+        em.flush();
         feedService.deleteFeedById(feed.getId());
+
+        //then
+        assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
+        assertThat(feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember).isEmpty()).isTrue();
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
