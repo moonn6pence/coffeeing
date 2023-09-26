@@ -91,7 +91,6 @@ public class CoffeeService {
         return new ToggleResponse(Boolean.FALSE);
     }
 
-
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCoffees(Long id) {
         return null;
@@ -103,5 +102,9 @@ public class CoffeeService {
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<SimpleProductElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
         return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
+    }
+
+    public void increasePopularity(Long id) {
+        
     }
 }
