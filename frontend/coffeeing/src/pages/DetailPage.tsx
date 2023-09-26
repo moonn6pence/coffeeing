@@ -5,7 +5,7 @@ import { Pagination } from 'components/Pagination';
 import { CapsuleCard } from 'components/CapsuleCard';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MyReview } from 'components/Detail/MyReview';
 import { ReviewEditModal } from 'components/Detail/ReviewEditModal';
 import { useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ import { RootState } from 'store/store';
 export const DetailPage = () => {
   const { beans, id } = useParams();
   const isLogin = useSelector((state: RootState) => state.member.isLogin);
+  const navigate = useNavigate();
 
   const [seeModal, setSeeModal] = useState(false);
   const handleModal = () => {
@@ -109,34 +110,48 @@ export const DetailPage = () => {
   };
 
   return (
-    <div className="relative">
+    <div>
       <BeanDetailBody {...beanDetail} />
-      {isLogin ? '' : ''}
-      <div className="w-fit mt-10 mx-auto">
-        <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
-        {capsule.isReviewed ? (
-          <MyReview
-            memberReview={capsule.memberReview}
-            handleModal={handleModal}
-          />
-        ) : (
-          <ReviewForm product_id={id} beans={beans} />
-        )}
-        {seeModal ? (
-          <ReviewEditModal
-            score={3}
-            content="마시씀"
-            beans={beans}
-            reviewId={1}
-            handleModal={handleModal}
-            // reviewId={capsule.memberReview.reviewId}
-            // score={capsule.memberReview.score}
-            // content={capsule.memberReview.content}
-          />
-        ) : (
-          ''
-        )}
-      </div>
+      {isLogin ? (
+        <div className="w-fit mt-10 mx-auto">
+          <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
+          {capsule.isReviewed ? (
+            <MyReview
+              memberReview={capsule.memberReview}
+              handleModal={handleModal}
+            />
+          ) : (
+            <ReviewForm product_id={id} beans={beans} />
+          )}
+          {seeModal ? (
+            <ReviewEditModal
+              score={3}
+              content="마시씀"
+              beans={beans}
+              reviewId={1}
+              handleModal={handleModal}
+              // reviewId={capsule.memberReview.reviewId}
+              // score={capsule.memberReview.score}
+              // content={capsule.memberReview.content}
+            />
+          ) : (
+            ''
+          )}
+        </div>
+      ) : (
+        <div className="relative w-300 mx-auto">
+          <div className="bg-review-blur w-300 h-72 blur-sm mt-10"></div>
+          <button
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-my-black text-white rounded-3xl px-22px py-3"
+            onClick={() => {
+              navigate('/login');
+            }}
+          >
+            로그인 후 이용해주세요
+          </button>
+        </div>
+      )}
+
       <div className="w-fit mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">
           평균 평점 {capsule.averageScore.toFixed(1)}{' '}
