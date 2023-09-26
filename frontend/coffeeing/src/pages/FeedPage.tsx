@@ -7,7 +7,7 @@ import { FeedEditModal } from "../components/Modal/FeedEditModal"
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag } from 'service/search/types';
 import { getTagsByKeyword } from 'service/search/search';
-
+import { postFeedLike, deleteFeeds } from "service/feed/feed"
 
 export const FeedPage = () => {
 
@@ -15,9 +15,29 @@ export const FeedPage = () => {
   const [feeds, setFeeds] = useState<Map<number, FeedDetail>>(new Map());
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [createFeedModalOpen, setCreateFeedModalOpen] = useState<boolean>(false);
-  
+
+  const deleteEventHandler = async (feedId: number) => {
+    const res = await deleteFeeds(feedId);
+    if(res) {
+      const newMap = new Map<number, FeedDetail>(feeds);
+      newMap.delete(feedId);
+      setFeeds(newMap);
+    }
+  }
+
+  const likeToggleEventHandler = async (feedId: number) => {
+    const res = await postFeedLike(feedId);
+    return res ? res.result : null;
+  }
+
   const feedComponents = useCallback(()=>{
-    return Array.from(feeds.values()).map((feedDetail)=>(<FeedCard feedDetail={ feedDetail } key={feedDetail.feedId}/>))
+    return Array.from(feeds.values()).map((feedDetail)=>(
+      <FeedCard feedDetail={ feedDetail } 
+                key={ feedDetail.feedId }
+                deleteEventHandler={deleteEventHandler}
+                likeToggleEventHandler={likeToggleEventHandler}
+                />
+    ))
   }, [feeds, setFeeds])
   
   const createFeeds = () => {

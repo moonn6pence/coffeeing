@@ -6,30 +6,26 @@ import SampleImage from 'assets/surveyMainImg.png'
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
-import { postFeedLike } from "service/feed/feed"
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
+    deleteEventHandler: (feedId: number)=>void,
+    likeToggleEventHandler: (feedId: number)=>Promise<boolean|null>
 }
 
-function FeedCard ({ feedDetail }: FeedCardProps) {
+function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler }: FeedCardProps) {
 
   const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
   const editEventHandler = () => {
       alert("edit");
   }
 
-  const deleteEventHandler = () => {
-      alert("delete");
-  }
-
-  const likeToggleEventHandler = async () => {
-    const res = await postFeedLike(feedDetail.feedId);
-    if(res) {
-        setLiked(res.result);
+  const toggleLike = async () => {
+    const res = await likeToggleEventHandler(feedDetail.feedId);
+    if(res!==null) {
+        setLiked(res);
     }
   }
-
 
   return(
     <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting">
@@ -47,7 +43,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
                         { feedDetail.registerName }
                     </div>
                     {
-                        feedDetail.tag ? <div> 캡슐이나 원두 태그</div> : ""
+                        feedDetail.tag ? <div> {feedDetail.tag.name} </div> : ""
                     }
                 </div>
             </div>
@@ -57,7 +53,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
                     <div className="write-icon-wrapper cursor-pointer rounded-xl" onClick={editEventHandler}>
                         <img src = {WriteIcon} />
                     </div>
-                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={deleteEventHandler}>
+                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={()=>{deleteEventHandler(feedDetail.feedId)}}>
                         <img src = {DeleteIcon} />
                     </div>
                 </div>
@@ -72,7 +68,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
 
             <div className="feed-content-wrapper flex flex-col px-6">
                 <div className="feed-like-wrapper w-full mx-1">
-                    <div className="cursor-pointer w-fit rounded-xl"  onClick={likeToggleEventHandler}>
+                    <div className="cursor-pointer w-fit rounded-xl"  onClick={toggleLike}>
                         { liked ? <img src = {Feedlike} /> : <img src = {FeedUnlike} /> }
                     </div>
                 </div>

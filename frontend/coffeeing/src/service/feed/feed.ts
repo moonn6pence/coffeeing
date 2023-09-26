@@ -29,7 +29,7 @@ export const postFeedLike = (feedId: number):Promise<void|ToggleResult> => {
         return Promise.resolve(res.data.data);
     }).catch((error)=>{
         if(!isAxiosError(error)) {
-            console.error("[Post Feed Like requst fail]: Unknown error");
+            console.error("[Post Feed Like request fail]: Unknown error");
         }
     });
 }
@@ -46,7 +46,19 @@ export const getFeeds = (cursor: number|undefined, size: number):Promise<void|Ge
         return Promise.resolve(res.data.data);
     }).catch((error)=>{
         if(!isAxiosError(error)) {
-            console.error("[Get Feeds requst fail]: Unknown error");
+            console.error("[Get Feeds request fail]: Unknown error");
         }
     });
 };
+
+export const deleteFeeds = (feedId: number):Promise<boolean>=>{
+    return privateRequest
+    .delete(`${API_URL}/${FEED_PATH}/${feedId}`).then((res)=>{
+        return true
+    }).catch((error)=>{
+        if(!isAxiosError(error)) {
+            console.error("[delete request fail]: Unknown error");
+        }
+        return false;
+    });
+}
