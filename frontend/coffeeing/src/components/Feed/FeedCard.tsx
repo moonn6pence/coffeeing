@@ -1,42 +1,50 @@
-import React, {MouseEvent} from "react";
+import React, { useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
-import SampleImage from 'assets/surveyMainImg.png'
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
+import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
+    deleteEventHandler: (feedId: number)=>void,
+    likeToggleEventHandler: (feedId: number)=>Promise<boolean|null>,
+    editHandler: (feedDetail: FeedDetail)=>void
 }
 
-function FeedCard ({ feedDetail }: FeedCardProps) {
+function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, editHandler }: FeedCardProps) {
+  const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
+  
   const editEventHandler = () => {
-      alert("edit");
+    editHandler(feedDetail);
   }
 
-  const deleteEventHandler = () => {
-      alert("delete");
+  const toggleLike = async () => {
+    const res = await likeToggleEventHandler(feedDetail.feedId);
+    if(res!==null) {
+        setLiked(res);
+    }
   }
-
-  const likeToggleEventHandler = () => {
-      alert("Toggle");
-  }
-
 
   return(
+    <>
     <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting">
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
                 <div className="feed-avater flex mr-10 justify-center items-center">
-                    <img src={DefaultProfile} />
+                    {
+                        feedDetail.registerProfileImg ? 
+                        <img src={feedDetail.registerProfileImg} className="w-10 h-10 rounded-full border-2"/> : 
+                        <img src={DefaultProfile} />
+                    }
                 </div>
                 <div className="feed-member-info flex flex-col">
                     <div>
                         { feedDetail.registerName }
                     </div>
                     {
-                        feedDetail.tag ? <div> 캡슐이나 원두 태그</div> : ""
+                        feedDetail.tag ? <div> {feedDetail.tag.name} </div> : ""
                     }
                 </div>
             </div>
@@ -46,7 +54,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
                     <div className="write-icon-wrapper cursor-pointer rounded-xl" onClick={editEventHandler}>
                         <img src = {WriteIcon} />
                     </div>
-                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={deleteEventHandler}>
+                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={()=>{deleteEventHandler(feedDetail.feedId)}}>
                         <img src = {DeleteIcon} />
                     </div>
                 </div>
@@ -56,13 +64,13 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
 
         <div className="feed-body flex flex-col w-full py-3">
             <div className="feed-image-wrapper flex w-full">
-                <img src = {SampleImage} className="w-full"/>
+                <img src = {feedDetail.images[0].imageUrl} className="w-full"/>
             </div>
 
             <div className="feed-content-wrapper flex flex-col px-6">
                 <div className="feed-like-wrapper w-full mx-1">
-                    <div className="cursor-pointer w-fit rounded-xl"  onClick={likeToggleEventHandler}>
-                        { <img src = {FeedUnlike} /> }
+                    <div className="cursor-pointer w-fit rounded-xl"  onClick={toggleLike}>
+                        { liked ? <img src = {Feedlike} /> : <img src = {FeedUnlike} /> }
                     </div>
                 </div>
 
@@ -74,6 +82,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
             </div>
         </div>
     </div>
+    </>
   )
 }
 

@@ -10,4 +10,8 @@ export interface ApiErrorResponse<D> {
     data?: null;
 }
 
+export type ToggleResult = {
+    result: boolean
+}
+
 export type ApiResponse<D> = ApiSuccessResponse<D> | ApiErrorResponse<D>;
