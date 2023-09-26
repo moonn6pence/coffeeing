@@ -1,16 +1,20 @@
-import React, {MouseEvent} from "react";
+import React, { useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
 import SampleImage from 'assets/surveyMainImg.png'
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
+import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
+import { postFeedLike } from "service/feed/feed"
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
 }
 
 function FeedCard ({ feedDetail }: FeedCardProps) {
+
+  const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
   const editEventHandler = () => {
       alert("edit");
   }
@@ -19,8 +23,11 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
       alert("delete");
   }
 
-  const likeToggleEventHandler = () => {
-      alert("Toggle");
+  const likeToggleEventHandler = async () => {
+    const res = await postFeedLike(feedDetail.feedId);
+    if(res) {
+        setLiked(res.result);
+    }
   }
 
 
@@ -66,7 +73,7 @@ function FeedCard ({ feedDetail }: FeedCardProps) {
             <div className="feed-content-wrapper flex flex-col px-6">
                 <div className="feed-like-wrapper w-full mx-1">
                     <div className="cursor-pointer w-fit rounded-xl"  onClick={likeToggleEventHandler}>
-                        { <img src = {FeedUnlike} /> }
+                        { liked ? <img src = {Feedlike} /> : <img src = {FeedUnlike} /> }
                     </div>
                 </div>
 
