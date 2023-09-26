@@ -75,17 +75,17 @@ public class MemberController {
 
     @GetMapping("/coffee/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 원두 리스트 요청")
-    public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long id,
-                                                             @Valid PageInfoRequest pageInfoRequest) {
+    public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long memberId,
+                                                             @Valid @RequestBody PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkResponse>builder()
-                .data(coffeeService.getBookmarkedCoffees(id, pageInfoRequest))
+                .data(coffeeService.getBookmarkedCoffees(memberId, pageInfoRequest))
                 .build();
     }
 
     @GetMapping("/capsule/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 캡슐 리스트 요청")
     public BaseResponse<BookmarkResponse> getBookmarkCapsules(@PathVariable @NumberFormat Long memberId,
-                                                              @Valid PageInfoRequest pageInfoRequest) {
+                                                              @Valid @RequestBody PageInfoRequest pageInfoRequest) {
         return BaseResponse.<BookmarkResponse>builder()
                 .data(capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest))
                 .build();
