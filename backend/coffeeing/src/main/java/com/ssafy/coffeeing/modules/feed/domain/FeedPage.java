@@ -36,8 +36,10 @@ public class FeedPage {
     }
 
     private void changeIsMineStatus(Member viewer) {
+        Long viewerId = (viewer != null) ? viewer.getId() : null;
+
         feedPageElements.forEach(feedPageElement -> {
-            if (Objects.equals(feedPageElement.getRegisterId(), viewer.getId())) {
+            if (Objects.equals(feedPageElement.getRegisterId(), viewerId)) {
                 feedPageElement.updateIsMineStatus();
             }
         });
