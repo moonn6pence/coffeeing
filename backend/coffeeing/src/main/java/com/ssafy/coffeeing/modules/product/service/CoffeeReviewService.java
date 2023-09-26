@@ -45,7 +45,7 @@ public class CoffeeReviewService {
         Coffee coffee = coffeeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
-        if (coffeeReviewRepository.existsByCapsuleAndMember(coffee, member)) {
+        if (coffeeReviewRepository.existsByCoffeeAndMember(coffee, member)) {
             throw new BusinessException(ProductErrorInfo.DUPLICATE_REVIEW);
         }
 

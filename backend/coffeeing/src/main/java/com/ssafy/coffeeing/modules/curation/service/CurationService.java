@@ -18,7 +18,10 @@ import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewQueryRepository;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
+import com.ssafy.coffeeing.modules.survey.domain.Preference;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
+import com.ssafy.coffeeing.modules.survey.mapper.SurveyMapper;
+import com.ssafy.coffeeing.modules.survey.repository.PreferenceRepository;
 import com.ssafy.coffeeing.modules.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,8 @@ public class CurationService {
     private final CoffeeRepository coffeeRepository;
     private final CoffeeReviewQueryRepository coffeeReviewQueryRepository;
     private final MemberQueryRepository memberQueryRepository;
+    private final PreferenceRepository preferenceRepository;
+
     private static final String prefix = "당신이 좋아하는 ";
 
     @Transactional(readOnly = true)
@@ -70,11 +75,15 @@ public class CurationService {
 
         CurationType randomCuration = randomUtil.getRandomKeywordCuration(isCapsule);
 
+        curations.add(findByMemberPreference(isCapsule
+                ? CurationType.CAPSULE_PREFERENCE
+                : CurationType.COFFEE_PREFERENCE, member));
+
         if (isCapsule) {
-            // 고평가 제품과 유사한 제품 큐레이션
             Capsule capsule = capsuleReviewQueryRepository.findRandomHighScoredCapsule(member);
 
             if (capsule != null && randomCuration.equals(CurationType.CAPSULE_LIKED_PRODUCT)) {
+                // 고평가 제품과 유사한 제품 큐레이션
                 curations.add(findByMemberLikedProduct(randomCuration, capsule));
             } else {
                 // 나이+성별 그룹의 취향 평균으로 큐레이션
@@ -150,6 +159,23 @@ public class CurationService {
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
+                coffeeRepository.findAllById(recommendResponse.results()));
+    }
+
+    private CurationElement findByMemberPreference(CurationType curation, Member member) {
+        Preference preference = preferenceRepository.findByMemberId(member.getId());
+
+        RecommendResponse recommendResponse =
+                recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference));
+
+        if (curation.getIsCapsule()) {
+            return CurationMapper.supplyCapsuleCurationElementOf(true,
+                    curation.getTitle(),
+                    capsuleRepository.findAllById(recommendResponse.results()));
+        }
+
+        return CurationMapper.supplyCoffeeCurationElementOf(false,
+                curation.getTitle(),
                 coffeeRepository.findAllById(recommendResponse.results()));
     }
 

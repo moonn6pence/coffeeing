@@ -41,4 +41,14 @@ public class SurveyMapper {
                 request.roast(), request.acidity(), request.body());
     }
 
+    public static PreferenceRequest supplyPreferenceRequestFrom(Preference preference) {
+
+        return new PreferenceRequest(preference.getProductType() == ProductType.COFFEE_CAPSULE,
+                preference.getMachineType(),
+                preference.getCoffeeCriteria().getRoast(),
+                preference.getCoffeeCriteria().getAcidity(),
+                preference.getCoffeeCriteria().getBody(),
+                preference.getFlavorNote());
+    }
+
 }
