@@ -37,12 +37,15 @@ export const SearchPage = () =>{
       size: 8,
     };
     const result = await requestFilterResult(filterProps);
-    setCurrentPage(result.currentPage)
-    setIsLast(result.isLast)
+    console.log(result)
     setProducts(result.products)
     setTotalPage(result.totalPage)
   }
-  
+  useEffect(()=>{
+    console.log('현재 페이지',currentPage)
+    getResult()
+  },[currentPage])
+
   // 필터 조건 바뀔 때 마다 가져오기
   useEffect(() =>  {  
     getResult()
@@ -108,7 +111,7 @@ export const SearchPage = () =>{
       </div>
       {/* 검색 결과 페이지네이션 */}
       <div>
-        <PaginationNew currentPage={currentPage} isLast={isLast} totalPage={totalPage} products={products} setCurrentPage={setCurrentPage} />
+        <PaginationNew currentPage={currentPage} totalPage={totalPage} products={products} setCurrentPage={setCurrentPage} />
       </div>
     </div>
   )
