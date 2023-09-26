@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { MyProfile } from 'components/Profile/MyProfile';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
+import { NavLinkWrapper } from 'components/NavLink/NavLinkWrapper';
 
 export type UserData = {
   nickname: string;
@@ -33,7 +34,7 @@ export const MemberPage = () => {
 
   if (userExists) {
     return (
-      <div className="wrapper w-full flex items-center flex-col">
+      <div className="wrapper w-full flex items-stretch flex-col w-96">
         <div className="w-300 bg-light h-80 flex items-center">
           <MyProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
@@ -44,13 +45,11 @@ export const MemberPage = () => {
             }}
           />
         </div>
-        <div className="sub-section w-300 mt-12">
-          <nav>
-            <NavLink to={`/member/${id}`}>
-              경험치
-            </NavLink>
-            <NavLink to={`/member/${id}/bookmark`}>북마크</NavLink>
-            <NavLink to={`/member/${id}/feed`}>피드</NavLink>
+        <div className="sub-section mt-12 grow">
+          <nav className="h-45">
+            <NavLinkWrapper to={`/member/${id}`} text="경험치" end />
+            <NavLinkWrapper to={`/member/${id}/bookmark`} text="북마크" />
+            <NavLinkWrapper to={`/member/${id}/feed`} text="피드" />
           </nav>
           <Outlet />
         </div>
