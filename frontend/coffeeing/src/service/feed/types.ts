@@ -26,3 +26,9 @@ export interface PostFeedReq {
 export interface PostFeedRes {
     feedId: number
 }
+
+export interface GetFeedRes {
+    feeds: FeedDetail[],
+    hasNext: boolean,
+    nextCursor: number | undefined
+}
