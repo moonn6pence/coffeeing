@@ -78,6 +78,7 @@ export const SearchPage = () =>{
               onChange={(e)=>handleTextChange(e)}
             />
           </div>
+          <hr className=" border-half-light mt-2" />
           </div>
           {/* 필터 listbox */}
           <div className="flex flex-row gap-2 items-start">
@@ -110,13 +111,13 @@ export const SearchPage = () =>{
               src={flavorNote}
             />
           </div>
-          <hr className=" border-half-light" />
+          
           {/* 선택된 태그들 */}
           <div className="flex flex-wrap w-790px gap-1">
-            <SelectedFilterTag src={roast} selectedItem={selectedRoast}/>
-            <SelectedFilterTag src={acidity} selectedItem={selectedAcid}/>
-            <SelectedFilterTag src={body} selectedItem={selectedBody}/>
-            <SelectedFilterTag src={flavorNote} selectedItem={selectedFlavorNote}/>
+            <SelectedFilterTag src={roast} selectedItem={selectedRoast} setSelectedItem={setSelectedRoast}/>
+            <SelectedFilterTag src={acidity} selectedItem={selectedAcid} setSelectedItem={setSelectedAcid}/>
+            <SelectedFilterTag src={body} selectedItem={selectedBody} setSelectedItem={setSelectedBody}/>
+            <SelectedFilterTag src={flavorNote} selectedItem={selectedFlavorNote} setSelectedItem={setSelectedFlavorNote}/>
           </div>
         </div>
       </div>
@@ -134,11 +135,11 @@ export const SearchPage = () =>{
           >캡슐</span>
       </div>
       {/* 검색 결고 없을 때 */}
+      <div className="mt-2">
+      {!showResult&& <NoResult label="검색 결과가 없습니다."/>}
+      </div>
       <div className="flex flex-col items-center">
-
-        {!showResult&& <NoResult label="검색 결과가 없습니다"/>}
-
-        {productType==='BEAN'&&(
+        {productType==='BEAN'&&totalPage!==-1&&(
           <PaginationNew 
             currentPage={currentPage} 
             totalPage={totalPage} 
@@ -147,7 +148,7 @@ export const SearchPage = () =>{
             setCurrentPage={setCurrentPage} 
           />
         )}
-        {productType=='CAPSULE'&&(
+        {productType=='CAPSULE'&&totalPage!==-1&&(
           <PaginationNew 
             currentPage={currentPage} 
             totalPage={totalPage} 
