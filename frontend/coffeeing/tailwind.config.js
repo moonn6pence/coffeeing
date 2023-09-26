@@ -39,9 +39,12 @@ module.exports = {
         '1056px': '1056px',
       },
       height: {
-        '100px' : '100px',
-        '560px' : '560px',
-      }
+        '100px': '100px',
+        '560px': '560px',
+      },
+      backgroundImage: {
+        'review-blur': "url('/src/assets/detail/review_blur.png')",
+      },
     },
   },
   plugins: [],

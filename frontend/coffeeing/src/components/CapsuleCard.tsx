@@ -4,13 +4,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 interface ICardProps {
   capsule_id: number;
-  brand: string;
+  subtitle: string;
   name: string;
   imgLink: string;
 }
 
 export const CapsuleCard = (props: ICardProps) => {
-  const { capsule_id, brand, name, imgLink } = props;
+  const { capsule_id, subtitle, name, imgLink } = props;
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
@@ -39,7 +39,7 @@ export const CapsuleCard = (props: ICardProps) => {
         alt="캡슐 사진"
         className="w-36 h-36 m-auto mb-16 hover:scale-110"
       />
-      <p className="text-sm text-center text-font-gray mb-2">{brand}</p>
+      <p className="text-sm text-center text-font-gray mb-2">{subtitle}</p>
       <p className="text-base text-center mb-12">{name}</p>
     </div>
   );
