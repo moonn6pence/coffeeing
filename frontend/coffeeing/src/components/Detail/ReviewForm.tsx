@@ -24,7 +24,6 @@ export const ReviewForm = ({ product_id, beans }: ReviewFormProps) => {
   };
 
   const submitReview = (event: FormEvent) => {
-    event.preventDefault();
     // 별점, 내용 담아서 보내는 거 연결할 예정
     if (!rating) {
       alert('별점을 입력해주세요');
@@ -35,9 +34,6 @@ export const ReviewForm = ({ product_id, beans }: ReviewFormProps) => {
         .post(`${API_URL}/product/${beans}/${product_id}/review`, {
           content: description,
           score: rating,
-        })
-        .then((res) => {
-          console.log(res.data.data);
         })
         .catch((err) => {
           console.log(err);
