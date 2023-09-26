@@ -24,14 +24,25 @@ export const DetailPage = () => {
 
   // 상품 정보 불러오기
   useEffect(() => {
-    publicRequest
-      .get(`${API_URL}/product/${beans}/${id}`)
-      .then((res) => {
-        setCapsule(res.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    isLogin
+      ? privateRequest
+          .get(`${API_URL}/product/${beans}/${id}`)
+          .then((res) => {
+            console.log(res.data.data);
+            setCapsule(res.data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+      : publicRequest
+          .get(`${API_URL}/product/${beans}/${id}`)
+          .then((res) => {
+            console.log(res.data.data);
+            setCapsule(res.data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
   }, []);
 
   const [capsule, setCapsule] = useState({
@@ -44,7 +55,7 @@ export const DetailPage = () => {
     id: 0,
     imageUrl: 'string',
     isBookmarked: false,
-    isReviewed: true,
+    isReviewed: false,
     memberReview: {
       content: 'string',
       memberId: 0,
@@ -126,14 +137,14 @@ export const DetailPage = () => {
           )}
           {seeModal ? (
             <ReviewEditModal
-              score={3}
-              content="마시씀"
+              // score={3}
+              // content="마시씀"
               beans={beans}
-              reviewId={1}
+              // reviewId={1}
               handleModal={handleModal}
-              // reviewId={capsule.memberReview.reviewId}
-              // score={capsule.memberReview.score}
-              // content={capsule.memberReview.content}
+              reviewId={capsule.memberReview.reviewId}
+              score={capsule.memberReview.score}
+              content={capsule.memberReview.content}
             />
           ) : (
             ''
