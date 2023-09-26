@@ -1,13 +1,13 @@
 import React, { useState, Fragment } from 'react'
 import { Listbox } from '@headlessui/react'
-import {Item} from '../../util/constants'
+import {FilterItem } from '../../util/constants'
 import IonIcon from '@reacticons/ionicons'
 
 type ListBoxProps = {
   label:string,
-  selectedItem:Item,
+  selectedItem:FilterItem[],
   setSelectedItem:any,
-  itemList:Item[];
+  itemList:FilterItem[];
   src:string;
 }
 
@@ -15,7 +15,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
   return (
     <Listbox
       value={selectedItem}
-      onChange={(newSelectedItems) => setSelectedItem(newSelectedItems)}
+      onChange={setSelectedItem}
       multiple
     >
 
@@ -27,7 +27,6 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
         <Listbox.Button
           className="cursor-pointer"
           aria-label="Toggle listbox"
-          onClick={() => setSelectedItem([])} 
         >
           ⌄
         </Listbox.Button>
@@ -35,8 +34,8 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
       {/* 드롭다운 */}
       <Listbox.Options className="w-full absolute mt-2 py-2 bg-white border border-gray-300 rounded-xl">
         {itemList.map((item) => (
-          <Listbox.Option key={item.value} value={item}>
-            {({ active, selected }) => (
+          <Listbox.Option key={item.name} value={item}>
+            {({ selected }) => (
               <li
                 className={`${
                   selected

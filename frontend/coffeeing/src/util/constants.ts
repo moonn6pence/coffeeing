@@ -40,31 +40,37 @@ export const AGE_ITEMS = [
     },
 ];
 
+export type FilterItem  ={
+    name:string,
+    label:string
+}
+
 export const ROAST_ITEMS = [
-    {value:0.2, name:'라이트'},
-    {value:0.4, name:'미디엄 라이트'},
-    {value:0.6, name:'미디엄'},
-    {value:0.8, name:'미디엄 다크'},
-    {value:1, name:'다크'},
+    {label:'LIGHT', name:'라이트'},
+    {label:'MEDIUM_LIGHT', name:'미디엄 라이트'},
+    {label:'MEDIUM', name:'미디엄'},
+    {label:'MEDIUM_DARK', name:'미디엄 다크'},
+    {label:'DARK', name:'다크'},
 ]
 
 export const ACIDITY_ITEMS = [
-    {value:0.5, name:'낮음'},
-    {value:0.75, name:'중간'},
-    {value:1, name:'높음'},
+    {label:'UNKNOWN', name:'없음'},
+    {label:'LOW', name:'낮음'},
+    {label:'MEDIUM', name:'중간'},
+    {label:'HIGH', name:'높음'},
 ]
 
 export const BODY_ITEMS = [
-    {value:0.3, name:'가벼움'},
-    {value:0.6, name:'중간'},
-    {value:0.9, name:'무거움'},
+    {label:'LIGHT', name:'가벼움'},
+    {label:'MEDIUM', name:'중간'},
+    {label:'HEAVY', name:'무거움'},
 ]
 
 export const FLAVOR_NOTE_ITEMS = [
-    {value:1, name:'과일'},
-    {value:2, name:'달콤'},
-    {value:3, name:'초콜릿'},
-    {value:4, name:'견과류'},
-    {value:5, name:'매콤함'},
-    {value:6, name:'꽃향'},
+    {label:'fruity', name:'과일'},
+    {label:'sweety', name:'달콤'},
+    {label:'chocolaty', name:'초콜릿'},
+    {label:'nutty', name:'견과류'},
+    {label:'spicy', name:'매콤함'},
+    {label:'floral', name:'꽃향'},
 ]

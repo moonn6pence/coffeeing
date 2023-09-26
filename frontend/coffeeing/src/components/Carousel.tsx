@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
-import { CapsuleCard } from './CapsuleCard';
+import { BeanCard } from './BeanCard';
 import eximg from 'assets/google_logo.png';
 import Next from 'assets/nextarrow.png';
 import Prev from 'assets/prevarrow.png';
@@ -100,11 +100,12 @@ export default class Carousel extends Component {
     return (
       <Slider {...settings} className="w-320 flex justify-center pl-10">
         {capsuleList.map((capsule) => (
-          <CapsuleCard
+          <BeanCard
             subtitle={capsule.subtitle}
-            capsule_id={capsule.capsule_id}
+            id={capsule.capsule_id}
             name={capsule.name}
             imgLink={eximg}
+            isCapsule={true}
             key={capsule.name}
           />
         ))}
