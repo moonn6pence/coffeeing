@@ -123,7 +123,7 @@ export const SearchPage = () =>{
 
       {/* 검색 결과 페이지네이션 */}
       {/* 원두 | 캡슐 */}
-      <div className="text-3xl font-bold space-x-10 mt-5 bg-orange-400 ml-10%">
+      <div className="text-3xl font-bold space-x-10 mt-5 ml-[10%]">
         <span 
           className={productType==='BEAN'?`text-black`:`text-[#7A88A3]`}
           onClick={()=>setProductType('BEAN')}
@@ -134,26 +134,29 @@ export const SearchPage = () =>{
           >캡슐</span>
       </div>
       {/* 검색 결고 없을 때 */}
-      {!showResult&& <NoResult label="검색 결과가 없습니다"/>}
+      <div className="flex flex-col items-center">
 
-      {productType==='BEAN'&&(
-        <PaginationNew 
-          currentPage={currentPage} 
-          totalPage={totalPage} 
-          products={products} 
-          isCapsule={false}
-          setCurrentPage={setCurrentPage} 
-        />
-      )}
-      {productType=='CAPSULE'&&(
-        <PaginationNew 
-          currentPage={currentPage} 
-          totalPage={totalPage} 
-          products={products} 
-          isCapsule={true}
-          setCurrentPage={setCurrentPage} 
-        />
-      )}
+        {!showResult&& <NoResult label="검색 결과가 없습니다"/>}
+
+        {productType==='BEAN'&&(
+          <PaginationNew 
+            currentPage={currentPage} 
+            totalPage={totalPage} 
+            products={products} 
+            isCapsule={false}
+            setCurrentPage={setCurrentPage} 
+          />
+        )}
+        {productType=='CAPSULE'&&(
+          <PaginationNew 
+            currentPage={currentPage} 
+            totalPage={totalPage} 
+            products={products} 
+            isCapsule={true}
+            setCurrentPage={setCurrentPage} 
+          />
+        )}
+      </div>
 
     </div>
   )
