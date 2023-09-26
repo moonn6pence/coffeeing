@@ -35,6 +35,15 @@ module.exports = {
         '532px': '532px',
         // 검색 바
         '790px': '790px',
+        // 피드 등록 모달
+        '1056px': '1056px',
+      },
+      height: {
+        '100px': '100px',
+        '560px': '560px',
+      },
+      backgroundImage: {
+        'review-blur': "url('/src/assets/detail/review_blur.png')",
       },
     },
   },

@@ -2,26 +2,50 @@ import React, { useEffect, useState } from 'react';
 import { MyProfile } from 'components/Profile/MyProfile';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
+import { useParams } from 'react-router-dom';
+
+type UserData = {
+  nickname: string;
+  profileImage: string;
+};
 
 export const MemberPage = () => {
-  const [nickname, setNickname] = useState('하이');
-  const [imgLink, setImgLink] = useState('');
+  const { id } = useParams();
+  const [userData, setUserData] = useState<UserData>({
+    nickname: '',
+    profileImage: '',
+  });
+  const [userExists, setUserExists] = useState(false);
 
-  // 나중에 연결할 예정
-  // useEffect(() => {
-  //   privateRequest
-  //     .get(`${API_URL}/member/info/1`)
-  //     .then((res) => {
-  //       setNickname(res.data.data.nicknmae);
-  //       setImgLink(res.data.data.profileImage);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
+  useEffect(() => {
+    privateRequest
+      .get(`${API_URL}/member/info/${id}`)
+      .then(({ data }) => {
+        console.log(data);
+        setUserData(data.data);
+        setUserExists(true);
+      })
+      .catch((error) => {
+        console.log(error);
+        setUserExists(false);
+      });
+  }, []);
+
   return (
     <div className="w-300 bg-light h-80 flex items-center">
-      <MyProfile nickname={nickname} imgLink={imgLink} />
+      {
+        userExists?(
+          <MyProfile
+            id={typeof id === 'string' ? Number.parseInt(id) : undefined}
+            nickname={userData.nickname}
+            profileImage={userData.profileImage}
+          />
+        ):(
+          <div className='text-center w-screen'>
+            <h3>해당 유저가 존재하지 않습니다.</h3>
+          </div>
+        )
+      }
     </div>
   );
 };

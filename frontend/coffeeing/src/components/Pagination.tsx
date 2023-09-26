@@ -29,7 +29,7 @@ export const Pagination = (props: PaginationProps) => {
     <div>
       {/* 나중에 리뷰쪽 페이지네이션인지 프로필쪽인지 구분하는 로직 추가 필요 */}
       {/* 리뷰 카드들 */}
-      <div className="flex flex-wrap w-300 justify-between">
+      <div className="w-300 grid grid-cols-3">
         {contentList.slice(offset, offset + limit).map((item, index) => (
           <ReviewCard memberReview={item} key={index} />
         ))}

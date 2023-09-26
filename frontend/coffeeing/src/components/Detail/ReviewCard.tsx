@@ -1,11 +1,13 @@
+import { StarIcons } from 'components/StarIcons';
 import React from 'react';
-import star from 'assets/detail/star.svg';
-import profile from 'assets/profile.svg';
+import { useNavigate } from 'react-router-dom';
 
 export type ReviewProps = {
   content: string;
-  id: number;
+  memberId: number;
   nickname: string;
+  profileImageUrl: string;
+  reviewId: number;
   score: number;
 };
 
@@ -14,21 +16,22 @@ type MemberReviewProps = {
 };
 
 export const ReviewCard = ({ memberReview }: MemberReviewProps) => {
-  const { content, id, nickname, score } = memberReview;
-
-  const starIcons = [];
-  for (let i = 0; i < score; i++) {
-    starIcons.push(<img src={star} alt="별" key={i} className="w-3.5 h-3.5" />);
-  }
+  const { content, memberId, nickname, score, profileImageUrl } = memberReview;
+  const navigate = useNavigate();
 
   return (
     <div className="w-96 p-3">
       <div className="flex mb-6">
-        {/* 프로필 사진 연결해줘야함 */}
-        <img src={profile} alt="사진" />
+        <img
+          src={profileImageUrl}
+          alt="사진"
+          onClick={() => {
+            navigate(`/member/${memberId}`);
+          }}
+        />
         <div className="ml-3">
           <p className="text-sm">{nickname}</p>
-          <div className="flex">{starIcons}</div>
+          <StarIcons score={score} />
         </div>
       </div>
       <div className="bg-light rounded-lg p-3 h-104px">
