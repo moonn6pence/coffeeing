@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CoffeeReviewRepository extends JpaRepository<CoffeeReview, Long> {
     CoffeeReview findCoffeeReviewByCoffeeAndMember(Coffee coffee, Member member);
+
+    boolean existsByCapsuleAndMember(Coffee coffee, Member member);
 }

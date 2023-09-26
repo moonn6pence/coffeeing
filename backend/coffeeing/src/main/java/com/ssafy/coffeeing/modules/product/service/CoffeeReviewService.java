@@ -45,6 +45,10 @@ public class CoffeeReviewService {
         Coffee coffee = coffeeRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
+        if (coffeeReviewRepository.existsByCapsuleAndMember(coffee, member)) {
+            throw new BusinessException(ProductErrorInfo.DUPLICATE_REVIEW);
+        }
+
         CoffeeReview review = coffeeReviewRepository.save(
                 ProductMapper.supplyCoffeeReviewOf(coffee, member, reviewRequest));
 

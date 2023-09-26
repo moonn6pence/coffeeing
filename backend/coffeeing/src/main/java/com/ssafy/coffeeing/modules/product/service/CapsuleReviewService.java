@@ -45,6 +45,10 @@ public class CapsuleReviewService {
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
+        if (capsuleReviewRepository.existsByCapsuleAndMember(capsule, member)) {
+            throw new BusinessException(ProductErrorInfo.DUPLICATE_REVIEW);
+        }
+
         CapsuleReview review = capsuleReviewRepository.save(
                 ProductMapper.supplyCapsuleReviewOf(capsule, member, reviewRequest));
 
