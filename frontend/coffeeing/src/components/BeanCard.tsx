@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface ICardProps {
   id: number;
-  subtitle: string;
+  subtitle?: string;
   name: string;
   imgLink: string;
   isCapsule: boolean;
