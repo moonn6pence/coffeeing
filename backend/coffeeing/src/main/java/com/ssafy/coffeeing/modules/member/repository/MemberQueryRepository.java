@@ -22,9 +22,9 @@ public class MemberQueryRepository {
 
         return jpaQueryFactory
                 .select(Projections.fields(PreferenceAverage.class,
-                        preference.coffeeCriteria.roast.sum(),
-                        preference.coffeeCriteria.acidity.sum(),
-                        preference.coffeeCriteria.body.sum()))
+                        preference.coffeeCriteria.roast.sum().as("roast"),
+                        preference.coffeeCriteria.acidity.sum().as("acidity"),
+                        preference.coffeeCriteria.body.sum().as("body")))
                 .from(member, preference)
                 .where(member.id.eq(preference.memberId))
                 .groupBy(member.age, member.gender)

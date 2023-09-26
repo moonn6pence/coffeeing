@@ -154,11 +154,19 @@ public class CurationService {
                         null));
 
         if (curation.getIsCapsule()) {
-            return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
+            return CurationMapper.supplyCapsuleCurationElementOf(true,
+                    new StringBuffer(String.valueOf(age.ordinal() + 1))
+                            .append("0대 ")
+                            .append(gender == Gender.MEN ? "남성" : "여성")
+                            .append(" 회원들의 취향").toString(),
                     capsuleRepository.findAllById(recommendResponse.results()));
         }
 
-        return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
+        return CurationMapper.supplyCoffeeCurationElementOf(false,
+                new StringBuffer(String.valueOf(age.ordinal() + 1))
+                        .append("0대 ")
+                        .append(gender == Gender.MEN ? "남성" : "여성")
+                        .append(" 회원들의 취향").toString(),
                 coffeeRepository.findAllById(recommendResponse.results()));
     }
 
@@ -170,12 +178,14 @@ public class CurationService {
 
         if (curation.getIsCapsule()) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
-                    curation.getTitle(),
+                    new StringBuffer().append(member.getNickname())
+                            .append(curation.getTitle()).toString(),
                     capsuleRepository.findAllById(recommendResponse.results()));
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false,
-                curation.getTitle(),
+                new StringBuffer().append(member.getNickname())
+                        .append(curation.getTitle()).toString(),
                 coffeeRepository.findAllById(recommendResponse.results()));
     }
 
@@ -194,7 +204,7 @@ public class CurationService {
 
         RecommendResponse recommendResponse = recommendService.pickBySimilarity(false, coffee.getId());
 
-        return CurationMapper.supplyCoffeeCurationElementOf(true,
+        return CurationMapper.supplyCoffeeCurationElementOf(false,
                 new StringBuffer().append(prefix)
                         .append(coffee.getCoffeeNameKr())
                         .append(curation.getTitle()).toString(),

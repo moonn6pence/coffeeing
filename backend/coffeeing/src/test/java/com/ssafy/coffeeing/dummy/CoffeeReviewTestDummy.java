@@ -16,19 +16,19 @@ public class CoffeeReviewTestDummy {
         List<CoffeeReview> reviews = new ArrayList<>();
 
         for (Member member : members) {
-            reviews.add(createMockCoffeeReview(coffee, member));
+            reviews.add(createMockCoffeeReview(coffee, member, 4.0));
         }
 
         return reviews;
     }
 
-    private static CoffeeReview createMockCoffeeReview(Coffee coffee, Member member) {
+    public static CoffeeReview createMockCoffeeReview(Coffee coffee, Member member, Double score) {
 
         return CoffeeReview.builder()
                 .coffee(coffee)
                 .member(member)
                 .content("content")
-                .score(4.0)
+                .score(score)
                 .build();
     }
 }
