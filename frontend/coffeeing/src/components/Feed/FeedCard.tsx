@@ -5,22 +5,19 @@ import DeleteIcon from 'assets/feed/delete-icon.svg';
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
-import { FeedEditModal } from "components/Modal/FeedEditModal"
-import { Tag } from "service/search/types";
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
-    suggestions: Tag[],
     deleteEventHandler: (feedId: number)=>void,
     likeToggleEventHandler: (feedId: number)=>Promise<boolean|null>,
-    debouncedSearch: (keyword: string) => void,
+    editHandler: (feedDetail: FeedDetail)=>void
 }
 
-function FeedCard ({ suggestions, feedDetail, deleteEventHandler, likeToggleEventHandler, debouncedSearch }: FeedCardProps) {
-  const [createFeedModalOpen, setCreateFeedModalOpen] = useState<boolean>(false);
+function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, editHandler }: FeedCardProps) {
   const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
+  
   const editEventHandler = () => {
-    setCreateFeedModalOpen(true);
+    editHandler(feedDetail);
   }
 
   const toggleLike = async () => {
@@ -85,10 +82,6 @@ function FeedCard ({ suggestions, feedDetail, deleteEventHandler, likeToggleEven
             </div>
         </div>
     </div>
-
-    {
-        feedDetail.isMine ? <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} feedDetail={feedDetail} /> : ""
-    }
     </>
   )
 }

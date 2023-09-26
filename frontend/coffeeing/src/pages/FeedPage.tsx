@@ -15,6 +15,8 @@ export const FeedPage = () => {
   const [feeds, setFeeds] = useState<Map<number, FeedDetail>>(new Map());
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [createFeedModalOpen, setCreateFeedModalOpen] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<Tag[]>([]);
+  const [editTarget, setEditTarget] = useState<FeedDetail|null>(null);
 
   const deleteEventHandler = async (feedId: number) => {
     const res = await deleteFeeds(feedId);
@@ -30,14 +32,17 @@ export const FeedPage = () => {
     return res ? res.result : null;
   }
 
+  const editHandler = (feedDetail: FeedDetail) => {
+    setEditTarget(feedDetail);
+  };
+
   const feedComponents = useCallback(()=>{
     return Array.from(feeds.values()).map((feedDetail)=>(
       <FeedCard feedDetail={ feedDetail } 
                 key={ feedDetail.feedId }
-                suggestions={ suggestions }
-                debouncedSearch={ debouncedSearch }
                 deleteEventHandler={deleteEventHandler}
                 likeToggleEventHandler={likeToggleEventHandler}
+                editHandler={editHandler}
                 />
     ))
   }, [feeds, setFeeds])
@@ -66,8 +71,6 @@ export const FeedPage = () => {
     }
   }
 
-  const [suggestions, setSuggestions] = useState<Tag[]>([]);
-  
   const changeSuggestions = async (keyword: string) => {
     const result = await getTagsByKeyword(keyword);
     if(result) {
@@ -82,6 +85,12 @@ export const FeedPage = () => {
   useEffect(()=>{
     loadFeeds();
   }, []);
+
+  useEffect(()=>{
+    if(editTarget) {
+      setCreateFeedModalOpen(true);
+    }
+  }, [editTarget])
 
   return(
     <>
@@ -115,7 +124,12 @@ export const FeedPage = () => {
             </div>
         </div>
 
-        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} feedDetail={null} />
+        <FeedEditModal isOpen={ createFeedModalOpen } 
+                      setIsOpen={setCreateFeedModalOpen} 
+                      suggestions = {suggestions} 
+                      debouncedSearch={debouncedSearch} 
+                      feedDetail={editTarget} 
+                      setEditTarget={setEditTarget}/>
     </>
   )
 }

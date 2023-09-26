@@ -14,12 +14,12 @@ interface FeedEditModalProps {
     suggestions: Tag[]
     debouncedSearch: (keyword: string) => void,
     feedDetail: FeedDetail | null
+    setEditTarget: (feedDetail: FeedDetail|null)=>void
 }
 
-export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch, feedDetail}:FeedEditModalProps) => {
-
+export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch, feedDetail, setEditTarget }:FeedEditModalProps) => {
+  console.log(feedDetail);
   const cancelButtonRef = useRef(null);
-  const [step, setStep] = useState<number>(feedDetail ? 3 : 1);
   const [uploadImage, setUploadImage] = useState<File>();
   const [preview, setPreview] = useState<string>();
 
@@ -35,18 +35,12 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch,
     }
   }, [uploadImage]);
 
-  useEffect(()=>{
-    if(preview) {
-      setStep(2);
-    }
-  }, [preview]);
-  
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={()=>{
         setIsOpen(false);
-        setStep(feedDetail === null ? 1:3);
         setPreview("");
+        setEditTarget(null);
       }}>
         <Transition.Child
           as={Fragment}
@@ -82,8 +76,8 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch,
                               </div>
                               <div className="flex-none cursor-pointer" onClick={() => {
                                     setIsOpen(false);
-                                    setStep(feedDetail === null ? 1:3);
                                     setPreview("");
+                                    setEditTarget(null);
                               }}>
                                 <img src={QuitModalIcon} />
                               </div>
@@ -92,12 +86,11 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch,
 
                       <div className="mt-2 border-b border-gray-200"></div>
                       { 
-                        (step === 1) ? 
-                          <DragDropUploader setImage={setUploadImage}/> :   
-                          (preview && step===2) ? 
-                          <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={null}/> : 
-                          (feedDetail && step == 3) ? 
-                          <FeedEditor fragment={Fragment} preview={undefined} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={feedDetail}/> : ""
+                          (feedDetail) ? 
+                          <FeedEditor fragment={Fragment} preview={undefined} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={feedDetail}/> :
+                          (preview) ? 
+                          <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={null}/> :
+                          <DragDropUploader setImage={setUploadImage}/> 
                       }
                       </div>
                   </div>
