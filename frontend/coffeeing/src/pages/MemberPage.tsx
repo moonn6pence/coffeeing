@@ -10,6 +10,10 @@ export type UserData = {
   profileImage: string;
 };
 
+export type MemberId = {
+  id: number;
+};
+
 export const MemberPage = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState<UserData>({
@@ -19,6 +23,7 @@ export const MemberPage = () => {
   const [userExists, setUserExists] = useState(false);
 
   useEffect(() => {
+    // get user data
     privateRequest
       .get(`${API_URL}/member/info/${id}`)
       .then(({ data }) => {
@@ -34,7 +39,7 @@ export const MemberPage = () => {
 
   if (userExists) {
     return (
-      <div className="wrapper w-full flex items-stretch flex-col w-96">
+      <div className="wrapper w-300 flex items-stretch flex-col m-auto">
         <div className="w-300 bg-light h-80 flex items-center">
           <MyProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
@@ -51,7 +56,7 @@ export const MemberPage = () => {
             <NavLinkWrapper to={`/member/${id}/bookmark`} text="북마크" />
             <NavLinkWrapper to={`/member/${id}/feed`} text="피드" />
           </nav>
-          <Outlet />
+          <Outlet context={{ id }} />
         </div>
       </div>
     );
