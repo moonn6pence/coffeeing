@@ -77,6 +77,7 @@ public class CoffeeTestDummy {
                     .productDescription("Generic Description")
                     .totalScore(81.2 + i)
                     .totalReviewer(20)
+                    .popularity(i * 10)
                     .build()
             );
         }

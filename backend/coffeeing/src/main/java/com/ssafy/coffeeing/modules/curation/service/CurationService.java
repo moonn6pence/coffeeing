@@ -101,7 +101,7 @@ public class CurationService {
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
-                coffeeRepository.findTop10CapsulesByOrderByPopularityDesc());
+                coffeeRepository.findTop10CoffeesByOrderByPopularityDesc());
     }
 
     private CurationElement findByCharacteristic(CurationType curation) {

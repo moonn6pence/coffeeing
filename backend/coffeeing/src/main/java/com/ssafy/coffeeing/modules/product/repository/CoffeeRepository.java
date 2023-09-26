@@ -12,7 +12,7 @@ public interface CoffeeRepository extends JpaRepository<Coffee, Long> {
 
     List<Coffee> findCoffeesByCoffeeNameKrContainingIgnoreCase(String keyword, Pageable pageable);
 
-    List<Coffee> findTop10CapsulesByOrderByPopularityDesc();
+    List<Coffee> findTop10CoffeesByOrderByPopularityDesc();
 
     List<Coffee> findTop10ByFlavorNoteContains(String flavorNote);
 }

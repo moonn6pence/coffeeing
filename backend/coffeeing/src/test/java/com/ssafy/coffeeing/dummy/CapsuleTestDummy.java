@@ -88,19 +88,21 @@ public class CapsuleTestDummy {
     public static List<Capsule> create10SpecifiedFlavorCapsules(String flavorNote) {
         List<Capsule> capsules = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            capsules.add(createMockCapsule(
-                    "Generic 한국 브랜드" + i,
-                    "Generic English brand " + i,
-                    "제네릭 캡슐명 " + i,
-                    "Generic Capsule Name " + i,
-                    new CoffeeCriteria(0.5, 0.5, 0.5),
-                    flavorNote,
-                    1,
-                    "Generic Url " + i,
-                    "generic description " + i,
-                    50.0,
-                    12
-            ));
+            capsules.add(Capsule.builder()
+                    .brandKr("Generic 한국 브랜드" + i)
+                    .brandEng("Generic English brand " + i)
+                    .capsuleNameKr("제네릭 캡슐명 " + i)
+                    .capsuleNameEng("Generic Capsule Name " + i)
+                    .coffeeCriteria(new CoffeeCriteria(0.5, 0.5, 0.5))
+                    .flavorNote(flavorNote)
+                    .machineType(1)
+                    .imageUrl("Generic Url " + i)
+                    .productDescription("generic description " + i)
+                    .totalScore(50.0)
+                    .totalReviewer(12)
+                    .popularity(i * 10)
+                    .build()
+            );
         }
         return capsules;
     }
