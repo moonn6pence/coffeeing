@@ -10,3 +10,14 @@ export type FilterProps = {
   page:number,
   size:number,
 }
+
+export type FilterSend = {
+  roast?: string,
+  acidity?:string,
+  body?:string,
+  flavorNote?:string,
+  keyword?:string,
+  productType:'BEAN'|'CAPSULE',
+  page:number,
+  size:number,
+}
