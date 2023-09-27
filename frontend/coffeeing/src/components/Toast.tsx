@@ -1,6 +1,5 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { async } from 'q';
 
 export const Toast = Swal.mixin({
   toast:true,

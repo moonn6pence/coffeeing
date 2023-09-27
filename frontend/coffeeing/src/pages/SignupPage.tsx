@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setMemberToken } from "store/memberSlice";
 import { MemberState } from "service/member/types";
+import { Toast } from 'components/Toast';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -62,6 +63,8 @@ function SignupPage() {
       if(myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
           window.location.replace("/recommend-main");
       }
+    } else {
+      Toast.fire('이미 존재하는 이메일입니다.','','error')
     }
   }
 
