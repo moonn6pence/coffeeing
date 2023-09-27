@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CurationType {
-    CAPSULE_POPULAR(true, "HOT 캡슐 Top 10", null, null),
-    COFFEE_POPULAR(false, "HOT 원두 Top 10", null, null),
+    CAPSULE_POPULAR(true, "HOT 캡슐 Top 10", "popularity", null),
+    COFFEE_POPULAR(false, "HOT 원두 Top 10", "popularity", null),
 
     CAPSULE_PREFERENCE(true, "님에게 알맞는 캡슐", "preference", null),
     COFFEE_PREFERENCE(false, "님에게 알맞는 원두들", "preference", null),
