@@ -5,6 +5,8 @@ import DeleteIcon from 'assets/feed/delete-icon.svg';
 import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
 import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
+import { NavLink } from 'react-router-dom';
+import { TagType } from "service/search/types";
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
@@ -35,16 +37,22 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                 <div className="feed-avater flex mr-10 justify-center items-center">
                     {
                         feedDetail.registerProfileImg ? 
-                        <img src={feedDetail.registerProfileImg} className="w-10 h-10 rounded-full border-2"/> : 
+                        <img src={feedDetail.registerProfileImg} className="w-12 h-12 rounded-full border-2"/> : 
                         <img src={DefaultProfile} />
                     }
                 </div>
                 <div className="feed-member-info flex flex-col">
-                    <div>
+                    <div className="font-bold text-base">
                         { feedDetail.registerName }
                     </div>
                     {
-                        feedDetail.tag ? <div> {feedDetail.tag.name} </div> : ""
+                        feedDetail.tag ? 
+                        <div className="text-sm font-semibold text-white bg-light-roasting rounded px-3 py-1 scale-50 -translate-x-1/4"> 
+                            <NavLink
+                                to={`/detail/${feedDetail.tag.category === TagType.CAPSULE ? "capsule" : "coffee"}/${feedDetail.tag.tagId}`}>
+                                {feedDetail.tag.name} 
+                            </NavLink>
+                        </div> : ""
                     }
                 </div>
             </div>
@@ -62,7 +70,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
             }
         </div>
 
-        <div className="feed-body flex flex-col w-full py-3">
+        <div className="feed-body flex flex-col w-full py-1">
             <div className="feed-image-wrapper flex w-full">
                 <img src = {feedDetail.images[0].imageUrl} className="w-full"/>
             </div>
