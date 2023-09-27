@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Slider from 'react-slick';
 import { BeanCard } from './BeanCard';
-import eximg from 'assets/google_logo.png';
 import Next from 'assets/nextarrow.png';
 import Prev from 'assets/prevarrow.png';
 import 'slick-carousel/slick/slick.css';
@@ -31,85 +30,72 @@ function PrevArrow(props: any) {
   );
 }
 
-export default class Carousel extends Component {
-  render() {
-    const settings = {
-      dots: false,
-      infinite: true,
-      speed: 500,
-      slidesToShow: 4,
-      slidesToScroll: 4,
-      initialSlide: 0,
-      nextArrow: <NextArrow />,
-      prevArrow: <PrevArrow />,
-      responsive: [
-        {
-          breakpoint: 1024,
-          settings: {
-            slidesToShow: 3,
-            slidesToScroll: 3,
-            infinite: true,
-            dots: false,
-          },
-        },
-        {
-          breakpoint: 600,
-          settings: {
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            initialSlide: 2,
-          },
-        },
-        {
-          breakpoint: 480,
-          settings: {
-            slidesToShow: 1,
-            slidesToScroll: 1,
-          },
-        },
-      ],
-    };
+export type curationListProps = {
+  id: number;
+  title: string;
+  subtitle: string;
+  imageUrl: string;
+};
 
-    // 더미데이터, 나중에 실제 데이터 받아와서 연결해줘야함
-    const capsuleList = [
-      {
-        name: '아르페지오',
-        subtitle: '네스프레소',
-        capsule_id: 1,
-        imgLink: '/',
-      },
-      { name: '니카라과', subtitle: '네스프레소', capsule_id: 2, imgLink: '/' },
-      { name: '코지', subtitle: '네스프레소', capsule_id: 3, imgLink: '/' },
-      {
-        name: '인도네시아',
-        subtitle: '네스프레소',
-        capsule_id: 4,
-        imgLink: '/',
-      },
-      { name: '볼루토', subtitle: '네스프레소', capsule_id: 5, imgLink: '/' },
-      { name: '베네치아', subtitle: '네스프레소', capsule_id: 6, imgLink: '/' },
-      { name: '리반토', subtitle: '네스프레소', capsule_id: 7, imgLink: '/' },
-      {
-        name: '리스트레토',
-        subtitle: '네스프레소',
-        capsule_id: 8,
-        imgLink: '/',
-      },
-    ];
+type CarouselProps = {
+  curationList: curationListProps[];
+  isCapsule: boolean;
+};
 
-    return (
-      <Slider {...settings} className="w-320 flex justify-center pl-10">
-        {capsuleList.map((capsule) => (
-          <BeanCard
-            subtitle={capsule.subtitle}
-            id={capsule.capsule_id}
-            name={capsule.name}
-            imgLink={eximg}
-            isCapsule={true}
-            key={capsule.name}
-          />
-        ))}
-      </Slider>
-    );
-  }
-}
+const Carousel = (props: CarouselProps) => {
+  const { curationList, isCapsule } = props;
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 4,
+    initialSlide: 0,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: false,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  return (
+    <Slider {...settings} className="w-320 flex justify-center pl-10">
+      {curationList.map((capsule) => (
+        <BeanCard
+          subtitle={capsule.subtitle}
+          id={capsule.id}
+          name={capsule.title}
+          imgLink={capsule.imageUrl}
+          isCapsule={isCapsule}
+          key={capsule.title}
+        />
+      ))}
+    </Slider>
+  );
+};
+
+export default Carousel;
