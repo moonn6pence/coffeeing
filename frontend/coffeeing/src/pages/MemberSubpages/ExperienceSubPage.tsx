@@ -41,11 +41,14 @@ export const ExperienceSubPage = () => {
           <div className="progress-wrapper">
             <div className="progress-white w-full bg-light h-10 rounded-xl">
               <div
-                className={`progress-inner w-[${
-                  (experienceInfo.experience /
-                    experienceInfo.experienceForLevelUp) *
-                  100
-                }%] bg-light-roasting h-10 rounded-xl`}
+                className={`progress-inner bg-light-roasting h-10 rounded-xl`}
+                style={{
+                  width:
+                    (experienceInfo.experience /
+                      experienceInfo.experienceForLevelUp) *
+                      100 +
+                    '%',
+                }}
               ></div>
             </div>
           </div>
