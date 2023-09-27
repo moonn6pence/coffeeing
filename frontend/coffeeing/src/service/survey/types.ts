@@ -23,5 +23,5 @@ export interface mySurvey {
   body:number,
   flavorNote:string,
   isCapsule:boolean,
-  machineType: number|null,
+  machineType: number,
 }
