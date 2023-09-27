@@ -62,7 +62,7 @@ export const SearchPage = () =>{
 
   return(
     <div >
-      <div className="mt-20 flex flex-col items-center">
+      <div className="mt-10 flex flex-col items-center">
         <div className="flex flex-col gap-2">
           {/* 검색바 */}
           <div className="flex flex-col justify-center">
@@ -124,14 +124,14 @@ export const SearchPage = () =>{
 
       {/* 검색 결과 페이지네이션 */}
       {/* 원두 | 캡슐 */}
-      <div className="text-3xl font-bold space-x-10 mt-5 ml-[10%]">
+      <div className="text-3xl font-bold space-x-10 mt-10 ml-[10%]">
         <span 
           className={productType==='BEAN'?`text-black`:`text-[#7A88A3]`}
-          onClick={()=>setProductType('BEAN')}
+          onClick={()=>{setProductType('BEAN'), setCurrentPage(0)}}
           >원두</span>
         <span 
           className={productType==='CAPSULE'?`text-black`:`text-[#7A88A3]`}
-          onClick={()=>setProductType('CAPSULE')}
+          onClick={()=>{setProductType('CAPSULE'), setCurrentPage(0)}}
           >캡슐</span>
       </div>
       {/* 검색 결고 없을 때 */}
