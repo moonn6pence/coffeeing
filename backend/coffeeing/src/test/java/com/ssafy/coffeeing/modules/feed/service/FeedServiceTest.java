@@ -92,7 +92,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
                 () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
                 () -> assertThat(response.getId()).isPositive(),
-                () -> assertThat(response.getLikeCount()).isEqualTo(0L),
+                () -> assertThat(response.getLikeCount()).isEqualTo(0),
                 () -> assertThat(response.getTagId()).isEqualTo(null),
                 () -> assertThat(response.getTagType()).isEqualTo(null),
                 () -> assertThat(response.getTagName()).isEqualTo(null)
