@@ -6,7 +6,7 @@ export type FilterProps = {
   selectedBody:FilterItem[],
   selectedFlavorNote:FilterItem[],
   keyword:string,
-  productType:'BEAN'|'CAPSULE',
+  productType:string,
   page:number,
   size:number,
 }
@@ -17,7 +17,6 @@ export type FilterSend = {
   body?:string,
   flavorNote?:string,
   keyword?:string,
-  productType:'BEAN'|'CAPSULE',
   page:number,
   size:number,
 }

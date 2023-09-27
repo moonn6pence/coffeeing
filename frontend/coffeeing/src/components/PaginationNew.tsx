@@ -9,22 +9,26 @@ type Product = {
   id:number,
   nameEng:string,
   nameKr:string,
-  brand?:string ,
-  origin?:string
-  imageUrl:string
+  regionEng?:string,
+  regionKr?:string,
+  brandEng?:string,
+  brandKr?:string,
+  imageUrl:string,
+  isCapsule:boolean,
 }
 
 export type PaginationProps = {
   currentPage:number,
   totalPage:number,
   products:Product[],
+  isCapsule:boolean,
   setCurrentPage:Dispatch<React.SetStateAction<number>>
 }
 
-export const PaginationNew = ({currentPage,totalPage,products,setCurrentPage}:PaginationProps)=>{
+export const PaginationNew = ({currentPage,totalPage,products,isCapsule,setCurrentPage}:PaginationProps)=>{
   const commonClass = 'w-10 h-10 font-semibold text-base';
   const maxButtons = 10
-  const startPage= Math.max(1, currentPage-Math.floor(maxButtons/2))
+  const startPage= Math.max(0, currentPage-Math.floor(maxButtons/2))
   const endPage = Math.min(totalPage, startPage+maxButtons-1)
   return(
     <div>
@@ -32,12 +36,12 @@ export const PaginationNew = ({currentPage,totalPage,products,setCurrentPage}:Pa
       <div className="flex flex-wrap w-300 justify-between">
         {products.map((item)=>{
           return(
-            <BeanCard 
+            <BeanCard
               id={item.id} 
-              subtitle="추후 받아와서 연결해줘야 함" 
-              name={item.nameKr}
-              isCapsule={true}
+              subtitle={isCapsule?item.brandKr:item.regionKr}
+              name={item.nameKr} 
               imgLink={item.imageUrl}
+              isCapsule={item.isCapsule}
               key={item.id} 
             />
           )
@@ -47,7 +51,7 @@ export const PaginationNew = ({currentPage,totalPage,products,setCurrentPage}:Pa
       <div className="flex justify-center">
         {/* 맨 처음 버튼 */}
         <button
-          onClick={()=>setCurrentPage(1)}
+          onClick={()=>setCurrentPage(0)}
           disabled={currentPage==1}
         >처음으로</button>
         {/* 이전 버튼 */}
@@ -59,13 +63,13 @@ export const PaginationNew = ({currentPage,totalPage,products,setCurrentPage}:Pa
           <img src={currentPage === 1 ? DisPrev : Prev} />
         </button>
         {/* 페이지 숫자들 */}
-        {Array.from({ length: endPage-startPage }, (_, index) => (
+        {Array.from({ length: endPage-startPage+1 }, (_, index) => (
           <button
             key={index + 1}
             onClick={() => setCurrentPage(startPage+index)}
             className={startPage+index=== currentPage ? `${commonClass} text-light-roasting` : `${commonClass}`}
           >
-            {startPage+index}
+            {startPage+index+1}
           </button>
         ))}
         {/* 다음 버튼 */}
