@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.global.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -44,12 +45,19 @@ public class ExecutionLogAspect {
         } catch (Exception e) {
             log.error("LoggerAspect - Controller error", e);
         }
-        log.info("\nControllerLogAspect" + " : {}\n", params);
+        log.info("""
+                ControllerLogAspect : {}
+                """, params);
         return result;
     }
 
     @Pointcut("execution(* com.ssafy.coffeeing.modules..*Service.*(..))")
     public void ServiceLog() {
+    }
+
+    @AfterThrowing(pointcut = "execution(* com.ssafy.coffeeing.*.*(..))", throwing = "ex")
+    public void logException(Exception ex) {
+        log.info("\n" + "예외 메시지:" + ex.getMessage() + "\n");
     }
 
     @Around("ServiceLog()")
@@ -70,7 +78,9 @@ public class ExecutionLogAspect {
         } catch (Exception e) {
             log.error("LoggingAspect - Service error", e);
         }
-        log.info("\nServiceLogAspect" + " : {}\n", params);
+        log.info("""
+                ServiceLogAspect : {}
+                """, params);
         return result;
     }
 
