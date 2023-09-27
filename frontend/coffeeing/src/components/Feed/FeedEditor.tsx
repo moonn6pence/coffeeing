@@ -9,6 +9,8 @@ import { getS3PreSignedURL } from "service/aws/awsUtil"
 import { uploadImage } from 'util/imageUtils';
 import { postFeed, updateFeeds } from "service/feed/feed";
 import { FeedDetail } from "service/feed/types";
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
 interface FeedEditorProps {
     fragment: ElementType<any>,
@@ -19,6 +21,7 @@ interface FeedEditorProps {
 }
 
 export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, feedDetail } : FeedEditorProps) => {
+  const { nickname, profileImage } = useSelector((state: RootState) => state.member);
   const [openAccordian, setOpenAccordian] = useState<boolean>(false);
   const [content, setContent] = useState<string>(feedDetail ? feedDetail.content : "");
   const [selcetedTag, setSelectedTag] = useState<Tag>((feedDetail && feedDetail.tag) ? feedDetail.tag : {
@@ -95,10 +98,13 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
                 <div className='w-1/3 flex flex-col'>
                 <div className='current-member-info flex-none flex flex-row w-full px-5 py-3'>
                     <div className='mr-4'>
-                    <img src={DefaultProfile} />
+                        {
+                            profileImage ? <img src={profileImage}  className="w-10 h-10 rounded-full border-2"/> :  <img src={DefaultProfile} />
+                        }
+                    
                     </div>
                     <div className='flex justify-center items-center font-semibold'>
-                        닉네임
+                        { nickname }
                     </div>
                 </div>
 
