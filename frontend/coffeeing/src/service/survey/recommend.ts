@@ -1,10 +1,10 @@
-import {  privateRequest } from "util/axios";
+import { publicRequest, privateRequest } from "util/axios";
 import { API_URL } from "util/constants";
 import { surveyResult, mySurvey } from "./types";
 
 export const getSurveyResult = async (survey:any)=>{
   try {
-    await privateRequest
+    await publicRequest
     .post(`${API_URL}/survey/recommend`,{},{
       params:{
         roast:survey.roasting,
