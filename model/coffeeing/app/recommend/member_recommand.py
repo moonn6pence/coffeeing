@@ -13,16 +13,23 @@ async def dbConnectionSample(db: Session):
 
     return loader.load_all_data(model["Member"])
 
-async def SurveyRecommendBeans(roasting, acidity, body, flavor):
-	# 일단 csv 로 data 받기
+async def SurveyRecommendBeans(roast, acidity, body, flavorNote, isCapsule, machineType):
+	# 일단 csv로 진행
 	data = pd.read_csv(currentPath+'\\app\\recommend\\beans_utf-8_230920.csv', encoding='utf-8')
-	# 필요한 열만 선택
+	
+	# 필요한 열만 선택 
 	selected_data = data[['name', 'roast', 'acid', 'body', 'new_keyword']]
-  # 사용자 입력 값
-	input_roast = roasting
+	# selected_data = data[['name', 'roast', 'acid', 'body', 'new_keyword', 'machine']]
+
+	# 캡슐 일 때
+	if isCapsule:
+		selected_data = selected_data[selected_data['machine']==machineType]
+  
+	# 사용자 입력 값
+	input_roast = roast
 	input_acid = acidity
 	input_body = body
-	input_keyword = flavor
+	input_flavorNote= flavorNote
 
   # 입력값을 데이터 프레임으로 변환
 	input_data = pd.DataFrame({'roast': [input_roast], 'acid': [input_acid], 'body': [input_body]})
@@ -33,16 +40,17 @@ async def SurveyRecommendBeans(roasting, acidity, body, flavor):
 
 	# 자카드 유사도 계산
 	jaccard_sim = []
-	input_set = set(input_keyword)
+	input_set = set(input_flavorNote.split(','))
 
 	for i in range(selected_data.shape[0]):
-			set1 = set(selected_data.iloc[i]['new_keyword'].split(', '))
-			jaccard_similarity = len(set1.intersection(input_set)) / len(set1.union(input_set))
-			jaccard_sim.append(jaccard_similarity)
-	selected_data.loc[:, 'jaccard_sim'] = jaccard_sim
+		# new_keyword 이름 추후 수정 필요
+		set1 = set(selected_data.iloc[i]['new_keyword'].split(', '))
+		jaccard_similarity = len(set1.intersection(input_set)) / len(set1.union(input_set))
+		jaccard_sim.append(jaccard_similarity)
+		selected_data.loc[:, 'jaccard_sim'] = jaccard_sim
 	# print(selected_data['jaccard_sim'], selected_data['cosine_sim'])
 
-	# 가중치 설정 
+	# 가중치 설정 (임의로 지정)
 	weight_cosine = 0.7  # 코사인 유사도의 가중치
 	weight_jaccard = 0.3  # 자카드 유사도의 가중치
 
@@ -54,7 +62,7 @@ async def SurveyRecommendBeans(roasting, acidity, body, flavor):
 	top_n = 4 
 	top_rows = selected_data.iloc[similar_indices[:top_n]]
 
-	# 추천 결과 출력 --> 추후에 보낼 내용 수정
+	# 추천 결과 출력 --> 추후에 보낼 내용 수정 -> product id?
 	recommended_indices = top_rows.index.tolist()  
 	recommended_beans = selected_data.iloc[recommended_indices][['name', 'roast', 'acid', 'body', 'new_keyword']].to_dict(orient='records')
 	
