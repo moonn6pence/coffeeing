@@ -18,7 +18,6 @@ interface FeedEditModalProps {
 }
 
 export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch, feedDetail, setEditTarget }:FeedEditModalProps) => {
-  console.log(feedDetail);
   const cancelButtonRef = useRef(null);
   const [uploadImage, setUploadImage] = useState<File>();
   const [preview, setPreview] = useState<string>();

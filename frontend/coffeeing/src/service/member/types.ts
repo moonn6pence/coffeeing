@@ -21,6 +21,7 @@ export interface OnboardResult{
 }
 
 export enum MemberState {
+    DEFAULT = "DEFAULT",
     BEFORE_ADDITIONAL_DATA = "BEFORE_ADDITIONAL_DATA",
     BEFORE_RESEARCH = "BEFORE_RESEARCH",
     NORMAL = "NORMAL"

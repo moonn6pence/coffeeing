@@ -1,4 +1,5 @@
 import React,{ useEffect, useState, useCallback } from "react";
+import { useNavigate } from 'react-router-dom';
 import FeedCard from "components/Feed/FeedCard";
 import { getFeeds } from "../service/feed/feed"
 import { FeedDetail } from "service/feed/types";
@@ -8,9 +9,14 @@ import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag } from 'service/search/types';
 import { getTagsByKeyword } from 'service/search/search';
 import { postFeedLike, deleteFeeds } from "service/feed/feed"
+import { Toast } from 'components/Toast';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { MemberState } from "service/member/types";
 
 export const FeedPage = () => {
-
+  const navigate = useNavigate();
+  const { state } = useSelector((state: RootState) => state.member);
   const [cursor, setCursor] = useState<number|undefined>();
   const [feeds, setFeeds] = useState<Map<number, FeedDetail>>(new Map());
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -48,7 +54,15 @@ export const FeedPage = () => {
   }, [feeds, setFeeds])
   
   const createFeeds = () => {
-      setCreateFeedModalOpen(true);
+      if(state === MemberState.DEFAULT) {
+        Toast.fire('로그인 후 이용해주세요.','','error');
+        navigate('/login')
+      } else if(state === MemberState.BEFORE_ADDITIONAL_DATA) {
+        Toast.fire('추가정보를 입력후 이용해주세요.','','error');
+         navigate('/signup/additonal-info')
+      } else {
+        setCreateFeedModalOpen(true);
+      }
   }
 
   const loadFeeds = async () => {
