@@ -4,9 +4,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 public record PageInfoRequest(
-        @Min(value = 0) int page
+        @NotNull @Min(value = 0) int page
 ) {
 
     public Pageable getPageableWithSize(int size){
