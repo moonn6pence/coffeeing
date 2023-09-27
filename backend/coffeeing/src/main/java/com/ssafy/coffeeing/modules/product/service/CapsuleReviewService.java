@@ -85,7 +85,7 @@ public class CapsuleReviewService {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
         }
 
-        review.getCapsule().editReview(reviewRequest.score() - review.getCapsule().getTotalScore());
+        review.getCapsule().updateReview(reviewRequest.score() - review.getCapsule().getTotalScore());
 
         review.update(reviewRequest.content(), reviewRequest.score());
     }

@@ -108,11 +108,11 @@ public class CapsuleService {
     }
 
     @Transactional
-    public void increasePopularity(Long id) {
+    public void addReview(Long id, Integer score) {
 
         Capsule capsule = capsuleRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
 
-//        capsule.
+        capsule.addReview(score);
     }
 }

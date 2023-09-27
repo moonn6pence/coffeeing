@@ -104,7 +104,27 @@ public class CoffeeService {
         return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
     }
 
-    public void increasePopularity(Long id) {
-        
+    public void addReview(Long id, Integer score) {
+
+        Coffee coffee = coffeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        coffee.addReview(score);
+    }
+
+    public void updateReview(Long id, Integer diff) {
+
+        Coffee coffee = coffeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        coffee.updateReview(diff);
+    }
+
+    public void deleteReview(Long id, Integer score) {
+
+        Coffee coffee = coffeeRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        coffee.deleteReview(score);
     }
 }

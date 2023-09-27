@@ -61,14 +61,28 @@ public class Coffee extends BaseEntity {
     public void addReview(Integer score) {
         this.totalScore += score;
         this.totalReviewer++;
+
+        this.popularity += score;
     }
 
     public void deleteReview(Integer score) {
         this.totalScore -= score;
         this.totalReviewer--;
+
+        this.popularity -= score;
     }
 
-    public void editReview(Integer diff) {
+    public void updateReview(Integer diff) {
         this.totalScore += diff;
+
+        this.popularity += diff;
+    }
+
+    public void attachFeed() {
+        this.popularity += 10;
+    }
+
+    public void detachFeed() {
+        this.popularity -= 10;
     }
 }
