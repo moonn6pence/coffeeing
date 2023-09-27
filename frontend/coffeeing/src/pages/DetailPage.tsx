@@ -11,6 +11,7 @@ import { ReviewEditModal } from 'components/Detail/ReviewEditModal';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import IonIcon from '@reacticons/ionicons';
+import { DeleteAlert } from 'components/DeleteAlert';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
@@ -23,26 +24,21 @@ export const DetailPage = () => {
   };
 
   // 상품 정보 불러오기
+  const fetchData = async () => {
+    try {
+      const response = await (isLogin
+        ? privateRequest.get(`${API_URL}/product/${beans}/${id}`)
+        : publicRequest.get(`${API_URL}/product/${beans}/${id}`));
+
+      const data = response.data.data;
+      setCapsule(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    isLogin
-      ? privateRequest
-          .get(`${API_URL}/product/${beans}/${id}`)
-          .then((res) => {
-            console.log(res.data.data);
-            setCapsule(res.data.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      : publicRequest
-          .get(`${API_URL}/product/${beans}/${id}`)
-          .then((res) => {
-            console.log(res.data.data);
-            setCapsule(res.data.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+    fetchData();
   }, []);
 
   const [capsule, setCapsule] = useState({
@@ -67,6 +63,24 @@ export const DetailPage = () => {
     nameKr: 'string',
     roast: 0,
   });
+
+  const handleDelete = async () => {
+    const goDelete = await DeleteAlert();
+
+    if (goDelete) {
+      // console.log('진짜 지움');
+      const review_id = capsule.memberReview.reviewId;
+
+      privateRequest
+        .delete(`${API_URL}/product/${beans}/review/${review_id}`)
+        .then(() => {
+          fetchData();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   useEffect(() => {
     // 리뷰들 불러오기
@@ -130,7 +144,9 @@ export const DetailPage = () => {
           {capsule.isReviewed ? (
             <MyReview
               memberReview={capsule.memberReview}
+              beans={beans}
               handleModal={handleModal}
+              handleDelete={handleDelete}
             />
           ) : (
             <ReviewForm product_id={id} beans={beans} />

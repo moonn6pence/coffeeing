@@ -1,34 +1,76 @@
-import React,{ useEffect, useState } from "react";
+import React,{ useEffect, useState, useCallback } from "react";
 import FeedCard from "components/Feed/FeedCard";
-import { getFeedDetailMock } from "../service/feed/mock"
+import { getFeeds } from "../service/feed/feed"
 import { FeedDetail } from "service/feed/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FeedEditModal } from "../components/Modal/FeedEditModal"
+import { FeedEditModal } from "components/Modal/FeedEditModal"
 import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { Tag } from 'service/search/types';
 import { getTagsByKeyword } from 'service/search/search';
+import { postFeedLike, deleteFeeds } from "service/feed/feed"
 
 export const FeedPage = () => {
-  const [feeds, setFeeds] = useState<FeedDetail[]>([]);
+
+  const [cursor, setCursor] = useState<number|undefined>();
+  const [feeds, setFeeds] = useState<Map<number, FeedDetail>>(new Map());
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [createFeedModalOpen, setCreateFeedModalOpen] = useState<boolean>(false);
+  const [suggestions, setSuggestions] = useState<Tag[]>([]);
+  const [editTarget, setEditTarget] = useState<FeedDetail|null>(null);
 
+  const deleteEventHandler = async (feedId: number) => {
+    const res = await deleteFeeds(feedId);
+    if(res) {
+      const newMap = new Map<number, FeedDetail>(feeds);
+      newMap.delete(feedId);
+      setFeeds(newMap);
+    }
+  }
+
+  const likeToggleEventHandler = async (feedId: number) => {
+    const res = await postFeedLike(feedId);
+    return res ? res.result : null;
+  }
+
+  const editHandler = (feedDetail: FeedDetail) => {
+    setEditTarget(feedDetail);
+  };
+
+  const feedComponents = useCallback(()=>{
+    return Array.from(feeds.values()).map((feedDetail)=>(
+      <FeedCard feedDetail={ feedDetail } 
+                key={ feedDetail.feedId }
+                deleteEventHandler={deleteEventHandler}
+                likeToggleEventHandler={likeToggleEventHandler}
+                editHandler={editHandler}
+                />
+    ))
+  }, [feeds, setFeeds])
+  
   const createFeeds = () => {
       setCreateFeedModalOpen(true);
   }
 
-  const loadFeeds = () => {
-    const mockData = [];
-    for(let i=0; i<5; ++i) {
-        mockData.push(getFeedDetailMock());
-    }
+  const loadFeeds = async () => {
+    const result = await getFeeds(cursor, 5);
 
-    const newList = [...feeds, ...mockData];
-    setFeeds(newList);
-    setHasMore(false);
+    if(result) {
+      setFeeds((prev)=>{
+        const newMap = new Map<number, FeedDetail>(prev);
+        prev.forEach(feedDetail=>{
+          newMap.set(feedDetail.feedId, feedDetail);
+        });
+        result.feeds.forEach(feedDetail=>{
+          newMap.set(feedDetail.feedId, feedDetail);
+        })
+
+        return newMap;
+      });
+      setHasMore(result.hasNext);
+      setCursor(result.nextCursor);
+    }
   }
 
-  const [suggestions, setSuggestions] = useState<Tag[]>([]);
   const changeSuggestions = async (keyword: string) => {
     const result = await getTagsByKeyword(keyword);
     if(result) {
@@ -41,12 +83,14 @@ export const FeedPage = () => {
   }, 300);
 
   useEffect(()=>{
-    const mockData = [];
-    for(let i=0; i<1; ++i) {
-        mockData.push(getFeedDetailMock());
-    }
-    setFeeds(mockData);
+    loadFeeds();
   }, []);
+
+  useEffect(()=>{
+    if(editTarget) {
+      setCreateFeedModalOpen(true);
+    }
+  }, [editTarget])
 
   return(
     <>
@@ -65,22 +109,27 @@ export const FeedPage = () => {
                 {/** Feed Card Component (Infinite Scroll)*/}
                 <div className="feeds-scroll-container flex flex-col w-full min-h-fit gap-1 pb-5">
                     <InfiniteScroll
-                        dataLength={feeds.length}
+                        dataLength={feeds.size}
                         next={loadFeeds}
                         hasMore={hasMore}
                         loader={
                             <h4>Loading...</h4>
-                        }
-                    >
-                        {
-                            feeds.map((feedDetail)=>(<FeedCard feedDetail={ feedDetail } key={feedDetail.feedId}/>))
+                        }>
+      
+                        {  
+                          feedComponents()
                         }
                     </InfiniteScroll>
                 </div>
             </div>
         </div>
 
-        <FeedEditModal isOpen={ createFeedModalOpen } setIsOpen={ setCreateFeedModalOpen } suggestions = {suggestions} debouncedSearch={debouncedSearch} />
+        <FeedEditModal isOpen={ createFeedModalOpen } 
+                      setIsOpen={setCreateFeedModalOpen} 
+                      suggestions = {suggestions} 
+                      debouncedSearch={debouncedSearch} 
+                      feedDetail={editTarget} 
+                      setEditTarget={setEditTarget}/>
     </>
   )
 }

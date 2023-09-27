@@ -6,18 +6,20 @@ import QuitModalIcon from "assets/quit-modal-icon.svg"
 import { DragDropUploader } from 'components/Feed/DragDropUploader';
 import { FeedEditor } from 'components/Feed/FeedEditor';
 import { Tag } from 'service/search/types';
+import { FeedDetail } from 'service/feed/types';
 
 interface FeedEditModalProps {
     isOpen: boolean,
-    setIsOpen: any,
+    setIsOpen: (open: boolean)=>void,
     suggestions: Tag[]
     debouncedSearch: (keyword: string) => void,
+    feedDetail: FeedDetail | null
+    setEditTarget: (feedDetail: FeedDetail|null)=>void
 }
 
-export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch }:FeedEditModalProps) => {
-
+export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch, feedDetail, setEditTarget }:FeedEditModalProps) => {
+  console.log(feedDetail);
   const cancelButtonRef = useRef(null);
-  const [step, setStep] = useState<number>(1);
   const [uploadImage, setUploadImage] = useState<File>();
   const [preview, setPreview] = useState<string>();
 
@@ -33,18 +35,12 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch 
     }
   }, [uploadImage]);
 
-  useEffect(()=>{
-    if(preview) {
-      setStep(2);
-    }
-  }, [preview]);
-  
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" initialFocus={cancelButtonRef} onClose={()=>{
         setIsOpen(false);
-        setStep(1);
         setPreview("");
+        setEditTarget(null);
       }}>
         <Transition.Child
           as={Fragment}
@@ -76,12 +72,12 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch 
                       <Dialog.Title as="h3" className="text-base text-center font-semibold leading-6 text-gray-900">
                             <div className="flex flex-row items-center mx-4">
                               <div className="grow">
-                                새 피드 만들기
+                                { feedDetail ? "내 피드 수정" : "새 피드 만들기"}
                               </div>
                               <div className="flex-none cursor-pointer" onClick={() => {
                                     setIsOpen(false);
-                                    setStep(1);
                                     setPreview("");
+                                    setEditTarget(null);
                               }}>
                                 <img src={QuitModalIcon} />
                               </div>
@@ -89,9 +85,12 @@ export const FeedEditModal = ({ isOpen, setIsOpen, suggestions, debouncedSearch 
                       </Dialog.Title>
 
                       <div className="mt-2 border-b border-gray-200"></div>
-                      { (step === 1) ? 
-                        <DragDropUploader setImage={setUploadImage}/> :   
-                        preview ? <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch}/> : ""
+                      { 
+                          (feedDetail) ? 
+                          <FeedEditor fragment={Fragment} preview={undefined} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={feedDetail}/> :
+                          (preview) ? 
+                          <FeedEditor fragment={Fragment} preview={preview} suggestions={suggestions} debouncedSearch={debouncedSearch} feedDetail={null}/> :
+                          <DragDropUploader setImage={setUploadImage}/> 
                       }
                       </div>
                   </div>

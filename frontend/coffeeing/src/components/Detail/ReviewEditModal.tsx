@@ -30,7 +30,6 @@ export const ReviewEditModal = (props: ReviewEditProps) => {
 
   const submitReview = (event: FormEvent) => {
     event.preventDefault();
-    // 별점, 내용 담아서 보내는 거 연결할 예정
     if (!rating) {
       alert('별점을 입력해주세요');
     } else if (!description) {
@@ -41,8 +40,9 @@ export const ReviewEditModal = (props: ReviewEditProps) => {
           content: description,
           score: rating,
         })
-        .then((res) => {
-          console.log(res.data.data);
+        .then(() => {
+          handleModal();
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);

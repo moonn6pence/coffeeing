@@ -3,7 +3,7 @@ import Next from 'assets/nextarrow.png'
 import Prev from 'assets/prevarrow.png'
 import DisNext from 'assets/disnextarrow.svg';
 import DisPrev from 'assets/disprevarrow.svg'
-import { CapsuleCard } from "./CapsuleCard";
+import { BeanCard } from "./BeanCard";
 
 type Product = {
   id:number,
@@ -32,10 +32,11 @@ export const PaginationNew = ({currentPage,totalPage,products,setCurrentPage}:Pa
       <div className="flex flex-wrap w-300 justify-between">
         {products.map((item)=>{
           return(
-            <CapsuleCard 
-              capsule_id={item.id} 
-              brand="추후 받아와서 연결해줘야 함" 
-              name={item.nameKr} 
+            <BeanCard 
+              id={item.id} 
+              subtitle="추후 받아와서 연결해줘야 함" 
+              name={item.nameKr}
+              isCapsule={true}
               imgLink={item.imageUrl}
               key={item.id} 
             />
