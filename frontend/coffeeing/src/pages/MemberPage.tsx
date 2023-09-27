@@ -58,6 +58,7 @@ export const MemberPage = () => {
           </nav>
           <Outlet context={{ id }} />
         </div>
+        <div className="spacer mb-40"></div>
       </div>
     );
   } else {
