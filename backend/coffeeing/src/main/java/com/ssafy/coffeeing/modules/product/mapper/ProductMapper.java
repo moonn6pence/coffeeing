@@ -1,8 +1,8 @@
 package com.ssafy.coffeeing.modules.product.mapper;
 
-import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -13,10 +13,11 @@ import com.ssafy.coffeeing.modules.product.dto.ProductReviewElement;
 import com.ssafy.coffeeing.modules.product.dto.ProductReviewResponse;
 import com.ssafy.coffeeing.modules.product.dto.ReviewRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Component;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductMapper {
 
     public static CapsuleResponse supplyCapsuleResponseOf(Capsule capsule,
@@ -27,7 +28,7 @@ public class ProductMapper {
                 capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleNameKr(), capsule.getImageUrl(),
                 capsule.getFlavorNote(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getBody(), capsule.getProductDescription(),
-                capsule.getTotalReviewer() == 0 ? 0.0 : (double) capsule.getTotalScore() / capsule.getTotalReviewer(),
+                capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / (double) capsule.getTotalReviewer(),
                 isBookmarked,
                 memberReview != null,
                 memberReview != null ? supplyProductReviewElementFrom(memberReview) : null);
@@ -40,7 +41,7 @@ public class ProductMapper {
                 coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl(),
                 coffee.getFlavorNote(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
                 coffee.getCoffeeCriteria().getBody(), coffee.getProductDescription(),
-                coffee.getTotalReviewer() == 0 ? 0.0 : (double) coffee.getTotalScore() / coffee.getTotalReviewer(),
+                coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / (double) coffee.getTotalReviewer(),
                 isBookmarked,
                 memberReview != null,
                 memberReview != null ? supplyProductReviewElementFrom(memberReview) : null);

@@ -1,14 +1,21 @@
 package com.ssafy.coffeeing.modules.feed.mapper;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
-import com.ssafy.coffeeing.modules.feed.dto.*;
+import com.ssafy.coffeeing.modules.feed.dto.FeedDetailResponse;
+import com.ssafy.coffeeing.modules.feed.dto.FeedElement;
+import com.ssafy.coffeeing.modules.feed.dto.FeedPageElement;
+import com.ssafy.coffeeing.modules.feed.dto.FeedPageResponse;
+import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
+import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.search.domain.Tag;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeedMapper {
 
     public static UploadFeedResponse supplyFeedResponseBy(Feed feed) {
