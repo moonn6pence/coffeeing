@@ -52,7 +52,9 @@ public class CurationService {
         List<CurationElement> curations = new ArrayList<>();
 
         // 인기도 큐레이션
-        curations.add(findByPopularity(isCapsule ? CurationType.CAPSULE_POPULAR : CurationType.COFFEE_POPULAR));
+        curations.add(findByPopularity(isCapsule.equals(Boolean.TRUE)
+                ? CurationType.CAPSULE_POPULAR
+                : CurationType.COFFEE_POPULAR));
 
         // 지표별 유사제품군 큐레이션
         CurationType randomCuration = randomUtil.getRandomCharacteristicCuration(isCapsule);
@@ -75,11 +77,11 @@ public class CurationService {
 
         CurationType randomCuration = randomUtil.getRandomKeywordCuration(isCapsule);
 
-        curations.add(findByMemberPreference(isCapsule
+        curations.add(findByMemberPreference(isCapsule.equals(Boolean.TRUE)
                 ? CurationType.CAPSULE_PREFERENCE
                 : CurationType.COFFEE_PREFERENCE, member));
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             Capsule capsule = capsuleReviewQueryRepository.findRandomHighScoredCapsule(member);
 
             if (capsule != null && randomCuration.equals(CurationType.CAPSULE_LIKED_PRODUCT)) {
@@ -104,7 +106,7 @@ public class CurationService {
 
     private CurationElement findByPopularity(CurationType curation) {
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
                     capsuleRepository.findTop10CapsulesByOrderByPopularityDesc());
         }
@@ -121,7 +123,7 @@ public class CurationService {
                 curation.getAttribute()
         );
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
                     capsuleRepository.findAllById(recommendResponse.results()));
         }
@@ -132,7 +134,7 @@ public class CurationService {
 
     private CurationElement findByFlavorNote(CurationType curation, String flavor) {
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
                     capsuleRepository.findTop10ByFlavorNoteContains(flavor));
         }
@@ -153,7 +155,7 @@ public class CurationService {
                         average.getBody(),
                         null));
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
                     new StringBuffer(String.valueOf(age.ordinal() + 1))
                             .append("0대 ")
@@ -176,7 +178,7 @@ public class CurationService {
         RecommendResponse recommendResponse =
                 recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference));
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
                     new StringBuffer().append(member.getNickname())
                             .append(curation.getTitle()).toString(),

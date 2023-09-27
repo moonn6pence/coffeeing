@@ -276,7 +276,7 @@ class CurationServiceTest extends ServiceTest {
                 .memberId(generalMember.getId())
                 .build());
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(0), generalMember, 4));
             capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(1), generalMember, 2));
         } else {
