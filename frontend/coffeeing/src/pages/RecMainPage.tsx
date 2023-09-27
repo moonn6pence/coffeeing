@@ -4,6 +4,7 @@ import recBgImg from '../assets/surveyMainImg.png'
 import {AppDispatch} from 'store/store'
 import { useDispatch } from 'react-redux';
 import { resetSurvey } from 'store/surveySlice';
+import { Toast } from 'components/Toast';
 
 export const RecMainPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -14,6 +15,11 @@ export const RecMainPage = () => {
     console.log('reset하기')
 
   },[])
+
+  const handleStartSurvey = ()=>{
+    Toast.fire('로그인 후 이용해주세요.','','info')
+    navigate('/recommend-survey')
+  }
 
 
   return (
@@ -26,7 +32,7 @@ export const RecMainPage = () => {
         </div>
         <button 
           className='bg-white text-black w-60 h-12 '
-          onClick={()=>navigate('/recommend-survey')}
+          onClick={handleStartSurvey}
           >시작하기</button>
       </div>
     </div>
