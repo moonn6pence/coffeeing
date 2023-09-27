@@ -4,6 +4,10 @@ import { useOutletContext } from 'react-router-dom';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import IonIcon from '@reacticons/ionicons';
+import coffee0 from '../../assets/experience/coffee0.png';
+import coffee1 from '../../assets/experience/coffee1.png';
+import coffee2 from '../../assets/experience/coffee2.png';
+import coffee3 from '../../assets/experience/coffee3.png';
 
 type ExperienceInfo = {
   experience: number;
@@ -32,6 +36,19 @@ export const ExperienceSubPage = () => {
     setInfoTabOpen(toggle);
   };
 
+  const setCoffeeImage = (memberLevel: number) => {
+    switch (memberLevel) {
+      case 0:
+        return <img src={coffee0} />;
+      case 1:
+        return <img src={coffee1} />;
+      case 2:
+        return <img src={coffee2} />;
+      case 3:
+        return <img src={coffee3} />;
+    }
+  };
+
   return (
     <div className="sub-wrapper">
       {experienceInfo ? (
@@ -46,15 +63,21 @@ export const ExperienceSubPage = () => {
               onMouseEnter={() => handleInfoToggle(true)}
               onMouseLeave={() => handleInfoToggle(false)}
             />
-            {infoTabOpen ? <div className='absolute right-0 top-10 z-20 border-2 p-5 bg-light rounded'>
-              <ul>
-                <li>피드 글 작성 + 75</li>
-                <li>리뷰 작성 + 50</li>
-                <li>추천 받기 + 15</li>
-              </ul>
-            </div> : ''}
+            {infoTabOpen ? (
+              <div className="absolute right-0 top-10 z-20 border-2 p-5 bg-light rounded">
+                <ul>
+                  <li>피드 글 작성 + 75</li>
+                  <li>리뷰 작성 + 50</li>
+                  <li>추천 받기 + 15</li>
+                </ul>
+              </div>
+            ) : (
+              ''
+            )}
           </div>
-          <div className="image-wrapper">PLACEHOLDER FOR image</div>
+          <div className="image-wrapper flex items-center justify-center">
+            {setCoffeeImage(experienceInfo.memberLevel)}
+          </div>
           <div className="progress-wrapper">
             <div className="progress-white w-full bg-light h-10 rounded-xl relative flex items-center justify-end">
               <div
