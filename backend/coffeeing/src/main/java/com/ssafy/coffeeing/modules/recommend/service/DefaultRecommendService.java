@@ -18,7 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
 
-@Profile({"prod", "dev"})
+@Profile({"prod"})
 @RequiredArgsConstructor
 @Service
 public class DefaultRecommendService implements RecommendService {

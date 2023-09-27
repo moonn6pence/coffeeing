@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Profile("test")
+@Profile("dev")
 @Service
 public class MockRecommendService implements RecommendService{
 
