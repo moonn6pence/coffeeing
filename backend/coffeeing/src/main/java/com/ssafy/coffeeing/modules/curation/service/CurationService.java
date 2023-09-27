@@ -44,7 +44,7 @@ public class CurationService {
     private final MemberQueryRepository memberQueryRepository;
     private final PreferenceRepository preferenceRepository;
 
-    private static final String prefix = "당신이 좋아하는 ";
+    private static final String PREFIX = "당신이 좋아하는 ";
 
     @Transactional(readOnly = true)
     public CurationResponse getOpenCuration(Boolean isCapsule) {
@@ -196,7 +196,7 @@ public class CurationService {
         RecommendResponse recommendResponse = recommendService.pickBySimilarity(true, capsule.getId());
 
         return CurationMapper.supplyCapsuleCurationElementOf(true,
-                new StringBuffer().append(prefix)
+                new StringBuffer().append(PREFIX)
                         .append(capsule.getCapsuleNameKr())
                         .append(curation.getTitle()).toString(),
                 capsuleRepository.findAllById(recommendResponse.results()));
@@ -207,7 +207,7 @@ public class CurationService {
         RecommendResponse recommendResponse = recommendService.pickBySimilarity(false, coffee.getId());
 
         return CurationMapper.supplyCoffeeCurationElementOf(false,
-                new StringBuffer().append(prefix)
+                new StringBuffer().append(PREFIX)
                         .append(coffee.getCoffeeNameKr())
                         .append(curation.getTitle()).toString(),
                 coffeeRepository.findAllById(recommendResponse.results()));

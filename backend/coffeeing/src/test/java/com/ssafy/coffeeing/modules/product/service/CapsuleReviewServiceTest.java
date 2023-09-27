@@ -76,29 +76,16 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
 
         // then
-        CapsuleReview actualReview = capsuleReviewRepository.findById(actual.id()).get();
+        CapsuleReview actualReview = capsuleReviewRepository.findById(actual.id())
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
 
         assertAll(
                 () -> assertEquals(capsule, actualReview.getCapsule()),
                 () -> assertEquals(generalMember, actualReview.getMember()),
                 () -> assertEquals(expectedTotalScore, capsule.getTotalScore()),
-                () -> assertEquals(expectedTotalReviewer, capsule.getTotalReviewer())
+                () -> assertEquals(expectedTotalReviewer, capsule.getTotalReviewer()),
+                () -> assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count())
         );
-    }
-
-    @Test
-    @DisplayName("리뷰 작성시 점수 증가 이벤트가 실행됨을 확인한다.")
-    void Given_CapsuleIdAndReviewRequest_When_CreateReview_Then_ExperienceEventSuccess() {
-
-        // given
-        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-
-        // when
-        CreationResponse actual = capsuleReviewService.createReview(capsule.getId(), reviewRequest);
-
-        // then
-        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
     }
 
     @Test
@@ -129,7 +116,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         List<CapsuleReview> capsuleReviews =
                 capsuleReviewRepository.saveAll(CapsuleReviewTestDummy.createMockCapsuleReviews(capsule, members));
 
-        Integer page = 0;
+        int page = 0;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(page);
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(null);
 
@@ -157,7 +144,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         Long invalidId = capsule.getId();
         capsuleRepository.delete(capsule);
 
-        Integer page = 0;
+        int page = 0;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(page);
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(null);
 
@@ -189,7 +176,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), reviewRequest.score()),
+                () -> assertEquals(review.getScore(), (int) reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -235,13 +222,14 @@ class CapsuleReviewServiceTest extends ServiceTest {
                 .build();
         capsuleReviewRepository.save(review);
 
+        long reviewId = review.getId();
+
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
 
         // when, then
-        assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class,
-                        () -> capsuleReviewService.updateReview(review.getId(), reviewRequest)).getInfo()
-        );
+        BusinessException e = assertThrows(BusinessException.class,
+                () -> capsuleReviewService.updateReview(reviewId, reviewRequest));
+        assertEquals(AuthErrorInfo.UNAUTHORIZED, e.getInfo());
     }
 
     @Test
@@ -311,11 +299,11 @@ class CapsuleReviewServiceTest extends ServiceTest {
                 .build();
         capsuleReviewRepository.save(review);
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        long reviewId = review.getId();
 
         // when, then
-        assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class, () -> capsuleReviewService.deleteReview(review.getId())).getInfo()
-        );
-
+        BusinessException e = assertThrows(BusinessException.class,
+                () -> capsuleReviewService.deleteReview(reviewId));
+        assertEquals(AuthErrorInfo.UNAUTHORIZED, e.getInfo());
     }
 }

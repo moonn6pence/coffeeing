@@ -75,7 +75,8 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
 
         // then
-        CoffeeReview actualReview = coffeeReviewRepository.findById(actual.id()).get();
+        CoffeeReview actualReview = coffeeReviewRepository.findById(actual.id())
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_REVIEW));
 
         assertAll(
                 () -> assertEquals(actualReview.getCoffee(), coffee),
@@ -85,21 +86,6 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 () -> assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count())
         );
     }
-
-//    @Test
-//    @DisplayName("리뷰 작성시 경험치 이벤트가 발생한다.")
-//    void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_ExperienceEventSuccess() {
-//
-//        // given
-//        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
-//        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-//
-//        // when
-//        CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
-//
-//        // then
-//        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
-//    }
 
     @Test
     @DisplayName("존재하지 않는 캡슐 아이디를 통해 리뷰를 생성할 시 예외를 던진다.")
@@ -189,7 +175,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), reviewRequest.score()),
+                () -> assertEquals(review.getScore(), (int) reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -236,12 +222,12 @@ class CoffeeReviewServiceTest extends ServiceTest {
         coffeeReviewRepository.save(review);
 
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        long reviewId = review.getId();
 
         // when, then
-        assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class,
-                        () -> coffeeReviewService.updateReview(review.getId(), reviewRequest)).getInfo()
-        );
+        BusinessException e = assertThrows(BusinessException.class,
+                () -> coffeeReviewService.updateReview(reviewId, reviewRequest));
+        assertEquals(AuthErrorInfo.UNAUTHORIZED, e.getInfo());
     }
 
     @Test
@@ -311,10 +297,10 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 .build();
         coffeeReviewRepository.save(review);
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        long reviewId = review.getId();
 
         // when, then
-        assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class, () -> coffeeReviewService.deleteReview(review.getId())).getInfo()
-        );
+        BusinessException e = assertThrows(BusinessException.class, () -> coffeeReviewService.deleteReview(reviewId));
+        assertEquals(AuthErrorInfo.UNAUTHORIZED, e.getInfo());
     }
 }
