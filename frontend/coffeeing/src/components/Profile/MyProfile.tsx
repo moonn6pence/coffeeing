@@ -92,6 +92,7 @@ export const MyProfile = (props: ProfileProps) => {
     const result = await privateRequest.put(`${API_URL}/member/nickname`, data);
     if (result.data.code === '200') {
       setEdit(false);
+      
       setters.setUserData({
         profileImage:profileImage,
         nickname:nicknameInput
