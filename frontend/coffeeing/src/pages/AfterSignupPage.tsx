@@ -1,12 +1,18 @@
 import React,{useState, useEffect} from "react";
 
+import { useDispatch } from "react-redux";
+import { AppDispatch  } from 'store/store';
+
 import Button from "components/Button";
 import { TextGridSelector } from "components/Form/TextGridSelectForm"
 import { AGE_ITEMS, GENDER_ITEMS } from "util/constants";
-import { getMyInfo, checkUniqueNickname, postOnboard } from "../service/member/member"
+import { getMyInfo, checkUniqueNickname, postOnboard } from "service/member/member"
 import { MemberState } from "service/member/types";
+import { setMyInfo } from "store/memberSlice";
 
 export const AfterSignupPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [nickname, setNickname] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState({
     value: -1,
@@ -56,6 +62,10 @@ export const AfterSignupPage = () => {
     });
 
     if(result) {
+        const myInfo = await getMyInfo();
+        if(myInfo) {
+            dispatch(setMyInfo(myInfo));
+        }
         window.location.replace("/");
     }
   }
