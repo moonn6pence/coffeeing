@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState, KeyboardEvent } from "react";
 import { ListBox } from "components/Form/ListBoxForm";
 import roast from '../assets/search/free-icon-coffee-beans-3219300.png'
 import acidity from '../assets/search/free-icon-lemon-7761399.png'
@@ -10,9 +10,11 @@ import searchIcon from '../assets/search/search.png'
 import { requestFilterResult } from "service/filter/request";
 import { FilterProps } from "service/filter/types";
 import { PaginationNew } from "components/PaginationNew";
-import noResult from '../assets/search/NoFilterResult.svg'
 import { NoResult } from "components/NoResult";
+import { useDispatch } from "react-redux";
+
 export const SearchPage = () =>{
+  const dispatch = useDispatch();
   const [selectedRoast, setSelectedRoast] = useState([{label:'미선택', name:'미선택'}])
   const [selectedAcid, setSelectedAcid] = useState([{label:'미선택', name:'미선택'}])
   const [selectedBody, setSelectedBody] = useState([{label:'미선택', name:'미선택'}])
@@ -23,8 +25,15 @@ export const SearchPage = () =>{
   const [productType, setProductType] = useState('BEAN')
   const [products, setProducts] = useState([])
   const [showResult, setShowResult] = useState(true)
+  const [sendKeyword, setSendKeyword] = useState(false)
+
   const handleTextChange = (e:ChangeEvent<HTMLInputElement>) =>{
     setKeyword(e.target.value)
+  }
+  const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
+    if (e.key==='Enter'){
+      setSendKeyword(!sendKeyword)
+    }
   }
   // 필터 결과 가져오기 함수
   const getResult = async () => {
@@ -49,7 +58,6 @@ export const SearchPage = () =>{
     setTotalPage(result.totalPage)
   }
 
-
   // 페이지네이션 페이지 바뀔 때 마다 필터링 결과 가져오기
   useEffect(()=>{
     getResult()
@@ -58,8 +66,8 @@ export const SearchPage = () =>{
   // 필터 조건 바뀔 때 마다 가져오기
   useEffect(() =>  {  
     getResult()
-  }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote]);
-
+  }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote,sendKeyword]);
+  
   return(
     <div >
       <div className="mt-10 flex flex-col items-center">
@@ -75,7 +83,9 @@ export const SearchPage = () =>{
               type="text" 
               placeholder="검색어를 입력하세요."
               value={keyword}
-              onChange={(e)=>handleTextChange(e)}
+              onKeyDown={handleEnter}
+              onChange={(e)=>handleTextChange(e)
+              }
             />
           </div>
           <hr className=" border-half-light mt-2" />
