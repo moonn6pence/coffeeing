@@ -37,7 +37,7 @@ public class CapsuleReviewDummy {
                 .capsule(capsule)
                 .member(member)
                 .content("taste very good")
-                .score(4.0)
+                .score(4)
                 .build();
     }
 }

@@ -16,13 +16,13 @@ public class CoffeeReviewTestDummy {
         List<CoffeeReview> reviews = new ArrayList<>();
 
         for (Member member : members) {
-            reviews.add(createMockCoffeeReview(coffee, member, 4.0));
+            reviews.add(createMockCoffeeReview(coffee, member, 4));
         }
 
         return reviews;
     }
 
-    public static CoffeeReview createMockCoffeeReview(Coffee coffee, Member member, Double score) {
+    public static CoffeeReview createMockCoffeeReview(Coffee coffee, Member member, Integer score) {
 
         return CoffeeReview.builder()
                 .coffee(coffee)

@@ -21,7 +21,7 @@ public class CoffeeTestDummy {
                 .flavorNote("floral, cocoa")
                 .imageUrl("https://abcdsfadsffddd.png")
                 .productDescription("")
-                .totalScore(45.353)
+                .totalScore(45)
                 .totalReviewer(10)
                 .build();
     }
@@ -36,7 +36,7 @@ public class CoffeeTestDummy {
                 .flavorNote("sweet")
                 .imageUrl("https://abcdsffddd.png")
                 .productDescription("")
-                .totalScore(50.0)
+                .totalScore(50)
                 .totalReviewer(10)
                 .build();
     }
@@ -54,7 +54,7 @@ public class CoffeeTestDummy {
                     .flavorNote("Generic aroma")
                     .imageUrl("Generic Url " + i)
                     .productDescription("Generic Description")
-                    .totalScore(60.0)
+                    .totalScore(60)
                     .totalReviewer(20)
                     .build()
             );
@@ -75,7 +75,7 @@ public class CoffeeTestDummy {
                     .flavorNote(flavorNote)
                     .imageUrl("Generic Url " + i)
                     .productDescription("Generic Description")
-                    .totalScore(81.2 + i)
+                    .totalScore(81 + i)
                     .totalReviewer(20)
                     .popularity(i * 10)
                     .build()
@@ -94,7 +94,7 @@ public class CoffeeTestDummy {
                 .flavorNote("sweet")
                 .imageUrl("https://abcdsffddd.png")
                 .productDescription("")
-                .totalScore(50.0)
+                .totalScore(50)
                 .totalReviewer(10)
                 .build();
     }
@@ -110,7 +110,7 @@ public class CoffeeTestDummy {
                 .flavorNote("sweet")
                 .imageUrl("https://abcdsffddd.png")
                 .productDescription("")
-                .totalScore(50.0)
+                .totalScore(50)
                 .totalReviewer(10)
                 .build();
     }

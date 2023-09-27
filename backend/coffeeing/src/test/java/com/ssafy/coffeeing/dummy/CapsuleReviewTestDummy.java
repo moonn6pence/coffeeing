@@ -16,13 +16,13 @@ public class CapsuleReviewTestDummy {
         List<CapsuleReview> reviews = new ArrayList<>();
 
         for (Member member : members) {
-            reviews.add(createMockCapsuleReview(capsule, member, 4.0));
+            reviews.add(createMockCapsuleReview(capsule, member, 4));
         }
 
         return reviews;
     }
 
-    public static CapsuleReview createMockCapsuleReview(Capsule capsule, Member member, Double score) {
+    public static CapsuleReview createMockCapsuleReview(Capsule capsule, Member member, Integer score) {
 
         return CapsuleReview.builder()
                 .capsule(capsule)

@@ -38,7 +38,7 @@ public class CapsuleDummy {
             "짧게 다크로스팅한 브라질산 원두가 강한 로스팅향과 균형감을 주고 다크로스팅한 코스타리카 원두가 쌉싸름한 코코아향에 무게감을 더해주는 커피입니다. 정교한 그라인딩으로 벨벳처럼 부드러워 거부할 수 없는 크리미한 질감을 표현했습니다.",
             "멕시코 원두를 짧게 라이트로스팅하여 섬세한 우디향과 부드러운 산미를 느낄 수 있으며, 브라질산 원두의 곡물향이 더해져 강렬하면서도 부드러운 우아한 조화를 보이는 커피입니다."
     );
-    private final List<Double> totalScores = List.of(38.9, 48.3, 42.1, 49.8, 25.5);
+    private final List<Integer> totalScores = List.of(38, 48, 42, 49, 25);
 
     private final CapsuleRepository capsuleRepository;
 
@@ -57,7 +57,7 @@ public class CapsuleDummy {
 
     public Capsule createNespressoCapsule(String capsuleNameKr, String capsuleNameEng, Double roast, Double acidity, Double body,
                                           String aroma, String imageUrl, String description,
-                                          Double totalScore, Integer totalReviewer) {
+                                          Integer totalScore, Integer totalReviewer) {
         return createCapsule("네스프레소", "nespresso", capsuleNameKr, capsuleNameEng,
                 new CoffeeCriteria(roast, acidity, body), aroma, 1,
                 imageUrl, description, totalScore, totalReviewer);
@@ -65,7 +65,7 @@ public class CapsuleDummy {
 
     private Capsule createCapsule(String brandKr, String brandEng, String capsuleNameKr, String capsuleNameEng, CoffeeCriteria coffeeCriteria,
                                   String flavorNote, Integer machineType, String imageUrl, String description,
-                                  Double totalScore, Integer totalReviewer) {
+                                  Integer totalScore, Integer totalReviewer) {
 
         return Capsule.builder()
                 .brandKr(brandKr)

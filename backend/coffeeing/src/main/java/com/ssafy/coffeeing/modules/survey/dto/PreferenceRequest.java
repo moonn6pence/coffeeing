@@ -9,9 +9,9 @@ public record PreferenceRequest(
 
         @NotNull Boolean isCapsule,
         @Range(min = 1, max = 5) Integer machineType,
-        @Range(min = 0, max = 1) Double roast,
-        @Range(min = 0, max = 1) Double acidity,
-        @Range(min = 0, max = 1) Double body,
-        @NotEmpty String flavorNote
+        @NotNull @Range(min = 0, max = 1) Double roast,
+        @NotNull @Range(min = 0, max = 1) Double acidity,
+        @NotNull @Range(min = 0, max = 1) Double body,
+        @NotNull @NotEmpty String flavorNote
 ) {
 }

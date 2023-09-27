@@ -106,4 +106,13 @@ public class CapsuleService {
         Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
         return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCapsuleElements, IS_CAPSULE);
     }
+
+    @Transactional
+    public void addReview(Long id, Integer score) {
+
+        Capsule capsule = capsuleRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+
+        capsule.addReview(score);
+    }
 }

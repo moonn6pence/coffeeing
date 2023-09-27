@@ -69,7 +69,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        double expectedTotalScore = capsule.getTotalScore() + reviewRequest.score();
+        int expectedTotalScore = capsule.getTotalScore() + reviewRequest.score();
         int expectedTotalReviewer = capsule.getTotalReviewer() + 1;
 
         // when
@@ -178,7 +178,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
@@ -189,7 +189,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), (double) reviewRequest.score()),
+                () -> assertEquals(review.getScore(), reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -203,7 +203,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
@@ -230,7 +230,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(other)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
@@ -252,13 +252,13 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
-                .score(3.0)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
-        capsule.addReview((int) (double) review.getScore());
+        capsule.addReview(review.getScore());
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        double expectedTotalScore = capsule.getTotalScore() - review.getScore();
+        int expectedTotalScore = capsule.getTotalScore() - review.getScore();
         int expectedTotalReviewer = capsule.getTotalReviewer() - 1;
 
         // when
@@ -280,7 +280,7 @@ class CapsuleReviewServiceTest extends ServiceTest {
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
@@ -300,13 +300,13 @@ class CapsuleReviewServiceTest extends ServiceTest {
     void Given_CapsuleReviewIdOfOthers_When_DeleteReview_Then_Success() {
 
         // given
-        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
-
+        Member other = memberRepository.save(MemberTestDummy
+                .createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 
         CapsuleReview review = CapsuleReview.builder()
                 .capsule(capsule)
                 .member(other)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         capsuleReviewRepository.save(review);
@@ -314,8 +314,8 @@ class CapsuleReviewServiceTest extends ServiceTest {
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class,
-                        () -> capsuleReviewService.deleteReview(review.getId())).getInfo()
+                assertThrows(BusinessException.class, () -> capsuleReviewService.deleteReview(review.getId())).getInfo()
         );
+
     }
 }

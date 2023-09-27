@@ -29,7 +29,6 @@ import com.ssafy.coffeeing.modules.util.RandomUtil;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,7 +193,7 @@ class CurationServiceTest extends ServiceTest {
         // then
         assertEquals(expected, actual);
     }
-    
+
     @ParameterizedTest
     @CsvSource({"true", "false"})
     @DisplayName("커스텀 큐레이션 조회 요청 시 사용자 성향 큐레이션과 나이 성별 성향 평균 큐레이션을 응답한다.")
@@ -278,11 +277,11 @@ class CurationServiceTest extends ServiceTest {
                 .build());
 
         if (isCapsule) {
-            capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(0), generalMember, 4.0));
-            capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(1), generalMember, 2.0));
+            capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(0), generalMember, 4));
+            capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(1), generalMember, 2));
         } else {
-            coffeeReviewRepository.save(CoffeeReviewTestDummy.createMockCoffeeReview(coffees.get(0), generalMember, 4.0));
-            coffeeReviewRepository.save(CoffeeReviewTestDummy.createMockCoffeeReview(coffees.get(1), generalMember, 2.0));
+            coffeeReviewRepository.save(CoffeeReviewTestDummy.createMockCoffeeReview(coffees.get(0), generalMember, 4));
+            coffeeReviewRepository.save(CoffeeReviewTestDummy.createMockCoffeeReview(coffees.get(1), generalMember, 2));
         }
 
         // mocking preference curation

@@ -86,7 +86,9 @@ public class CoffeeReviewService {
             throw new BusinessException(AuthErrorInfo.UNAUTHORIZED);
         }
 
-        review.update(reviewRequest.content(), (double) reviewRequest.score());
+        review.getCoffee().updateReview(reviewRequest.score() - review.getCoffee().getTotalScore());
+
+        review.update(reviewRequest.content(), reviewRequest.score());
     }
 
     public void deleteReview(Long id) {

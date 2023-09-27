@@ -27,7 +27,7 @@ public class ProductMapper {
                 capsule.getId(), capsule.getBrandKr(), capsule.getCapsuleNameKr(), capsule.getImageUrl(),
                 capsule.getFlavorNote(), capsule.getCoffeeCriteria().getRoast(), capsule.getCoffeeCriteria().getAcidity(),
                 capsule.getCoffeeCriteria().getBody(), capsule.getProductDescription(),
-                capsule.getTotalReviewer() == 0 ? 0.0 : capsule.getTotalScore() / capsule.getTotalReviewer(),
+                capsule.getTotalReviewer() == 0 ? 0.0 : (double) capsule.getTotalScore() / capsule.getTotalReviewer(),
                 isBookmarked,
                 memberReview != null,
                 memberReview != null ? supplyProductReviewElementFrom(memberReview) : null);
@@ -40,7 +40,7 @@ public class ProductMapper {
                 coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl(),
                 coffee.getFlavorNote(), coffee.getCoffeeCriteria().getRoast(), coffee.getCoffeeCriteria().getAcidity(),
                 coffee.getCoffeeCriteria().getBody(), coffee.getProductDescription(),
-                coffee.getTotalReviewer() == 0 ? 0.0 : coffee.getTotalScore() / coffee.getTotalReviewer(),
+                coffee.getTotalReviewer() == 0 ? 0.0 : (double) coffee.getTotalScore() / coffee.getTotalReviewer(),
                 isBookmarked,
                 memberReview != null,
                 memberReview != null ? supplyProductReviewElementFrom(memberReview) : null);
@@ -98,7 +98,7 @@ public class ProductMapper {
                 .capsule(capsule)
                 .member(member)
                 .content(reviewRequest.content())
-                .score((double) reviewRequest.score())
+                .score(reviewRequest.score())
                 .build();
     }
 
@@ -109,7 +109,7 @@ public class ProductMapper {
                 .coffee(coffee)
                 .member(member)
                 .content(reviewRequest.content())
-                .score((double) reviewRequest.score())
+                .score(reviewRequest.score())
                 .build();
     }
 
