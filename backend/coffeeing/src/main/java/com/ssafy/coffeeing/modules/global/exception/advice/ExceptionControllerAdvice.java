@@ -16,7 +16,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseResponse RuntimeExceptionHandler(RuntimeException e){
-        log.error(e.getMessage());
+        extractLog(e);
         return BaseResponse.builder()
                 .code(GlobalErrorInfo.INTERNAL_SERVER_ERROR.getCode())
                 .message(GlobalErrorInfo.INTERNAL_SERVER_ERROR.getMessage())
@@ -31,5 +31,15 @@ public class ExceptionControllerAdvice {
                 .code(e.getInfo().getCode())
                 .message(e.getInfo().getMessage())
                 .build();
+    }
+
+    private void extractLog(RuntimeException e) {
+        String lineNumber = String.valueOf(e.getStackTrace()[0].getLineNumber());
+        String className = e.getStackTrace()[0].getClassName();
+        String methodName = e.getStackTrace()[0].getMethodName();
+        String message = e.getMessage();
+        log.error("\n" + """
+                className : {}, methodName: {}, 예외 발생시킨 line: {}, 이유: {}
+                """, className, methodName, lineNumber, message);
     }
 }
