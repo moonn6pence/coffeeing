@@ -28,10 +28,11 @@ public class DefaultRecommendService implements RecommendService {
     private final RestTemplate restTemplate;
 
     @Override
-    public RecommendResponse pickByPreference(PreferenceRequest preferenceRequest) {
+    public RecommendResponse pickByPreference(Integer count, PreferenceRequest preferenceRequest) {
 
         URI uri = UriComponentsBuilder
-                .fromUriString(recSysProperty.getCollaborativeFilteringUrl())
+                .fromUriString(recSysProperty.getPickByPreferenceUrl())
+                .queryParam("count", count)
                 .queryParam("isCapsule", preferenceRequest.isCapsule())
                 .queryParamIfPresent("machineType", Optional.of(preferenceRequest.machineType()))
                 .queryParam("roast", preferenceRequest.roast())
@@ -52,10 +53,11 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    public RecommendResponse pickBySimilarity(Boolean isCapsule, Long id) {
+    public RecommendResponse pickBySimilarity(Integer count, Boolean isCapsule, Long id) {
 
         URI uri = UriComponentsBuilder
-                .fromUriString(recSysProperty.getContentBasedFilteringUrl())
+                .fromUriString(recSysProperty.getPickBySimilarityUrl())
+                .queryParam("count", count)
                 .queryParam("isCapsule", isCapsule)
                 .queryParam("id", id)
                 .encode()
@@ -72,7 +74,24 @@ public class DefaultRecommendService implements RecommendService {
     }
 
     @Override
-    public RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute) {
-        return null;
+    public RecommendResponse pickByCriteria(Integer count, Boolean isCapsule, String criteria, String attribute) {
+
+        URI uri = UriComponentsBuilder
+                .fromUriString(recSysProperty.getPickByCriteriaUrl())
+                .queryParam("count", count)
+                .queryParam("isCapsule", isCapsule)
+                .queryParam("criteria", criteria)
+                .queryParam("attribute", attribute)
+                .encode()
+                .build()
+                .toUri();
+
+        try {
+            return restTemplate.getForObject(uri, RecommendResponse.class);
+        } catch (HttpClientErrorException e) {
+            throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
+        } catch (HttpServerErrorException e) {
+            throw new BusinessException(SurveyErrorInfo.EXTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -14,14 +14,17 @@ import javax.annotation.PostConstruct;
 public class RecSysProperty {
 
     private final String baseUrl;
-    private final String recByParamUrl;
-    private final String recByProductUrl;
-    private String collaborativeFilteringUrl;
-    private String contentBasedFilteringUrl;
+    private final String preferencePath;
+    private final String similarityPath;
+    private final String criteriaPath;
+    private String pickByPreferenceUrl;
+    private String pickBySimilarityUrl;
+    private String pickByCriteriaUrl;
 
     @PostConstruct
     private void setUp() {
-        collaborativeFilteringUrl = this.baseUrl.concat(this.recByParamUrl);
-        contentBasedFilteringUrl = this.baseUrl.concat(this.recByProductUrl);
+        pickByPreferenceUrl = this.baseUrl.concat(this.preferencePath);
+        pickBySimilarityUrl = this.baseUrl.concat(this.similarityPath);
+        pickByCriteriaUrl = this.baseUrl.concat(this.criteriaPath);
     }
 }

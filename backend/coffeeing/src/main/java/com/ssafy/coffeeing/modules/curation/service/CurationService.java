@@ -45,6 +45,7 @@ public class CurationService {
     private final PreferenceRepository preferenceRepository;
 
     private static final String PREFIX = "당신이 좋아하는 ";
+    private static final Integer CURATION_LENGTH = 10;
 
     @Transactional(readOnly = true)
     public CurationResponse getOpenCuration(Boolean isCapsule) {
@@ -118,6 +119,7 @@ public class CurationService {
     private CurationElement findByCharacteristic(CurationType curation) {
 
         RecommendResponse recommendResponse = recommendService.pickByCriteria(
+                CURATION_LENGTH,
                 curation.getIsCapsule(),
                 curation.getCriteria(),
                 curation.getAttribute()
@@ -148,12 +150,14 @@ public class CurationService {
         PreferenceAverage average = memberQueryRepository.findPreferenceAverageByAgeAndGender(age, gender);
 
         RecommendResponse recommendResponse = recommendService.pickByPreference(
+                CURATION_LENGTH,
                 new PreferenceRequest(curation.getIsCapsule(),
                         1,
                         average.getRoast(),
                         average.getAcidity(),
                         average.getBody(),
-                        null));
+                        null)
+        );
 
         if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
@@ -176,7 +180,7 @@ public class CurationService {
         Preference preference = preferenceRepository.findByMemberId(member.getId());
 
         RecommendResponse recommendResponse =
-                recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference));
+                recommendService.pickByPreference(CURATION_LENGTH,SurveyMapper.supplyPreferenceRequestFrom(preference));
 
         if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
@@ -193,7 +197,7 @@ public class CurationService {
 
     private CurationElement findByMemberLikedProduct(CurationType curation, Capsule capsule) {
 
-        RecommendResponse recommendResponse = recommendService.pickBySimilarity(true, capsule.getId());
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(CURATION_LENGTH,true, capsule.getId());
 
         return CurationMapper.supplyCapsuleCurationElementOf(true,
                 new StringBuffer().append(PREFIX)
@@ -204,7 +208,7 @@ public class CurationService {
 
     private CurationElement findByMemberLikedProduct(CurationType curation, Coffee coffee) {
 
-        RecommendResponse recommendResponse = recommendService.pickBySimilarity(false, coffee.getId());
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(CURATION_LENGTH,false, coffee.getId());
 
         return CurationMapper.supplyCoffeeCurationElementOf(false,
                 new StringBuffer().append(PREFIX)
