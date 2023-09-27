@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BeanDetailBody } from 'components/Detail/BeanDetailBody';
 import { ReviewForm } from 'components/Detail/ReviewForm';
-import { Pagination } from 'components/Pagination';
 import { BeanCard } from 'components/BeanCard';
 import { privateRequest, publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
@@ -12,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import IonIcon from '@reacticons/ionicons';
 import { DeleteAlert } from 'components/DeleteAlert';
+import { PaginationNew } from 'components/PaginationNew';
 
 export const DetailPage = () => {
   const { beans, id } = useParams();
@@ -19,6 +19,8 @@ export const DetailPage = () => {
   const navigate = useNavigate();
 
   const [seeModal, setSeeModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(-1);
   const handleModal = () => {
     setSeeModal(!seeModal);
   };
@@ -82,19 +84,26 @@ export const DetailPage = () => {
     }
   };
 
-  useEffect(() => {
-    // 리뷰들 불러오기
+  // 리뷰 가져오기
+  const getReview = async () => {
     privateRequest
       .get(`${API_URL}/product/${beans}/${id}/review`, {
-        params: { page: 0 },
+        params: { page: currentPage },
       })
       .then((res) => {
         // console.log(res.data.data.reviews);
         setReviews(res.data.data.reviews);
+        setTotalPage(res.data.data.totalCount - 1);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+  useEffect(() => {
+    getReview();
+  }, [currentPage]);
+
+  useEffect(() => {
     // 비슷한 상품 받아오기
     privateRequest
       .get(`${API_URL}/product/${beans}/${id}/similar`)
@@ -151,19 +160,14 @@ export const DetailPage = () => {
           ) : (
             <ReviewForm product_id={id} beans={beans} />
           )}
-          {seeModal ? (
+          {seeModal && (
             <ReviewEditModal
-              // score={3}
-              // content="마시씀"
               beans={beans}
-              // reviewId={1}
               handleModal={handleModal}
               reviewId={capsule.memberReview.reviewId}
               score={capsule.memberReview.score}
               content={capsule.memberReview.content}
             />
-          ) : (
-            ''
           )}
         </div>
       ) : (
@@ -187,7 +191,14 @@ export const DetailPage = () => {
         </p>
         <div className="flex space-x-6">
           {reviews[0] ? (
-            <Pagination limit={6} contentList={reviews} />
+            <PaginationNew
+              currentPage={currentPage}
+              totalPage={totalPage}
+              reviews={reviews}
+              isCapsule={beans === 'capsule' ? true : false}
+              setCurrentPage={setCurrentPage}
+              isReview={true}
+            />
           ) : (
             <div className="w-300 flex flex-col h-30 items-center justify-center space-y-6">
               <IonIcon name="chatbubble-ellipses-outline" size="large" />

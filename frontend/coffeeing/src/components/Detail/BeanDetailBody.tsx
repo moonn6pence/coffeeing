@@ -36,13 +36,6 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
   } = props;
 
   const [isBooked, setIsBooked] = useState(isBookmarked);
-
-  const beanCharac = [
-    { name: '로스팅', value: roast },
-    { name: '바디감', value: body },
-    { name: '산 미', value: acidity },
-  ];
-
   const aromaList = aroma.split(', ');
 
   const handleBookmark = () => {
@@ -74,12 +67,7 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
           onClick={handleBookmark}
         />
         <div className="space-y-3 w-full">
-          {beanCharac.map((charac) => (
-            <div className="flex w-full justify-between" key={charac.name}>
-              <span className="text-xl font-bold my-auto">{charac.name}</span>
-              <BeanRating rate={charac.value} />
-            </div>
-          ))}
+          <BeanRating roast={roast} body={body} acidity={acidity} />
         </div>
         <p className="w-full max-w-full">{description}</p>
         <p className="w-full text-xl font-bold flex justify-between">
