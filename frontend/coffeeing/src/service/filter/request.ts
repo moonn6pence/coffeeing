@@ -14,7 +14,6 @@ export const requestFilterResult = async ({selectedRoast, selectedAcid,selectedB
     body: sendBody,
     flavorNote:sendFlavorNote,
     keyword:keyword,
-    productType:productType,
     page:page,
     size:8,
   }
@@ -33,11 +32,20 @@ export const requestFilterResult = async ({selectedRoast, selectedAcid,selectedB
   if (!keyword) {
     delete params.keyword
   }
-  try {
-    const response = await publicRequest.get(`${API_URL}/search/products`, { params });
-    return response.data.data; 
-  } catch (err) {
-    console.log("[filter request fail]", err);
-    throw err;
+  if (productType==='BEAN') {
+    try {
+      const response = await publicRequest.get(`${API_URL}/search/products/bean`, { params });
+      return response.data.data; 
+    } catch (err) {
+      console.log("[filter request fail]", err);
+      throw err;
+    }
+  } else {
+    try {
+      const response = await publicRequest.get(`${API_URL}/search/products/capsule`, { params });
+      return response.data.data;
+    } catch (err) {
+      console.log("[filter request fail]", err)
+    }
   }
 }
