@@ -5,13 +5,13 @@ type FeedItemProps = {
   imageUrl: string;
 };
 
-export const FeedItem = (props: FeedItemProps) => {
+export const FeedComponent = (props: FeedItemProps) => {
   const { feedId, imageUrl } = props;
-
 
   return (
     <div>
       <div className="image-wrapper">
+        <span>{feedId}</span>
         <img src={imageUrl} alt="이미지" />
       </div>
     </div>

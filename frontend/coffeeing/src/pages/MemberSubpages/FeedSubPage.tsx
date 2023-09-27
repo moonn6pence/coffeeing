@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
-import { FeedItem } from 'components/Feed/FeedItem';
+import { FeedComponent } from 'components/Feed/FeedComponent';
 import { MemberId } from 'pages/MemberPage';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useOutletContext } from 'react-router-dom';
 import { privateRequest } from 'util/axios';
@@ -12,12 +12,29 @@ type FeedItem = {
   imageUrl: string;
 };
 
+type FeedItemResponse = {
+  feedId: number;
+  images: Array<string>;
+};
+
 export const FeedSubPage = () => {
   const { id: memberId } = useOutletContext<MemberId>();
   const FEED_SIZE = 12;
   const [cursor, setCursor] = useState<undefined | number>(undefined);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [feedList, setFeedList] = useState<Array<JSX.Element>>([]);
+  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [feedList, setFeedList] = useState<Array<FeedItem>>([]);
+
+  const feedComponents = useCallback(() => {
+    return feedList.map((item: FeedItem) => {
+      return (
+        <FeedComponent
+          feedId={item.feedId}
+          key={item.feedId}
+          imageUrl={item.imageUrl}
+        />
+      );
+    });
+  }, [feedList]);
 
   const queryFeeds = async () => {
     return await privateRequest
@@ -41,14 +58,11 @@ export const FeedSubPage = () => {
       setFeedList((ori) => {
         return [
           ...ori,
-          ...data.feed.map((item: FeedItem) => {
-            return (
-              <FeedItem
-                feedId={item.feedId}
-                imageUrl={item.imageUrl}
-                key={item.feedId}
-              />
-            );
+          ...data.feeds.map((item: FeedItemResponse) => {
+            return {
+              feedId: item.feedId,
+              imageUrl: item.images[0],
+            };
           }),
         ];
       });
@@ -57,18 +71,20 @@ export const FeedSubPage = () => {
     setCursor(data.nextCursor);
   };
 
+  useEffect(() => {
+    loadFeeds();
+  });
+
   return (
     <div className="sub-wrapper">
       <div className="feed-wrapper">
         <InfiniteScroll
-          dataLength={FEED_SIZE}
+          dataLength={feedList.length}
           next={loadFeeds}
           hasMore={hasMore}
-          loader={
-            <h4>Loading...</h4>
-          }
+          loader={<h4>Loading...</h4>}
         >
-          {feedList}
+          {feedComponents()}
         </InfiniteScroll>
       </div>
     </div>
