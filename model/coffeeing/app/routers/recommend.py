@@ -6,7 +6,7 @@ recommend = APIRouter(prefix='/rec')
 def collaborative_filter(isCapsule: bool, machineType: int, roast: float, acidity: float,body: float, flavorNote: str):   
     return {"results":[1,2,3,4]}
 
-@recommend.post("/content")
-async def content_filter(isCapsule: bool, id: int, roasting:float, acidity:float, body:float, flavorNote:list[str]):
-	result = await SurveyRecommendBeans(roasting, acidity, body, flavorNote)
+@recommend.post("/survey/recommend")
+async def content_filter(roast:float, acidity:float, body:float, flavorNote:str,isCapsule: bool, machineType:int,):
+	result = await SurveyRecommendBeans(roast, acidity, body, flavorNote, isCapsule, machineType)
 	return result
