@@ -50,7 +50,7 @@ public class CoffeeDummy {
             "sample description 4",
             "sample description 5"
     );
-    private final List<Double> totalScores = List.of(38.9, 48.3, 42.1, 49.8, 25.5);
+    private final List<Integer> totalScores = List.of(38, 48, 42, 49, 25);
 
 
     private final CoffeeRepository coffeeRepository;
@@ -80,7 +80,7 @@ public class CoffeeDummy {
     }
 
     private Coffee createCoffee(String coffeeNameKr, String coffeeNameEng, String flavorNote, String imageUrl, String productDescription,
-                                CoffeeCriteria coffeeCriteria, Double totalScore, Integer totalReviewer, String regionKr, String regionEng) {
+                                CoffeeCriteria coffeeCriteria, Integer totalScore, Integer totalReviewer, String regionKr, String regionEng) {
         return Coffee.builder()
                 .coffeeNameKr(coffeeNameKr)
                 .coffeeNameEng(coffeeNameEng)

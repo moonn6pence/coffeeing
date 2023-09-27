@@ -68,7 +68,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         // given
         ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        double expectedTotalScore = coffee.getTotalScore() + reviewRequest.score();
+        int expectedTotalScore = coffee.getTotalScore() + reviewRequest.score();
         int expectedTotalReviewer = coffee.getTotalReviewer() + 1;
 
         // when
@@ -81,24 +81,25 @@ class CoffeeReviewServiceTest extends ServiceTest {
                 () -> assertEquals(actualReview.getCoffee(), coffee),
                 () -> assertEquals(actualReview.getMember(), generalMember),
                 () -> assertEquals(expectedTotalScore, coffee.getTotalScore()),
-                () -> assertEquals(expectedTotalReviewer, coffee.getTotalReviewer())
+                () -> assertEquals(expectedTotalReviewer, coffee.getTotalReviewer()),
+                () -> assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count())
         );
     }
 
-    @Test
-    @DisplayName("리뷰 작성시 경험치 이벤트가 발생한다.")
-    void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_ExperienceEventSuccess() {
-
-        // given
-        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
-        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-
-        // when
-        CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
-
-        // then
-        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
-    }
+//    @Test
+//    @DisplayName("리뷰 작성시 경험치 이벤트가 발생한다.")
+//    void Given_CoffeeIdAndReviewRequest_When_CreateReviews_Then_ExperienceEventSuccess() {
+//
+//        // given
+//        ReviewRequest reviewRequest = new ReviewRequest(3, "tasty");
+//        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+//
+//        // when
+//        CreationResponse actual = coffeeReviewService.createReview(coffee.getId(), reviewRequest);
+//
+//        // then
+//        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
+//    }
 
     @Test
     @DisplayName("존재하지 않는 캡슐 아이디를 통해 리뷰를 생성할 시 예외를 던진다.")
@@ -177,7 +178,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
@@ -188,7 +189,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         // then
         assertAll(
-                () -> assertEquals(review.getScore(), (double) reviewRequest.score()),
+                () -> assertEquals(review.getScore(), reviewRequest.score()),
                 () -> assertEquals(review.getContent(), reviewRequest.content())
         );
     }
@@ -202,7 +203,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
@@ -229,7 +230,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(other)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
@@ -251,13 +252,13 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
-                .score(3.0)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
-        coffee.addReview((int) (double) review.getScore());
+        coffee.addReview(review.getScore());
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
-        double expectedTotalScore = coffee.getTotalScore() - review.getScore();
+        int expectedTotalScore = coffee.getTotalScore() - review.getScore();
         int expectedTotalReviewer = coffee.getTotalReviewer() - 1;
 
         // when
@@ -279,7 +280,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(generalMember)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
@@ -299,13 +300,13 @@ class CoffeeReviewServiceTest extends ServiceTest {
     void Given_CoffeeReviewIdOfOthers_When_DeleteReview_Then_Success() {
 
         // given
-        Member other = memberRepository.save(MemberTestDummy.createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
-
+        Member other = memberRepository.save(MemberTestDummy
+                .createGeneralMember("Sean", "{noop}seanjjang", "seanbryan@naver.com"));
 
         CoffeeReview review = CoffeeReview.builder()
                 .coffee(coffee)
                 .member(other)
-                .score(3.5)
+                .score(3)
                 .content("tasty")
                 .build();
         coffeeReviewRepository.save(review);
@@ -313,8 +314,7 @@ class CoffeeReviewServiceTest extends ServiceTest {
 
         // when, then
         assertEquals(AuthErrorInfo.UNAUTHORIZED,
-                assertThrows(BusinessException.class,
-                        () -> coffeeReviewService.deleteReview(review.getId())).getInfo()
+                assertThrows(BusinessException.class, () -> coffeeReviewService.deleteReview(review.getId())).getInfo()
         );
     }
 }

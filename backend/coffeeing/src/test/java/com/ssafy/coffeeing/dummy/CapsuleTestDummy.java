@@ -12,7 +12,7 @@ public class CapsuleTestDummy {
 
     private static Capsule createMockCapsule(String brandKr, String brandEng, String capsuleNameKr, String capsuleNameEng, CoffeeCriteria coffeeCriteria,
                                              String flavorNote, Integer machineType, String imageUrl, String description,
-                                             Double totalScore, Integer totalReviewer) {
+                                             Integer totalScore, Integer totalReviewer) {
 
         return Capsule.builder()
                 .brandKr(brandKr)
@@ -41,7 +41,7 @@ public class CapsuleTestDummy {
                 .machineType(1)
                 .imageUrl("https://www.nespresso.com/ecom/medias/sys_master/public/16653932462110/ispirazione-roma-2x.png?impolicy=small&imwidth=284&imdensity=1")
                 .productDescription("멕시코 원두를 짧게 라이트로스팅하여 섬세한 우디향과 부드러운 산미를 느낄 수 있으며, 브라질산 원두의 곡물향이 더해져 강렬하면서도 부드러운 우아한 조화를 보이는 커피입니다.")
-                .totalScore(38.0)
+                .totalScore(38)
                 .totalReviewer(10)
                 .build();
     }
@@ -58,7 +58,7 @@ public class CapsuleTestDummy {
                 .machineType(1)
                 .imageUrl("https://www.nespresso.com/ecom/medias/sys_master/public/16987597701150/ispirazione-napoli-2x.png?impolicy=small&imwidth=284&imdensity=1")
                 .productDescription("인디아와 우간다 원두를 오랜 시간 다크 로스팅하여 묵직한 바디감과 함께 기분 좋은 쓴맛의 코코아 향, 그리고 벨벳 같은 부드러운 질감이 특징입니다. 나폴리의 뿌리 깊은 커피 전통과 역사를 반영한 강렬하면서도 아름다운 아로마와 풍미, 질감을 선사 합니다.")
-                .totalScore(99.9)
+                .totalScore(99)
                 .totalReviewer(20)
                 .build();
     }
@@ -76,7 +76,7 @@ public class CapsuleTestDummy {
                     1,
                     "Generic Url " + i,
                     "generic description " + i,
-                    50.0,
+                    50,
                     12
             ));
         }
@@ -98,7 +98,7 @@ public class CapsuleTestDummy {
                     .machineType(1)
                     .imageUrl("Generic Url " + i)
                     .productDescription("generic description " + i)
-                    .totalScore(50.0)
+                    .totalScore(50)
                     .totalReviewer(12)
                     .popularity(i * 10)
                     .build()
@@ -119,7 +119,7 @@ public class CapsuleTestDummy {
                 1,
                 "Generic Url ",
                 "generic description ",
-                50.0,
+                50,
                 12));
         capsules.add(createMockCapsule(
                 "Generic 한국 브랜드",
@@ -131,7 +131,7 @@ public class CapsuleTestDummy {
                 1,
                 "Generic Url ",
                 "generic description ",
-                50.0,
+                50,
                 12));
         capsules.add(createMockCapsule(
                 "Generic 한국 브랜드",
@@ -143,7 +143,7 @@ public class CapsuleTestDummy {
                 1,
                 "Generic Url ",
                 "generic description ",
-                50.0,
+                50,
                 12));
         capsules.add(createMockCapsule(
                 "Generic 한국 브랜드",
@@ -155,7 +155,7 @@ public class CapsuleTestDummy {
                 1,
                 "Generic Url ",
                 "generic description ",
-                50.0,
+                50,
                 12));
         return capsules;
     }

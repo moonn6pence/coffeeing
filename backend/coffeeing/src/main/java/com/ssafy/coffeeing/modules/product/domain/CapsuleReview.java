@@ -8,7 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @SuperBuilder
@@ -30,9 +35,9 @@ public class CapsuleReview extends BaseEntity {
     private String content;
 
     @Column
-    private Double score;
+    private Integer score;
 
-    public void update(String content, Double score) {
+    public void update(String content, Integer score) {
         this.content = content;
         this.score = score;
     }

@@ -51,7 +51,7 @@ public class Capsule extends BaseEntity {
 
     @Column
     @Builder.Default
-    private Double totalScore = 0.0;
+    private Integer totalScore = 0;
 
     @Column
     @Builder.Default
@@ -64,11 +64,15 @@ public class Capsule extends BaseEntity {
     public void addReview(Integer score) {
         this.totalScore += score;
         this.totalReviewer++;
+
+        this.popularity += score;
     }
 
-    public void deleteReview(Double score) {
+    public void deleteReview(Integer score) {
         this.totalScore -= score;
         this.totalReviewer--;
+
+        this.popularity += score;
     }
 
     public void editReview(Integer diff) {

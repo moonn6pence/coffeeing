@@ -28,7 +28,6 @@ public class CoffeeReviewDummy {
             }
         }
 
-
         return coffeeReviewRepository.saveAll(coffeeReviews);
     }
 
@@ -37,7 +36,7 @@ public class CoffeeReviewDummy {
                 .coffee(coffee)
                 .member(member)
                 .content("taste very good")
-                .score(4.0)
+                .score(4)
                 .build();
     }
 }
