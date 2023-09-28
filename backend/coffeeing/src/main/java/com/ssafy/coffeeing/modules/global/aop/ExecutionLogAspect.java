@@ -1,24 +1,38 @@
 package com.ssafy.coffeeing.modules.global.aop;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Component
 @Aspect
 public class ExecutionLogAspect {
+
+    private final ObjectMapper objectMapper;
+
+    public ExecutionLogAspect(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
 
     @Pointcut("execution(* com.ssafy.coffeeing.modules..*Controller.*(..))")
     public void ControllerLog() {
@@ -84,14 +98,15 @@ public class ExecutionLogAspect {
         return result;
     }
 
-    private static JSONObject getParams(HttpServletRequest request) {
-        JSONObject jsonObject = new JSONObject();
+    private String getParams(HttpServletRequest request) throws JsonProcessingException {
         Enumeration<String> params = request.getParameterNames();
+        Map<String, String> object = new HashMap<>();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
             String replaceParam = param.replaceAll("\\.", "-");
-            jsonObject.put(replaceParam, request.getParameter(param));
+            object.put(replaceParam, request.getParameter(param));
         }
-        return jsonObject;
+
+        return objectMapper.writeValueAsString(object);
     }
 }
