@@ -1,7 +1,5 @@
 package com.ssafy.coffeeing.modules.recommend.service;
 
-import com.ssafy.coffeeing.modules.member.domain.Age;
-import com.ssafy.coffeeing.modules.member.domain.Gender;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import org.springframework.context.annotation.Profile;
@@ -9,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Profile("dev")
+@Profile({"test", "dev"})
 @Service
 public class MockRecommendService implements RecommendService{
 
