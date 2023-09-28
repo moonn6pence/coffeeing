@@ -39,34 +39,38 @@ export const MemberPage = () => {
 
   if (userExists) {
     return (
-      <div className="wrapper w-300 flex items-stretch flex-col m-auto">
-        <div className="w-300 bg-light h-80 flex items-center">
-          <MyProfile
-            id={typeof id === 'string' ? Number.parseInt(id) : undefined}
-            nickname={userData.nickname}
-            profileImage={userData.profileImage}
-            setters={{
-              setUserData: setUserData,
-            }}
-          />
+      <div className="absolute">
+        <div className="wrapper w-300 flex items-stretch flex-col m-auto">
+          <div className="w-300 bg-light h-80 flex items-center">
+            <MyProfile
+              id={typeof id === 'string' ? Number.parseInt(id) : undefined}
+              nickname={userData.nickname}
+              profileImage={userData.profileImage}
+              setters={{
+                setUserData: setUserData,
+              }}
+            />
+          </div>
+          <div className="sub-section mt-12 grow">
+            <nav className="h-45">
+              <NavLinkWrapper to={`/member/${id}`} text="경험치" end />
+              <NavLinkWrapper to={`/member/${id}/bookmark`} text="북마크" />
+              <NavLinkWrapper to={`/member/${id}/feed`} text="피드" />
+            </nav>
+            <Outlet context={{ id }} />
+          </div>
+          <div className="spacer mb-40"></div>
         </div>
-        <div className="sub-section mt-12 grow">
-          <nav className="h-45">
-            <NavLinkWrapper to={`/member/${id}`} text="경험치" end />
-            <NavLinkWrapper to={`/member/${id}/bookmark`} text="북마크" />
-            <NavLinkWrapper to={`/member/${id}/feed`} text="피드" />
-          </nav>
-          <Outlet context={{ id }} />
-        </div>
-        <div className="spacer mb-40"></div>
       </div>
     );
   } else {
     return (
-      <div className="flex justify-center">
-        <div className="w-300 bg-light h-80 flex items-center">
-          <div className="text-center w-screen">
-            <h3>해당 유저가 존재하지 않습니다.</h3>
+      <div className="absolute">
+        <div className="flex justify-center">
+          <div className="w-300 bg-light h-80 flex items-center">
+            <div className="text-center w-screen">
+              <h3>해당 유저가 존재하지 않습니다.</h3>
+            </div>
           </div>
         </div>
       </div>

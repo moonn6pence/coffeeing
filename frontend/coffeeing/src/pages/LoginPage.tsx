@@ -53,44 +53,48 @@ function LoginPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 items-center pt-10">
-      <div className="text-3xl font-bold">로그인</div>
-      <div className="flex flex-row gap-1">
-        <p>아직 회원이 아니신가요?</p>
-        <p
-          className="hover:font-bold cursor-pointer"
-          onClick={() => {
-            navigate('/signup');
-          }}
-        >
-          회원가입
-        </p>
-      </div>
+    <div className="absolute">
+      <div className="w-320 pt-10">
+        <div className="flex flex-col gap-6 items-center">
+          <div className="text-3xl font-bold">로그인</div>
+          <div className="flex flex-row gap-1">
+            <p>아직 회원이 아니신가요?</p>
+            <p
+              className="hover:font-bold cursor-pointer"
+              onClick={() => {
+                navigate('/signup');
+              }}
+            >
+              회원가입
+            </p>
+          </div>
 
-      <InputField
-        label="이메일"
-        placeholder="이메일을 입력해주세요."
-        value={email}
-        type="email"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <InputField
-        label="비밀번호"
-        placeholder="비밀번호를 입력해주세요."
-        value={pw}
-        type="password"
-        onChange={(e) => setPw(e.target.value)}
-      />
-      <div className="flex flex-col items-center gap-2">
-        <Button placeholder="로그인" handleSubmit={handleSubmit} />
-        <p className="text-sm flex flex-row gap-2">
-          <span>비밀번호를 잊어버리셨나요?</span>
-          <span className="font-semibold">비밀번호 찾기</span>
-        </p>
-      </div>
+          <InputField
+            label="이메일"
+            placeholder="이메일을 입력해주세요."
+            value={email}
+            type="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <InputField
+            label="비밀번호"
+            placeholder="비밀번호를 입력해주세요."
+            value={pw}
+            type="password"
+            onChange={(e) => setPw(e.target.value)}
+          />
+          <div className="flex flex-col items-center gap-2">
+            <Button placeholder="로그인" handleSubmit={handleSubmit} />
+            <p className="text-sm flex flex-row gap-2">
+              <span>비밀번호를 잊어버리셨나요?</span>
+              <span className="font-semibold">비밀번호 찾기</span>
+            </p>
+          </div>
 
-      <div className="text-xl">OR</div>
-      <GoogleLoginBtn />
+          <div className="text-xl">OR</div>
+          <GoogleLoginBtn />
+        </div>
+      </div>
     </div>
   );
 }

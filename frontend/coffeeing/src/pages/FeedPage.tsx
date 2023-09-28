@@ -107,7 +107,7 @@ export const FeedPage = () => {
   }, [editTarget])
 
   return(
-    <>
+     <div className="absolute">
         <div className="main-container w-320 pt-10 items-center mx-auto">
             <div className="feed-container flex flex-col w-full h-30 items-center mx-auto min-w-min px-72">
                 {/** Create Feed Button */}
@@ -144,6 +144,6 @@ export const FeedPage = () => {
                       debouncedSearch={debouncedSearch} 
                       feedDetail={editTarget} 
                       setEditTarget={setEditTarget}/>
-    </>
+    </div>
   )
 }

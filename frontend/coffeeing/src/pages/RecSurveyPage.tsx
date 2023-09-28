@@ -12,26 +12,28 @@ export const RecSurveyPage = () =>{
   const survey = useSelector((state:RootState)=>state.survey)
 
   return(
-    <div>
-      {survey.currentPage==0&&
-        <CoffeeSelect/>
-      }
-      {survey.currentPage==1&&
-        <RoastingSelect/>
-      }
-      {survey.currentPage==2&&
-        <AciditySelect/>
-      }
-      {survey.currentPage==3&&
-        <BodySelect/>
-      } 
-      {survey.currentPage==4&&
-        <FlavorNoteSelect/>
-      }
-      {
-        survey.currentPage==5&&
-        <MachineSelect/>
-      }
+    <div className="absolute">
+      <div>
+        {survey.currentPage==0&&
+          <CoffeeSelect/>
+        }
+        {survey.currentPage==1&&
+          <RoastingSelect/>
+        }
+        {survey.currentPage==2&&
+          <AciditySelect/>
+        }
+        {survey.currentPage==3&&
+          <BodySelect/>
+        } 
+        {survey.currentPage==4&&
+          <FlavorNoteSelect/>
+        }
+        {
+          survey.currentPage==5&&
+          <MachineSelect/>
+        }
+      </div>
     </div>
   )
 }

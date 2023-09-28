@@ -75,6 +75,8 @@ export const RecResultPage  = ()=>{
   // },[])
 
   return(
-    <div>아</div>
+    <div className="absolute">
+      <div>아</div>
+    </div>
   )
 }

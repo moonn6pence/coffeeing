@@ -1,4 +1,6 @@
+import classNames from 'classnames';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface ILinkProps {
   name: string;
@@ -7,6 +9,7 @@ interface ILinkProps {
 }
 
 export const NavBarLink = (props: ILinkProps) => {
+  const navigate = useNavigate();
   const { name, link, active } = props;
   // 공통 CSS
   const commonClass = 'h-12 font-bold text-base hover:brightness-125';
@@ -15,13 +18,22 @@ export const NavBarLink = (props: ILinkProps) => {
     ? `${commonClass} text-cinamon-roasting`
     : `${commonClass} text-light-roasting`;
 
+  const goLink = () => {
+      navigate(`${link}`);
+  };
+  
+  
   return (
     <div
-      className={active ? 'border-b-2 border-cinamon-roasting py-3' : 'py-3'}
+      className={
+        classNames(
+          'cursor-pointer h-12 font-bold text-base hover:brightness-125 text-light-roasting', 
+          active ? 'border-b-2 border-cinamon-roasting py-3' : 'py-3'
+        )
+      }
+      onClick={goLink}
     >
-      <a href={link} className={linkClass}>
-        {name}
-      </a>
+      {name}
     </div>
   );
 };
