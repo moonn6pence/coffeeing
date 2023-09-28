@@ -14,7 +14,7 @@ import javax.persistence.*;
 @SuperBuilder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AttributeOverride(name = "id", column = @Column(name = "post_like_id"))
+@AttributeOverride(name = "id", column = @Column(name = "feed_like_id"))
 @Entity
 public class FeedLike extends BaseEntity {
 
