@@ -66,6 +66,7 @@ export const RecResultPage  = ()=>{
 
   return(
     <div>
+      {/* [Recommendation Result] */}
       <p>{userInfo.nickname}님 맞춤 {products[0].isCapsule ? '캡슐' : '원두'} 추천</p>
       <div className="flex w-300 justify-between">
         {products.map((item, index) => (
@@ -79,7 +80,7 @@ export const RecResultPage  = ()=>{
           />
         ))}
       </div>
-
+      {/* [My Preference Result] */}
     </div>
   )
 }
