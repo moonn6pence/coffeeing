@@ -47,15 +47,21 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
                 <div className="feed-avater flex mr-10 justify-center items-center">
+                    <NavLink
+                        to={`/member/${feedDetail.registerId}`}>
                     {
                         feedDetail.registerProfileImg ? 
                         <img src={feedDetail.registerProfileImg} className="w-12 h-12 rounded-full border-2"/> : 
                         <img src={DefaultProfile} />
                     }
+                    </NavLink>
                 </div>
                 <div className="feed-member-info flex flex-col">
                     <div className="font-bold text-base">
-                        { feedDetail.registerName }
+                            <NavLink
+                                to={`/member/${feedDetail.registerId}`}>
+                                { feedDetail.registerName }
+                            </NavLink>
                     </div>
                     {
                         feedDetail.tag ? 
