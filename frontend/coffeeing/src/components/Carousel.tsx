@@ -83,7 +83,7 @@ const Carousel = (props: CarouselProps) => {
   };
 
   return (
-    <Slider {...settings} className="w-320 flex justify-center pl-10">
+    <Slider {...settings} className="w-full flex justify-center pl-10">
       {curationList.map((capsule) => (
         <BeanCard
           subtitle={capsule.subtitle}
