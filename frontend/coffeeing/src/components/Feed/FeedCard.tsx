@@ -10,6 +10,7 @@ import { TagType } from "service/search/types";
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { Toast } from 'components/Toast';
+import { DeleteAlert } from 'components/DeleteAlert'
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
@@ -80,7 +81,12 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                     <div className="write-icon-wrapper cursor-pointer rounded-xl" onClick={editEventHandler}>
                         <img src = {WriteIcon} />
                     </div>
-                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={()=>{deleteEventHandler(feedDetail.feedId)}}>
+                    <div className="delete-icon-wrapper cursor-pointer rounded-xl" onClick={async ()=>{
+                        const confirmResult = await DeleteAlert();
+                        if(confirmResult) {
+                            deleteEventHandler(feedDetail.feedId)
+                        }
+                    }}>
                         <img src = {DeleteIcon} />
                     </div>
                 </div>
