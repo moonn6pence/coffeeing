@@ -24,8 +24,6 @@ type ResultType = {
 }
 
 export const RecResultPage  = ()=>{
-  // 타입 추후 수정
-  const [rec, setRec] = useState<ResultType>();
   const [userInfo, setUserInfo] = useState({
     roast:0,
     acidity:0,
@@ -34,6 +32,7 @@ export const RecResultPage  = ()=>{
     nickname:'',
   })
   const [products, setProducts] = useState([{
+    isCapsule:true,
     id:0,
     imageUrl:'',
     subtitle:'',
@@ -46,10 +45,20 @@ export const RecResultPage  = ()=>{
   }
   const getPreference = async ()=>{
     const result = await getSurveyResult(survey);
-    result 
-    ? 
-      setProducts(result.products)
-    : console.log(result)
+    if (result) {
+      setProducts(result.recommendation.products)
+      setProducts((products)=>({...products,isCapsule:result.recommendation.isCapsule}))
+      setUserInfo((userInfo)=>({
+        ...userInfo,
+        roast:result.roast, 
+        acidity:result.acidity,
+        body:result.body,
+        imageUrl:result.imageUrl,
+        nickname:result.nickname,
+      }))
+    } else {
+      console.log(result)
+    }
   }
   useEffect( ()=>{
     sendPreference();
@@ -57,17 +66,18 @@ export const RecResultPage  = ()=>{
 
   return(
     <div>
+      <p>{userInfo.nickname}님 맞춤 {products[0].isCapsule ? '캡슐' : '원두'} 추천</p>
       <div className="flex w-300 justify-between">
-        {/* {products.map((item, index) => (
+        {products.map((item, index) => (
           <BeanCard
             subtitle={item.subtitle}
             name={item.title}
             id={item.id}
             imgLink={item.imageUrl}
-            isCapsule={beans === 'capsule' ? true : false}
+            isCapsule={item.isCapsule}
             key={index}
           />
-        ))} */}
+        ))}
       </div>
 
     </div>
