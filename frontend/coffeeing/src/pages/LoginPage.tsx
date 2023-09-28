@@ -37,7 +37,7 @@ function LoginPage() {
         window.location.replace('/recommend-main');
       }
     } else {
-      Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error')
+      Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error');
     }
   };
 
