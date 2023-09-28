@@ -13,11 +13,7 @@ export const ListPage = () => {
   const [isCapsule, setIsCapsule] = useState(false);
   const [curationLists, setCurationLists] = useState<curationProps[]>([]);
   // 공통 CSS
-  const commonClass = 'h-12 font-bold text-base hover:brightness-125';
-  // active 상태에 따른 CSS
-  const linkClass = isCapsule
-    ? `${commonClass} text-cinamon-roasting`
-    : `${commonClass} text-light-roasting`;
+  const commonClass = 'font-bold text-base hover:brightness-125 p-3';
 
   const publicCuration = () => {
     publicRequest
@@ -30,15 +26,19 @@ export const ListPage = () => {
 
   useEffect(() => {
     publicCuration();
-  }, []);
+  }, [isCapsule]);
   return (
-    <div className="mt-10 flex flex-col items-center">
-      <div className="text-left">
-        <span className={linkClass}>원두</span>
-        <span>캡슐</span>
+    <div className="mt-10 flex flex-col w-4/5 mx-auto">
+      <div className="w-full mb-10">
+        <span className={isCapsule
+      ? `${commonClass} text-light-roasting`
+      : `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`} onClick={()=>{setIsCapsule(false)}}>원두</span>
+        <span className={isCapsule
+      ? `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`
+      : `${commonClass} text-light-roasting`} onClick={()=>{setIsCapsule(true)}}>캡슐</span>
       </div>
       {curationLists.map((item, index) => (
-        <div key={index} className="">
+        <div key={index}>
           <p className="font-bold text-2xl">{item.title}</p>
           <Carousel curationList={item.products} isCapsule={item.isCapsule} />
         </div>
