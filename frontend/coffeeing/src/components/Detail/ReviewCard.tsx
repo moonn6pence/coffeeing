@@ -1,6 +1,7 @@
 import { StarIcons } from 'components/StarIcons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import noProfile from 'assets/profile.svg'
 
 export type ReviewProps = {
   content: string;
@@ -23,7 +24,7 @@ export const ReviewCard = ({ memberReview }: MemberReviewProps) => {
     <div className="w-96 p-3">
       <div className="flex mb-6">
         <img
-          src={profileImageUrl}
+          src={profileImageUrl || noProfile}
           alt="사진"
           onClick={() => {
             navigate(`/member/${memberId}`);
