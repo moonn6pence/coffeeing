@@ -19,32 +19,21 @@ export const ListPage = () => {
   // 공통 CSS
   const commonClass = 'font-bold text-base hover:brightness-125 p-3';
 
-  const publicCuration = () => {
-    publicRequest
-      .get(`${API_URL}/curation/open`, { params: { isCapsule: isCapsule } })
-      .then((res) => {
-        console.log(res.data.data.curations);
-        setCurationLists(res.data.data.curations);
-      })
-      .catch((err)=>{
-        console.log(err.response)
-      });
+  const getCuration = async () => {
+    try {
+      const response = await (isLogin
+        ? privateRequest.get(`${API_URL}/curation/custom`, { params: { isCapsule: isCapsule } })
+        : publicRequest.get(`${API_URL}/curation/open`, { params: { isCapsule: isCapsule } }))
+
+      const data = response.data.data.curations;
+      setCurationLists(data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const privateCuration = () => {
-    privateRequest.get(`${API_URL}/curation/custom`, { params: { isCapsule: isCapsule } })
-      .then((res)=>{
-        setCurationLists(res.data.data.curations)
-      })
-      .catch((err)=>{
-        console.log(err.response)
-      })
-  }
-
   useEffect(() => {
-    isLogin
-    ? privateCuration()
-    : publicCuration();
+    getCuration()
   }, [isCapsule]);
 
   return (
