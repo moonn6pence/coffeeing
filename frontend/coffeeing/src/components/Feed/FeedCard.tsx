@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
@@ -7,6 +7,9 @@ import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
 import { NavLink } from 'react-router-dom';
 import { TagType } from "service/search/types";
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { Toast } from 'components/Toast';
 
 interface FeedCardProps {
     feedDetail: FeedDetail,
@@ -16,6 +19,7 @@ interface FeedCardProps {
 }
 
 function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, editHandler }: FeedCardProps) {
+  const { isLogin } = useSelector((state: RootState) => state.member);
   const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
   const [likeCnt, setLikeCnt] = useState<number>(feedDetail.likeCount);
   
@@ -24,6 +28,10 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
   }
 
   const toggleLike = async () => {
+    if(!isLogin) {
+        Toast.fire('로그인 후 이용해주세요.','','info');
+    }
+
     const res = await likeToggleEventHandler(feedDetail.feedId);
     if(res!==null) {
         setLiked(res);
