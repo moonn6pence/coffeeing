@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
@@ -17,6 +17,7 @@ interface FeedCardProps {
 
 function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, editHandler }: FeedCardProps) {
   const [liked, setLiked] = useState<boolean>(feedDetail.isLike);
+  const [likeCnt, setLikeCnt] = useState<number>(feedDetail.likeCount);
   
   const editEventHandler = () => {
     editHandler(feedDetail);
@@ -26,6 +27,9 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
     const res = await likeToggleEventHandler(feedDetail.feedId);
     if(res!==null) {
         setLiked(res);
+        setLikeCnt((prev)=>{
+            return res ? prev+1 : prev-1;
+        })
     }
   }
 
@@ -75,14 +79,17 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                 <img src = {feedDetail.images[0].imageUrl} className="w-full"/>
             </div>
 
-            <div className="feed-content-wrapper flex flex-col px-6">
-                <div className="feed-like-wrapper w-full mx-1">
+            <div className="feed-content-wrapper flex flex-col px-6 mt-2">
+                <div className="feed-like-wrapper w-full mx-1 flex items-center">
                     <div className="cursor-pointer w-fit rounded-xl"  onClick={toggleLike}>
                         { liked ? <img src = {Feedlike} /> : <img src = {FeedUnlike} /> }
                     </div>
+                    <div className="ml-1 text-lg">
+                        { likeCnt }
+                    </div>
                 </div>
 
-                <div className="feed-text-wrapper flex flex-row w-full min-h-max">
+                <div className="feed-text-wrapper flex flex-row w-full min-h-max mt-2 mb-5">
                     <p className="break-all"> 
                         { feedDetail.content }
                     </p>
