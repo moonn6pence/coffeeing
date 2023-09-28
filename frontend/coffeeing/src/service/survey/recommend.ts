@@ -4,7 +4,7 @@ import { surveyResult, mySurvey } from "./types";
 
 export const getSurveyResult = async (survey:any)=>{
   try {
-    await publicRequest
+    const res =  await publicRequest
     .post(`${API_URL}/survey/recommend`,{},{
       params:{
         roast:survey.roasting,
@@ -15,12 +15,10 @@ export const getSurveyResult = async (survey:any)=>{
         machineType:survey.machine,
       }
     })
-    .then((res)=>{
-      return res.data.data
-    })
+    return res.data.data
   } catch (error) {
     console.log('[fail to get recommendation]', error)
-    return false
+    throw error
   }
 }
 
