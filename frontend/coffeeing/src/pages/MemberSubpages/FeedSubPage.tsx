@@ -21,8 +21,9 @@ export const FeedSubPage = () => {
   const { id: memberId } = useOutletContext<MemberId>();
   const FEED_SIZE = 12;
   const [cursor, setCursor] = useState<undefined | number>(undefined);
-  const [hasMore, setHasMore] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
   const [feedList, setFeedList] = useState<Array<FeedItem>>([]);
+  const [feedSet, setFeedSet] = useState<Set<number>>(new Set());
 
   const feedComponents = useCallback(() => {
     return feedList.map((item: FeedItem) => {
@@ -54,11 +55,21 @@ export const FeedSubPage = () => {
   };
   const loadFeeds = async () => {
     const data = await queryFeeds();
+    console.log('data called ', data);
     if (data) {
+      const newFeeds = data.feeds.filter((item: FeedItemResponse) => {
+        if (!feedSet.has(item.feedId)) {
+          setFeedSet((originalSet) => {
+            return originalSet.add(item.feedId);
+          });
+          return true;
+        }
+        return false;
+      });
       setFeedList((ori) => {
         return [
           ...ori,
-          ...data.feeds.map((item: FeedItemResponse) => {
+          ...newFeeds.map((item: FeedItemResponse) => {
             return {
               feedId: item.feedId,
               imageUrl: item.images[0],
@@ -67,19 +78,21 @@ export const FeedSubPage = () => {
         ];
       });
     }
+    console.log('data has next = ', data.hasNext);
     setHasMore(data.hasNext);
     setCursor(data.nextCursor);
   };
 
   useEffect(() => {
     loadFeeds();
-  });
+  }, []);
 
   return (
     <div className="sub-wrapper">
-      <div className="feed-wrapper">
+      <div className="feed-wrapper flex w-full min-h-fit">
         <InfiniteScroll
           dataLength={feedList.length}
+          style={{display:'flex'}}
           next={loadFeeds}
           hasMore={hasMore}
           loader={<h4>Loading...</h4>}
