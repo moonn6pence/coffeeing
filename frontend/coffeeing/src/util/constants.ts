@@ -125,3 +125,17 @@ export const SURVEY_BODY_ITEMS = [
 	{label:0.9,name:'스무디 같은 꾸덕꾸덕한 느낌', src:smoothie},
 	{label:-1,name:'잘 모르겠어요', src:unknownBody}
 ]
+
+import nespresso from '../assets/survey/machine/nespresso-removebg-preview.png'
+import nespresso_burtuo from '../assets/survey/machine/nespresso_b-removebg-preview.png'
+import dolce from '../assets/survey/machine/dolce-removebg-preview.png'
+import illi from '../assets/survey/machine/illi-removebg-preview.png'
+import balmuda from '../assets/survey/machine/balmuda.png'
+
+export const SURVEY_MACHINE_ITEMS = [
+	{label:1,name:'네스프레소', src:nespresso},
+	{label:2,name:'네스프레소 버추오', src:nespresso_burtuo},
+	{label:3,name:'돌체구스토', src:dolce},
+	{label:4,name:'일리', src:illi},
+	{label:5,name:'기타', src:balmuda},
+]
