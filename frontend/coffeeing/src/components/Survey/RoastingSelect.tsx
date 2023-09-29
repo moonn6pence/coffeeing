@@ -5,6 +5,7 @@ import { addCurrentPage, saveRoasting } from 'store/surveySlice';
 import { NextButton } from './SurveyButton';
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_ROAST_ITEMS } from 'util/constants';
+import { BackButton } from './SurveyButton';
 export const RoastingSelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch<AppDispatch>();
@@ -54,7 +55,11 @@ export const RoastingSelect = () => {
         />
       </div>
       {/* 버튼 */}
-      <NextButton handleClick={handleRoastSubmit} label='다음' />
+      <div className='flex flex-row gap-10'>
+        <BackButton/>
+        <NextButton handleClick={handleRoastSubmit} label='다음' />
+      </div>
+        
     </div>
   );
 };

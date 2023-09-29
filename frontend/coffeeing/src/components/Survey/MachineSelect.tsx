@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { NextButton } from './SurveyButton'
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_MACHINE_ITEMS } from 'util/constants';
+import { BackButton } from './SurveyButton';
 export const MachineSelect = () => {
   const navigate = useNavigate();
   const survey = useSelector((state:RootState)=>state.survey)
@@ -35,7 +36,10 @@ export const MachineSelect = () => {
         pageNum={5}
       />
       {/* 버튼 */}
-      <NextButton handleClick={handleSurveySubmit} label='제출하기'/>
+      <div className='flex flex-row gap-10'>
+        <BackButton/>
+        <NextButton handleClick={handleSurveySubmit} label='제출하기'/>
+      </div>
     </div>
   )
 }
