@@ -1,15 +1,11 @@
-import { useDebounce } from '@react-hooks-hub/use-debounce';
 import { isAxiosError } from 'axios';
 import { FeedComponent } from 'components/Feed/FeedComponent';
-import { FeedEditModal } from 'components/Modal/FeedEditModal';
 import { MemberFeedModal } from 'components/Modal/MemberFeedModal';
 import { MemberId } from 'pages/MemberPage';
 import React, { useCallback, useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useOutletContext } from 'react-router-dom';
 import { FeedDetail } from 'service/feed/types';
-import { getTagsByKeyword } from 'service/search/search';
-import { Tag } from 'service/search/types';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 

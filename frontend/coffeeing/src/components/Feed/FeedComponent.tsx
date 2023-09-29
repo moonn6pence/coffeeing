@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import noImage from '../../assets/no_image.png';
 import { FeedDetail } from 'service/feed/types';
-import { privateRequest, publicRequest } from 'util/axios';
+import { publicRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
-import { useOutletContext } from 'react-router-dom';
-import { MemberId } from 'pages/MemberPage';
 import { useSelector } from 'react-redux';
-import memberSlice from 'store/memberSlice';
 import { RootState } from 'store/store';
 
 type FeedItemProps = {

@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react';
 import FeedCard from 'components/Feed/FeedCard';
-import React, { Fragment, useRef, useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { deleteFeeds, postFeedLike } from 'service/feed/feed';
 import { FeedDetail } from 'service/feed/types';
 import { FeedEditModal } from './FeedEditModal';
