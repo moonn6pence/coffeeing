@@ -181,7 +181,7 @@ class CurationServiceTest extends ServiceTest {
                         : CurationType.COFFEE_ROAST_DARK
                 );
 
-        given(recommendService.pickByCriteria(isCapsule, "roast", "high"))
+        given(recommendService.pickByCriteria(10, isCapsule, "roast", "high"))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByCriteriaMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByCriteriaMockCoffees.stream().map(Coffee::getId).toList())
@@ -248,7 +248,7 @@ class CurationServiceTest extends ServiceTest {
                         : CurationType.COFFEE_AGE_GENDER
                 );
 
-        given(recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference)))
+        given(recommendService.pickByPreference(10, SurveyMapper.supplyPreferenceRequestFrom(preference)))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByPreferenceMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByPreferenceMockCoffees.stream().map(Coffee::getId).toList())
@@ -276,7 +276,7 @@ class CurationServiceTest extends ServiceTest {
                 .memberId(generalMember.getId())
                 .build());
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(0), generalMember, 4));
             capsuleReviewRepository.save(CapsuleReviewTestDummy.createMockCapsuleReview(capsules.get(1), generalMember, 2));
         } else {
@@ -321,13 +321,13 @@ class CurationServiceTest extends ServiceTest {
                 ? CurationType.CAPSULE_LIKED_PRODUCT
                 : CurationType.COFFEE_LIKED_PRODUCT);
 
-        given(recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference)))
+        given(recommendService.pickByPreference(10, SurveyMapper.supplyPreferenceRequestFrom(preference)))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByPreferenceMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByPreferenceMockCoffees.stream().map(Coffee::getId).toList())
                 );
 
-        given(recommendService.pickBySimilarity(isCapsule, isCapsule ? capsules.get(0).getId() : coffees.get(0).getId()))
+        given(recommendService.pickBySimilarity(10, isCapsule, isCapsule ? capsules.get(0).getId() : coffees.get(0).getId()))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickBySimilarityMockCapsules.stream().map(Capsule::getId).toList()
                         : pickBySimilarityMockCoffees.stream().map(Coffee::getId).toList())

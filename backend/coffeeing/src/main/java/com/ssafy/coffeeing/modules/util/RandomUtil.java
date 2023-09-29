@@ -4,6 +4,7 @@ import com.ssafy.coffeeing.modules.curation.domain.CurationType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -18,42 +19,33 @@ public class RandomUtil {
 
     private final Random random;
 
+    private static final String REGEX_IS_CRITERIA = "(roast|body|acidity|flavor)";
+    private static final String REGEX_IS_KEYWORD = "(liked product|age and gender)";
+
     public RandomUtil() {
         this.capsuleCharacteristicCurations = new ArrayList<>();
         this.coffeeCharacteristicCurations = new ArrayList<>();
         this.capsuleKeywordCurations = new ArrayList<>();
         this.coffeeKeywordCurations = new ArrayList<>();
-        this.flavors = new ArrayList<>();
+        this.flavors = List.of("fruity", "sweety", "chocolaty", "nutty", "spicy", "floral");
         this.random = new Random();
 
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_ACIDITY_HIGH);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_ACIDITY_LOW);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_BODY_HEAVY);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_BODY_LIGHT);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_ROAST_DARK);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_ROAST_LIGHT);
-        this.capsuleCharacteristicCurations.add(CurationType.CAPSULE_FLAVOR);
-
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ACIDITY_HIGH);
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ACIDITY_LOW);
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_BODY_HEAVY);
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_BODY_LIGHT);
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ROAST_DARK);
-        this.capsuleCharacteristicCurations.add(CurationType.COFFEE_ROAST_LIGHT);
-        this.coffeeCharacteristicCurations.add(CurationType.CAPSULE_FLAVOR);
-
-        this.capsuleKeywordCurations.add(CurationType.CAPSULE_AGE_GENDER);
-        this.capsuleKeywordCurations.add(CurationType.CAPSULE_LIKED_PRODUCT);
-
-        this.coffeeKeywordCurations.add(CurationType.COFFEE_AGE_GENDER);
-        this.coffeeKeywordCurations.add(CurationType.COFFEE_LIKED_PRODUCT);
-
-        this.flavors.add("fruity");
-        this.flavors.add("sweety");
-        this.flavors.add("chocolaty");
-        this.flavors.add("nutty");
-        this.flavors.add("spicy");
-        this.flavors.add("floral");
+        Arrays.stream(CurationType.values())
+                .forEach(curationType -> {
+                    if (curationType.getIsCapsule().equals(Boolean.TRUE)) {
+                        if (curationType.getCriteria().matches(REGEX_IS_CRITERIA)) {
+                            this.capsuleCharacteristicCurations.add(curationType);
+                        } else if (curationType.getCriteria().matches(REGEX_IS_KEYWORD)){
+                            this.capsuleKeywordCurations.add(curationType);
+                        }
+                    } else {
+                        if (curationType.getCriteria().matches(REGEX_IS_CRITERIA)) {
+                            this.coffeeCharacteristicCurations.add(curationType);
+                        } else if (curationType.getCriteria().matches(REGEX_IS_KEYWORD)) {
+                            this.coffeeKeywordCurations.add(curationType);
+                        }
+                    }
+                });
     }
 
     public int generate(int boundary) {
@@ -62,7 +54,7 @@ public class RandomUtil {
 
     public CurationType getRandomCharacteristicCuration(Boolean isCapsule) {
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             return capsuleCharacteristicCurations.get(generate(capsuleCharacteristicCurations.size()));
         }
 
@@ -71,7 +63,7 @@ public class RandomUtil {
 
     public CurationType getRandomKeywordCuration(Boolean isCapsule) {
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             return capsuleKeywordCurations.get(generate(capsuleKeywordCurations.size()));
         }
 

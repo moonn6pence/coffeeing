@@ -44,7 +44,8 @@ public class CurationService {
     private final MemberQueryRepository memberQueryRepository;
     private final PreferenceRepository preferenceRepository;
 
-    private static final String prefix = "당신이 좋아하는 ";
+    private static final String PREFIX = "당신이 좋아하는 ";
+    private static final Integer CURATION_LENGTH = 12;
 
     @Transactional(readOnly = true)
     public CurationResponse getOpenCuration(Boolean isCapsule) {
@@ -52,7 +53,9 @@ public class CurationService {
         List<CurationElement> curations = new ArrayList<>();
 
         // 인기도 큐레이션
-        curations.add(findByPopularity(isCapsule ? CurationType.CAPSULE_POPULAR : CurationType.COFFEE_POPULAR));
+        curations.add(findByPopularity(isCapsule.equals(Boolean.TRUE)
+                ? CurationType.CAPSULE_POPULAR
+                : CurationType.COFFEE_POPULAR));
 
         // 지표별 유사제품군 큐레이션
         CurationType randomCuration = randomUtil.getRandomCharacteristicCuration(isCapsule);
@@ -75,11 +78,11 @@ public class CurationService {
 
         CurationType randomCuration = randomUtil.getRandomKeywordCuration(isCapsule);
 
-        curations.add(findByMemberPreference(isCapsule
+        curations.add(findByMemberPreference(isCapsule.equals(Boolean.TRUE)
                 ? CurationType.CAPSULE_PREFERENCE
                 : CurationType.COFFEE_PREFERENCE, member));
 
-        if (isCapsule) {
+        if (isCapsule.equals(Boolean.TRUE)) {
             Capsule capsule = capsuleReviewQueryRepository.findRandomHighScoredCapsule(member);
 
             if (capsule != null && randomCuration.equals(CurationType.CAPSULE_LIKED_PRODUCT)) {
@@ -104,7 +107,7 @@ public class CurationService {
 
     private CurationElement findByPopularity(CurationType curation) {
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
                     capsuleRepository.findTop10CapsulesByOrderByPopularityDesc());
         }
@@ -116,12 +119,13 @@ public class CurationService {
     private CurationElement findByCharacteristic(CurationType curation) {
 
         RecommendResponse recommendResponse = recommendService.pickByCriteria(
+                CURATION_LENGTH,
                 curation.getIsCapsule(),
                 curation.getCriteria(),
                 curation.getAttribute()
         );
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
                     capsuleRepository.findAllById(recommendResponse.results()));
         }
@@ -132,12 +136,16 @@ public class CurationService {
 
     private CurationElement findByFlavorNote(CurationType curation, String flavor) {
 
-        if (curation.getIsCapsule()) {
-            return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
+            return CurationMapper.supplyCapsuleCurationElementOf(true,
+                    new StringBuffer().append(curation.getTitle())
+                            .append(flavor).toString(),
                     capsuleRepository.findTop10ByFlavorNoteContains(flavor));
         }
 
-        return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
+        return CurationMapper.supplyCoffeeCurationElementOf(false,
+                new StringBuffer().append(curation.getTitle())
+                        .append(flavor).toString(),
                 coffeeRepository.findTop10ByFlavorNoteContains(flavor));
     }
 
@@ -146,14 +154,16 @@ public class CurationService {
         PreferenceAverage average = memberQueryRepository.findPreferenceAverageByAgeAndGender(age, gender);
 
         RecommendResponse recommendResponse = recommendService.pickByPreference(
+                CURATION_LENGTH,
                 new PreferenceRequest(curation.getIsCapsule(),
                         1,
                         average.getRoast(),
                         average.getAcidity(),
                         average.getBody(),
-                        null));
+                        null)
+        );
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
                     new StringBuffer(String.valueOf(age.ordinal() + 1))
                             .append("0대 ")
@@ -174,9 +184,9 @@ public class CurationService {
         Preference preference = preferenceRepository.findByMemberId(member.getId());
 
         RecommendResponse recommendResponse =
-                recommendService.pickByPreference(SurveyMapper.supplyPreferenceRequestFrom(preference));
+                recommendService.pickByPreference(CURATION_LENGTH,SurveyMapper.supplyPreferenceRequestFrom(preference));
 
-        if (curation.getIsCapsule()) {
+        if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
                     new StringBuffer().append(member.getNickname())
                             .append(curation.getTitle()).toString(),
@@ -191,10 +201,10 @@ public class CurationService {
 
     private CurationElement findByMemberLikedProduct(CurationType curation, Capsule capsule) {
 
-        RecommendResponse recommendResponse = recommendService.pickBySimilarity(true, capsule.getId());
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(CURATION_LENGTH,true, capsule.getId());
 
         return CurationMapper.supplyCapsuleCurationElementOf(true,
-                new StringBuffer().append(prefix)
+                new StringBuffer().append(PREFIX)
                         .append(capsule.getCapsuleNameKr())
                         .append(curation.getTitle()).toString(),
                 capsuleRepository.findAllById(recommendResponse.results()));
@@ -202,10 +212,10 @@ public class CurationService {
 
     private CurationElement findByMemberLikedProduct(CurationType curation, Coffee coffee) {
 
-        RecommendResponse recommendResponse = recommendService.pickBySimilarity(false, coffee.getId());
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(CURATION_LENGTH,false, coffee.getId());
 
         return CurationMapper.supplyCoffeeCurationElementOf(false,
-                new StringBuffer().append(prefix)
+                new StringBuffer().append(PREFIX)
                         .append(coffee.getCoffeeNameKr())
                         .append(curation.getTitle()).toString(),
                 coffeeRepository.findAllById(recommendResponse.results()));

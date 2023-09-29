@@ -7,10 +7,10 @@ import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 
 public interface RecommendService {
 
-    RecommendResponse pickByPreference(PreferenceRequest preferenceRequest);
+    RecommendResponse pickByPreference(Integer count, PreferenceRequest preferenceRequest);
 
-    RecommendResponse pickBySimilarity(Boolean isCapsule, Long id);
+    RecommendResponse pickBySimilarity(Integer count, Boolean isCapsule, Long id);
 
-    RecommendResponse pickByCriteria(Boolean isCapsule, String criteria, String attribute);
+    RecommendResponse pickByCriteria(Integer count, Boolean isCapsule, String criteria, String attribute);
 
 }

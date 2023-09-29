@@ -1,13 +1,13 @@
 package com.ssafy.coffeeing.modules.member.mapper;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.ExperienceInfoResponse;
+import com.ssafy.coffeeing.modules.member.dto.MemberInfoResponse;
 import com.ssafy.coffeeing.modules.member.dto.MyInfoResponse;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import org.springframework.stereotype.Component;
-
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberMapper {
     public static MemberInfoResponse supplyBaseInfoResponseFrom(Member member) {
         return new MemberInfoResponse(
@@ -26,10 +26,10 @@ public class MemberMapper {
 
     public static MyInfoResponse supplyMyInfoResponseOf(Member member) {
         return new MyInfoResponse(
-            member.getId(),
-            member.getState(),
-            member.getNickname(),
-            member.getProfileImage()
+                member.getId(),
+                member.getState(),
+                member.getNickname(),
+                member.getProfileImage()
         );
     }
 

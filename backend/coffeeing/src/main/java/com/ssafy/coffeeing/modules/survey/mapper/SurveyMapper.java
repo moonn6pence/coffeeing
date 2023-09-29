@@ -5,15 +5,15 @@ import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
-import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.survey.domain.Preference;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import com.ssafy.coffeeing.modules.survey.dto.SurveyResponse;
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SurveyMapper {
 
     public static Preference supplyPreferenceOf(PreferenceRequest request, Long memberId) {

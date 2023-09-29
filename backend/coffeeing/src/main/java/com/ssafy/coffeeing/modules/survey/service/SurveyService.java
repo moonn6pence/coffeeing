@@ -32,13 +32,14 @@ public class SurveyService {
     private final CoffeeRepository coffeeRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
     private static final Integer SURVEY_EXPERIENCE = 15;
+    private static final Integer SURVEY_RESULT_LENGTH = 4;
 
     @Transactional
     public SurveyResponse recommendBySurvey(PreferenceRequest preferenceRequest) {
 
         Member member = securityContextUtils.getMemberIdByTokenOptionalRequest();
 
-        RecommendResponse recommendResponse = recommendService.pickByPreference(preferenceRequest);
+        RecommendResponse recommendResponse = recommendService.pickByPreference(SURVEY_RESULT_LENGTH, preferenceRequest);
 
         List<SimpleProductElement> products = preferenceRequest.isCapsule() ?
                 capsuleRepository.findAllById(recommendResponse.results())

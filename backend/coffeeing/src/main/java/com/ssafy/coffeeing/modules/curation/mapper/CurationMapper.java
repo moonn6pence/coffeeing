@@ -5,9 +5,12 @@ import com.ssafy.coffeeing.modules.curation.dto.CurationResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CurationMapper {
 
     public static CurationResponse supplyCurationResponseFrom(List<CurationElement> curations) {
