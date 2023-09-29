@@ -137,11 +137,15 @@ public class CurationService {
     private CurationElement findByFlavorNote(CurationType curation, String flavor) {
 
         if (curation.getIsCapsule().equals(Boolean.TRUE)) {
-            return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
+            return CurationMapper.supplyCapsuleCurationElementOf(true,
+                    new StringBuffer().append(curation.getTitle())
+                            .append(flavor).toString(),
                     capsuleRepository.findTop10ByFlavorNoteContains(flavor));
         }
 
-        return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
+        return CurationMapper.supplyCoffeeCurationElementOf(false,
+                new StringBuffer().append(curation.getTitle())
+                        .append(flavor).toString(),
                 coffeeRepository.findTop10ByFlavorNoteContains(flavor));
     }
 
