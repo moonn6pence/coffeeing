@@ -8,20 +8,10 @@ import { NavBarButton } from 'components/NavBar/NavBarButton';
 export const MainPage = () => {
   return (
     <div>
-      <div className="w-screen h-[750px] bg-light"></div>
-      <div className="w-screen h-[750px] flex justify-evenly items-center">
-        <img src={recImg} alt="추천페이지" className="w-[579px] h-96" />
-        <div className="space-y-8">
-          <p className="font-bold text-[42px] leading-[50px]">
-            취향에 맞는
-            <br />
-            커피 추천
-          </p>
-          <p className="text-xl text-[#7C7C7C]">
-            본인의 취향에 맞는
-            <br />
-            원두와 캡슐을 찾아보세요
-          </p>
+      <div className="w-screen h-[620px] bg-main-page bg-cover flex justify-center">
+        <div className="flex flex-col items-center mt-20 h-[210px] justify-between">
+          <p className="text-6xl font-bold text-[#4A2F23]">취향에 맞는 커피 추천</p>
+          <p className="text-lg text-[#784C3A]">본인의 취향에 맞는 원두와 캡슐을 찾아보세요</p>
           <NavBarButton value="추천받기" navLink="/recommend-main" />
         </div>
       </div>
