@@ -79,12 +79,25 @@ import coffeeBean from '../assets/survey/coffee/coffeeBean.png'
 import coffeeCapsule from '../assets/survey/coffee/coffeeCapsule.png'
 
 export type CoffeeItem = {
-    label:string,
+    label:string|number,
 		name:string,
 		src:string,
+		toolTipDesc?:string
 }
 
 export const COFFEE_ITEMS = [
 	{label:'bean', name:'원두', src:coffeeBean},
 	{label:'capsule', name:'캡슐', src:coffeeCapsule}
+]
+
+import lightRoast from '../assets/survey/lightRoast.png';
+import mediumRoast from '../assets/survey/mediumRoast.png';
+import darkRoast from '../assets/survey/darkRoast.png';
+import unknownRoast from '../assets/survey/unknownRoast.png';
+
+export const SURVEY_ROAST_ITEMS = [
+	{label:0.3, name:'라이트 로스팅',src:lightRoast,toolTipDesc:'강한 신맛이 나고 품종의 특성이 잘 나타납니다.'},
+	{label:0.6, name:'미디엄 로스팅',src:mediumRoast,toolTipDesc:'산뜻한 신맛이 나고 품종의 특성이 약하게 나타납니다.'},
+	{label:0.9, name:'라이트 로스팅',src:darkRoast,toolTipDesc:'신맛이 약해지고 단맛과 쓴맛이 강해집니다.'},
+	{label:-1, name:'잘 모르겠어요',src:unknownRoast},
 ]
