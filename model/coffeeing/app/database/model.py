@@ -1,4 +1,6 @@
 from .models.member import Member
+from .models.capsule import Capsule
+from .models.coffee import Coffee
 
 class Model:
     def __getitem__(self, key):
@@ -8,3 +10,5 @@ class Model:
         return setattr(self, key, value)
 
     Member = Member
+    Capsule = Capsule
+    Coffee = Coffee
