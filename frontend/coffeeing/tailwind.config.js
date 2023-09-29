@@ -45,6 +45,9 @@ module.exports = {
       backgroundImage: {
         'review-blur': "url('/src/assets/detail/review_blur.png')",
       },
+      fontFamily: {
+        'S-CoreDream-3Light': ['S-CoreDream-3Light'],
+      }
     },
   },
   plugins: [],
