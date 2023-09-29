@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'store/store';
 import { setMemberToken, setMyInfo } from 'store/memberSlice';
 import { MemberState } from 'service/member/types';
+import { Toast } from 'components/Toast';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -35,6 +36,8 @@ function LoginPage() {
       if (myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
         window.location.replace('/recommend-main');
       }
+    } else {
+      Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error');
     }
   };
 

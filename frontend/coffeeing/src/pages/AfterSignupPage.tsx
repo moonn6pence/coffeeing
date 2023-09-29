@@ -9,6 +9,7 @@ import { AGE_ITEMS, GENDER_ITEMS } from "util/constants";
 import { getMyInfo, checkUniqueNickname, postOnboard } from "service/member/member"
 import { MemberState } from "service/member/types";
 import { setMyInfo } from "store/memberSlice";
+import { Toast } from 'components/Toast';
 
 export const AfterSignupPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,23 +36,34 @@ export const AfterSignupPage = () => {
 
   const handleCheckNickname = async () => {
       if(nickname.length <=0 || nickname.length > 11) {
-          // TODO ADD MODAL
+          Toast.fire('닉네임은 1자 이상 11자 이하만<br>입력 가능합니다.','','error');
           return;
       }
       const result = await checkUniqueNickname(nickname);
       if(result) {
-          alert(result.exist);
+          if(result.exist) {
+            Toast.fire('이미 사용중인 닉네임입니다.','','error');
+          } else {
+            Toast.fire('사용 가능한 닉네임입니다.','','info');
+          }
+      } else {
+        Toast.fire('서버와 연결이 원할하지 않습니다.<br>관리자에게 문의하세요.','','error');
       }
   }
 
   const handleSubmit = async () => {
     if(nickname.length <=0 || nickname.length > 11) {
-        // TODO ADD MODAL
+        Toast.fire('닉네임은 1자 이상 11자 이하만<br>입력 가능합니다.','','error');
         return;
     }
 
-    if(selectedAge.value == -1 || selectedGender.value == -1) {
-        // TODO ADD MODAL
+    if(selectedGender.value == -1) {
+        Toast.fire('성별 선택은 필수입니다.','','error');
+        return;
+    }
+
+    if(selectedAge.value == -1) {
+        Toast.fire('나이 선택은 필수입니다.','','error');
         return;
     }
 
