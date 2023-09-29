@@ -1,18 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import lightRoast from '../../assets/survey/lightRoast.png';
-import mediumRoast from '../../assets/survey/mediumRoast.png';
-import darkRoast from '../../assets/survey/darkRoast.png';
-import unknownRoast from '../../assets/survey/unknownRoast.png';
 import { AppDispatch, RootState } from 'store/store';
 import { addCurrentPage, saveRoasting } from 'store/surveySlice';
 import { NextButton } from './SurveyButton';
-import { RoastingTooltip } from 'components/Tooltip/survey';
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_ROAST_ITEMS } from 'util/constants';
 export const RoastingSelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
-  const widthClass = `w-${survey.currentPage}/${survey.totalPage}`;
   const dispatch = useDispatch<AppDispatch>();
   const [selectedRoast, setSelectedRoast] = useState(0)
   useEffect(()=>{
@@ -46,7 +40,7 @@ export const RoastingSelect = () => {
         </div>
         <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={` botton-0 left-0 ${widthClass} h-2.5 rounded-lg bg-half-light`}
+            className={` botton-0 left-0 ${survey.totalPage===4?'w-1/4':'w-1/5'} h-2.5 rounded-lg bg-half-light`}
           ></span>
         </p>
       </div>

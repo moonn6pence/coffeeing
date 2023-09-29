@@ -1,6 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, {  useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { AppDispatch, RootState } from 'store/store';
+import {  RootState } from 'store/store';
 import { NextButton, BackButton } from './SurveyButton';
 import { addCurrentPage } from 'store/surveySlice';
 import { saveBody } from 'store/surveySlice';
@@ -9,7 +9,6 @@ import { SURVEY_BODY_ITEMS } from 'util/constants';
 export const BodySelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch()
-  const widthClass = `w-${survey.currentPage}/${survey.totalPage}`;
   const [selectedBody, setSelectedBody] = useState(-2);
 
   const handleBodyClick = () => {
@@ -31,7 +30,7 @@ export const BodySelect = () => {
         <p className="text-2xl font-bold">선호하는 바디감을 선택해주세요</p>
         <p className="relative w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={`absolute botton-0 left-0 ${widthClass} h-2.5 rounded-lg bg-light-roasting`}
+            className={`absolute botton-0 left-0 ${survey.totalPage===4?'w-3/4':'w-4/5'} h-2.5 rounded-lg bg-half-light`}
           ></span>
         </p>
       </div>

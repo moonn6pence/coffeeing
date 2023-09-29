@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppDispatch, RootState } from 'store/store';
 import { addCurrentPage, saveAcidity } from 'store/surveySlice';
@@ -7,7 +7,6 @@ import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_ACID_ITEMS } from 'util/constants';
 export const AciditySelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
-  const [widthClass, setWidthClass] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   const [selectedAcidity, setSelectedAcidity] = useState(-1);
 
@@ -33,7 +32,7 @@ export const AciditySelect = () => {
         <p className="text-2xl font-bold">선호하는 산미 단계를 선택해주세요</p>
         <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={` botton-0 left-0 ${widthClass} h-2.5 rounded-lg bg-light-roasting`}
+            className={` botton-0 left-0 ${survey.totalPage===4?'w-2/4':'w-2/5'} h-2.5 rounded-lg bg-half-light`}
           ></span>
         </p>
       </div>

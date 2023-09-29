@@ -65,7 +65,7 @@ export const FlavorNoteSelect = () => {
         <p className='text-2xl font-bold'>선호하는 맛이나 향들을 선택해주세요</p>
         <p>(최대 6개 선택 가능)</p>
         <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
-          <p className={`absolute botton-0 left-0  h-2.5 rounded-lg bg-light-roasting`}></p>
+          <p className={`absolute botton-0 left-0 ${survey.totalPage===4?'w-4/4':'w-4/5'} h-2.5 rounded-lg bg-half-light`}></p>
         </p>
       </div>
       {/* 설문 사진 */}
