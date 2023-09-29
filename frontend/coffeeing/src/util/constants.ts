@@ -101,3 +101,16 @@ export const SURVEY_ROAST_ITEMS = [
 	{label:0.9, name:'라이트 로스팅',src:darkRoast,toolTipDesc:'신맛이 약해지고 단맛과 쓴맛이 강해집니다.'},
 	{label:-1, name:'잘 모르겠어요',src:unknownRoast},
 ]
+
+import noAcid from '../assets/survey/acidity/noAcid.png';
+import lowAcid from '../assets/survey/acidity/lowAcid.png';
+import mediumAcid from '../assets/survey/acidity/mediumAcid.png';
+import highAcid from '../assets/survey/acidity/highAcid.png';
+
+export const SURVEY_ACID_ITEMS = [
+	{label:0.25, name:'없음', src:noAcid},
+	{label:0.5, name:'낮음', src:lowAcid},
+	{label:0.75, name:'중간', src:mediumAcid},
+	{label:1, name:'높음', src:highAcid}
+]
+
