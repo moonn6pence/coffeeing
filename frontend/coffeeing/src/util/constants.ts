@@ -74,3 +74,17 @@ export const FLAVOR_NOTE_ITEMS = [
     {label:'spicy', name:'매콤함'},
     {label:'floral', name:'꽃향'},
 ]
+
+import coffeeBean from '../assets/survey/coffee/coffeeBean.png'
+import coffeeCapsule from '../assets/survey/coffee/coffeeCapsule.png'
+
+export type CoffeeItem = {
+    label:string,
+		name:string,
+		src:string,
+}
+
+export const COFFEE_ITEMS = [
+	{label:'bean', name:'원두', src:coffeeBean},
+	{label:'capsule', name:'캡슐', src:coffeeCapsule}
+]
