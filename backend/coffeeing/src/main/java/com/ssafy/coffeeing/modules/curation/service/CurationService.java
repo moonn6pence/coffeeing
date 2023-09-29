@@ -45,7 +45,7 @@ public class CurationService {
     private final PreferenceRepository preferenceRepository;
 
     private static final String PREFIX = "당신이 좋아하는 ";
-    private static final Integer CURATION_LENGTH = 10;
+    private static final Integer CURATION_LENGTH = 12;
 
     @Transactional(readOnly = true)
     public CurationResponse getOpenCuration(Boolean isCapsule) {
