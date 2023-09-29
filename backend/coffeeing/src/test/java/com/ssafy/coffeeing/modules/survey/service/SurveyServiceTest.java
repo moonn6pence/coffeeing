@@ -10,7 +10,7 @@ import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.recommend.service.MockRecommendService;
+import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import com.ssafy.coffeeing.modules.survey.domain.Preference;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
@@ -18,18 +18,16 @@ import com.ssafy.coffeeing.modules.survey.dto.SurveyResponse;
 import com.ssafy.coffeeing.modules.survey.mapper.SurveyMapper;
 import com.ssafy.coffeeing.modules.survey.repository.PreferenceRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
-import com.ssafy.coffeeing.modules.util.base.BaseEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -44,7 +42,7 @@ class SurveyServiceTest extends ServiceTest {
     @Autowired
     private PreferenceRepository preferenceRepository;
 
-    @Qualifier("MockRecommendService")
+    @MockBean
     private RecommendService recommendService;
 
     @Autowired
@@ -66,6 +64,7 @@ class SurveyServiceTest extends ServiceTest {
     private List<Capsule> capsuleRecommendations;
     private List<Coffee> coffees;
     private List<Coffee> coffeeRecommendations;
+    private static final Integer SURVEY_RESULT_LENGTH = 4;
 
     @ParameterizedTest
     @MethodSource("preferenceRequests")
@@ -76,15 +75,18 @@ class SurveyServiceTest extends ServiceTest {
         if (preferenceRequest.isCapsule()) {
             capsules = capsuleRepository.saveAll(CapsuleTestDummy.create25GenericCapsules());
             capsuleRecommendations = capsules.subList(0, 4);
-            ReflectionTestUtils.setField(MockRecommendService.class, "mockCapsuleIds",
-                    capsuleRecommendations.stream().map(BaseEntity::getId).toList());
         } else {
             coffees = coffeeRepository.saveAll(CoffeeTestDummy.create25GeneralCoffees());
             coffeeRecommendations = coffees.subList(0, 4);
-            ReflectionTestUtils.setField(MockRecommendService.class, "mockCoffeeIds",
-                    coffeeRecommendations.stream().map(BaseEntity::getId).toList());
         }
 
+        given(recommendService.pickByPreference(SURVEY_RESULT_LENGTH, preferenceRequest))
+                .willReturn(new RecommendResponse(preferenceRequest.isCapsule().equals(Boolean.TRUE)
+                        ? capsuleRecommendations.subList(0, SURVEY_RESULT_LENGTH)
+                        .stream().map(Capsule::getId).toList()
+                        : coffeeRecommendations.subList(0, SURVEY_RESULT_LENGTH)
+                        .stream().map(Coffee::getId).toList())
+                );
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(null);
 
         SurveyResponse expected = generateExpectation(preferenceRequest);
@@ -105,15 +107,18 @@ class SurveyServiceTest extends ServiceTest {
         if (preferenceRequest.isCapsule()) {
             capsules = capsuleRepository.saveAll(CapsuleTestDummy.create25GenericCapsules());
             capsuleRecommendations = capsules.subList(0, 4);
-            ReflectionTestUtils.setField(MockRecommendService.class, "mockCapsuleIds",
-                    capsuleRecommendations.stream().map(BaseEntity::getId).toList());
         } else {
             coffees = coffeeRepository.saveAll(CoffeeTestDummy.create25GeneralCoffees());
             coffeeRecommendations = coffees.subList(0, 4);
-            ReflectionTestUtils.setField(MockRecommendService.class, "mockCoffeeIds",
-                    coffeeRecommendations.stream().map(BaseEntity::getId).toList());
         }
 
+        given(recommendService.pickByPreference(SURVEY_RESULT_LENGTH, preferenceRequest))
+                .willReturn(new RecommendResponse(preferenceRequest.isCapsule().equals(Boolean.TRUE)
+                        ? capsuleRecommendations.subList(0, SURVEY_RESULT_LENGTH)
+                        .stream().map(Capsule::getId).toList()
+                        : coffeeRecommendations.subList(0, SURVEY_RESULT_LENGTH)
+                        .stream().map(Coffee::getId).toList())
+                );
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
         SurveyResponse expected = generateExpectation(preferenceRequest, generalMember);
 

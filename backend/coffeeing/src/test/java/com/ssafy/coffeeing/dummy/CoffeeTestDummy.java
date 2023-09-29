@@ -62,10 +62,10 @@ public class CoffeeTestDummy {
         return coffees;
     }
 
-    public static List<Coffee> create10SpecifiedFlavorCoffees(String flavorNote) {
+    public static List<Coffee> create12SpecifiedFlavorCoffees(String flavorNote) {
         List<Coffee> coffees = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             coffees.add(Coffee.builder()
                     .coffeeNameKr("제네렉 커피 " + i)
                     .coffeeNameEng("Generic Coffee " + i)

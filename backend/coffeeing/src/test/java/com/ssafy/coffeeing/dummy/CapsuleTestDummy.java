@@ -85,9 +85,9 @@ public class CapsuleTestDummy {
 
 
 
-    public static List<Capsule> create10SpecifiedFlavorCapsules(String flavorNote) {
+    public static List<Capsule> create12SpecifiedFlavorCapsules(String flavorNote) {
         List<Capsule> capsules = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 12; i++) {
             capsules.add(Capsule.builder()
                     .brandKr("Generic 한국 브랜드" + i)
                     .brandEng("Generic English brand " + i)

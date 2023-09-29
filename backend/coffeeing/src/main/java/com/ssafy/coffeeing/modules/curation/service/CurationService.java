@@ -109,11 +109,11 @@ public class CurationService {
 
         if (curation.getIsCapsule().equals(Boolean.TRUE)) {
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
-                    capsuleRepository.findTop10CapsulesByOrderByPopularityDesc());
+                    capsuleRepository.findTop12CapsulesByOrderByPopularityDesc());
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
-                coffeeRepository.findTop10CoffeesByOrderByPopularityDesc());
+                coffeeRepository.findTop12CoffeesByOrderByPopularityDesc());
     }
 
     private CurationElement findByCharacteristic(CurationType curation) {
@@ -140,13 +140,13 @@ public class CurationService {
             return CurationMapper.supplyCapsuleCurationElementOf(true,
                     new StringBuffer().append(curation.getTitle())
                             .append(flavor).toString(),
-                    capsuleRepository.findTop10ByFlavorNoteContains(flavor));
+                    capsuleRepository.findTop12ByFlavorNoteContains(flavor));
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false,
                 new StringBuffer().append(curation.getTitle())
                         .append(flavor).toString(),
-                coffeeRepository.findTop10ByFlavorNoteContains(flavor));
+                coffeeRepository.findTop12ByFlavorNoteContains(flavor));
     }
 
     private CurationElement findByAgeAndGender(CurationType curation, Age age, Gender gender) {

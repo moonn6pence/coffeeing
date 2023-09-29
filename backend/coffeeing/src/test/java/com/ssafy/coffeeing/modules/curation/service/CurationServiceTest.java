@@ -75,25 +75,27 @@ class CurationServiceTest extends ServiceTest {
     private List<Coffee> pickByPreferenceMockCoffees;
     private List<Coffee> pickBySimilarityMockCoffees;
 
+    private static final Integer CURATION_LENGTH = 12;
+
     @BeforeEach
     void setCurations() {
         capsules = new ArrayList<>();
-        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create10SpecifiedFlavorCapsules("fruity")));
-        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create10SpecifiedFlavorCapsules("nutty")));
-        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create10SpecifiedFlavorCapsules("floral")));
+        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create12SpecifiedFlavorCapsules("fruity")));
+        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create12SpecifiedFlavorCapsules("nutty")));
+        capsules.addAll(capsuleRepository.saveAll(CapsuleTestDummy.create12SpecifiedFlavorCapsules("floral")));
 
         coffees = new ArrayList<>();
-        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create10SpecifiedFlavorCoffees("fruity")));
-        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create10SpecifiedFlavorCoffees("nutty")));
-        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create10SpecifiedFlavorCoffees("floral")));
+        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create12SpecifiedFlavorCoffees("fruity")));
+        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create12SpecifiedFlavorCoffees("nutty")));
+        coffees.addAll(coffeeRepository.saveAll(CoffeeTestDummy.create12SpecifiedFlavorCoffees("floral")));
 
-        pickByPreferenceMockCapsules = capsules.subList(0, 10);
-        pickBySimilarityMockCapsules = capsules.subList(10, 20);
-        pickByCriteriaMockCapsules = capsules.subList(20, 30);
+        pickByPreferenceMockCapsules = capsules.subList(0, 12);
+        pickBySimilarityMockCapsules = capsules.subList(12, 24);
+        pickByCriteriaMockCapsules = capsules.subList(24, 36);
 
-        pickByCriteriaMockCoffees = coffees.subList(0, 10);
-        pickByPreferenceMockCoffees = coffees.subList(10, 20);
-        pickBySimilarityMockCoffees = coffees.subList(20, 30);
+        pickByCriteriaMockCoffees = coffees.subList(0, 12);
+        pickByPreferenceMockCoffees = coffees.subList(12, 24);
+        pickBySimilarityMockCoffees = coffees.subList(24, 36);
     }
 
     @ParameterizedTest
@@ -108,22 +110,22 @@ class CurationServiceTest extends ServiceTest {
                 ? CurationMapper.supplyCapsuleCurationElementOf(
                 true,
                 CurationType.CAPSULE_POPULAR.getTitle(),
-                capsuleRepository.findTop10CapsulesByOrderByPopularityDesc())
+                capsuleRepository.findTop12CapsulesByOrderByPopularityDesc())
                 : CurationMapper.supplyCoffeeCurationElementOf(
                 false,
                 CurationType.COFFEE_POPULAR.getTitle(),
-                coffeeRepository.findTop10CoffeesByOrderByPopularityDesc());
+                coffeeRepository.findTop12CoffeesByOrderByPopularityDesc());
 
         // mocking flavor curation
         CurationElement expectedFlavorCuration = isCapsule
                 ? CurationMapper.supplyCapsuleCurationElementOf(
                 true,
-                CurationType.CAPSULE_FLAVOR.getTitle(),
-                capsuleRepository.findTop10ByFlavorNoteContains(flavor))
+                CurationType.CAPSULE_FLAVOR.getTitle()+flavor,
+                capsuleRepository.findTop12ByFlavorNoteContains(flavor))
                 : CurationMapper.supplyCoffeeCurationElementOf(
                 false,
-                CurationType.COFFEE_FLAVOR.getTitle(),
-                coffeeRepository.findTop10ByFlavorNoteContains(flavor));
+                CurationType.COFFEE_FLAVOR.getTitle()+flavor,
+                coffeeRepository.findTop12ByFlavorNoteContains(flavor));
 
         CurationResponse expected = CurationMapper
                 .supplyCurationResponseFrom(Arrays.asList(expectedPopularityCuration, expectedFlavorCuration));
@@ -155,11 +157,11 @@ class CurationServiceTest extends ServiceTest {
                 ? CurationMapper.supplyCapsuleCurationElementOf(
                 true,
                 CurationType.CAPSULE_POPULAR.getTitle(),
-                capsuleRepository.findTop10CapsulesByOrderByPopularityDesc())
+                capsuleRepository.findTop12CapsulesByOrderByPopularityDesc())
                 : CurationMapper.supplyCoffeeCurationElementOf(
                 false,
                 CurationType.COFFEE_POPULAR.getTitle(),
-                coffeeRepository.findTop10CoffeesByOrderByPopularityDesc());
+                coffeeRepository.findTop12CoffeesByOrderByPopularityDesc());
 
         // mocking criteria curation
         CurationElement expectedCriteriaCuration = isCapsule
@@ -181,7 +183,7 @@ class CurationServiceTest extends ServiceTest {
                         : CurationType.COFFEE_ROAST_DARK
                 );
 
-        given(recommendService.pickByCriteria(10, isCapsule, "roast", "high"))
+        given(recommendService.pickByCriteria(CURATION_LENGTH, isCapsule, "roast", "high"))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByCriteriaMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByCriteriaMockCoffees.stream().map(Coffee::getId).toList())
@@ -248,7 +250,7 @@ class CurationServiceTest extends ServiceTest {
                         : CurationType.COFFEE_AGE_GENDER
                 );
 
-        given(recommendService.pickByPreference(10, SurveyMapper.supplyPreferenceRequestFrom(preference)))
+        given(recommendService.pickByPreference(CURATION_LENGTH, SurveyMapper.supplyPreferenceRequestFrom(preference)))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByPreferenceMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByPreferenceMockCoffees.stream().map(Coffee::getId).toList())
@@ -321,13 +323,13 @@ class CurationServiceTest extends ServiceTest {
                 ? CurationType.CAPSULE_LIKED_PRODUCT
                 : CurationType.COFFEE_LIKED_PRODUCT);
 
-        given(recommendService.pickByPreference(10, SurveyMapper.supplyPreferenceRequestFrom(preference)))
+        given(recommendService.pickByPreference(CURATION_LENGTH, SurveyMapper.supplyPreferenceRequestFrom(preference)))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickByPreferenceMockCapsules.stream().map(Capsule::getId).toList()
                         : pickByPreferenceMockCoffees.stream().map(Coffee::getId).toList())
                 );
 
-        given(recommendService.pickBySimilarity(10, isCapsule, isCapsule ? capsules.get(0).getId() : coffees.get(0).getId()))
+        given(recommendService.pickBySimilarity(CURATION_LENGTH, isCapsule, isCapsule ? capsules.get(0).getId() : coffees.get(0).getId()))
                 .willReturn(new RecommendResponse(isCapsule
                         ? pickBySimilarityMockCapsules.stream().map(Capsule::getId).toList()
                         : pickBySimilarityMockCoffees.stream().map(Coffee::getId).toList())

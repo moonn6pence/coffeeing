@@ -12,7 +12,7 @@ public interface CapsuleRepository extends JpaRepository<Capsule, Long> {
 
     List<Capsule> findCapsulesByCapsuleNameKrContainingIgnoreCase(String keyword, Pageable pageable);
 
-    List<Capsule> findTop10CapsulesByOrderByPopularityDesc();
+    List<Capsule> findTop12CapsulesByOrderByPopularityDesc();
 
-    List<Capsule> findTop10ByFlavorNoteContains(String flavorNote);
+    List<Capsule> findTop12ByFlavorNoteContains(String flavorNote);
 }
