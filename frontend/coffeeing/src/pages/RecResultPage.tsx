@@ -115,18 +115,8 @@ export const RecResultPage  = ()=>{
         {/* [Preference] */}
         <div className="space-y-3 w-532px">
           <p className="text-xl font-black mb-10">내 취향 분석</p>
-          <div className="flex w-full justify-between">
-            <span className="text-xl font-bold my-auto">로스팅</span> 
-            <BeanRating rate={userInfo.roast}/>
-          </div>
-          <div className="flex w-full justify-between">
-            <span className="text-xl font-bold my-auto">산미</span> 
-            <BeanRating rate={userInfo.acidity}/>
-          </div>
-          <div className="flex w-full justify-between">
-            <span className="text-xl font-bold my-auto">바디감</span> 
-            <BeanRating rate={userInfo.body}/>
-          </div>
+          <BeanRating roast={userInfo.roast} acidity={userInfo.acidity} body={userInfo.body}/>
+          
         </div>
       </div>
     </div>
