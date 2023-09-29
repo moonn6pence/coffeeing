@@ -140,11 +140,11 @@ export const SearchPage = () =>{
       {/* 원두 | 캡슐 */}
       <div className="text-3xl font-bold space-x-10 mt-10 ml-[10%]">
         <span 
-          className={productType==='BEAN'?`text-black`:`text-[#7A88A3]`}
+          className={`${productType==='BEAN'?`text-black`:`text-[#7A88A3]`} cursor-pointer `}
           onClick={()=>{setProductType('BEAN'), setCurrentPage(0)}}
           >원두</span>
         <span 
-          className={productType==='CAPSULE'?`text-black`:`text-[#7A88A3]`}
+          className={`${productType==='CAPSULE'?`text-black`:`text-[#7A88A3]`} cursor-pointer`}
           onClick={()=>{setProductType('CAPSULE'), setCurrentPage(0)}}
           >캡슐</span>
       </div>
