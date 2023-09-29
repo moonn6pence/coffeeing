@@ -12,7 +12,7 @@ export const BodySelect = () => {
   const [selectedBody, setSelectedBody] = useState(-2);
 
   const handleBodyClick = () => {
-    if (selectedBody === -1) {
+    if (selectedBody === -2) {
       alert('선호하는 바디감을 하나만 선택해주세요');
     } else {
       dispatch(addCurrentPage());

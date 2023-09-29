@@ -9,7 +9,7 @@ import { BackButton } from './SurveyButton';
 export const RoastingSelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch<AppDispatch>();
-  const [selectedRoast, setSelectedRoast] = useState(0)
+  const [selectedRoast, setSelectedRoast] = useState(-2)
   useEffect(()=>{
     console.log(selectedRoast)
   },[selectedRoast])
@@ -17,7 +17,7 @@ export const RoastingSelect = () => {
   // 다음 버튼 클릭 시
   const handleRoastSubmit = () => {
     // 선택 안 했을 때
-    if (selectedRoast === -1) {
+    if (selectedRoast === -2) {
       alert('선호하는 로스팅 단계를 하나 선택해주세요');
     }
     // 선택 했을 때 - 다음 페이지로 & 로스팅 정보 저장
