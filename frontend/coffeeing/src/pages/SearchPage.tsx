@@ -65,7 +65,11 @@ export const SearchPage = () =>{
 
   // 필터 조건 바뀔 때 마다 가져오기
   useEffect(() =>  {  
-    getResult()
+    if (currentPage===0) {
+      getResult()
+    } else {
+      setCurrentPage(0)
+    }
   }, [selectedRoast, selectedAcid, selectedBody, selectedFlavorNote,sendKeyword]);
   
   return(
