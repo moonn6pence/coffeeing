@@ -11,7 +11,7 @@ type RadioGroupProps = {
 
 export const RadioGroupSingle = ({selectedItem, setSelectedItem, itemList,pageNum}:RadioGroupProps)=>{
   return(
-    <RadioGroup className="flex gap-10" value={selectedItem} onChange={setSelectedItem}>
+    <RadioGroup className={`${pageNum===5?'gap-3':'gap-10'} flex`} value={selectedItem} onChange={setSelectedItem}>
       {itemList.map((item)=>(
         <RadioGroup.Option key={item.label} value={item.label}>
           {({checked})=>(
