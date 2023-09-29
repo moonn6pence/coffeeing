@@ -114,3 +114,14 @@ export const SURVEY_ACID_ITEMS = [
 	{label:1, name:'높음', src:highAcid}
 ]
 
+import water from '../assets/survey/body/water.png';
+import smoothie from '../assets/survey/body/smoothie.png';
+import milk from '../assets/survey/body/milk.png';
+import unknownBody from '../assets/survey/body/unknownBody.png';
+
+export const SURVEY_BODY_ITEMS = [
+	{label:0.3, name:'물 같은 가벼운 느낌',src:water},
+	{label:0.6,name:'우유 같은 묵직한 느낌', src:milk},
+	{label:0.9,name:'스무디 같은 꾸덕꾸덕한 느낌', src:smoothie},
+	{label:-1,name:'잘 모르겠어요', src:unknownBody}
+]
