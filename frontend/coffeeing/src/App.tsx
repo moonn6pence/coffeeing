@@ -20,7 +20,7 @@ import { ExperienceSubPage } from 'pages/MemberSubpages/ExperienceSubPage';
 
 function App() {
   return (
-    <div className='font-S-CoreDream-3Light'>
+    <div className='font-Pretendard-Regular'>
       <NavBarBody />
 
       {/* Routes */}
