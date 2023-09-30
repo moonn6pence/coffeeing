@@ -18,9 +18,9 @@ import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.search.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -166,10 +166,10 @@ public class FeedService {
     }
 
     private void validateTagInformation(Tag tag) {
-        if(tag.category().equals(TagType.CAPSULE)) {
+        if(tag.category().equals(ProductType.COFFEE_CAPSULE)) {
             boolean isExist = capsuleRepository.existsById(tag.tagId());
             if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
-        } else if(tag.category().equals(TagType.BEAN)) {
+        } else if(tag.category().equals(ProductType.COFFEE_BEAN)) {
             boolean isExist = coffeeRepository.existsById(tag.tagId());
             if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
         }
@@ -180,7 +180,7 @@ public class FeedService {
             Optional<FeedLike> feedLike,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
-        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
         if (Objects.isNull(viewer)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);

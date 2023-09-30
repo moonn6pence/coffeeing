@@ -38,7 +38,7 @@ public class FeedMapper {
                 .imageUrl(imageUrl)
                 .likeCount(0)
                 .tagId(tag.tagId())
-                .tagType(tag.category())
+                .productType(tag.category())
                 .tagName(tag.name())
                 .build();
     }

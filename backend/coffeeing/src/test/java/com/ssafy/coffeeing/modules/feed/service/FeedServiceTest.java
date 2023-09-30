@@ -25,9 +25,9 @@ import com.ssafy.coffeeing.modules.global.exception.info.FeedErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,10 +42,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -94,7 +91,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getId()).isPositive(),
                 () -> assertThat(response.getLikeCount()).isEqualTo(0),
                 () -> assertThat(response.getTagId()).isEqualTo(null),
-                () -> assertThat(response.getTagType()).isEqualTo(null),
+                () -> assertThat(response.getProductType()).isEqualTo(null),
                 () -> assertThat(response.getTagName()).isEqualTo(null)
         );
 
@@ -123,7 +120,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getId()).isPositive(),
                 () -> assertThat(response.getLikeCount()).isEqualTo(0L),
                 () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
-                () -> assertThat(response.getTagType()).isEqualTo(TagType.CAPSULE),
+                () -> assertThat(response.getProductType()).isEqualTo(ProductType.COFFEE_CAPSULE),
                 () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr())
         );
 
@@ -202,7 +199,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content()),
                 () -> assertThat(feed.getTagName()).isEqualTo(updateFeedRequest.tag().name()),
                 () -> assertThat(feed.getTagId()).isEqualTo(updateFeedRequest.tag().tagId()),
-                () -> assertThat(feed.getTagType()).isEqualTo(updateFeedRequest.tag().category())
+                () -> assertThat(feed.getProductType()).isEqualTo(updateFeedRequest.tag().category())
         );
 
         //verify

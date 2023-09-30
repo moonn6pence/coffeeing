@@ -2,10 +2,20 @@ package com.ssafy.coffeeing.modules.search.service;
 
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.domain.*;
-import com.ssafy.coffeeing.modules.search.dto.*;
+import com.ssafy.coffeeing.modules.search.domain.Acidity;
+import com.ssafy.coffeeing.modules.search.domain.Body;
+import com.ssafy.coffeeing.modules.search.domain.Roast;
+import com.ssafy.coffeeing.modules.search.domain.Tag;
+import com.ssafy.coffeeing.modules.search.dto.BeanSearchElement;
+import com.ssafy.coffeeing.modules.search.dto.CapsuleSearchElement;
+import com.ssafy.coffeeing.modules.search.dto.SearchBeanResponse;
+import com.ssafy.coffeeing.modules.search.dto.SearchCapsuleResponse;
+import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
 import com.ssafy.coffeeing.modules.search.mapper.SearchMapper;
 import com.ssafy.coffeeing.modules.search.repository.SearchQueryRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +24,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
@@ -135,8 +150,8 @@ public class SearchService {
             List<Capsule> capsules,
             List<Coffee> coffees) {
         tags.addAll(capsules.stream().map(capsule ->
-                new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr())).toList());
+                new Tag(capsule.getId(), ProductType.COFFEE_CAPSULE, capsule.getCapsuleNameKr())).toList());
         tags.addAll(coffees.stream().map(coffee ->
-                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr())).toList());
+                new Tag(coffee.getId(), ProductType.COFFEE_BEAN, coffee.getCoffeeNameKr())).toList());
     }
 }
