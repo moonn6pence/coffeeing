@@ -21,7 +21,7 @@ def SurveyRecommendBeans(roast, acidity, body, flavor_note, is_capsule, machine_
     input_roast = roast
     input_acid = acidity
     input_body = body
-    input_flavor_note= flavor_note
+    input_flavor_notes= set(flavor_note.split(','))
 
     # 입력값을 데이터 프레임으로 변환
     input_data = pd.DataFrame({'roast': [input_roast], 'acidity': [input_acid], 'body': [input_body]})
@@ -33,8 +33,7 @@ def SurveyRecommendBeans(roast, acidity, body, flavor_note, is_capsule, machine_
     jaccard_sim = []
     for i in range(data.shape[0]):
         product_flaver_notes = set(data.iloc[i]['flavor_note'].split(', '))
-        intersection_len = 1 if input_flavor_note in product_flaver_notes else 0
-        jaccard_similarity = intersection_len / (len(product_flaver_notes)+abs(intersection_len-1))
+        jaccard_similarity = len(input_flavor_notes) / len(product_flaver_notes.union(input_flavor_notes))
         jaccard_sim.append(jaccard_similarity)
     
     data.loc[:, 'jaccard_sim'] = jaccard_sim
@@ -58,4 +57,5 @@ def SurveyRecommendBeans(roast, acidity, body, flavor_note, is_capsule, machine_
     result = []
     for recommended_product in recommended_products:
         result.append(recommended_product['id'])
+    print(result)
     return result
