@@ -22,16 +22,17 @@ import java.util.Optional;
 public class DefaultRecommendService implements RecommendService {
 
     private final RecSysProperty recSysProperty;
-
     private final RestTemplate restTemplate;
+    private static final String PARAM_COUNT = "count";
+    private static final String PARAM_IS_CAPSULE = "isCapsule";
 
     @Override
     public RecommendResponse pickByPreference(Integer count, PreferenceRequest preferenceRequest) {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getPickByPreferenceUrl())
-                .queryParam("count", count)
-                .queryParam("isCapsule", preferenceRequest.isCapsule())
+                .queryParam(PARAM_COUNT, count)
+                .queryParam(PARAM_IS_CAPSULE, preferenceRequest.isCapsule())
                 .queryParamIfPresent("machineType", Optional.of(preferenceRequest.machineType()))
                 .queryParam("roast", preferenceRequest.roast())
                 .queryParam("acidity", preferenceRequest.acidity())
@@ -55,8 +56,8 @@ public class DefaultRecommendService implements RecommendService {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getPickBySimilarityUrl())
-                .queryParam("count", count)
-                .queryParam("isCapsule", isCapsule)
+                .queryParam(PARAM_COUNT, count)
+                .queryParam(PARAM_IS_CAPSULE, isCapsule)
                 .queryParam("id", id)
                 .encode()
                 .build()
@@ -76,8 +77,8 @@ public class DefaultRecommendService implements RecommendService {
 
         URI uri = UriComponentsBuilder
                 .fromUriString(recSysProperty.getPickByCriteriaUrl())
-                .queryParam("count", count)
-                .queryParam("isCapsule", isCapsule)
+                .queryParam(PARAM_COUNT, count)
+                .queryParam(PARAM_IS_CAPSULE, isCapsule)
                 .queryParam("criteria", criteria)
                 .queryParam("attribute", attribute)
                 .encode()
