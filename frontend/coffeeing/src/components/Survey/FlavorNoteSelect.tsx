@@ -31,8 +31,8 @@ export const FlavorNoteSelect = () => {
     {src:floral, label:'플로럴', isSelected:selectedFloral, setIsSelected:setSelectedFloral, keyword:'floral'},
     {src:fruity, label:'과일', isSelected:selectedFruity, setIsSelected:setSelectedFruity, keyword:'fruity'},
     {src:nutty, label:'견과류', isSelected:selectedNutty, setIsSelected:setSelectedNutty, keyword:'nutty'},
-    {src:spicy, label:'매콤함', isSelected:selectedSpicy, setIsSelected:setSelectedSpicy, keyword:'spicy'},
-    {src:sweet, label:'달콤함', isSelected:selectedSweety, setIsSelected:setSelectedSweety, keyword:'sweety'},
+    {src:spicy, label:'매콤', isSelected:selectedSpicy, setIsSelected:setSelectedSpicy, keyword:'spicy'},
+    {src:sweet, label:'달콤', isSelected:selectedSweety, setIsSelected:setSelectedSweety, keyword:'sweety'},
   ]
 
   const handleFlavorSelect = (isSelected:boolean, setIsSelected:Dispatch<SetStateAction<boolean>>, keyword:string)=>{
@@ -63,8 +63,9 @@ export const FlavorNoteSelect = () => {
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='text-2xl font-bold'>선호하는 맛이나 향들을 선택해주세요</p>
+        <p>(최대 6개 선택 가능)</p>
         <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
-          <p className={`absolute botton-0 left-0  h-2.5 rounded-lg bg-light-roasting`}></p>
+          <p className={`absolute botton-0 left-0 ${survey.totalPage===4?'w-4/4':'w-4/5'} h-2.5 rounded-lg bg-half-light`}></p>
         </p>
       </div>
       {/* 설문 사진 */}
