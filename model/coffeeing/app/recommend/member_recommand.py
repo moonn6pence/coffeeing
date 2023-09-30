@@ -5,7 +5,7 @@ from ..database.model import Model
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-def SurveyRecommendBeans(roast, acidity, body, flavor_note, is_capsule, machine_type, db: Session):
+def SurveyRecommendBeans(count, roast, acidity, body, flavor_note, is_capsule, machine_type, db: Session):
     model = Model()
     loader = DataLoader(db)
     
@@ -47,7 +47,7 @@ def SurveyRecommendBeans(roast, acidity, body, flavor_note, is_capsule, machine_
 
     # # 유사도가 높은 행을 추출
     similar_indices = combined_sim.argsort()[::-1]  
-    top_n = 4 
+    top_n = count
     top_rows = data.iloc[similar_indices[:top_n]]
 
     ## 유사도가 가장 높은 top_n개의 product_id 리턴

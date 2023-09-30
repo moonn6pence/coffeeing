@@ -8,15 +8,24 @@ from sqlalchemy.orm import Session
 
 recommend = APIRouter(prefix='/rec')
 
+#  원두 / 캡슐의 특성을 기준에 따라 추천한다. 
+#  (1) 특성의 종류(criteria): roast, body, acidity (로스팅, 바디감, 산도)
+#  (2) 추천 기준(attribute) : low, high
+#    2-1 : low
+#    2-2 : high
 @recommend.get("/criteria")
-def collaborative_filter(isCapsule: bool, machineType: int, roast: float, acidity: float,body: float, flavorNote: str):   
+def item_characteristics_base_recommand(count: int, isCapsule: bool, criteria: str, attribute:str, db: Session = Depends(get_session)):   
     return {"results":[1,2,3,4]}
 
+# 원두, 캡슐의 id가 주어진 경우 해당 아이템과 유사한 상품을 추천한다.
 @recommend.get("/similar")
-def collaborative_filter2(isCapsule: bool, machineType: int, roast: float, acidity: float,body: float, flavorNote: str):   
+def suvey_base_recommand(count: int, isCapsule: bool, id: int, db: Session = Depends(get_session)):   
     return {"results":[1,2,3,4]}
 
+#  사용자 설문 결과를 기반으로 다음의 두 가지 유사도를 이용하여 상품을 추천한다.
+#  (1) 설문 결과로 나온 원두의 특성(roast, body, acidity)와 상품들의 코사인 유사도
+#  (2) 설문 결과로 나온 flaver_note와 상품들의 자카드 유사도 
 @recommend.get("/preference")
-async def content_filter(roast:float, acidity:float, body:float, flavorNote:str,isCapsule: bool, machineType:int, db: Session = Depends(get_session)):
-	result = SurveyRecommendBeans(roast, acidity, body, flavorNote, isCapsule, machineType, db)
+async def suvey_base_recommand(count: int, isCapsule: bool, machineType:int, roast:float, acidity:float, body:float, flavorNote:str, db: Session = Depends(get_session)):
+	result = SurveyRecommendBeans(count, roast, acidity, body, flavorNote, isCapsule, machineType, db)
 	return {"results": result}
