@@ -14,7 +14,7 @@ export const NavBarLinkList = () => {
   ];
 
   return (
-    <div className="flex space-x-16">
+    <div className="flex w-1/3 justify-between">
       {navigation.map((page) => (
         <NavBarLink
           name={page.name}

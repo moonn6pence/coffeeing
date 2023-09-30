@@ -44,9 +44,10 @@ module.exports = {
       },
       backgroundImage: {
         'review-blur': "url('/src/assets/detail/review_blur.png')",
+        'main-page': "url('/src/assets/main/main-background.jpg')",
       },
       fontFamily: {
-        'S-CoreDream-3Light': ['S-CoreDream-3Light'],
+        'Pretendard-Regular': ['Pretendard-Regular'],
       }
     },
   },

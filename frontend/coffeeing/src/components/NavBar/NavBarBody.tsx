@@ -12,8 +12,8 @@ export const NavBarBody = () => {
   const myInfo = useSelector((state:RootState) => state.member);
   const navigate = useNavigate();
   return (
-    <div className="w-screen h-16 border-b border-light-roasting py-2 px-30">
-      <div className="flex justify-between w-300">
+    <div className="w-screen h-16 border-b border-light-roasting py-2 flex justify-center">
+      <div className="flex justify-between w-4/5">
         <button
           onClick={() => {
             navigate('/');
@@ -33,7 +33,6 @@ export const NavBarBody = () => {
                 }
               }}
             />
-            <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
           </div>
         ) : (
           <div className="flex space-x-3">

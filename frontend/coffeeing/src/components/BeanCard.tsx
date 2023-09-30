@@ -51,8 +51,8 @@ export const BeanCard = (props: ICardProps) => {
         alt="사진"
         className="w-36 h-36 m-auto mb-16 hover:scale-110"
       />
-      <p className="text-sm text-center text-font-gray mb-2">{subtitle}</p>
-      <p className="text-base text-center mb-12">{name}</p>
+      <p className="text-sm text-center text-font-gray mb-2 h-5">{subtitle || '  '}</p>
+      <p className="text-base text-center mb-12 truncate">{name}</p>
     </div>
   );
 };
