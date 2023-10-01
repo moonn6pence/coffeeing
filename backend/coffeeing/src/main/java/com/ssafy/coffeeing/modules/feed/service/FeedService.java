@@ -170,7 +170,7 @@ public class FeedService {
         if (Objects.isNull(feed.getTagId())) {
             attachFeedTagWithValidation(tag);
             feed.updateTag(tag);
-        }else if (!feed.getTagId().equals(tag.tagId())) {
+        }else if (!feed.getTagName().equals(tag.name())) {
             detachFeedTagWithValidation(feed);
             attachFeedTagWithValidation(tag);
             feed.updateTag(tag);
