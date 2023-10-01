@@ -107,6 +107,7 @@ class FeedServiceTest extends ServiceTest {
                 .willReturn(generalMember);
         Capsule capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleRoma());
         UploadFeedRequest uploadFeedRequest = FeedTestDummy.createUploadFeedRequestWithTag(capsule);
+        Integer previousPopularity = capsule.getPopularity();
 
         //when
         UploadFeedResponse uploadFeedResponse = feedService
@@ -121,7 +122,8 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getLikeCount()).isEqualTo(0L),
                 () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
                 () -> assertThat(response.getProductType()).isEqualTo(ProductType.COFFEE_CAPSULE),
-                () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr())
+                () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr()),
+                () -> assertThat(capsule.getPopularity()).isEqualTo(previousPopularity + 10)
         );
 
         //verify
@@ -164,6 +166,29 @@ class FeedServiceTest extends ServiceTest {
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
     }
 
+    @DisplayName("피드 삭제 요청 시, 태그가 존재하던 피드라면 태그와 연관된 Product Popularity 가 10 감소한다.")
+    @Test
+    void Given_DeleteFeedRequest_When_DeleteFeedAndDetachTag_Then_Success() {
+        //given
+        given(securityContextUtils.getCurrnetAuthenticatedMember())
+                .willReturn(generalMember);
+        Capsule capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleRoma());
+        UploadFeedResponse uploadFeedResponse = feedService.uploadFeedByMember(FeedTestDummy.createUploadFeedRequestWithTag(capsule));
+        Feed feed = feedRepository.getReferenceById(uploadFeedResponse.feedId());
+        Integer previousPopularity = capsule.getPopularity();
+
+        //when
+        em.flush();
+        feedService.deleteFeedById(feed.getId());
+
+        //then
+        assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
+        assertThat(capsule.getPopularity()).isEqualTo(previousPopularity - 10);
+
+        //verify
+        verify(securityContextUtils, times(2)).getCurrnetAuthenticatedMember();
+    }
+
     @DisplayName("피드 내용 수정 요청 시, 수정에 성공한다.")
     @Test
     void Given_UpdateFeedRequest_When_UpdateFeed_Then_Success() {
@@ -174,6 +199,7 @@ class FeedServiceTest extends ServiceTest {
 
         //when
         feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        em.flush();
 
         //then
         assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content());
@@ -182,24 +208,27 @@ class FeedServiceTest extends ServiceTest {
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
     }
 
-    @DisplayName("태그와 함께 피드 업데이트 요청 시, 수정에 성공한다.")
+    @DisplayName("태그와 함께 태그가 없던 피드 업데이트 요청 시, 수정에 성공한다.")
     @Test
     void Given_UpdateFeedWithTag_When_UpdateFeed_Then_Success() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         Coffee coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeRoma());
+        Integer previousPopularity = coffee.getPopularity();
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(coffee);
 
         //when
         feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        em.flush();
 
         //then
         assertAll(
                 () -> assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content()),
                 () -> assertThat(feed.getTagName()).isEqualTo(updateFeedRequest.tag().name()),
                 () -> assertThat(feed.getTagId()).isEqualTo(updateFeedRequest.tag().tagId()),
-                () -> assertThat(feed.getProductType()).isEqualTo(updateFeedRequest.tag().category())
+                () -> assertThat(feed.getProductType()).isEqualTo(updateFeedRequest.tag().category()),
+                () -> assertThat(coffee.getPopularity()).isEqualTo(previousPopularity + 10)
         );
 
         //verify
