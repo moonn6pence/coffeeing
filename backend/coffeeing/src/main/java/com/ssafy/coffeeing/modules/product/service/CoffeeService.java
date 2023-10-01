@@ -63,6 +63,7 @@ public class CoffeeService {
         return ProductMapper.supplyCoffeeResponseOf(coffee, isBookmarked, memberReview);
     }
 
+    @Transactional
     public ToggleResponse toggleBookmark(Long id) {
 
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
@@ -102,29 +103,5 @@ public class CoffeeService {
         Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<SimpleProductElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
         return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
-    }
-
-    public void addReview(Long id, Integer score) {
-
-        Coffee coffee = coffeeRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
-
-        coffee.addReview(score);
-    }
-
-    public void updateReview(Long id, Integer diff) {
-
-        Coffee coffee = coffeeRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
-
-        coffee.updateReview(diff);
-    }
-
-    public void deleteReview(Long id, Integer score) {
-
-        Coffee coffee = coffeeRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
-
-        coffee.deleteReview(score);
     }
 }

@@ -66,6 +66,7 @@ public class CapsuleService {
         return ProductMapper.supplyCapsuleResponseOf(capsule, isBookmarked, memberReview);
     }
 
+    @Transactional
     public ToggleResponse toggleBookmark(Long id) {
 
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
@@ -105,14 +106,5 @@ public class CapsuleService {
         Member member = memberRepository.findById(id).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
         return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCapsuleElements, IS_CAPSULE);
-    }
-
-    @Transactional
-    public void addReview(Long id, Integer score) {
-
-        Capsule capsule = capsuleRepository.findById(id)
-                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
-
-        capsule.addReview(score);
     }
 }

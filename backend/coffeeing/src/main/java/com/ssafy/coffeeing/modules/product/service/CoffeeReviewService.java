@@ -91,6 +91,7 @@ public class CoffeeReviewService {
         review.update(reviewRequest.content(), reviewRequest.score());
     }
 
+    @Transactional
     public void deleteReview(Long id) {
 
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
