@@ -16,8 +16,8 @@ export const NavLinkWrapper = (props: NavLinkWrapperProps) => {
       to={to}
       className={({ isActive }) => {
         const defaultClassName =
-          'p-5 m-2 inline-block w-[100px] rounded-t-[10px] text-center font-bold ';
-        return defaultClassName + (isActive ? 'bg-light' : 'bg-light-roasting');
+          'p-5 inline-block w-36 rounded-t-[10px] text-center font-bold text-xl ';
+        return defaultClassName + (isActive ? 'bg-light' : 'bg-light-roasting text-white');
       }}
     >
       {text}
