@@ -50,6 +50,18 @@ public class FeedTestDummy {
                 .build();
     }
 
+    public static Feed createFeedWithCoffeeTag(Member member, Coffee coffee) {
+        return Feed.builder()
+                .member(member)
+                .likeCount(0)
+                .content("testFeed")
+                .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
+                .tagId(coffee.getId())
+                .tagName(coffee.getCoffeeNameEng())
+                .productType(ProductType.COFFEE_BEAN)
+                .build();
+    }
+
     public static FeedLike createFeedLike(Feed feed, Member member) {
         return FeedLike.builder()
                 .feed(feed)
@@ -78,5 +90,10 @@ public class FeedTestDummy {
     public static UpdateFeedRequest createUpdateFeedRequestWithTag(Coffee coffee) {
         return new UpdateFeedRequest("testUpdateContent",
                 new Tag(coffee.getId(), ProductType.COFFEE_BEAN, coffee.getCoffeeNameKr()));
+    }
+
+    public static UpdateFeedRequest createUpdateFeedRequestWithTag(Capsule capsule) {
+        return new UpdateFeedRequest("testUpdateContent",
+                new Tag(capsule.getId(), ProductType.COFFEE_CAPSULE, capsule.getCapsuleNameKr()));
     }
 }

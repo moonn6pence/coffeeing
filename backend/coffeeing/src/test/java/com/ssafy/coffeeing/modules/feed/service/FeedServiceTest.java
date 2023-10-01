@@ -235,6 +235,36 @@ class FeedServiceTest extends ServiceTest {
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
     }
 
+    @DisplayName("태그와 함께 태그가 있던 피드 업데이트 요청 시, 피드 업데이트에 성공한다.")
+    @Test
+    void Given_UpdateFeedWithChangeTag_When_UpdateFeed_Then_Success() {
+        //given
+        Coffee coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeKenyaAA());
+        Feed feed = feedRepository.save(FeedTestDummy.createFeedWithCoffeeTag(generalMember, coffee));
+        given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        Capsule capsule = capsuleRepository.save(CapsuleTestDummy.createMockCapsuleRoma());
+        UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(capsule);
+        Integer previousCoffeePopularity = coffee.getPopularity();
+        Integer previousCapsulePopularity = capsule.getPopularity();
+
+        //when
+        feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        em.flush();
+
+        //then
+        assertAll(
+                () -> assertThat(feed.getContent()).isEqualTo(updateFeedRequest.content()),
+                () -> assertThat(feed.getTagName()).isEqualTo(updateFeedRequest.tag().name()),
+                () -> assertThat(feed.getTagId()).isEqualTo(updateFeedRequest.tag().tagId()),
+                () -> assertThat(feed.getProductType()).isEqualTo(updateFeedRequest.tag().category()),
+                () -> assertThat(coffee.getPopularity()).isEqualTo(previousCoffeePopularity - 10),
+                () -> assertThat(capsule.getPopularity()).isEqualTo(previousCapsulePopularity + 10)
+        );
+
+        //verify
+        verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
+    }
+
     @DisplayName("태그와 함께 피드 업데이트 요청 시, 태그 정보가 존재하지 않다면 수정에 실패한다.")
     @Test
     void Given_UpdateFeedWithNotExistTag_When_UpdateFeed_Then_Fail() {
