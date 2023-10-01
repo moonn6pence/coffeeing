@@ -11,7 +11,7 @@ import { postFeed, updateFeeds } from "service/feed/feed";
 import { FeedDetail } from "service/feed/types";
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
-
+import IonIcon from "@reacticons/ionicons";
 interface FeedEditorProps {
     fragment: ElementType<any>,
     preview: string | undefined,
@@ -95,9 +95,9 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
                 </div>
 
                 {/* insert  */}
-                <div className='w-1/3 flex flex-col'>
-                <div className='current-member-info flex-none flex flex-row w-full px-5 py-3'>
-                    <div className='mr-4'>
+                <div className='w-1/3 flex flex-col border-l'>
+                <div className='current-member-info flex-none flex flex-row w-full py-3 ml-2'>
+                    <div className="mr-3">
                         {
                             profileImage ? <img src={profileImage}  className="w-10 h-10 rounded-full border-2"/> :  <img src={DefaultProfile} />
                         }
@@ -107,10 +107,10 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
                         { nickname }
                     </div>
                 </div>
-
-                <div className='w-full grow'>
+                        
+                <div className='w-full grow '>
                     <textarea rows={8} 
-                              className='w-full border-y border-gray-200 resize-none focus:outline-none' 
+                              className='w-full ml-2 resize-none focus:outline-none' 
                               placeholder='문구를 입력하세요...'
                               value={content}
                               onChange={(event)=>{setContent(event.target.value)}}>
@@ -118,12 +118,13 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
                     <div className='w-full'>
                     <Disclosure>
                         <div className='flex w-full' onClick={toggleAccordianIcon}>
-                        <div className='w-full px-2 border-b border-gray-200 pb-1'>
+                        <div className='w-full px-2 border-y border-gray-200 h-12 py-2'>
                             <Disclosure.Button className="flex w-full justify-between items-center">
-                                <div className='font-semibold'>
+                                <div className=' text-lg'>
                                     [원두/캡슐] 태그 검색
                                 </div>
-                                {openAccordian ? <img src={ OpenAccordianIcon }/> :<img src={ CloseAccordianIcon } />}
+                                {openAccordian ? <IonIcon size="large" name="chevron-up-outline"></IonIcon> :<IonIcon size="large" name="chevron-down-outline"></IonIcon>}
+                                {/* {openAccordian ? <img src={ OpenAccordianIcon }/> :<img src={ CloseAccordianIcon } />} */}
                             </Disclosure.Button>
                         </div>
                         </div>
