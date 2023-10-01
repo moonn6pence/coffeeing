@@ -66,10 +66,11 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                     </div>
                     {
                         feedDetail.tag ? 
-                        <div className="text-sm font-semibold text-white bg-light-roasting rounded px-3 py-1 scale-50 -translate-x-1/4"> 
+                        <div className="text-base"> 
+                        {/* <div className="text-sm font-semibold text-white bg-light-roasting rounded px-3 py-1 scale-50 -translate-x-1/4">  */}
                             <NavLink
                                 to={`/detail/${feedDetail.tag.category === TagType.CAPSULE ? "capsule" : "coffee"}/${feedDetail.tag.tagId}`}>
-                                {feedDetail.tag.name} 
+                                {feedDetail.tag.name} • <span className=" text-sm">{feedDetail.tag.category==='CAPSULE'?'캡슐':'원두'}</span>
                             </NavLink>
                         </div> : ""
                     }
