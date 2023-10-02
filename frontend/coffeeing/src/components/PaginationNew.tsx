@@ -43,7 +43,7 @@ export const PaginationNew = ({
   const startPage = Math.max(0, currentPage - Math.floor(maxButtons / 2));
   const endPage = Math.min(totalPage, startPage + maxButtons - 1);
   return (
-    <div className='w-screen'>
+    <div className='w-full'>
       {isReview ? (
         <div className="flex flex-wrap">
           {reviews?.map((item) => {

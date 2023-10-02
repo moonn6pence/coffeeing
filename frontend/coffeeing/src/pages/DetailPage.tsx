@@ -148,7 +148,7 @@ export const DetailPage = () => {
     <div>
       <BeanDetailBody {...beanDetail} />
       {isLogin ? (
-        <div className="w-fit mt-10 mx-auto">
+        <div className="w-4/5 mt-10 mx-auto">
           <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
           {capsule.isReviewed ? (
             <MyReview
@@ -171,7 +171,7 @@ export const DetailPage = () => {
           )}
         </div>
       ) : (
-        <div className="relative w-300 mx-auto">
+        <div className="relative w-4/5 mx-auto">
           <div className="bg-review-blur w-300 h-72 blur-sm mt-10"></div>
           <button
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-my-black text-white rounded-3xl px-22px py-3"
@@ -184,7 +184,7 @@ export const DetailPage = () => {
         </div>
       )}
 
-      <div className="w-fit mt-10 mx-auto">
+      <div className="w-4/5 mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">
           평균 평점 {capsule.averageScore.toFixed(1)}{' '}
           <span className="text-[#BE9E8B]">/ 5.0</span>
