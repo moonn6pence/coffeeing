@@ -61,7 +61,7 @@ function LoginPage() {
       <div className="flex flex-row gap-1">
         <p>아직 회원이 아니신가요?</p>
         <p
-          className="hover:font-bold cursor-pointer"
+          className="font-bold cursor-pointer"
           onClick={() => {
             navigate('/signup');
           }}
@@ -86,13 +86,13 @@ function LoginPage() {
       />
       <div className="flex flex-col items-center gap-2">
         <Button placeholder="로그인" handleSubmit={handleSubmit} />
-        <p className="text-sm flex flex-row gap-2">
+        {/* <p className="text-sm flex flex-row gap-2">
           <span>비밀번호를 잊어버리셨나요?</span>
           <span className="font-semibold">비밀번호 찾기</span>
-        </p>
+        </p> */}
       </div>
 
-      <div className="text-xl">OR</div>
+      <div>또는</div>
       <GoogleLoginBtn />
     </div>
   );

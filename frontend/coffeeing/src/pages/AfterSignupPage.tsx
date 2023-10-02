@@ -127,8 +127,7 @@ export const AfterSignupPage = () => {
         />
 
         <div className="flex flex-col items-center gap-2">
-            <Button placeholder="등록하기" handleSubmit={handleSubmit}
-            color="bg-light-roasting"/>
+            <Button placeholder="등록하기" handleSubmit={handleSubmit}/>
         </div>
       </div>
     </div>

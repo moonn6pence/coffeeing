@@ -73,7 +73,7 @@ function SignupPage() {
       <div className="text-3xl font-bold">회원가입</div>
       <div className="flex flex-row gap-1">
         <p>이미 회원이신가요?</p> 
-        <p className="hover:font-bold cursor-pointer" onClick={()=>{navigate('/login')}}>로그인</p>
+        <p className="font-bold cursor-pointer" onClick={()=>{navigate('/login')}}>로그인</p>
       </div>
       {/* 이메일 */}
       <div className="flex flex-col gap-1">
@@ -116,7 +116,7 @@ function SignupPage() {
       </div>
       {/* 회원가입 버튼 */}
       <Button placeholder="회원가입" handleSubmit={handleSubmit} />
-      <div className="text-xl">OR</div>
+      <div>또는</div>
       {/* 구글 로그인 버튼 */}
       <GoogleLoginBtn/>
     </div>
