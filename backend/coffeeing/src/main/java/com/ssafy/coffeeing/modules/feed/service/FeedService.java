@@ -9,6 +9,7 @@ import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedRedisUtil;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
@@ -49,7 +50,7 @@ public class FeedService {
     private final SecurityContextUtils securityContextUtils;
     private final FeedUtil feedUtil;
     private final ApplicationEventPublisher applicationEventPublisher;
-
+    private final FeedRedisUtil feedRedisUtil;
     private static final int FEED_UPLOAD_EXPERIENCE = 75;
 
 
@@ -104,16 +105,17 @@ public class FeedService {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+        boolean feedLikeResponse = false;
 
-        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, member);
-
-        if(feedLike.isPresent()) {
-            feedLikeRepository.delete(feedLike.get());
-            return decreaseFeedLikeCount(feed);
-        } else {
-            feedLikeRepository.save(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
-            return increaseFeedLikeCount(feed);
+        if(feedRedisUtil.isLikedFeedInRedis(feed, member)) {
+            feedRedisUtil.disLikeFeedInRedis(feed, member);
+            feedLikeResponse = decreaseFeedLikeCount(feed);
+        } else if(feedRedisUtil.isNotLikedFeedInRedis(feed, member)) {
+            feedRedisUtil.likeFeedInRedis(feed, member);
+            feedLikeResponse = increaseFeedLikeCount(feed);
         }
+
+        return FeedLikeMapper.supplyFeedLikeResponseBy(feedLikeResponse);
     }
 
     @Transactional(readOnly = true)
@@ -219,14 +221,14 @@ public class FeedService {
         return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
     }
 
-    private ToggleResponse decreaseFeedLikeCount(Feed feed) {
+    private boolean decreaseFeedLikeCount(Feed feed) {
         feed.decreaseLikeCount();
-        return FeedLikeMapper.supplyFeedLikeResponseBy(false);
+        return false;
     }
 
-    private ToggleResponse increaseFeedLikeCount(Feed feed) {
+    private boolean increaseFeedLikeCount(Feed feed) {
         feed.increaseLikeCount();
-        return FeedLikeMapper.supplyFeedLikeResponseBy(true);
+        return true;
     }
 
     private Capsule getCapsule(Long tagId) {
