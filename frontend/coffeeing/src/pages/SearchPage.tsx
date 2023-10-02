@@ -127,7 +127,7 @@ export const SearchPage = () =>{
           </div>
           
           {/* 선택된 태그들 */}
-          <div className="flex flex-wrap w-790px gap-1">
+          <div className="flex flex-wrap mx-[20%] gap-1">
             <SelectedFilterTag src={roast} selectedItem={selectedRoast} setSelectedItem={setSelectedRoast}/>
             <SelectedFilterTag src={acidity} selectedItem={selectedAcid} setSelectedItem={setSelectedAcid}/>
             <SelectedFilterTag src={body} selectedItem={selectedBody} setSelectedItem={setSelectedBody}/>
