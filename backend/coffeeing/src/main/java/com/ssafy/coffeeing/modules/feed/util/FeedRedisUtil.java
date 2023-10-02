@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class FeedRedisUtil {
@@ -18,7 +19,6 @@ public class FeedRedisUtil {
     public FeedRedisUtil(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
         this.redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer<>(Long.class));
-        this.redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(HashMap.class));
     }
 
     public boolean isLikedFeedInRedis(Feed feed, Member member) {
@@ -51,6 +51,10 @@ public class FeedRedisUtil {
             feedLikeCache.put(member.getId(), false);
         }
         hashOperations.put("feedLike", feed.getId(), feedLikeCache);
+
+        if (isNotSetExpireTime()) {
+            redisTemplate.expire("feedLike", 8, TimeUnit.HOURS);
+        }
     }
 
     public void likeFeedInRedis(Feed feed, Member member) {
@@ -65,5 +69,13 @@ public class FeedRedisUtil {
             feedLikeCache.put(member.getId(), true);
         }
         hashOperations.put("feedLike", feed.getId(), feedLikeCache);
+
+        if (isNotSetExpireTime()) {
+            redisTemplate.expire("feedLike", 8, TimeUnit.HOURS);
+        }
+    }
+
+    private boolean isNotSetExpireTime() {
+        return redisTemplate.getExpire("feedLike").equals(-1L);
     }
 }
