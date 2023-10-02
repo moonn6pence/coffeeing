@@ -5,7 +5,37 @@ from ..database.model import Model
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 
-def SurveyRecommendBeans(count, roast, acidity, body, flavor_note, is_capsule, machine_type, db: Session):
+def RecommendByProductId(count: int, is_capsule: bool, id: int, db: Session):
+    model = Model()
+    loader = DataLoader(db)
+
+    model_name = 'Capsule' if is_capsule else 'Coffee'
+    data = loader.load_all_data(model[model_name])
+    col_names = list(data.columns)
+    col_names[0] = 'id'
+    data.columns = col_names
+
+    # target: 선택된 캡슐 또는 원두
+    target = data.loc[(data.id == id), :]
+    if len(target) != 1:
+        return []
+    
+    # other_products: 선택된 캡슐, 원두를 제외한 다른 상품 목록
+    # 캡슐인 경우 머신 타입이 다른 원두는 추천되지 않는다.
+    other_products = None
+    if is_capsule:
+        other_products = data.loc[(data.id != id)&(data.machine_type != target['machine_type'].values[0]), :]
+    else:
+        other_products = data.loc[(data.id != id), :]
+
+    other_products.reset_index(inplace=True)
+    roast = target['roast'].values[0]
+    acidity = target['acidity'].values[0]
+    body = target['body'].values[0]
+    flavor_note = target['flavor_note'].values[0].replace(' ', '')
+    return _get_similar_data(count, roast, acidity, body, flavor_note, other_products)
+
+def ProductSimilarityRecommend(count, roast, acidity, body, flavor_note, is_capsule, machine_type, db: Session):
     model = Model()
     loader = DataLoader(db)
     
@@ -17,6 +47,9 @@ def SurveyRecommendBeans(count, roast, acidity, body, flavor_note, is_capsule, m
         data = loader.load_all_data(model["Coffee"])[['coffee_id', 'coffee_name_eng', 'roast', 'acidity', 'body', 'flavor_note']]
         data.rename(columns={'coffee_id': 'id'}, inplace=True)
 
+    return _get_similar_data(count, roast, acidity, body, flavor_note, data)
+
+def _get_similar_data(count, roast, acidity, body, flavor_note, data):
     # 사용자 설문조사 입력 데이터
     input_roast = roast
     input_acid = acidity
@@ -53,9 +86,9 @@ def SurveyRecommendBeans(count, roast, acidity, body, flavor_note, is_capsule, m
     ## 유사도가 가장 높은 top_n개의 product_id 리턴
     recommended_indices = top_rows.index.tolist()  
     recommended_products = data.iloc[recommended_indices].to_dict(orient='records')
-    
+
     result = []
     for recommended_product in recommended_products:
         result.append(recommended_product['id'])
-    print(result)
+
     return result
