@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, KeyboardEvent } from "react";
 
 type InputFieldProps = {
   label:string;
@@ -6,9 +6,10 @@ type InputFieldProps = {
   value:string;
   type:string;
   onChange:(e:ChangeEvent<HTMLInputElement>)=>void;
+  onKeyDown?:(e:KeyboardEvent<HTMLElement>)=>void;
 }
 
-function InputField({ label, placeholder, value, type, onChange }:InputFieldProps) {
+function InputField({ label, placeholder, value, type, onChange,onKeyDown }:InputFieldProps) {
   return (
     <div className="flex flex-col gap-1">
       <label className="text-base text-gray-800 font-medium">{label}</label>
@@ -18,6 +19,7 @@ function InputField({ label, placeholder, value, type, onChange }:InputFieldProp
         value={value}
         type={type}
         onChange={onChange}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

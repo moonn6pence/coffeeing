@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useState, useEffect, MouseEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
@@ -18,8 +18,8 @@ function LoginPage() {
   const [pw, setPw] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   // 로그인 처리
-  const handleSubmit = async (e: MouseEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     const result = await signIn({ email: email, password: pw });
     if (result) {
       dispatch(setMemberToken(result));
@@ -40,7 +40,12 @@ function LoginPage() {
       Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error');
     }
   };
-
+  // enter key event 추가
+  const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
+    if (e.key==='Enter') {
+      handleSubmit()
+    }
+  }
   useEffect(() => {
     const checkMemberInfo = async () => {
       const result = await getMyInfo();
@@ -76,6 +81,7 @@ function LoginPage() {
         value={email}
         type="email"
         onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={handleEnter}
       />
       <InputField
         label="비밀번호"
@@ -83,6 +89,7 @@ function LoginPage() {
         value={pw}
         type="password"
         onChange={(e) => setPw(e.target.value)}
+        onKeyDown={handleEnter}
       />
       <div className="flex flex-col items-center gap-2">
         <Button placeholder="로그인" handleSubmit={handleSubmit} />
