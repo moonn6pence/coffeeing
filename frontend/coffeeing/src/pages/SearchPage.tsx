@@ -80,7 +80,7 @@ export const SearchPage = () =>{
           <div className="flex flex-col justify-center mx-[20%] ">
             <div className="flex items-center border border-light-roasting h-16 rounded-md">
             <span className="flex items-center pl-2">
-              <img className="w-5 h-5" src={searchIcon} alt="Search Icon" />
+              <img onClick={()=>setSendKeyword(!sendKeyword)} className="w-5 h-5" src={searchIcon} alt="Search Icon" />
             </span>
             <input 
               className="block py-4 pl-2 w-full focus:outline-none"
