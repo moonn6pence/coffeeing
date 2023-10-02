@@ -51,13 +51,14 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
   };
 
   return (
-    <div className="bg-light flex w-300 h-450px justify-around mx-auto mt-10 items-center">
+    <div className="bg-light flex w-4/5 h-450px justify-around mx-auto mt-10 items-center">
       <BeanCard
         id={id}
         subtitle={subtitle}
         name={name}
         imgLink={imageUrl}
         isCapsule={product === 'capsule' ? true : false}
+        isSame={true}
       />
       <div className="flex flex-col items-end space-y-6 w-532px">
         <img
