@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import DefaultProfile from 'assets/feed/default-profile.svg'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
-import FeedUnlike from 'assets/feed/feed-unlike-icon.svg'
-import Feedlike from 'assets/feed/feed-like-icon.svg'
 import { FeedDetail } from "service/feed/types";
 import { NavLink } from 'react-router-dom';
 import { TagType } from "service/search/types";
@@ -11,7 +9,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import { Toast } from 'components/Toast';
 import { DeleteAlert } from 'components/DeleteAlert'
-
+import IonIcon from "@reacticons/ionicons";
 interface FeedCardProps {
     feedDetail: FeedDetail,
     deleteEventHandler: (feedId: number)=>void,
@@ -44,7 +42,8 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
 
   return(
     <>
-    <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting">
+    <div className="feed-card flex flex-col w-full border-b border-light-roasting">
+    {/* <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting"> */}
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
                 <div className="feed-avater flex mr-10 justify-center items-center">
@@ -66,10 +65,11 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                     </div>
                     {
                         feedDetail.tag ? 
-                        <div className="text-sm font-semibold text-white bg-light-roasting rounded px-3 py-1 scale-50 -translate-x-1/4"> 
+                        <div className="text-base"> 
+                        {/* <div className="text-sm font-semibold text-white bg-light-roasting rounded px-3 py-1 scale-50 -translate-x-1/4">  */}
                             <NavLink
                                 to={`/detail/${feedDetail.tag.category === TagType.CAPSULE ? "capsule" : "coffee"}/${feedDetail.tag.tagId}`}>
-                                {feedDetail.tag.name} 
+                                {feedDetail.tag.name} • <span className=" text-sm">{feedDetail.tag.category==='CAPSULE'?'캡슐':'원두'}</span>
                             </NavLink>
                         </div> : ""
                     }
@@ -96,20 +96,20 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
 
         <div className="feed-body flex flex-col w-full py-1">
             <div className="feed-image-wrapper flex w-full">
-                <img src = {feedDetail.images[0].imageUrl} className="w-full"/>
+                <img src = {feedDetail.images[0].imageUrl} className="w-full h-96"/>
             </div>
 
-            <div className="feed-content-wrapper flex flex-col px-6 mt-2">
+            <div className="feed-content-wrapper flex flex-col mt-2">
                 <div className="feed-like-wrapper w-full mx-1 flex items-center">
                     <div className="cursor-pointer w-fit rounded-xl"  onClick={toggleLike}>
-                        { liked ? <img src = {Feedlike} /> : <img src = {FeedUnlike} /> }
+                        { liked ? <IonIcon size="large" name="heart"></IonIcon> :<IonIcon size="large" name="heart-outline"></IonIcon>}
                     </div>
-                    <div className="ml-1 text-lg">
-                        { likeCnt }
+                    <div className="ml-1 text-base mb-2">
+                        { likeCnt } 명이 좋아합니다
                     </div>
                 </div>
 
-                <div className="feed-text-wrapper flex flex-row w-full min-h-max mt-2 mb-5">
+                <div className="feed-text-wrapper flex flex-row w-full min-h-max mt-2 mb-5 ml-2">
                     <p className="break-all"> 
                         { feedDetail.content }
                     </p>

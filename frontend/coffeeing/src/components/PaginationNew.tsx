@@ -43,7 +43,7 @@ export const PaginationNew = ({
   const startPage = Math.max(0, currentPage - Math.floor(maxButtons / 2));
   const endPage = Math.min(totalPage, startPage + maxButtons - 1);
   return (
-    <div>
+    <div className='w-screen'>
       {isReview ? (
         <div className="flex flex-wrap">
           {reviews?.map((item) => {
@@ -51,7 +51,7 @@ export const PaginationNew = ({
           })}
         </div>
       ) : (
-        <div className="flex flex-wrap w-300 justify-between">
+        <div className=" mx-20 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4">
           {products &&
             products.map((item) => {
               return (

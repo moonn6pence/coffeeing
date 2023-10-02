@@ -23,7 +23,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
         {/* 태그 */}
         <Listbox.Label className="w-fit p-4 h-8 border border-cinamon-roasting rounded-3xl flex gap-2 items-center justify-center">
           <img className="w-4 h-5" src={src}/>
-          {label}
+          <span className='hidden lg:block'>{label}</span>
           <Listbox.Button
             className="cursor-pointer"
             aria-label="Toggle listbox"

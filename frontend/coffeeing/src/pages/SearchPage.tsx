@@ -75,12 +75,12 @@ export const SearchPage = () =>{
   return(
     <div >
       <div className="mt-10 flex flex-col items-center">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 w-full ">
           {/* 검색바 */}
-          <div className="flex flex-col justify-center">
-            <div className="flex items-center border border-light-roasting w-790px h-16 rounded-md">
+          <div className="flex flex-col justify-center mx-[20%] ">
+            <div className="flex items-center border border-light-roasting h-16 rounded-md">
             <span className="flex items-center pl-2">
-              <img className="w-5 h-5" src={searchIcon} alt="Search Icon" />
+              <img onClick={()=>setSendKeyword(!sendKeyword)} className="w-5 h-5" src={searchIcon} alt="Search Icon" />
             </span>
             <input 
               className="block py-4 pl-2 w-full focus:outline-none"
@@ -95,7 +95,7 @@ export const SearchPage = () =>{
           <hr className=" border-half-light mt-2" />
           </div>
           {/* 필터 listbox */}
-          <div className="flex flex-row gap-2 items-start">
+          <div className="flex flex-row gap-2 items-start mx-[20%] ">
             <ListBox 
               label="로스팅" 
               selectedItem={selectedRoast} 
@@ -127,7 +127,7 @@ export const SearchPage = () =>{
           </div>
           
           {/* 선택된 태그들 */}
-          <div className="flex flex-wrap w-790px gap-1">
+          <div className="flex flex-wrap mx-[20%] gap-1">
             <SelectedFilterTag src={roast} selectedItem={selectedRoast} setSelectedItem={setSelectedRoast}/>
             <SelectedFilterTag src={acidity} selectedItem={selectedAcid} setSelectedItem={setSelectedAcid}/>
             <SelectedFilterTag src={body} selectedItem={selectedBody} setSelectedItem={setSelectedBody}/>
@@ -152,7 +152,7 @@ export const SearchPage = () =>{
       <div className="mt-2">
       {!showResult&& <NoResult label="검색 결과가 없습니다."/>}
       </div>
-      <div className="flex flex-col items-center">
+      {/* <div className="flex flex-col items-center"> */}
         {productType==='BEAN'&&totalPage!==-1&&(
           <PaginationNew 
             currentPage={currentPage} 
@@ -171,7 +171,7 @@ export const SearchPage = () =>{
             setCurrentPage={setCurrentPage} 
           />
         )}
-      </div>
+      {/* </div> */}
 
     </div>
   )
