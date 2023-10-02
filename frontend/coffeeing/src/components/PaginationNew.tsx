@@ -51,7 +51,7 @@ export const PaginationNew = ({
           })}
         </div>
       ) : (
-        <div className="flex flex-wrap w-300 justify-between">
+        <div className="w-300 grid grid-cols-4">
           {products &&
             products.map((item) => {
               return (
