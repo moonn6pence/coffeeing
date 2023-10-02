@@ -8,7 +8,7 @@ function GoogleLoginBtn(){
         flex items-center justify-center gap-2
         hover:bg-gray-200 ">
         <img className="h-7" src={googleLogo}/> 
-        <span className="text-sm font-medium text-gray-800">Sign in with Google</span>
+        <span className="text-sm font-medium text-gray-800">구글 계정으로 로그인</span>
     </a>
   )
 }
