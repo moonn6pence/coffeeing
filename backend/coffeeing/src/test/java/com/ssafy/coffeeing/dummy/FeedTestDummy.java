@@ -2,11 +2,15 @@ package com.ssafy.coffeeing.dummy;
 
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
-import com.ssafy.coffeeing.modules.feed.dto.*;
+import com.ssafy.coffeeing.modules.feed.dto.FeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.ImageElement;
+import com.ssafy.coffeeing.modules.feed.dto.MemberFeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.search.domain.Tag;
 import org.springframework.context.annotation.Profile;
 
@@ -21,7 +25,7 @@ public class FeedTestDummy {
     }
 
     public static UploadFeedRequest createUploadFeedRequestWithTag(Capsule capsule) {
-        return new UploadFeedRequest(new Tag(capsule.getId(), TagType.CAPSULE, capsule.getCapsuleNameKr()),
+        return new UploadFeedRequest(new Tag(capsule.getId(), ProductType.COFFEE_CAPSULE, capsule.getCapsuleNameKr()),
                 createImageElement(), "첫 번째 피드1");
     }
 
@@ -43,6 +47,18 @@ public class FeedTestDummy {
                 .likeCount(0)
                 .content("testFeed")
                 .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
+                .build();
+    }
+
+    public static Feed createFeedWithCoffeeTag(Member member, Coffee coffee) {
+        return Feed.builder()
+                .member(member)
+                .likeCount(0)
+                .content("testFeed")
+                .imageUrl("[{\"imageUrl\":\"https://image1.webp\"},{\"imageUrl\":\"https://image2.webp\"}]")
+                .tagId(coffee.getId())
+                .tagName(coffee.getCoffeeNameEng())
+                .productType(ProductType.COFFEE_BEAN)
                 .build();
     }
 
@@ -73,6 +89,11 @@ public class FeedTestDummy {
 
     public static UpdateFeedRequest createUpdateFeedRequestWithTag(Coffee coffee) {
         return new UpdateFeedRequest("testUpdateContent",
-                new Tag(coffee.getId(), TagType.BEAN, coffee.getCoffeeNameKr()));
+                new Tag(coffee.getId(), ProductType.COFFEE_BEAN, coffee.getCoffeeNameKr()));
+    }
+
+    public static UpdateFeedRequest createUpdateFeedRequestWithTag(Capsule capsule) {
+        return new UpdateFeedRequest("testUpdateContent",
+                new Tag(capsule.getId(), ProductType.COFFEE_CAPSULE, capsule.getCapsuleNameKr()));
     }
 }

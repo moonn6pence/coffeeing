@@ -18,9 +18,11 @@ import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
+import com.ssafy.coffeeing.modules.product.domain.Capsule;
+import com.ssafy.coffeeing.modules.product.domain.Coffee;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.search.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -60,7 +62,7 @@ public class FeedService {
         Tag tag = uploadFeedRequest.tag();
 
         if(Objects.nonNull(tag)) {
-            validateTagInformation(tag);
+            attachFeedTagWithValidation(tag);
             feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl, tag);
         } else {
             feed = FeedMapper.supplyFeedEntityOf(member, content, imageUrl);
@@ -77,7 +79,7 @@ public class FeedService {
 
         Feed feed = feedRepository.findByIdAndMember(feedId, member)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
-
+        detachFeedTagWithValidation(feed);
         feedLikeRepository.deleteFeedLikesByFeed(feed);
         feedRepository.delete(feed);
     }
@@ -90,8 +92,7 @@ public class FeedService {
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
         if(Objects.nonNull(tag)) {
-            validateTagInformation(tag);
-            feed.updateTag(tag);
+            compareTagInformationByNewTag(feed, tag);
             feed.updateContent(updateFeedRequest.content());
         } else {
             feed.updateContent(updateFeedRequest.content());
@@ -165,13 +166,14 @@ public class FeedService {
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
 
-    private void validateTagInformation(Tag tag) {
-        if(tag.category().equals(TagType.CAPSULE)) {
-            boolean isExist = capsuleRepository.existsById(tag.tagId());
-            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
-        } else if(tag.category().equals(TagType.BEAN)) {
-            boolean isExist = coffeeRepository.existsById(tag.tagId());
-            if(!isExist) throw new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT);
+    private void compareTagInformationByNewTag(Feed feed, Tag tag) {
+        if (Objects.isNull(feed.getTagId())) {
+            attachFeedTagWithValidation(tag);
+            feed.updateTag(tag);
+        }else if (!feed.getTagName().equals(tag.name())) {
+            detachFeedTagWithValidation(feed);
+            attachFeedTagWithValidation(tag);
+            feed.updateTag(tag);
         }
     }
 
@@ -180,7 +182,7 @@ public class FeedService {
             Optional<FeedLike> feedLike,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
-        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+        Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
         if (Objects.isNull(viewer)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
@@ -225,5 +227,35 @@ public class FeedService {
     private ToggleResponse increaseFeedLikeCount(Feed feed) {
         feed.increaseLikeCount();
         return FeedLikeMapper.supplyFeedLikeResponseBy(true);
+    }
+
+    private Capsule getCapsule(Long tagId) {
+        return capsuleRepository.findById(tagId)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+    }
+
+    private Coffee getCoffee(Long tagId) {
+        return coffeeRepository.findById(tagId)
+                .orElseThrow(() -> new BusinessException(ProductErrorInfo.NOT_FOUND_PRODUCT));
+    }
+
+    private void detachFeedTagWithValidation(Feed feed) {
+        if (feed.getProductType() == ProductType.COFFEE_BEAN) {
+            Coffee coffee = getCoffee(feed.getTagId());
+            coffee.detachFeed();
+        } else if (feed.getProductType() == ProductType.COFFEE_CAPSULE) {
+            Capsule capsule = getCapsule(feed.getTagId());
+            capsule.detachFeed();
+        }
+    }
+
+    private void attachFeedTagWithValidation(Tag tag) {
+        if (tag.category() == ProductType.COFFEE_BEAN) {
+            Coffee coffee = getCoffee(tag.tagId());
+            coffee.attachFeed();
+        } else if (tag.category() == ProductType.COFFEE_CAPSULE) {
+            Capsule capsule = getCapsule(tag.tagId());
+            capsule.attachFeed();
+        }
     }
 }

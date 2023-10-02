@@ -22,7 +22,7 @@ public class FeedPage {
     private void makeFeedImageUrlsToObject(List<Feed> feeds, FeedUtil feedUtil) {
         feeds.forEach(feed -> {
             Member member = feed.getMember();
-            Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getTagType(), feed.getTagName());
+            Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
             feedPageElements.add(new FeedPageElement(feed.getId(),
                     feedUtil.makeJsonStringToImageElement(feed.getImageUrl()),

@@ -1,13 +1,24 @@
 package com.ssafy.coffeeing.modules.feed.domain;
 
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.product.domain.ProductType;
 import com.ssafy.coffeeing.modules.search.domain.Tag;
-import com.ssafy.coffeeing.modules.search.domain.TagType;
 import com.ssafy.coffeeing.modules.util.base.BaseEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.*;
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Getter
 @SuperBuilder
@@ -27,9 +38,9 @@ public class Feed extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
-    @Column(name = "tag_category")
+    @Column(name = "product_category")
     @Enumerated(EnumType.STRING)
-    private TagType tagType;
+    private ProductType productType;
 
     @Column(name = "tag_name")
     private String tagName;
@@ -47,7 +58,7 @@ public class Feed extends BaseEntity {
 
     public void updateTag(Tag tag) {
         this.tagId = tag.tagId();
-        this.tagType = tag.category();
+        this.productType = tag.category();
         this.tagName = tag.name();
     }
 
