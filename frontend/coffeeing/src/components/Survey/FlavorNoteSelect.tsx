@@ -75,7 +75,7 @@ export const FlavorNoteSelect = () => {
         </p>
       </div>
       {/* 설문 사진 */}
-      <div className='grid grid-rows-2 grid-flow-col gap-10 '>
+      <div className='grid grid-rows-6 sm:grid-rows-3 lg:grid-rows-2 grid-flow-col gap-10 '>
         {
           data.map((item) => {
             const { src, label, isSelected, setIsSelected, keyword } = item;

@@ -47,7 +47,7 @@ export const RoastingSelect = () => {
         </p>
       </div>
       {/* 설문 사진 */}
-      <div className="flex flex-row gap-10">
+      <div >
         <RadioGroupSingle 
           selectedItem={selectedRoast}
           setSelectedItem={setSelectedRoast}
