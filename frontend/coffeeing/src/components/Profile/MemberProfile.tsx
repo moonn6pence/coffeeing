@@ -9,20 +9,23 @@ import { RootState } from 'store/store';
 import { uploadImage } from 'util/imageUtils';
 import { ValidateNicknameResult, validateNickname } from 'util/regexUtils';
 import { UserData } from 'pages/MemberPage';
+import { CoffeeCriteria } from 'service/member/types';
+import { BeanRating } from 'components/Detail/BeanRating';
 
 type ProfileProps = {
   id: number | undefined;
   nickname: string;
   profileImage: string;
-  setters:ProfileSetters
+  preference: CoffeeCriteria | null;
+  setters: ProfileSetters;
 };
 
-type ProfileSetters ={
-  setUserData:React.Dispatch<React.SetStateAction<UserData>>
-}
+type ProfileSetters = {
+  setUserData: React.Dispatch<React.SetStateAction<UserData>>;
+};
 
-export const MyProfile = (props: ProfileProps) => {
-  const { id, nickname, profileImage, setters } = props;
+export const MemberProfile = (props: ProfileProps) => {
+  const { id, nickname, profileImage, preference, setters } = props;
   const { memberId } = useSelector((state: RootState) => state.member);
   const [nicknameInput, setNicknameInput] = useState('');
   const [edit, setEdit] = useState(false);
@@ -92,11 +95,12 @@ export const MyProfile = (props: ProfileProps) => {
     const result = await privateRequest.put(`${API_URL}/member/nickname`, data);
     if (result.data.code === '200') {
       setEdit(false);
-      
+
       setters.setUserData({
-        profileImage:profileImage,
-        nickname:nicknameInput
-      })
+        profileImage: profileImage,
+        nickname: nicknameInput,
+        preference,
+      });
     } else {
       alert('닉네임 변경에 실패했습니다!');
     }
@@ -152,80 +156,93 @@ export const MyProfile = (props: ProfileProps) => {
   };
 
   return (
-    <div className="w-72 flex flex-col items-center">
-      <div
-        className={`img-wrapper rounded-full ${
-          memberId === id ? 'hover:cursor-pointer' : ''
-        }`}
-        onClick={() => {
-          if (memberId === id) {
-            handleProfileImageChangeClick();
-          }
-        }}
-      >
-        {profileImage ? (
-          <img
-            src={profileImage}
-            key={imageRefreshKey}
-            alt="프로필이미지"
-            className="w-44 h-44 rounded-full border-2"
-          />
-        ) : (
-          <img
-            src={noImage}
-            alt="프로필이미지"
-            className="w-44 h-44 rounded-full border-2"
-          />
-        )}
-      </div>
-      <input
-        type="file"
-        name="profile"
-        id="profile"
-        accept="image/png, image/jpeg, image/jpg"
-        ref={imageRef}
-        className="collapse"
-        onInput={() => {
-          handleImageOnInput();
-        }}
-      />
-
-      {edit ? (
-        <div className="flex flex-col h-7 mt-6">
-          <div>
-            <input type="text" onChange={onChangeNickname} maxLength={10} />
-            <button
-              onClick={editNickname}
-              className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-              disabled={!nicknameUseable}
-            >
-              변경하기
-            </button>
-            <button
-              onClick={() => setEdit(false)}
-              className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-            >
-              취소하기
-            </button>
-          </div>
-          {!nicknameUseable ? <p className="text-red-600">{message}</p> : ''}
-        </div>
-      ) : (
-        <div className="flex justify-center mt-6">
-          <p className="font-medium text-xl mr-2">{nickname}</p>
-          {memberId === id ? (
-            <button
-              onClick={() => {
-                setEdit(true);
-              }}
-            >
-              <img src={editIcon} alt="수정하기" className="w-6 h-6" />
-            </button>
+    <div className="w-72 flex flex-row justify-center">
+      <div className='flex flex-col items-center'>
+        <div
+          className={`img-wrapper rounded-full ${
+            memberId === id ? 'hover:cursor-pointer' : ''
+          }`}
+          onClick={() => {
+            if (memberId === id) {
+              handleProfileImageChangeClick();
+            }
+          }}
+        >
+          {profileImage ? (
+            <img
+              src={profileImage}
+              key={imageRefreshKey}
+              alt="프로필이미지"
+              className="w-44 h-44 rounded-full border-2"
+            />
           ) : (
-            ''
+            <img
+              src={noImage}
+              alt="프로필이미지"
+              className="w-44 h-44 rounded-full border-2"
+            />
           )}
         </div>
-      )}
+        <input
+          type="file"
+          name="profile"
+          id="profile"
+          accept="image/png, image/jpeg, image/jpg"
+          ref={imageRef}
+          className="collapse"
+          onInput={() => {
+            handleImageOnInput();
+          }}
+        />
+
+        {edit ? (
+          <div className="flex flex-col h-7 mt-6">
+            <div>
+              <input type="text" onChange={onChangeNickname} maxLength={10} />
+              <button
+                onClick={editNickname}
+                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
+                disabled={!nicknameUseable}
+              >
+                변경하기
+              </button>
+              <button
+                onClick={() => setEdit(false)}
+                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
+              >
+                취소하기
+              </button>
+            </div>
+            {!nicknameUseable ? <p className="text-red-600">{message}</p> : ''}
+          </div>
+        ) : (
+          <div className="flex justify-center mt-6">
+            <p className="font-medium text-xl mr-2">{nickname}</p>
+            {memberId === id ? (
+              <button
+                onClick={() => {
+                  setEdit(true);
+                }}
+              >
+                <img src={editIcon} alt="수정하기" className="w-6 h-6" />
+              </button>
+            ) : (
+              ''
+            )}
+          </div>
+        )}
+      </div>
+      <div>
+        {
+          preference?(
+            <BeanRating acidity={preference.acidity} roast={preference.roast} body={preference.body} />
+          ):(
+            <div>
+              <h2>취향 데이터가 아직 없습니다...</h2>
+            </div>
+          )
+        }
+      </div>
     </div>
   );
 };

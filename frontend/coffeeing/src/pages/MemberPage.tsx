@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { MyProfile } from 'components/Profile/MyProfile';
+import { MemberProfile } from 'components/Profile/MemberProfile';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { Outlet, useParams } from 'react-router-dom';
 import { NavLinkWrapper } from 'components/NavLink/NavLinkWrapper';
 import { NavBarButton } from 'components/NavBar/NavBarButton';
+import { CoffeeCriteria } from 'service/member/types';
 
 export type UserData = {
   nickname: string;
   profileImage: string;
+  preference: CoffeeCriteria | null;
 };
 
 export type MemberId = {
@@ -20,6 +22,7 @@ export const MemberPage = () => {
   const [userData, setUserData] = useState<UserData>({
     nickname: '',
     profileImage: '',
+    preference: null,
   });
   const [userExists, setUserExists] = useState(false);
 
@@ -42,10 +45,11 @@ export const MemberPage = () => {
     return (
       <div className="wrapper w-4/5 flex items-stretch flex-col m-auto mt-10">
         <div className="w-full bg-light h-80 flex items-center">
-          <MyProfile
+          <MemberProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
             nickname={userData.nickname}
             profileImage={userData.profileImage}
+            preference={userData.preference}
             setters={{
               setUserData: setUserData,
             }}
@@ -60,7 +64,7 @@ export const MemberPage = () => {
           <Outlet context={{ id }} />
         </div>
         <div className="spacer mb-40 flex justify-center pt-10">
-            <NavBarButton value='로그아웃' navLink='/' isLogout={true} />
+          <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
         </div>
       </div>
     );

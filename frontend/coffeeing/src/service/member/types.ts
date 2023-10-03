@@ -26,3 +26,9 @@ export enum MemberState {
     BEFORE_RESEARCH = "BEFORE_RESEARCH",
     NORMAL = "NORMAL"
 }
+
+export type CoffeeCriteria = {
+  roast:number,
+  acidity:number,
+  body:number
+}
