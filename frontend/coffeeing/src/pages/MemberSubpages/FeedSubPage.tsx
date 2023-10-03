@@ -100,7 +100,7 @@ export const FeedSubPage = () => {
 
 
   return (
-    <div className="sub-wrapper">
+    <div className="w-full h-60 bg-light">
       {feedDetail && (
         <MemberFeedModal
           isOpen={isModalOpen}

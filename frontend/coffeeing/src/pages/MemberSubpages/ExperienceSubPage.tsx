@@ -39,20 +39,20 @@ export const ExperienceSubPage = () => {
   const setCoffeeImage = (memberLevel: number) => {
     switch (memberLevel) {
       case 0:
-        return <img src={coffee0} />;
+        return <img src={coffee0} className='w-96 h-96 my-12' />;
       case 1:
-        return <img src={coffee1} />;
+        return <img src={coffee1} className='w-96 h-96 my-12' />;
       case 2:
-        return <img src={coffee2} />;
+        return <img src={coffee2} className='w-96 h-96 my-12' />;
       case 3:
-        return <img src={coffee3} />;
+        return <img src={coffee3} className='w-96 h-96 my-12' />;
     }
   };
 
   return (
-    <div className="sub-wrapper">
+    <>
       {experienceInfo ? (
-        <div className="wrapper">
+        <div className="bg-light p-12">
           <div className="header flex items-center justify-between relative">
             <span className="font-bold text-3xl">
               LV : {experienceInfo.memberLevel}
@@ -64,7 +64,7 @@ export const ExperienceSubPage = () => {
               onMouseLeave={() => handleInfoToggle(false)}
             />
             {infoTabOpen ? (
-              <div className="absolute right-0 top-10 z-20 border-2 p-5 bg-light rounded">
+              <div className="absolute right-0 top-10 z-20 border-2 p-5 bg-white rounded">
                 <ul>
                   <li>피드 글 작성 + 75</li>
                   <li>리뷰 작성 + 50</li>
@@ -79,7 +79,7 @@ export const ExperienceSubPage = () => {
             {setCoffeeImage(experienceInfo.memberLevel)}
           </div>
           <div className="progress-wrapper">
-            <div className="progress-white w-full bg-light h-10 rounded-xl relative flex items-center justify-end">
+            <div className="progress-white w-full bg-[#E8CAAA] h-10 rounded-xl relative flex items-center justify-end">
               <div
                 className={`progress-inner bg-light-roasting h-10 rounded-xl absolute top-0 left-0`}
                 style={{
@@ -100,6 +100,6 @@ export const ExperienceSubPage = () => {
       ) : (
         <div> halp</div>
       )}
-    </div>
+    </>
   );
 };
