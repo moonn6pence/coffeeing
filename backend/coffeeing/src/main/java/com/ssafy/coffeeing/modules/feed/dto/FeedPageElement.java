@@ -19,7 +19,7 @@ public class FeedPageElement {
     Boolean isMine = false;
 
     public FeedPageElement(Long feedId, List<ImageElement> images, String content, Tag tag, Long registerId, Integer likeCount,
-                           String registerName, String registerProfileImg) {
+                           String registerName, String registerProfileImg, Boolean isLike) {
         this.feedId = feedId;
         this.images = images;
         this.content = content;
@@ -28,13 +28,10 @@ public class FeedPageElement {
         this.likeCount = likeCount;
         this.registerName = registerName;
         this.registerProfileImg = registerProfileImg;
+        this.isLike = isLike;
     }
 
     public void updateIsMineStatus() {
         this.isMine = !this.isMine;
-    }
-
-    public void updateIsLikeStatus() {
-        this.isLike = !this.isLike;
     }
 }

@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
-import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
@@ -32,10 +31,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -82,6 +79,7 @@ public class FeedService {
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
         detachFeedTagWithValidation(feed);
         feedLikeRepository.deleteFeedLikesByFeed(feed);
+        feedRedisUtil.disLikeFeedInRedis(feed);
         feedRepository.delete(feed);
     }
 
@@ -144,26 +142,23 @@ public class FeedService {
         List<ImageElement> images = feedUtil.makeJsonStringToImageElement(feed.getImageUrl());
 
         if (Objects.isNull(viewer)) {
-            return getFeedDetailResponse(null, feed, Optional.empty(), images);
+            return getFeedDetailResponse(null, feed, false, images);
         }
-        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, viewer);
-        return getFeedDetailResponse(viewer, feed, feedLike, images);
+        boolean isLikeFeed = feedRedisUtil.isLikedFeedInRedis(feed, viewer);
+
+        return getFeedDetailResponse(viewer, feed, isLikeFeed, images);
     }
 
     @Transactional(readOnly = true)
     public FeedPageResponse getFeedsByFeedPage(FeedsRequest feedsRequest) {
         Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
-        List<FeedLike> feedLikes = new ArrayList<>();
         Long cursor = feedsRequest.cursor();
         Integer size = feedsRequest.size();
 
         Slice<Feed> feeds = feedRepository.findFeedsByFeedPage(cursor, PageRequest.of(0, size));
-        if (!feeds.getContent().isEmpty()) {
-            feedLikes = feedLikeRepository.findFeedLikesByFeedsAndMember(feeds.getContent(), viewer);
-        }
         Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getId() : null;
 
-        FeedPage feedPage = new FeedPage(feeds.getContent(), feedLikes, viewer, feedUtil);
+        FeedPage feedPage = new FeedPage(feeds.getContent(), feedRedisUtil, viewer, feedUtil);
 
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
     }
@@ -181,26 +176,22 @@ public class FeedService {
 
     private FeedDetailResponse getFeedDetailResponse(
             Member viewer, Feed feed,
-            Optional<FeedLike> feedLike,
+            boolean isLikeFeed,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
         Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
         if (Objects.isNull(viewer)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
-        } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
+        } else if (isLikeFeed && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, true);
-        } else if (viewerLikedFeed(feedLike)) {
+        } else if (isLikeFeed) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, false);
         } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, true);
         } else {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
         }
-    }
-
-    private boolean viewerLikedFeed(Optional<FeedLike> feedLike) {
-        return feedLike.isPresent();
     }
 
     private boolean isFeedWrittenByViewer(Long feedWriterId, Long viewerId) {
