@@ -33,7 +33,7 @@ public class FeedScheduler {
     private List<FeedLike> deleteFeedLikes;
     private Set<Long> feedKeys;
 
-    @Scheduled(fixedDelay = 25200000)
+    @Scheduled(fixedDelay = 27000000)
     public void writeBackFeedLikeInRedis() {
         HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
         deleteFeedLikes = new ArrayList<>();
@@ -44,8 +44,7 @@ public class FeedScheduler {
 
         feedLikeRepository.deleteAll(deleteFeedLikes);
         feedLikeRepository.saveAll(insertFeedLikes);
-
-        hashOperations.delete(KEY, feedKeys);
+        redisTemplate.delete(KEY);
     }
 
     private void validateFeedIdWithWriteToDatabase(HashOperations<String, Long, HashMap> hashOperations) {
