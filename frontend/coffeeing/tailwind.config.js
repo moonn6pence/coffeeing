@@ -44,7 +44,11 @@ module.exports = {
       },
       backgroundImage: {
         'review-blur': "url('/src/assets/detail/review_blur.png')",
+        'main-page': "url('/src/assets/main/main-background.jpg')",
       },
+      fontFamily: {
+        'Pretendard-Regular': ['Pretendard-Regular'],
+      }
     },
   },
   plugins: [],

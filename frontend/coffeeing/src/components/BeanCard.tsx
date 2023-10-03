@@ -9,6 +9,7 @@ interface ICardProps {
   imgLink: string;
   isCapsule: boolean;
   isProfile?: boolean;
+  isSame?: boolean;
   onBookmarkChange?: (id: number) => void;
 }
 
@@ -20,6 +21,7 @@ export const BeanCard = (props: ICardProps) => {
     imgLink,
     isCapsule,
     isProfile = false,
+    isSame = false,
     onBookmarkChange,
   } = props;
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ export const BeanCard = (props: ICardProps) => {
 
   return (
     <div
-      className="h-94 w-70.5 flex flex-col justify-center cursor-pointer"
+      className="h-94 w-70.5 flex flex-col justify-center"
       onClick={goDetail}
     >
       {isProfile ? (
@@ -49,10 +51,10 @@ export const BeanCard = (props: ICardProps) => {
       <img
         src={imgLink}
         alt="사진"
-        className="w-36 h-36 m-auto mb-16 hover:scale-110"
+        className={`w-36 h-36 m-auto mb-16 ${isSame?'':'hover:scale-110 cursor-pointer'}`}
       />
-      <p className="text-sm text-center text-font-gray mb-2">{subtitle}</p>
-      <p className="text-base text-center mb-12">{name}</p>
+      <p className="text-sm text-center text-font-gray mb-2 h-5">{subtitle || '  '}</p>
+      <p className="text-base text-center mb-12 truncate">{name}</p>
     </div>
   );
 };

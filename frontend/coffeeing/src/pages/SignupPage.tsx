@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, KeyboardEvent } from "react";
 import { useNavigate } from 'react-router-dom'
 import InputField from "components/InputField";
 import Button from "components/Button";
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
 import { setMemberToken } from "store/memberSlice";
 import { MemberState } from "service/member/types";
+import { Toast } from 'components/Toast';
 
 function SignupPage() {
   const navigate = useNavigate();
@@ -48,8 +49,7 @@ function SignupPage() {
   }, []);
 
   // 회원가입 처리
-  const handleSubmit = async (e:React.MouseEvent) =>{
-    e.preventDefault();
+  const handleSubmit = async () =>{
     if(!email || !pw1 || !pw2 || pw1 !== pw2) return;
     const result = await signUp({email: email, password: pw1});
     if(result) {
@@ -62,7 +62,13 @@ function SignupPage() {
       if(myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
           window.location.replace("/recommend-main");
       }
+    } else {
+      Toast.fire('이미 존재하는 이메일입니다.','','error')
     }
+  }
+  // enter key event 추가
+  const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
+    handleSubmit()
   }
 
   return (
@@ -70,7 +76,7 @@ function SignupPage() {
       <div className="text-3xl font-bold">회원가입</div>
       <div className="flex flex-row gap-1">
         <p>이미 회원이신가요?</p> 
-        <p className="hover:font-bold cursor-pointer" onClick={()=>{navigate('/login')}}>로그인</p>
+        <p className="font-bold cursor-pointer" onClick={()=>{navigate('/login')}}>로그인</p>
       </div>
       {/* 이메일 */}
       <div className="flex flex-col gap-1">
@@ -80,6 +86,7 @@ function SignupPage() {
           value={email}
           type='email'
           onChange={(e) => setEmail(e.target.value)} 
+          onKeyDown={handleEnter}
         />
         {!isValidEmail&&email&&(
           <div className="text-xs text-red-600">이메일 형식이 잘못되었습니다.</div>
@@ -93,6 +100,7 @@ function SignupPage() {
           value={pw1}
           type='password'
           onChange={(e) => setPw1(e.target.value)}
+          onKeyDown={handleEnter}
         />
         {!isValidPw&&pw1&&(
           <div className="text-xs text-red-600">비밀번호는 8자 이상으로 영문, 숫자, 특수기호를 포함해야 합니다.</div>
@@ -106,6 +114,7 @@ function SignupPage() {
           value={pw2}
           type='password'
           onChange={(e) => setPw2(e.target.value)}
+          onKeyDown={handleEnter}
         />
         {!isIdenticalPw&&pw2&&(
           <div className="text-xs text-red-600">비밀번호가 일치하지 않습니다.</div>
@@ -113,7 +122,7 @@ function SignupPage() {
       </div>
       {/* 회원가입 버튼 */}
       <Button placeholder="회원가입" handleSubmit={handleSubmit} />
-      <div className="text-xl">OR</div>
+      <div>또는</div>
       {/* 구글 로그인 버튼 */}
       <GoogleLoginBtn/>
     </div>

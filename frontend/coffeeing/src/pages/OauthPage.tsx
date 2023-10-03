@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useDispatch } from "react-redux";
 import { AppDispatch  } from 'store/store';
-import { setMemberToken } from "store/memberSlice";
+import { setMemberToken, setMyInfo } from "store/memberSlice";
 import { getMyInfo } from "../service/member/member"
 import { MemberState } from "service/member/types";
 
@@ -22,14 +22,20 @@ export const OauthPage = () => {
             }));
             
             const result = await getMyInfo();
-            if(result && result.state == MemberState.BEFORE_ADDITIONAL_DATA) {
-                window.location.replace("/signup/additonal-info");
-            } 
-            
-            if(result && result.state == MemberState.BEFORE_RESEARCH) {
-                window.location.replace("/recommend-main");
+            if(result) {
+                dispatch(setMyInfo(result));
+                switch(result.state) {
+                    case MemberState.BEFORE_ADDITIONAL_DATA:
+                        window.location.replace("/signup/additonal-info");
+                        break;
+                    case MemberState.BEFORE_RESEARCH:
+                        window.location.replace("/recommend-main");
+                        break;
+                    default:
+                        window.location.replace("/beans");
+                }
             }
-            window.location.replace("/beans");
+            window.location.replace("/login");
         }
         oauthLogin();
     }, []);

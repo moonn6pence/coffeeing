@@ -15,7 +15,7 @@ const initialState: LoginState = {
   memberId: -1,
   nickname: '',
   profileImage: '',
-  state: MemberState.BEFORE_ADDITIONAL_DATA,
+  state: MemberState.DEFAULT,
 };
 
 const memberSlice = createSlice({
@@ -42,10 +42,13 @@ const memberSlice = createSlice({
         accessToken: '',
         refreshToken: '',
         grantType: '',
+        state: MemberState.DEFAULT
       };
     },
     setMyInfo(state, action: PayloadAction<MyInfo>) {
       const { payload } = action;
+      
+      console.log(payload);
       return {
         ...state,
         ...payload,

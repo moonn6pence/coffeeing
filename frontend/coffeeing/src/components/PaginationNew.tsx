@@ -43,7 +43,7 @@ export const PaginationNew = ({
   const startPage = Math.max(0, currentPage - Math.floor(maxButtons / 2));
   const endPage = Math.min(totalPage, startPage + maxButtons - 1);
   return (
-    <div>
+    <div className='w-full'>
       {isReview ? (
         <div className="flex flex-wrap">
           {reviews?.map((item) => {
@@ -51,7 +51,7 @@ export const PaginationNew = ({
           })}
         </div>
       ) : (
-        <div className="flex flex-wrap w-300 justify-between">
+        <div className=" mx-20 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4">
           {products &&
             products.map((item) => {
               return (
@@ -71,16 +71,16 @@ export const PaginationNew = ({
       {/* 페이지네이션 버튼들 */}
       <div className="flex justify-center">
         {/* 맨 처음 버튼 */}
-        <button onClick={() => setCurrentPage(0)} disabled={currentPage == 1}>
+        <button onClick={() => setCurrentPage(0)} disabled={currentPage == 0}>
           처음으로
         </button>
         {/* 이전 버튼 */}
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
-          disabled={currentPage === 1}
+          disabled={currentPage === 0}
           className="w-10 h-10"
         >
-          <img src={currentPage === 1 ? DisPrev : Prev} />
+          <img src={currentPage === 0 ? DisPrev : Prev} />
         </button>
         {/* 페이지 숫자들 */}
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => (

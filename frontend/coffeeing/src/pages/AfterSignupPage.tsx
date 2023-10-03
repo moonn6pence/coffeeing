@@ -1,12 +1,19 @@
 import React,{useState, useEffect} from "react";
 
+import { useDispatch } from "react-redux";
+import { AppDispatch  } from 'store/store';
+
 import Button from "components/Button";
 import { TextGridSelector } from "components/Form/TextGridSelectForm"
 import { AGE_ITEMS, GENDER_ITEMS } from "util/constants";
-import { getMyInfo, checkUniqueNickname, postOnboard } from "../service/member/member"
+import { getMyInfo, checkUniqueNickname, postOnboard } from "service/member/member"
 import { MemberState } from "service/member/types";
+import { setMyInfo } from "store/memberSlice";
+import { Toast } from 'components/Toast';
 
 export const AfterSignupPage = () => {
+  const dispatch = useDispatch<AppDispatch>();
+
   const [nickname, setNickname] = useState<string>("");
   const [selectedGender, setSelectedGender] = useState({
     value: -1,
@@ -29,23 +36,34 @@ export const AfterSignupPage = () => {
 
   const handleCheckNickname = async () => {
       if(nickname.length <=0 || nickname.length > 11) {
-          // TODO ADD MODAL
+          Toast.fire('닉네임은 1자 이상 11자 이하만<br>입력 가능합니다.','','error');
           return;
       }
       const result = await checkUniqueNickname(nickname);
       if(result) {
-          alert(result.exist);
+          if(result.exist) {
+            Toast.fire('이미 사용중인 닉네임입니다.','','error');
+          } else {
+            Toast.fire('사용 가능한 닉네임입니다.','','info');
+          }
+      } else {
+        Toast.fire('서버와 연결이 원할하지 않습니다.<br>관리자에게 문의하세요.','','error');
       }
   }
 
   const handleSubmit = async () => {
     if(nickname.length <=0 || nickname.length > 11) {
-        // TODO ADD MODAL
+        Toast.fire('닉네임은 1자 이상 11자 이하만<br>입력 가능합니다.','','error');
         return;
     }
 
-    if(selectedAge.value == -1 || selectedGender.value == -1) {
-        // TODO ADD MODAL
+    if(selectedGender.value == -1) {
+        Toast.fire('성별 선택은 필수입니다.','','error');
+        return;
+    }
+
+    if(selectedAge.value == -1) {
+        Toast.fire('나이 선택은 필수입니다.','','error');
         return;
     }
 
@@ -56,6 +74,10 @@ export const AfterSignupPage = () => {
     });
 
     if(result) {
+        const myInfo = await getMyInfo();
+        if(myInfo) {
+            dispatch(setMyInfo(myInfo));
+        }
         window.location.replace("/");
     }
   }
@@ -105,8 +127,7 @@ export const AfterSignupPage = () => {
         />
 
         <div className="flex flex-col items-center gap-2">
-            <Button placeholder="등록하기" handleSubmit={handleSubmit}
-            color="bg-light-roasting"/>
+            <Button placeholder="등록하기" handleSubmit={handleSubmit}/>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { Outlet, useParams } from 'react-router-dom';
 import { NavLinkWrapper } from 'components/NavLink/NavLinkWrapper';
+import { NavBarButton } from 'components/NavBar/NavBarButton';
 
 export type UserData = {
   nickname: string;
@@ -39,8 +40,8 @@ export const MemberPage = () => {
 
   if (userExists) {
     return (
-      <div className="wrapper w-300 flex items-stretch flex-col m-auto">
-        <div className="w-300 bg-light h-80 flex items-center">
+      <div className="wrapper w-4/5 flex items-stretch flex-col m-auto mt-10">
+        <div className="w-full bg-light h-80 flex items-center">
           <MyProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
             nickname={userData.nickname}
@@ -51,14 +52,16 @@ export const MemberPage = () => {
           />
         </div>
         <div className="sub-section mt-12 grow">
-          <nav className="h-45">
+          <nav className="h-45 space-x-4">
             <NavLinkWrapper to={`/member/${id}`} text="경험치" end />
             <NavLinkWrapper to={`/member/${id}/bookmark`} text="북마크" />
             <NavLinkWrapper to={`/member/${id}/feed`} text="피드" />
           </nav>
           <Outlet context={{ id }} />
         </div>
-        <div className="spacer mb-40"></div>
+        <div className="spacer mb-40 flex justify-center pt-10">
+            <NavBarButton value='로그아웃' navLink='/' isLogout={true} />
+        </div>
       </div>
     );
   } else {

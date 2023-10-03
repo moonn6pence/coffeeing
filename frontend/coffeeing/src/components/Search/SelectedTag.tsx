@@ -17,9 +17,9 @@ export const SelectedFilterTag = ({ src, selectedItem,setSelectedItem }: Selecte
       {selectedItem
         .slice(1,)
         .map((item) => (
-        <div key={item.name} className="w-fit p-4 h-8 border rounded-3xl flex gap-2 items-center justify-center bg-half-light">
+        <div key={item.name} className="w-fit p-4 h-8 border rounded-3xl flex gap-1 items-center justify-center bg-half-light">
           <img src={src} alt={item.name} className="w-4 h-5" />
-          {item.name}
+          <span className=" text-xs md:text-sm lg:text-base">{item.name}</span>
           <IonIcon onClick={()=>removeItem(item)} name="close-outline"></IonIcon>
         </div>
       ))}

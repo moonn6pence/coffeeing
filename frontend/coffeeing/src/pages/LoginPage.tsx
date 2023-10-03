@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent } from 'react';
+import React, { useState, useEffect, MouseEvent, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'store/store';
 import { setMemberToken, setMyInfo } from 'store/memberSlice';
 import { MemberState } from 'service/member/types';
+import { Toast } from 'components/Toast';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ function LoginPage() {
   const [pw, setPw] = useState('');
   const dispatch = useDispatch<AppDispatch>();
   // 로그인 처리
-  const handleSubmit = async (e: MouseEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     const result = await signIn({ email: email, password: pw });
     if (result) {
       dispatch(setMemberToken(result));
@@ -35,9 +36,16 @@ function LoginPage() {
       if (myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
         window.location.replace('/recommend-main');
       }
+    } else {
+      Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error');
     }
   };
-
+  // enter key event 추가
+  const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
+    if (e.key==='Enter') {
+      handleSubmit()
+    }
+  }
   useEffect(() => {
     const checkMemberInfo = async () => {
       const result = await getMyInfo();
@@ -58,7 +66,7 @@ function LoginPage() {
       <div className="flex flex-row gap-1">
         <p>아직 회원이 아니신가요?</p>
         <p
-          className="hover:font-bold cursor-pointer"
+          className="font-bold cursor-pointer"
           onClick={() => {
             navigate('/signup');
           }}
@@ -73,6 +81,7 @@ function LoginPage() {
         value={email}
         type="email"
         onChange={(e) => setEmail(e.target.value)}
+        onKeyDown={handleEnter}
       />
       <InputField
         label="비밀번호"
@@ -80,16 +89,17 @@ function LoginPage() {
         value={pw}
         type="password"
         onChange={(e) => setPw(e.target.value)}
+        onKeyDown={handleEnter}
       />
       <div className="flex flex-col items-center gap-2">
         <Button placeholder="로그인" handleSubmit={handleSubmit} />
-        <p className="text-sm flex flex-row gap-2">
+        {/* <p className="text-sm flex flex-row gap-2">
           <span>비밀번호를 잊어버리셨나요?</span>
           <span className="font-semibold">비밀번호 찾기</span>
-        </p>
+        </p> */}
       </div>
 
-      <div className="text-xl">OR</div>
+      <div>또는</div>
       <GoogleLoginBtn />
     </div>
   );

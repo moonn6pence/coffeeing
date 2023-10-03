@@ -28,7 +28,7 @@ export const NavBarButton = ({
   };
 
   const divCommon =
-    'px-22px py-3 rounded-3xl hover:brightness-90 cursor-pointer w-fit';
+    'px-4 py-3 rounded-3xl hover:brightness-90 cursor-pointer w-max';
   const pCommon = 'text-base text-light-roasting font-bold';
 
   return (
@@ -36,7 +36,7 @@ export const NavBarButton = ({
       className={dark ? `${divCommon} bg-my-black` : `${divCommon} bg-light`}
       onClick={goLink}
     >
-      <p className={dark ? `${pCommon} text-white` : `${pCommon}`}>{value}</p>
+      <p className={`${dark ? `${pCommon} text-white` : `${pCommon}`} text-xs md:text-base`}>{value}</p>
     </div>
   );
 };
