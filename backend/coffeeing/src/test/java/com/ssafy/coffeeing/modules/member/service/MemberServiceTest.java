@@ -83,7 +83,7 @@ class MemberServiceTest extends ServiceTest {
 
         //then
         assertThat(memberBaseInfoResponse).isEqualTo(
-                MemberMapper.supplyBaseInfoResponseFrom(generalMember)
+                MemberMapper.supplyBaseInfoResponseOf(generalMember, null)
         );
     }
 

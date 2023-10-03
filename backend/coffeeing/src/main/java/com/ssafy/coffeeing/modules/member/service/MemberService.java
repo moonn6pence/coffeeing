@@ -4,6 +4,8 @@ import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.member.mapper.MemberMapper;
 import com.ssafy.coffeeing.modules.member.util.MemberUtil;
+import com.ssafy.coffeeing.modules.survey.domain.Preference;
+import com.ssafy.coffeeing.modules.survey.repository.PreferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PreferenceRepository preferenceRepository;
     private final SecurityContextUtils securityContextUtils;
     private final MemberUtil memberUtil;
 
@@ -67,7 +70,9 @@ public class MemberService {
         Member member = memberRepository
                 .findById(memberId)
                 .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
-        return MemberMapper.supplyBaseInfoResponseFrom(member);
+        Preference preference = preferenceRepository.findByMemberId(memberId);
+
+        return MemberMapper.supplyBaseInfoResponseOf(member,preference);
     }
 
     @Transactional(readOnly = true)

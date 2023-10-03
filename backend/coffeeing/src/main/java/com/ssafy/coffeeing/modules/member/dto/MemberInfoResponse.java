@@ -1,12 +1,10 @@
 package com.ssafy.coffeeing.modules.member.dto;
 
-import com.ssafy.coffeeing.modules.member.domain.MemberState;
+import com.ssafy.coffeeing.modules.survey.dto.CoffeeCriteriaResponse;
 
 public record MemberInfoResponse(
     String nickname,
-    String profileImage
-    // TODO : add Preference information about a member.
-    // This response is used to fill information at member section
-
+    String profileImage,
+    CoffeeCriteriaResponse preference
 ) {
 }
