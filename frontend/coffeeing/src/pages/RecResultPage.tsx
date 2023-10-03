@@ -5,26 +5,14 @@ import { RootState } from "store/store";
 import { BeanCard } from "components/BeanCard";
 import { BeanRating } from "components/Detail/BeanRating";
 import profile from '../assets/profile.svg'
-import IonIcon from "@reacticons/ionicons";
 import { useNavigate } from "react-router-dom";
 import again from '../assets/again.png'
+import loadingGif from '../assets/survey/loading.gif'
 type ProductsType = {
   id:number,
   imageUrl:string,
   subtitle:string,
   title:string,
-}
-
-type ResultType = {
-  roast:number,
-  acidity:number,
-  body:number,
-  imageUrl:string,
-  nickname:string,
-  recommendation:{
-    isCapsule:boolean,
-    products: ProductsType[]
-  },
 }
 
 export const RecResultPage  = ()=>{
@@ -80,7 +68,10 @@ export const RecResultPage  = ()=>{
     <div className="flex flex-col items-center">
       {loading 
       ? (
-        <div>로딩중</div>
+        <div className="flex flex-col items-center">
+          <img src={loadingGif} />
+          <p className="text-2xl">취향을 분석중입니다</p>
+        </div>
       ) 
       : (
         <div>
