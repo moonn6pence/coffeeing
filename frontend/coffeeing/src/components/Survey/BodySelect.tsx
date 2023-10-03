@@ -28,9 +28,9 @@ export const BodySelect = () => {
           {survey.currentPage}/{survey.totalPage}
         </p>
         <p className="text-2xl font-bold">선호하는 바디감을 선택해주세요</p>
-        <p className="relative w-560px h-2.5 rounded-lg bg-process-bar">
+        <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={`absolute botton-0 left-0 ${survey.totalPage===4?'w-3/4':'w-4/5'} h-2.5 rounded-lg bg-half-light`}
+            className={`botton-0 left-0 ${survey.totalPage === 4 ? (selectedBody !== -2 ? 'w-3/4 transition-width duration-500 ease-in-out' : 'w-2/4') : (selectedBody !== -2 ? 'w-3/5 transition-width duration-500 ease-in-out' : 'w-2/5')} h-2.5 rounded-lg bg-half-light`}
           ></span>
         </p>
       </div>

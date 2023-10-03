@@ -41,8 +41,9 @@ export const RoastingSelect = () => {
         </div>
         <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={` botton-0 left-0 ${survey.totalPage===4?'w-1/4':'w-1/5'} h-2.5 rounded-lg bg-half-light`}
+            className={`botton-0 left-0 ${survey.totalPage === 4 ? (selectedRoast !== -2 ? 'w-1/4 transition-width duration-500 ease-in-out' : 'w-0') : (selectedRoast !== -2 ? 'w-1/5 transition-width duration-500 ease-in-out' : 'w-0')} h-2.5 rounded-lg bg-half-light`}
           ></span>
+
         </p>
       </div>
       {/* 설문 사진 */}
