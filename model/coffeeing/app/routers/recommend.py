@@ -3,6 +3,8 @@ from fastapi import Depends
 
 from ..recommend.member_recommand import ProductSimilarityRecommend
 from ..recommend.member_recommand import RecommendByProductId
+from ..recommend.member_recommand import RecommendByCriteria
+
 from ..database.connection import get_session
 
 from sqlalchemy.orm import Session
@@ -12,11 +14,13 @@ recommend = APIRouter(prefix='/rec')
 #  원두 / 캡슐의 특성을 기준에 따라 추천한다. 
 #  (1) 특성의 종류(criteria): roast, body, acidity (로스팅, 바디감, 산도)
 #  (2) 추천 기준(attribute) : low, high
-#    2-1 : low
-#    2-2 : high
+#    2-1 : low 0 ~ 0.4
+#    2-2 : high 0.6 ~ 1.0
+#    2-3 : 중간값에 존재하는 상품들의 추천이 안되는 것을 방지하기 위해 low, high값에 0~0.1 사이값을 추가로 보정한다.
 @recommend.get("/criteria")
 async def item_characteristics_base_recommand(count: int, isCapsule: bool, criteria: str, attribute:str, db: Session = Depends(get_session)):   
-    return {"results":[1,2,3,4]}
+    result = RecommendByCriteria(count, isCapsule, criteria, attribute, db)
+    return {"results": result}
 
 # 원두, 캡슐의 id가 주어진 경우 해당 아이템과 유사한 상품을 추천한다.
 @recommend.get("/similar")

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.orm.decl_api import DeclarativeMeta
+from sqlalchemy import func
 
 def get_all(db: Session, model: DeclarativeMeta, skip: int = 0, limit: int = 3000):
     return db.query(model).offset(skip).limit(limit).all()
@@ -11,3 +12,9 @@ def get_by_id(db: Session, model: DeclarativeMeta, id_column_name:str, id: int):
     column_attr = getattr(model, id_column_name, None)
     filter_condition = (column_attr == id)
     return db.query(model).filter(filter_condition).first()
+
+
+def get_by_criteria_range(db: Session, model: DeclarativeMeta, criteria: str, count:int, row: float, high: float):
+    column_attr = getattr(model, criteria, None)
+    filter_condition = (column_attr >= row) & (column_attr < high)
+    return db.query(model).filter(filter_condition).order_by(func.random()).limit(count).all()

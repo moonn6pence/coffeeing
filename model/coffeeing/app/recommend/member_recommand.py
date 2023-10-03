@@ -4,6 +4,34 @@ from ..database.dataloader import DataLoader
 from ..database.model import Model
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
+import random
+
+def RecommendByCriteria(count: int, is_capsule: bool, criteria: str, attribute:str, db: Session):
+    model = Model()
+    loader = DataLoader(db)
+
+    model_name = 'Capsule' if is_capsule else 'Coffee'
+    low = None
+    high = None
+
+    if(attribute == 'low'): 
+        low = 0
+        high = 0.4 + (random.random() * 0.1)
+    else:
+        low = 0.6 - (random.random() * 0.1)
+        high = 1.1
+
+    datas = loader.load_data_by_criteria(model[model_name], criteria, count, low, high)
+    col_names = list(datas.columns)
+    col_names[0] = 'id'
+    datas.columns = col_names
+
+    datas = datas.to_dict(orient='records')
+    result = []
+    for data in datas:
+        result.append(data['id'])
+
+    return result
 
 def RecommendByProductId(count: int, is_capsule: bool, id: int, db: Session):
     model = Model()

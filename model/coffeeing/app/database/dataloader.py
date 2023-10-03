@@ -8,6 +8,7 @@ from sqlalchemy.orm.decl_api import DeclarativeMeta
 from .crud import get_all
 from .crud import get_by_machine_type
 from .crud import get_by_id
+from .crud import get_by_criteria_range
 
 class DataLoader:
     def __init__(self, db: Session):
@@ -15,7 +16,6 @@ class DataLoader:
 
     def load_all_data(self, model: DeclarativeMeta):
         db_items = get_all(self.db, model, limit=sys.maxsize - 1)
-
         if not db_items:
             db_df = pd.DataFrame()
         else:
@@ -43,5 +43,17 @@ class DataLoader:
             db_df = pd.DataFrame()
         else:
             db_df = pd.DataFrame(data=[db_item.values()], columns=db_item.keys())
+            db_df = db_df[list(model.__table__.columns.keys())]
+        return db_df
+    
+    def load_data_by_criteria(self, model: DeclarativeMeta, criteria:str, count:int, row: float, high: float):
+        db_items = get_by_criteria_range(self.db, model, criteria, count, row, high)
+
+        if not db_items:
+            db_df = pd.DataFrame()
+        else:
+            db_df = pd.DataFrame(
+                data=[item.values() for item in db_items], columns=db_items[0].keys()
+            )
             db_df = db_df[list(model.__table__.columns.keys())]
         return db_df
