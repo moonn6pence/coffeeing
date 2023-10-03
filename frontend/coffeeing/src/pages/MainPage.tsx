@@ -15,9 +15,9 @@ export const MainPage = () => {
     <div>
       <div className="w-screen h-[620px] bg-main-page bg-cover flex justify-center">
         <div className="flex flex-col items-center mt-20 h-[210px] justify-between">
-          <p className="text-6xl font-bold text-[#4A2F23]">취향에 맞는 커피 추천</p>
-          <p className="text-lg text-[#784C3A]">본인의 취향에 맞는 원두와 캡슐을 찾아보세요</p>
-          <NavBarButton value="추천받기" navLink="/recommend-main" />
+          <p className="md:text-6xl text-4xl font-bold text-[#4A2F23]">당신을 위한 특별한 한 잔</p>
+          <p className="text-xl text-[#784C3A]">Coffeeing 과 함께하세요</p>
+          <NavBarButton value="나에게 맞는 원두/캡슐 추천 받으러 가기" navLink="/recommend-main" />
         </div>
       </div>
       <div className="w-screen h-[750px] bg-light flex justify-evenly items-center">
