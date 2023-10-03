@@ -28,6 +28,9 @@ public class ServiceTest {
     private MemberRepository memberRepository;
 
     @Autowired
+    private RedisTemplate redisTemplate;
+
+    @Autowired
     protected EntityManager em;
 
     @Autowired
@@ -48,6 +51,7 @@ public class ServiceTest {
 
     @BeforeEach
     void setUp() {
+        redisTemplate.delete("feedLike");
         generalMember = memberRepository.save(MemberTestDummy
                 .createGeneralMember("testNickname", "{noop}test123", "test1@test.com"));
         beforeResearchMember = memberRepository.save(MemberTestDummy

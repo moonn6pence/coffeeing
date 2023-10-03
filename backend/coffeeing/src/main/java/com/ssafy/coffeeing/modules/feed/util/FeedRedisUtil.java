@@ -72,8 +72,20 @@ public class FeedRedisUtil {
 
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
+        if (!Objects.nonNull(feedLikeCache)) {
+            feedLikeCache = new HashMap<>();
+        }
+        feedLikeCache.put(member.getId(), false);
+        hashOperations.put(KEY, feed.getId(), feedLikeCache);
+    }
+
+    public void disLikeFeedInRedis(Feed feed) {
+        HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
+
+        HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
+
         if (Objects.nonNull(feedLikeCache)) {
-            feedLikeCache.put(member.getId(), false);
+            feedLikeCache.replaceAll((i, v) -> false);
             hashOperations.put(KEY, feed.getId(), feedLikeCache);
         }
     }
@@ -83,15 +95,16 @@ public class FeedRedisUtil {
 
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
-        if(Objects.nonNull(feedLikeCache)) {
-            feedLikeCache.put(member.getId(), true);
-            hashOperations.put(KEY, feed.getId(), feedLikeCache);
+        if (!Objects.nonNull(feedLikeCache)) {
+            feedLikeCache = new HashMap<>();
         }
+        feedLikeCache.put(member.getId(), true);
+        hashOperations.put(KEY, feed.getId(), feedLikeCache);
     }
 
     private boolean isNotSetExpireTime() {
         if (Objects.nonNull(redisTemplate.getExpire(KEY))) {
-            return redisTemplate.getExpire(KEY).equals(-1L);
+            return Objects.requireNonNull(redisTemplate.getExpire(KEY)).equals(-1L);
         }
         return false;
     }
