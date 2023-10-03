@@ -36,7 +36,7 @@ export const NavBarButton = ({
       className={dark ? `${divCommon} bg-my-black` : `${divCommon} bg-light`}
       onClick={goLink}
     >
-      <p className={dark ? `${pCommon} text-white` : `${pCommon}`}>{value}</p>
+      <p className={`${dark ? `${pCommon} text-white` : `${pCommon}`} text-xs md:text-base`}>{value}</p>
     </div>
   );
 };
