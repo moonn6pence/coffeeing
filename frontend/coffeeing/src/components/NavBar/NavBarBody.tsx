@@ -6,7 +6,7 @@ import { RootState } from 'store/store';
 import profile from 'assets/profile.svg';
 import logo from 'assets/logo.svg';
 import { useNavigate } from 'react-router-dom';
-
+import { NavBarDropdown } from './NavBarDropdown';
 export const NavBarBody = () => {
   const isLogin = useSelector((state: RootState) => state.member.isLogin);
   const myInfo = useSelector((state:RootState) => state.member);
@@ -40,6 +40,7 @@ export const NavBarBody = () => {
             <NavBarButton value="회원가입" navLink="/signup" />
           </div>
         )}
+        <NavBarDropdown/>
       </div>
     </div>
   );

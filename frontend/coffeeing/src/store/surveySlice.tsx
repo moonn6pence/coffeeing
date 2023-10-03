@@ -1,4 +1,5 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
+import { stat } from 'fs';
 import { SurveyType } from 'types/StoreTypes';
 
 
@@ -51,7 +52,16 @@ const surveySlice = createSlice({
       state.machine = action.payload
       console.log('machine type', state.machine)
     },
-    resetSurvey:()=>initialState
+    resetSurvey:(state)=>{
+      state.currentPage=0
+      state.totalPage=0
+      state.roasting=0
+      state.acidity=0
+      state.body=0
+      state.flavorNote=''
+      state.machine=1
+      state.isCapsule=false
+    }
   },
 })
 

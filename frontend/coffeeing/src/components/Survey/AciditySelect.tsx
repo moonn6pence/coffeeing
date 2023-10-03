@@ -32,7 +32,7 @@ export const AciditySelect = () => {
         <p className="text-2xl font-bold">선호하는 산미 단계를 선택해주세요</p>
         <p className="flex w-560px h-2.5 rounded-lg bg-process-bar">
           <span
-            className={` botton-0 left-0 ${survey.totalPage===4?'w-2/4':'w-2/5'} h-2.5 rounded-lg bg-half-light`}
+            className={`botton-0 left-0 ${survey.totalPage === 4 ? (selectedAcidity !== -1 ? 'w-2/4 transition-width duration-500 ease-in-out' : 'w-1/4') : (selectedAcidity !== -1? 'w-2/5 transition-width duration-500 ease-in-out' : 'w-1/5')} h-2.5 rounded-lg bg-half-light`}
           ></span>
         </p>
       </div>

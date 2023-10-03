@@ -2,7 +2,6 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storageSession from 'redux-persist/lib/storage/session';
 import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import surveySlice from "./surveySlice";
-import searchSlice from "./searchSlice";
 import memberSlice from "./memberSlice";
 
 const persistConfig = {
@@ -13,7 +12,6 @@ const persistConfig = {
 
 const reducers = combineReducers({
   survey:surveySlice,
-  search:searchSlice,
   member:memberSlice,
 });
 

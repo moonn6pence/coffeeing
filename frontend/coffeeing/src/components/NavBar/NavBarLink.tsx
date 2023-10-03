@@ -20,7 +20,7 @@ export const NavBarLink = (props: ILinkProps) => {
 
   return (
     <div
-      className={active ? 'border-b-2 border-cinamon-roasting py-3' : 'py-3'}
+      className={`${active ? 'border-b-2 border-cinamon-roasting py-3' : 'py-3'} hidden md:block`}
     >
       <span onClick={()=>{navigate(link)}} className={linkClass}>
         {name}

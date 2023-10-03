@@ -24,8 +24,10 @@ export const MachineSelect = () => {
       <div className='flex flex-col items-center gap-2'>
         <p>{survey.currentPage}/{survey.totalPage}</p>
         <p className='text-2xl font-bold'>사용 중인 커피 머신을 선택해주세요</p>
-        <p className='relative w-560px h-2.5 rounded-lg bg-process-bar'>
-          <p className={`absolute botton-0 left-0 w-full h-2.5 rounded-lg bg-half-light`}></p>
+        <p className='flex w-560px h-2.5 rounded-lg bg-process-bar'>
+          <span
+            className={`botton-0 left-0 ${selectedMachine !== -1 ? 'w-full transition-width duration-500 ease-in-out ': 'w-4/5'} h-2.5 rounded-lg bg-half-light`}
+          ></span>
         </p>
       </div>
       {/* 설문 사진 */}
