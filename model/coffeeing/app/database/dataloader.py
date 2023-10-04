@@ -9,6 +9,8 @@ from .crud import get_all
 from .crud import get_by_machine_type
 from .crud import get_by_id
 from .crud import get_by_criteria_range
+from .crud import get_member_coffee_matrix
+from .crud import get_member_capsule_matrix
 
 class DataLoader:
     def __init__(self, db: Session):
@@ -56,4 +58,20 @@ class DataLoader:
                 data=[item.values() for item in db_items], columns=db_items[0].keys()
             )
             db_df = db_df[list(model.__table__.columns.keys())]
+        return db_df
+    
+    def load_member_coffee_matrix(self):
+        db_items = get_member_coffee_matrix(self.db)
+        items = []
+        for row in db_items:
+            items.append(row._mapping)
+        db_df = pd.DataFrame(data=items, columns=['member_id', 'product_id', 'score'])
+        return db_df
+    
+    def load_member_capsule_matrix(self):
+        db_items = get_member_capsule_matrix(self.db)
+        items = []
+        for row in db_items:
+            items.append(row._mapping)
+        db_df = pd.DataFrame(data=items, columns=['member_id', 'product_id', 'score'])
         return db_df
