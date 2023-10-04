@@ -5,8 +5,6 @@ import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;

@@ -22,7 +22,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<BookmarkProductElement> findBookmarkedCoffeeElements(Member member, Pageable pageable) {
+    public Page<CoffeeBookmarkElement> findBookmarkedCoffeeElements(Member member, Pageable pageable) {
         List<Coffee> queryResult = jpaQueryFactory
                 .select(
                         coffeeBookmark.coffee
@@ -38,7 +38,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
                 .orderBy(coffeeBookmark.id.desc())
                 .fetch();
 
-        List<BookmarkProductElement> coffeeBookmarkElements = queryResult
+        List<CoffeeBookmarkElement> coffeeBookmarkElements = queryResult
                 .stream()
                 .map((item) -> ProductMapper.supplyCoffeeBookmarkElementOf(
                                 item.getId(),
