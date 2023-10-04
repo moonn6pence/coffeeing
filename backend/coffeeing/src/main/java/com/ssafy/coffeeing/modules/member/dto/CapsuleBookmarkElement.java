@@ -6,5 +6,5 @@ public record CapsuleBookmarkElement(
         String nameKr,
         String imageUrl
 
-) implements BookmarkProductElement {
+){
 }

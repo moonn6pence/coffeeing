@@ -2,10 +2,11 @@ package com.ssafy.coffeeing.modules.product.mapper;
 
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkResponse;
 import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -119,7 +120,7 @@ public class ProductMapper {
                 .build();
     }
 
-    public static BookmarkProductElement supplyCoffeeBookmarkElementOf(
+    public static CoffeeBookmarkElement supplyCoffeeBookmarkElementOf(
             Long id,
             String regionKr,
             String nameKr,
@@ -147,8 +148,16 @@ public class ProductMapper {
         return new SimpleProductElement(coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl());
     }
 
-    public static BookmarkResponse supplyBookmarkedResponseOf(Integer number, Integer totalPages, List<BookmarkProductElement> bookmarkedElements, boolean isCapsule) {
+    public static CoffeeBookmarkResponse supplyCoffeeBookmarkResponseOf(Integer number, Integer totalPages, List<CoffeeBookmarkElement> bookmarkedElements, boolean isCapsule) {
         return new BookmarkResponse(
+                number,
+                totalPages,
+                bookmarkedElements,
+                isCapsule
+        );
+    }
+    public static CapsuleBookmarkResponse supplyCapsuleBookmarkResponseOf(Integer number, Integer totalPages, List<CapsuleBookmarkElement> bookmarkedElements, boolean isCapsule){
+        return new CapsuleBookmarkResponse(
                 number,
                 totalPages,
                 bookmarkedElements,

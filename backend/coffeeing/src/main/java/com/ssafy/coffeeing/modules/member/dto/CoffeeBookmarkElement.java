@@ -6,5 +6,5 @@ public record CoffeeBookmarkElement(
         String nameKr,
         String imageUrl
 
-) implements BookmarkProductElement {
+) {
 }
