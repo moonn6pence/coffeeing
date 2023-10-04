@@ -108,7 +108,7 @@ export const FeedPage = () => {
 
   return(
     <>
-        <div className="main-container w-320 pt-10 items-center mx-auto">
+        <div className="main-container w-full pt-10 items-center mx-auto">
             <div className="feed-container flex flex-col w-full h-30 items-center mx-auto min-w-min px-72">
                 {/** Create Feed Button */}
                 <div className="write-button-wrapper flex flex-row-reverse w-full">

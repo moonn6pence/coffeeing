@@ -27,6 +27,7 @@ export type PaginationProps = {
   isCapsule: boolean;
   setCurrentPage: Dispatch<React.SetStateAction<number>>;
   isReview?: boolean;
+  isProfile?: boolean;
 };
 
 export const PaginationNew = ({
@@ -36,6 +37,7 @@ export const PaginationNew = ({
   isCapsule,
   setCurrentPage,
   isReview = false,
+  isProfile = false,
   reviews,
 }: PaginationProps) => {
   const commonClass = 'w-10 h-10 font-semibold text-base';
@@ -43,7 +45,7 @@ export const PaginationNew = ({
   const startPage = Math.max(0, currentPage - Math.floor(maxButtons / 2));
   const endPage = Math.min(totalPage, startPage + maxButtons - 1);
   return (
-    <div className='w-full'>
+    <div className="w-full">
       {isReview ? (
         <div className="flex flex-wrap">
           {reviews?.map((item) => {
@@ -60,8 +62,9 @@ export const PaginationNew = ({
                   subtitle={isCapsule ? item.brandKr : item.regionKr}
                   name={item.nameKr}
                   imgLink={item.imageUrl}
-                  isCapsule={item.isCapsule}
+                  isCapsule={isCapsule}
                   key={item.id}
+                  isProfile={isProfile}
                 />
               );
             })}
