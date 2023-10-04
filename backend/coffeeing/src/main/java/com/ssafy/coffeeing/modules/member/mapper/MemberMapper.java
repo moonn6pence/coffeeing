@@ -12,11 +12,11 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberMapper {
-  public static MemberInfoResponse supplyBaseInfoResponseOf(Member member, Preference preference) {
+  public static MemberInfoResponse supplyBaseInfoResponseOf(Member member, CoffeeCriteriaResponse preference) {
     return new MemberInfoResponse(
             member.getNickname(),
             member.getProfileImage(),
-            supplyCoffeeCriteriaResponseFrom(preference)
+            preference
     );
   }
 

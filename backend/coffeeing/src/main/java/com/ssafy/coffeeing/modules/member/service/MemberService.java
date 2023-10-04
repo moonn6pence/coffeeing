@@ -1,10 +1,12 @@
 package com.ssafy.coffeeing.modules.member.service;
 
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
+import com.ssafy.coffeeing.modules.global.embedded.CoffeeCriteria;
 import com.ssafy.coffeeing.modules.member.dto.*;
 import com.ssafy.coffeeing.modules.member.mapper.MemberMapper;
 import com.ssafy.coffeeing.modules.member.util.MemberUtil;
 import com.ssafy.coffeeing.modules.survey.domain.Preference;
+import com.ssafy.coffeeing.modules.survey.dto.CoffeeCriteriaResponse;
 import com.ssafy.coffeeing.modules.survey.repository.PreferenceRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,7 @@ public class MemberService {
         }
 
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-        if(!member.getState().equals(MemberState.BEFORE_ADDITIONAL_DATA)) {
+        if (!member.getState().equals(MemberState.BEFORE_ADDITIONAL_DATA)) {
             throw new BusinessException(MemberErrorInfo.NOT_VALID_STATE);
         }
 
@@ -51,7 +53,7 @@ public class MemberService {
     }
 
     public void addExperience(final ExperienceEvent eventRecord) {
-        Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
+        Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
         member.addExperience(eventRecord.experience());
         while (isLevelUp(member.getMemberLevel(), member.getExperience())) {
             member.subtractExperience(memberUtil.calculateLevelUpExperience(member.getMemberLevel()));
@@ -69,17 +71,17 @@ public class MemberService {
     public MemberInfoResponse getMemberInfo(Long memberId) {
         Member member = memberRepository
                 .findById(memberId)
-                .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
         Preference preference = preferenceRepository.findByMemberId(memberId);
-
-        return MemberMapper.supplyBaseInfoResponseOf(member,preference);
+        CoffeeCriteriaResponse coffeeCriteriaResponse = MemberMapper.supplyCoffeeCriteriaResponseFrom(preference);
+        return MemberMapper.supplyBaseInfoResponseOf(member, coffeeCriteriaResponse);
     }
 
     @Transactional(readOnly = true)
     public ExperienceInfoResponse getMemberExperience(Long memberId) {
         Member member = memberRepository
                 .findById(memberId)
-                .orElseThrow(()->new BusinessException(MemberErrorInfo.NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
         return MemberMapper.supplyExperienceInfoResponseOf(
                 member,
                 memberUtil.calculateLevelUpExperience(member.getMemberLevel())
@@ -96,9 +98,9 @@ public class MemberService {
     public void updateMemberNickname(NicknameChangeRequest nicknameChangeRequest) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
         boolean nicknameExists = memberRepository.existsByNickname(nicknameChangeRequest.nickname());
-        if(nicknameExists){
+        if (nicknameExists) {
             throw new BusinessException(MemberErrorInfo.PRE_EXIST_NICKNAME);
-        }else{
+        } else {
             member.updateMemberNickname(nicknameChangeRequest.nickname());
         }
     }
