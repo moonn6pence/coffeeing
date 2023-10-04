@@ -54,7 +54,7 @@ function LoginPage() {
       }
 
       if (result && result.state == MemberState.BEFORE_RESEARCH) {
-        window.location.replace('/recommend-main');
+        window.location.replace('/');
       }
     };
     checkMemberInfo();
