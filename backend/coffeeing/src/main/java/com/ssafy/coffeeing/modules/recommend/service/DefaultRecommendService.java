@@ -4,6 +4,7 @@ import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.SurveyErrorInfo;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.property.RecSysProperty;
+import com.ssafy.coffeeing.modules.recommend.util.RecommendCacheUtil;
 import com.ssafy.coffeeing.modules.survey.dto.PreferenceRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 @Profile({"prod","dev"})
@@ -23,6 +25,7 @@ public class DefaultRecommendService implements RecommendService {
 
     private final RecSysProperty recSysProperty;
     private final RestTemplate restTemplate;
+    private final RecommendCacheUtil recommendCacheUtil;
     private static final String PARAM_COUNT = "count";
     private static final String PARAM_IS_CAPSULE = "isCapsule";
 
@@ -42,8 +45,14 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try {
-            return restTemplate.getForObject(uri, RecommendResponse.class);
+        try{
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
+        } catch (BusinessException e) {
+            recommendCacheUtil.pushAll(uri.toString(),
+                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
+            );
+
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
         } catch (HttpClientErrorException e) {
             throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
         } catch (HttpServerErrorException e) {
@@ -63,8 +72,14 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try {
-            return restTemplate.getForObject(uri, RecommendResponse.class);
+        try{
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
+        } catch (BusinessException e) {
+            recommendCacheUtil.pushAll(uri.toString(),
+                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
+            );
+
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
         } catch (HttpClientErrorException e) {
             throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
         } catch (HttpServerErrorException e) {
@@ -85,8 +100,14 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try {
-            return restTemplate.getForObject(uri, RecommendResponse.class);
+        try{
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
+        } catch (BusinessException e) {
+            recommendCacheUtil.pushAll(uri.toString(),
+                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
+            );
+
+            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
         } catch (HttpClientErrorException e) {
             throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
         } catch (HttpServerErrorException e) {
