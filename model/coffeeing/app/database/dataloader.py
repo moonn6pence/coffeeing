@@ -70,7 +70,6 @@ class DataLoader:
     
     def load_member_capsule_matrix(self):
         db_items = get_member_capsule_matrix(self.db)
-        db_df = pd.DataFrame(columns=['member_id', 'product_id', 'score'])
         items = []
         for row in db_items:
             items.append(row._mapping)

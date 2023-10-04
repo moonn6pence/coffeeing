@@ -37,7 +37,8 @@ async def suvey_base_recommand(count: int, isCapsule: bool, machineType:int, roa
 	result = ProductSimilarityRecommend(count, roast, acidity, body, flavorNote, isCapsule, machineType, db)
 	return {"results": result}
 
-@recommend.get('/test')
+# 리뷰 데이터 기반 행렬 분해
+@recommend.get('/svd')
 async def svd_base_recommand(count: int, isCapsule: bool, memberId:int, db: Session = Depends(get_session)):
 	result = RecommandBySVD(count, isCapsule, memberId, db)
 	return {"results": result}

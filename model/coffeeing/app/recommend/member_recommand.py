@@ -1,15 +1,12 @@
 from sqlalchemy.orm import Session
-from sqlalchemy.orm.decl_api import DeclarativeMeta
 from ..database.dataloader import DataLoader
 from ..database.model import Model
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import random
 from surprise import SVD, Reader, Dataset
-from surprise.model_selection import cross_validate
 
-
-def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
+def RecommandBySVD(count: int, is_capsule: bool, member_id: int, db: Session):
     loader = DataLoader(db)
     member_product_matrix = None
     if is_capsule:
@@ -17,12 +14,27 @@ def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
     else:
         member_product_matrix = loader.load_member_coffee_matrix()
 
-    reader = Reader()
+    reader = Reader(rating_scale=(1, 5))
     data = Dataset.load_from_df(member_product_matrix[['member_id', 'product_id', 'score']], reader)
+    
+    trainset = data.build_full_trainset()
+    algo = SVD(n_epochs=20, n_factors=50, random_state=0)
+    algo.fit(trainset)
 
-    algo = SVD()
-    cross_validate(algo, data, measures=["RMSE", "MAE"], cv=5, verbose=True)
-    return ""
+    not_eval_products_id = []
+    for info in member_product_matrix.values:
+        if info[0] == member_id and info[2] == 0.0:
+            not_eval_products_id.append(int(info[1]))
+
+    predictions = [algo.predict(str(member_id), str(product_id)) for product_id in not_eval_products_id]
+    predictions.sort(key=_sortkey_est, reverse=True)
+    top_predictions = predictions[:count]
+
+    result = [int(pred.iid) for pred in top_predictions]
+    return result
+
+def _sortkey_est(pred):
+    return pred.est
 
 def RecommendByCriteria(count: int, is_capsule: bool, criteria: str, attribute:str, db: Session):
     model = Model()
