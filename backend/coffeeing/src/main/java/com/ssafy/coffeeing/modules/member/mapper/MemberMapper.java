@@ -28,12 +28,13 @@ public class MemberMapper {
     );
   }
 
-  public static MyInfoResponse supplyMyInfoResponseOf(Member member) {
+  public static MyInfoResponse supplyMyInfoResponseOf(Member member, boolean isAfterSurvey) {
     return new MyInfoResponse(
             member.getId(),
             member.getState(),
             member.getNickname(),
-            member.getProfileImage()
+            member.getProfileImage(),
+            isAfterSurvey
     );
   }
 
