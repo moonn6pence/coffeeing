@@ -6,6 +6,15 @@ import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import random
 
+def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
+    loader = DataLoader(db)
+    member_product_matrix = None
+    if is_capsule:
+        member_product_matrix = loader.load_member_capsule_matrix()
+    else:
+        member_product_matrix = loader.load_member_coffee_matrix()
+    return ""
+
 def RecommendByCriteria(count: int, is_capsule: bool, criteria: str, attribute:str, db: Session):
     model = Model()
     loader = DataLoader(db)

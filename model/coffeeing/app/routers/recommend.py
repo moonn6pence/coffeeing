@@ -4,6 +4,7 @@ from fastapi import Depends
 from ..recommend.member_recommand import ProductSimilarityRecommend
 from ..recommend.member_recommand import RecommendByProductId
 from ..recommend.member_recommand import RecommendByCriteria
+from ..recommend.member_recommand import RecommandBySVD
 
 from ..database.connection import get_session
 
@@ -34,4 +35,9 @@ async def suvey_base_recommand(count: int, isCapsule: bool, id: int, db: Session
 @recommend.get("/preference")
 async def suvey_base_recommand(count: int, isCapsule: bool, machineType:int, roast:float, acidity:float, body:float, flavorNote:str, db: Session = Depends(get_session)):
 	result = ProductSimilarityRecommend(count, roast, acidity, body, flavorNote, isCapsule, machineType, db)
+	return {"results": result}
+
+@recommend.get('/test')
+async def svd_base_recommand(count: int, isCapsule: bool, memberId:int, db: Session = Depends(get_session)):
+	result = RecommandBySVD(count, isCapsule, memberId, db)
 	return {"results": result}
