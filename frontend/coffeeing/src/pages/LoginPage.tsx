@@ -34,7 +34,7 @@ function LoginPage() {
       }
 
       if (myInfo && myInfo.state == MemberState.NORMAL) {
-        window.location.replace('/recommend-main');
+        window.location.replace('/');
       }
     } else {
       Toast.fire('아이디 또는 비밀번호를 <br> 확인하세요.','','error');
@@ -54,7 +54,7 @@ function LoginPage() {
       }
 
       if (result && result.state == MemberState.NORMAL) {
-        window.location.replace('/recommend-main');
+        window.location.replace('/');
       }
     };
     checkMemberInfo();
