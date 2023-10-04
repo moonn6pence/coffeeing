@@ -1,6 +1,5 @@
 import { publicRequest, privateRequest } from "util/axios";
 import { API_URL } from "util/constants";
-import { useSelector } from "react-redux";
 
 export const getSurveyResult = async (survey:any, isLogin:boolean)=>{
   try {
@@ -53,7 +52,7 @@ export const savePreference = async (survey:any)=>{
         machineType:survey.machine,
       }
     })
-    return '[save preference succeeded]'
+    return true
   } catch (error) {
     console.log('[save preference fail', error)
     throw error
