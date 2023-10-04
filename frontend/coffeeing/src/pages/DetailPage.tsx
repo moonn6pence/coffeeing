@@ -37,6 +37,7 @@ export const DetailPage = () => {
       setCapsule(data);
     } catch (error) {
       console.error(error);
+      navigate('/no');
     }
   };
 
