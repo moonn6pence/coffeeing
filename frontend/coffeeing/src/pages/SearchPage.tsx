@@ -169,6 +169,7 @@ export const SearchPage = () =>{
             setCurrentPage={setCurrentPage} 
           />
         )}
+        <p className="mb-20"></p>
     </div>
   )
 }
