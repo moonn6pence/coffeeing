@@ -3,7 +3,6 @@ package com.ssafy.coffeeing.modules.survey.service;
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.domain.MemberState;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
@@ -73,7 +72,6 @@ public class SurveyService {
         }
 
         preference = SurveyMapper.supplyPreferenceOf(preferenceRequest, member.getId());
-        member.updateMemberState(MemberState.NORMAL);
         preferenceRepository.save(preference);
     }
 }

@@ -41,7 +41,7 @@ public class MemberTestDummy {
     }
 
     public static Member createBeforeResearchMember(String nickname, String password, String email) {
-        return createMember(nickname, password, email, MemberState.BEFORE_RESEARCH);
+        return createMember(nickname, password, email, MemberState.NORMAL);
     }
 
     public static Member createMember(String nickname, String password, String email, MemberState state) {
