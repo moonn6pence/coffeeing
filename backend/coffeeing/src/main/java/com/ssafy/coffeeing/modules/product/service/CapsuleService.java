@@ -15,7 +15,6 @@ import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
-import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;

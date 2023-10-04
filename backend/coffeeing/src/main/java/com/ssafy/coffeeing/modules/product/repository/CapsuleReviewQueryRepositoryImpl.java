@@ -67,7 +67,7 @@ public class CapsuleReviewQueryRepositoryImpl implements CapsuleReviewQueryRepos
                         capsuleReview.score.goe(3.5)
                 )
                 .offset(randomUtil.generate(count))
-                .fetchOne();
+                .fetchFirst();
     }
 
     private Long getPageCount(Capsule capsule, Member member) {
