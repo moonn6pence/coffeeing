@@ -21,11 +21,15 @@ import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryReposi
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleReviewRepository;
+import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
+import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -43,7 +47,10 @@ public class CapsuleService {
 
     private final CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
 
+    private final RecommendService recommendService;
+
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Integer SIMILAR_PRODUCT_SIZE = 4;
     private static final Boolean IS_CAPSULE = true;
 
     @Transactional(readOnly = true)
@@ -98,7 +105,11 @@ public class CapsuleService {
 
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCapsules(Long id) {
-        return null;
+
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(SIMILAR_PRODUCT_SIZE, true, id);
+        List<Capsule> capsules = capsuleRepository.findAllById(recommendResponse.results());
+
+        return new SimilarProductResponse(true, capsules.stream().map(ProductMapper::supplySimpleProductElementFrom).toList());
     }
 
     @Transactional(readOnly = true)

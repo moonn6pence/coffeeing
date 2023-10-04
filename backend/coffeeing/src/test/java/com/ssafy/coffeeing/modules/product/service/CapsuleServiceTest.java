@@ -15,6 +15,7 @@ import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkQueryRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleBookmarkRepository;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
+import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +46,9 @@ class CapsuleServiceTest extends ServiceTest {
 
     @Autowired
     private CapsuleBookmarkQueryRepository capsuleBookmarkQueryRepository;
+
+    @Autowired
+    private RecommendService recommendService;
 
     private Capsule capsule;
 
