@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class ServiceTest {
 
     @Autowired
     protected EntityManager em;
+
+    @Autowired
+    protected RedisTemplate redisTemplate;
 
     @MockBean
     protected SecurityContextUtils securityContextUtils;
@@ -48,6 +52,7 @@ public class ServiceTest {
                 .createGeneralMember("testNickname", "{noop}test123", "test1@test.com"));
         beforeResearchMember = memberRepository.save(MemberTestDummy
                 .createBeforeResearchMember("paul", "{noop}testPassword", "zase@naver.com"));
+        redisTemplate.getConnectionFactory().getConnection().flushAll();
     }
 
     @AfterEach
