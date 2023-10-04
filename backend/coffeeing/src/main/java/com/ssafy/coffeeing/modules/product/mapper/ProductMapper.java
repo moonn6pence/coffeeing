@@ -2,7 +2,10 @@ package com.ssafy.coffeeing.modules.product.mapper;
 
 import com.ssafy.coffeeing.modules.global.dto.CreationResponse;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkResponse;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleReview;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
@@ -16,6 +19,8 @@ import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductMapper {
@@ -114,13 +119,22 @@ public class ProductMapper {
                 .build();
     }
 
-    public static SimpleProductElement supplySimpleProductElementOf(
+    public static CoffeeBookmarkElement supplyCoffeeBookmarkElementOf(
             Long id,
-            String subtitle, // input Region(Coffee) or Brand(Capsule)
-            String title,
+            String regionKr,
+            String nameKr,
             String imageUrl
     ) {
-        return new SimpleProductElement(id, subtitle, title, imageUrl);
+        return new CoffeeBookmarkElement(id, regionKr, nameKr, imageUrl);
+    }
+
+    public static CapsuleBookmarkElement supplyCapsuleBookmarkElementOf(
+            Long id,
+            String brandKr,
+            String nameKr,
+            String imageUrl
+    ) {
+        return new CapsuleBookmarkElement(id, brandKr, nameKr, imageUrl);
     }
 
     public static SimpleProductElement supplySimpleProductElementFrom(Capsule capsule) {
@@ -133,11 +147,19 @@ public class ProductMapper {
         return new SimpleProductElement(coffee.getId(), coffee.getRegionKr(), coffee.getCoffeeNameKr(), coffee.getImageUrl());
     }
 
-    public static BookmarkResponse supplyBookmarkedResponseOf(Page<SimpleProductElement> bookmarkedElements, boolean isCapsule) {
-        return new BookmarkResponse(
-                bookmarkedElements.getNumber(),
-                bookmarkedElements.getTotalPages(),
-                bookmarkedElements.getContent(),
+    public static CoffeeBookmarkResponse supplyCoffeeBookmarkResponseOf(Integer number, Integer totalPages, List<CoffeeBookmarkElement> bookmarkedElements, boolean isCapsule) {
+        return new CoffeeBookmarkResponse(
+                number,
+                totalPages,
+                bookmarkedElements,
+                isCapsule
+        );
+    }
+    public static CapsuleBookmarkResponse supplyCapsuleBookmarkResponseOf(Integer number, Integer totalPages, List<CapsuleBookmarkElement> bookmarkedElements, boolean isCapsule){
+        return new CapsuleBookmarkResponse(
+                number,
+                totalPages,
+                bookmarkedElements,
                 isCapsule
         );
     }

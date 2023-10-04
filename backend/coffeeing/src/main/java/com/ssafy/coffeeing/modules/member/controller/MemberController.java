@@ -78,38 +78,38 @@ public class MemberController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(
-                    name = "page"
-                    , value = "페이지 번호"
-                    , required = true
-                    , dataType = "Integer"
-                    , paramType = "query"
-                    , defaultValue = ""
+                    name = "page",
+                    value = "페이지 번호",
+                    required = true,
+                    dataType = "Integer",
+                    paramType = "query",
+                    defaultValue = ""
             )
     })
     @GetMapping("/coffee/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 원두 리스트 요청")
-    public BaseResponse<BookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long memberId,
+    public BaseResponse<CoffeeBookmarkResponse> getBookmarkCoffees(@PathVariable @NumberFormat Long memberId,
                                                              @Valid @ModelAttribute PageInfoRequest pageInfoRequest) {
-        return BaseResponse.<BookmarkResponse>builder()
+        return BaseResponse.<CoffeeBookmarkResponse>builder()
                 .data(coffeeService.getBookmarkedCoffees(memberId, pageInfoRequest))
                 .build();
     }
 
     @ApiImplicitParams({
             @ApiImplicitParam(
-                    name = "page"
-                    , value = "페이지 번호"
-                    , required = true
-                    , dataType = "Integer"
-                    , paramType = "query"
-                    , defaultValue = ""
+                    name = "page",
+                    value = "페이지 번호",
+                    required = true,
+                    dataType = "Integer",
+                    paramType = "query",
+                    defaultValue = ""
             )
     })
     @GetMapping("/capsule/bookmark/{memberId}")
     @ApiOperation(value = "멤버가 북마크한 캡슐 리스트 요청")
-    public BaseResponse<BookmarkResponse> getBookmarkCapsules(@PathVariable @NumberFormat Long memberId,
+    public BaseResponse<CapsuleBookmarkResponse> getBookmarkCapsules(@PathVariable @NumberFormat Long memberId,
                                                               @Valid @ModelAttribute PageInfoRequest pageInfoRequest) {
-        return BaseResponse.<BookmarkResponse>builder()
+        return BaseResponse.<CapsuleBookmarkResponse>builder()
                 .data(capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest))
                 .build();
     }

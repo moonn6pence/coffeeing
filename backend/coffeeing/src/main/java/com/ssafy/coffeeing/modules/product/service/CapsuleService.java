@@ -6,7 +6,8 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkResponse;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
@@ -101,10 +102,15 @@ public class CapsuleService {
     }
 
     @Transactional(readOnly = true)
-    public BookmarkResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
+    public CapsuleBookmarkResponse getBookmarkedCapsule(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
         Member member = memberRepository.findById(id).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        Page<SimpleProductElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
-        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCapsuleElements, IS_CAPSULE);
+        Page<CapsuleBookmarkElement> bookmarkedCapsuleElements = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(member, pageable);
+        return ProductMapper.supplyCapsuleBookmarkResponseOf(
+                bookmarkedCapsuleElements.getNumber(),
+                bookmarkedCapsuleElements.getTotalPages(),
+                bookmarkedCapsuleElements.getContent(),
+                IS_CAPSULE
+        );
     }
 }

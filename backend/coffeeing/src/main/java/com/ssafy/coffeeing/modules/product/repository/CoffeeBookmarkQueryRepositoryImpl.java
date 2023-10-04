@@ -2,8 +2,8 @@ package com.ssafy.coffeeing.modules.product.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
-import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<SimpleProductElement> findBookmarkedCoffeeElements(Member member, Pageable pageable) {
+    public Page<CoffeeBookmarkElement> findBookmarkedCoffeeElements(Member member, Pageable pageable) {
         List<Coffee> queryResult = jpaQueryFactory
                 .select(
                         coffeeBookmark.coffee
@@ -37,9 +37,9 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
                 .orderBy(coffeeBookmark.id.desc())
                 .fetch();
 
-        List<SimpleProductElement> simpleProductElements = queryResult
+        List<CoffeeBookmarkElement> coffeeBookmarkElements = queryResult
                 .stream()
-                .map((item) -> ProductMapper.supplySimpleProductElementOf(
+                .map((item) -> ProductMapper.supplyCoffeeBookmarkElementOf(
                                 item.getId(),
                                 item.getRegionKr(),
                                 item.getCoffeeNameKr(),
@@ -48,7 +48,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
                 )
                 .toList();
 
-        return new PageImpl<>(simpleProductElements, pageable, getCount(member));
+        return new PageImpl<>(coffeeBookmarkElements, pageable, getCount(member));
     }
 
     private Long getCount(Member member) {
