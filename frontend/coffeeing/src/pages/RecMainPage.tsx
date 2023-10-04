@@ -21,8 +21,8 @@ export const RecMainPage = () => {
 
 
   return (
-    <div className='relative flex items-center justify-center w-full h-screen'>
-      <img className='w-full h-full brightness-50' src={recBgImg} alt="배경 이미지" />
+    <div className='relative flex items-center justify-center w-full'>
+      <img className='w-full h-[calc(100vh-64px)] brightness-50' src={recBgImg} alt="배경 이미지" />
       <div className='absolute flex flex-col items-center gap-10 top-1/3'>
         <div className='flex flex-col items-center'>
           <p className='text-4xl text-white z-10'>본인의 취향에 맞는</p>
