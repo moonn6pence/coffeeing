@@ -43,7 +43,7 @@ export const DetailPage = () => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [id]);
 
   const [capsule, setCapsule] = useState({
     acidity: 0,
@@ -93,7 +93,7 @@ export const DetailPage = () => {
         params: { page: currentPage },
       })
       .then((res) => {
-        // console.log(res.data.data.reviews);
+        console.log(res.data.data.reviews);
         setReviews(res.data.data.reviews);
         setTotalPage(res.data.data.totalCount - 1);
       })
@@ -110,12 +110,13 @@ export const DetailPage = () => {
     privateRequest
       .get(`${API_URL}/product/${beans}/${id}/similar`)
       .then((res) => {
+        console.log(res.data.data);
         setSimilarList(res.data.data.products);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [capsule]);
+  }, [id]);
 
   const [reviews, setReviews] = useState([
     {
@@ -212,7 +213,7 @@ export const DetailPage = () => {
         <p className="text-2xl font-bold mb-3">
           비슷한 {beans === 'capsule' ? '캡슐' : '원두'}
         </p>
-        <div className="flex w-full justify-between">
+        <div className="w-full justify-between grid grid-cols-2 md:grid-cols-4">
           {similarList.map((item, index) => (
             <BeanCard
               subtitle={item.subtitle}
