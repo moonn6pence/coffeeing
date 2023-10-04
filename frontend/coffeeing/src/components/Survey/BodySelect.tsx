@@ -43,7 +43,7 @@ export const BodySelect = () => {
         pageNum={3}
         />
       {/* 버튼 */}
-      <div className="flex gap-10">
+      <div className="flex gap-10 mb-20">
         <BackButton />
         <NextButton handleClick={handleBodyClick} label='다음' />
       </div>

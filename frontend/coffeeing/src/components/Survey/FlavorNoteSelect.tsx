@@ -104,12 +104,15 @@ export const FlavorNoteSelect = () => {
       {/* 버튼 */}
       {!isFinalPage 
       ?
-      <div className='flex gap-10'>
+      <div className='flex gap-10 mb-10'>
         <BackButton/>
         <NextButton handleClick={handleFlavorSubmit} label="다음"/>
       </div>
       :
+      <div className="flex gap-10 mb-20">
+        <BackButton/>
         <NextButton handleClick={handleSurveySubmit} label="제출하기"/>
+      </div>
       }
     </div>
   )
