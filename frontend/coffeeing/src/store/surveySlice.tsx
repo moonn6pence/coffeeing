@@ -1,5 +1,4 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
-import { stat } from 'fs';
 import { SurveyType } from 'types/StoreTypes';
 
 
@@ -20,11 +19,11 @@ const surveySlice = createSlice({
   reducers:{
     setTotalPage(state, action:PayloadAction<number>){
       state.totalPage=action.payload
-      console.log('total page', state.totalPage)
+      // console.log('total page', state.totalPage)
     },
     addCurrentPage(state){
       state.currentPage += 1
-      console.log('current page', state.currentPage)
+      // console.log('current page', state.currentPage)
     },
     minusCurrentPage(state){
       state.currentPage -= 1
@@ -34,11 +33,11 @@ const surveySlice = createSlice({
     },
     saveRoasting(state, action:PayloadAction<number>){
       state.roasting = action.payload
-      console.log('roasting',state.roasting)
+      // console.log('roasting',state.roasting)
     },
     saveAcidity(state, action:PayloadAction<number>){
       state.acidity = action.payload
-      console.log('acidity', state.acidity)
+      // console.log('acidity', state.acidity)
     },
     saveBody(state, action:PayloadAction<number>){
       state.body=action.payload
@@ -46,11 +45,11 @@ const surveySlice = createSlice({
     },
     saveFlavorNote(state, action:PayloadAction<string>){
       state.flavorNote = action.payload
-      console.log('flavorNote', state.flavorNote)
+      // console.log('flavorNote', state.flavorNote)
     },
     saveMachineType(state, action:PayloadAction<number>){
       state.machine = action.payload
-      console.log('machine type', state.machine)
+      // console.log('machine type', state.machine)
     },
     resetSurvey:(state)=>{
       state.currentPage=0

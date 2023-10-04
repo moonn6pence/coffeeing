@@ -5,6 +5,7 @@ import { addCurrentPage, saveAcidity } from 'store/surveySlice';
 import { NextButton, BackButton } from './SurveyButton';
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_ACID_ITEMS } from 'util/constants';
+import { Toast } from 'components/Toast';
 export const AciditySelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch<AppDispatch>();
@@ -14,7 +15,7 @@ export const AciditySelect = () => {
   const handleAciditySubmit = () => {
     // 선택 안 했을 때
     if (selectedAcidity === -1) {
-      alert('선호하는 산미 단계를 하나 선택해주세요');
+      Toast.fire('선호하는 산미 단계를 하나 <br> 선택해주세요.','','warning')
     }
     // 선택 했을 때 - 다음 페이지로 & 산미 정보 저장
     else {

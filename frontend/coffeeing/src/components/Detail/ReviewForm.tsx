@@ -44,7 +44,7 @@ export const ReviewForm = ({ product_id, beans }: ReviewFormProps) => {
   return (
     <form
       onSubmit={submitReview}
-      className="w-300 h-200px bg-light rounded-lg p-6 flex flex-col justify-between"
+      className="w-full h-200px bg-light rounded-lg p-6 flex flex-col justify-between"
     >
       <label>
         <StarRating

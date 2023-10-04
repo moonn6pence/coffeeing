@@ -8,12 +8,6 @@ import profile from '../assets/profile.svg'
 import { useNavigate } from "react-router-dom";
 import again from '../assets/again.png'
 import loadingGif from '../assets/survey/loading.gif'
-type ProductsType = {
-  id:number,
-  imageUrl:string,
-  subtitle:string,
-  title:string,
-}
 
 export const RecResultPage  = ()=>{
   const navigate = useNavigate();
@@ -57,6 +51,7 @@ export const RecResultPage  = ()=>{
       console.log(result)
     }
   }
+
   useEffect( ()=>{
     if (isLogin) {
       sendPreference();
@@ -79,7 +74,7 @@ export const RecResultPage  = ()=>{
             <p className="text-2xl font-bold">
               {userInfo.nickname} <span>{isLogin ? '님' : ''}</span> 맞춤 {userInfo.isCapsule ? '캡슐' : '원두'} 추천
             </p>
-            <div className="flex w-300 justify-between">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {products.map((item, index) => (
                 <BeanCard
                   subtitle={item.subtitle}
@@ -92,8 +87,8 @@ export const RecResultPage  = ()=>{
               ))}
             </div>
           </div>
-          <hr className="w-300" />
-          <div className="mt-5 flex flex-row w-300 justify-end items-center gap-1">
+          <hr className="mx-15" />
+          <div className="mt-5 flex flex-row mx-15 justify-end items-center gap-1">
             <img src={again} className="w-4 h-4" alt="Again" />
             <p
               className="font-black cursor-pointer"
@@ -102,11 +97,10 @@ export const RecResultPage  = ()=>{
               추천 다시 받기
             </p>
           </div>
-          <div className="mt-2 bg-light w-300 h-80 flex items-center justify-around">
+          <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-around">
             {isLogin&&(
               <div className="flex flex-col gap-3 items-center w-70.5">
                 <img src={profile} alt="Profile" className="w-44 h-44 rounded-full border-2" />
-                <p>닉네임</p>
                 <p>{userInfo.nickname}</p>
               </div>
             )}

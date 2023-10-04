@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from 'components/InputField';
 import Button from 'components/Button';
@@ -33,7 +33,7 @@ function LoginPage() {
         window.location.replace('/signup/additonal-info');
       }
 
-      if (myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
+      if (myInfo && myInfo.state == MemberState.NORMAL) {
         window.location.replace('/recommend-main');
       }
     } else {
@@ -53,7 +53,7 @@ function LoginPage() {
         window.location.replace('/signup/additonal-info');
       }
 
-      if (result && result.state == MemberState.BEFORE_RESEARCH) {
+      if (result && result.state == MemberState.NORMAL) {
         window.location.replace('/recommend-main');
       }
     };

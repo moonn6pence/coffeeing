@@ -41,7 +41,7 @@ function SignupPage() {
             window.location.replace("/signup/additonal-info");
         } 
         
-        if(result && result.state == MemberState.BEFORE_RESEARCH) {
+        if(result && result.state == MemberState.NORMAL) {
             window.location.replace("/recommend-main");
         }
     }
@@ -59,7 +59,7 @@ function SignupPage() {
       if(myInfo && myInfo.state == MemberState.BEFORE_ADDITIONAL_DATA) {
           window.location.replace("/signup/additonal-info");
       } 
-      if(myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
+      if(myInfo && myInfo.state == MemberState.NORMAL) {
           window.location.replace("/recommend-main");
       }
     } else {
@@ -68,7 +68,9 @@ function SignupPage() {
   }
   // enter key event 추가
   const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
-    handleSubmit()
+    if(e.key === 'Enter') {
+      handleSubmit()
+    }
   }
 
   return (

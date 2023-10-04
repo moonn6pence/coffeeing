@@ -8,6 +8,7 @@ type LoginState = SignInMemberInfo &
   };
 
 const initialState: LoginState = {
+  isAfterSurvey: false,
   isLogin: false,
   accessToken: '',
   refreshToken: localStorage.getItem('refreshToken') || '',

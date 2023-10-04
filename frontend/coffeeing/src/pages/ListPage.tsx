@@ -14,37 +14,72 @@ type curationProps = {
 export const ListPage = () => {
   const [isCapsule, setIsCapsule] = useState(false);
   const [curationLists, setCurationLists] = useState<curationProps[]>([]);
-  const isLogin = useSelector((state: RootState) => state.member.isLogin);
+  const [privateCurationLists, setPrivateCurationLists] = useState<
+    curationProps[]
+  >([]);
+  const isAfterSurvey = useSelector(
+    (state: RootState) => state.member.isAfterSurvey,
+  );
 
   // 공통 CSS
   const commonClass = 'font-bold text-base hover:brightness-125 p-3';
 
   const getCuration = async () => {
     try {
-      const response = await (isLogin
-        ? privateRequest.get(`${API_URL}/curation/custom`, { params: { isCapsule: isCapsule } })
-        : publicRequest.get(`${API_URL}/curation/open`, { params: { isCapsule: isCapsule } }))
+      console.log('설문조사를 ', isAfterSurvey);
+      publicRequest
+        .get(`${API_URL}/curation/open`, {
+          params: { isCapsule: isCapsule },
+        })
+        .then((res) => {
+          setCurationLists(res.data.data.curations);
+        });
 
-      const data = response.data.data.curations;
-      setCurationLists(data);
+      if (isAfterSurvey) {
+        privateRequest
+          .get(`${API_URL}/curation/custom`, {
+            params: { isCapsule: isCapsule },
+          })
+          .then((res) => {
+            setPrivateCurationLists(res.data.data.curations);
+          });
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    getCuration()
+    getCuration();
   }, [isCapsule]);
 
   return (
     <div className="mt-10 flex flex-col w-4/5 mx-auto">
       <div className="w-full mb-10">
-        <span className={isCapsule
-      ? `${commonClass} text-light-roasting`
-      : `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`} onClick={()=>{setIsCapsule(false)}}>원두</span>
-        <span className={isCapsule
-      ? `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`
-      : `${commonClass} text-light-roasting`} onClick={()=>{setIsCapsule(true)}}>캡슐</span>
+        <span
+          className={
+            isCapsule
+              ? `${commonClass} text-light-roasting`
+              : `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`
+          }
+          onClick={() => {
+            setIsCapsule(false);
+          }}
+        >
+          원두
+        </span>
+        <span
+          className={
+            isCapsule
+              ? `${commonClass} text-cinamon-roasting border-b-2 border-cinamon-roasting`
+              : `${commonClass} text-light-roasting`
+          }
+          onClick={() => {
+            setIsCapsule(true);
+          }}
+        >
+          캡슐
+        </span>
       </div>
       {curationLists.map((item, index) => (
         <div key={index}>
@@ -52,6 +87,13 @@ export const ListPage = () => {
           <Carousel curationList={item.products} isCapsule={item.isCapsule} />
         </div>
       ))}
+      {isAfterSurvey &&
+        privateCurationLists.map((item, index) => (
+          <div key={index}>
+            <p className="font-bold text-2xl">{item.title}</p>
+            <Carousel curationList={item.products} isCapsule={item.isCapsule} />
+          </div>
+        ))}
     </div>
   );
 };

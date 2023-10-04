@@ -6,6 +6,7 @@ import { addCurrentPage } from 'store/surveySlice';
 import { saveBody } from 'store/surveySlice';
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_BODY_ITEMS } from 'util/constants';
+import { Toast } from 'components/Toast';
 export const BodySelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch()
@@ -13,7 +14,7 @@ export const BodySelect = () => {
 
   const handleBodyClick = () => {
     if (selectedBody === -2) {
-      alert('선호하는 바디감을 하나만 선택해주세요');
+      Toast.fire('선호하는 바디감을 하나 선택해주세요.','','warning')
     } else {
       dispatch(addCurrentPage());
       dispatch(saveBody(selectedBody));

@@ -4,7 +4,6 @@ import recBgImg from '../assets/surveyMainImg.png'
 import {AppDispatch} from 'store/store'
 import { useDispatch } from 'react-redux';
 import { resetSurvey } from 'store/surveySlice';
-import { Toast } from 'components/Toast';
 
 export const RecMainPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +21,7 @@ export const RecMainPage = () => {
 
 
   return (
-    <div className='relative flex items-center justify-center w-screen h-screen'>
+    <div className='relative flex items-center justify-center w-full h-screen'>
       <img className='w-full h-full brightness-50' src={recBgImg} alt="배경 이미지" />
       <div className='absolute flex flex-col items-center gap-10 top-1/3'>
         <div className='flex flex-col items-center'>

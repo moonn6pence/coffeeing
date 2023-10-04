@@ -15,7 +15,7 @@ export const MyReview = (props: MyReviewProps) => {
   const { memberReview, handleModal, beans, handleDelete } = props;
 
   return (
-    <div className="w-300 h-200px bg-light rounded-lg p-6 flex flex-col">
+    <div className="w-full h-200px bg-light rounded-lg p-6 flex flex-col">
       <div className="flex justify-between">
         <StarIcons score={memberReview.score} size="big" />
         <div>
