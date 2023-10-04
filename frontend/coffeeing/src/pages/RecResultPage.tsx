@@ -4,17 +4,16 @@ import { getSurveyResult, savePreference } from "service/survey/recommend";
 import { RootState } from "store/store";
 import { BeanCard } from "components/BeanCard";
 import { BeanRating } from "components/Detail/BeanRating";
-import profile from '../assets/profile.svg'
 import { useNavigate } from "react-router-dom";
 import again from '../assets/again.png'
 import loadingGif from '../assets/survey/loading.gif'
 import { Toast } from "components/Toast";
-import { checkPrimeSync } from "crypto";
+import NoImg from '../assets/noprofile.png'
 
 export const RecResultPage  = ()=>{
   const navigate = useNavigate();
   const survey =useSelector((state:RootState)=>state.survey);
-  const {isLogin} = useSelector((state:RootState)=>state.member)
+  const {isLogin,profileImage} = useSelector((state:RootState)=>state.member)
   const [loading, setLoading] = useState(true);
   const [userInfo, setUserInfo] = useState({
     roast:0,
@@ -50,7 +49,15 @@ export const RecResultPage  = ()=>{
         nickname:result.nickname,
         isCapsule:result.recommendation.isCapsule,
       }))
+      if (result.imageUrl===null) {
+        setUserInfo((userInfo)=>({
+          ...userInfo,
+          imageUrl:NoImg
+        }))
+      }
       setLoading(false)
+      console.log(userInfo.imageUrl)
+      console.log(profileImage)
     } else {
       console.log(result)
     }
@@ -77,7 +84,7 @@ export const RecResultPage  = ()=>{
         </div>
       ) 
       : (
-        <div>
+        <div className="w-3/4">
           {/* 상단부 */}
           <div className="mt-10 flex flex-col">
             <p className="text-2xl font-bold">
@@ -112,12 +119,15 @@ export const RecResultPage  = ()=>{
           <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-around">
             {isLogin&&(
               <div className=" flex flex-col gap-3 items-center w-0 md:w-70.5">
-                <img src={profile} alt="Profile" className="hidden md:block w-44 h-44 rounded-full border-2" />
+                <img src={userInfo.imageUrl} alt="Profile" className="hidden md:block w-44 h-44 rounded-full border-2" />
                 <p className="hidden md:block">{userInfo.nickname}</p>
               </div>
             )}
             <div className="space-y-3 w-1/2">
-              <p className="text-xl font-black mb-10">내 취향 분석</p>
+              <div className="flex flex-row">
+                <p className="text-xl font-black mb-10">내 취향 분석</p>
+
+              </div>
               <BeanRating roast={userInfo.roast*5} acidity={userInfo.acidity*5} body={userInfo.body*5} />
             </div>
           </div>
