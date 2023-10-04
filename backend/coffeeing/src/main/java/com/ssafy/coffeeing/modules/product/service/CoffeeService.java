@@ -15,9 +15,11 @@ import com.ssafy.coffeeing.modules.product.domain.CoffeeReview;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
 import com.ssafy.coffeeing.modules.product.dto.PageInfoRequest;
 import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
-import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
-import com.ssafy.coffeeing.modules.product.repository.*;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkQueryRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeBookmarkRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
+import com.ssafy.coffeeing.modules.product.repository.CoffeeReviewRepository;
 import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
 import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service

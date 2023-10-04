@@ -4,6 +4,8 @@ import com.ssafy.coffeeing.modules.curation.domain.CurationType;
 import com.ssafy.coffeeing.modules.curation.dto.CurationElement;
 import com.ssafy.coffeeing.modules.curation.dto.CurationResponse;
 import com.ssafy.coffeeing.modules.curation.mapper.CurationMapper;
+import com.ssafy.coffeeing.modules.curation.util.PopularProductCacheUtil;
+import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Age;
 import com.ssafy.coffeeing.modules.member.domain.Gender;
@@ -43,6 +45,7 @@ public class CurationService {
     private final CoffeeReviewQueryRepository coffeeReviewQueryRepository;
     private final MemberQueryRepository memberQueryRepository;
     private final PreferenceRepository preferenceRepository;
+    private final PopularProductCacheUtil popularProductCacheUtil;
 
     private static final String PREFIX = "당신이 좋아하는 ";
     private static final Integer CURATION_LENGTH = 12;
@@ -107,13 +110,38 @@ public class CurationService {
 
     private CurationElement findByPopularity(CurationType curation) {
 
+        List<Long> ids = null;
+
         if (curation.getIsCapsule().equals(Boolean.TRUE)) {
+
+            try {
+                ids = popularProductCacheUtil.getAll(curation.getIsCapsule(), CURATION_LENGTH);
+            } catch (BusinessException e) {
+                List<Capsule> capsules = capsuleRepository.findTop12CapsulesByOrderByPopularityDesc();
+
+                popularProductCacheUtil.pushAll(true,
+                        capsules.stream().map(capsule -> String.valueOf(capsule.getId())).toList());
+
+                return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(), capsules);
+            }
+
             return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(),
-                    capsuleRepository.findTop12CapsulesByOrderByPopularityDesc());
+                    capsuleRepository.findAllById(ids));
+        }
+
+        try {
+            ids = popularProductCacheUtil.getAll(curation.getIsCapsule(), CURATION_LENGTH);
+        } catch (BusinessException e) {
+            List<Coffee> coffees = coffeeRepository.findTop12CoffeesByOrderByPopularityDesc();
+
+            popularProductCacheUtil.pushAll(false,
+                    coffees.stream().map(coffee -> String.valueOf(coffee.getId())).toList());
+
+            return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(), coffees);
         }
 
         return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(),
-                coffeeRepository.findTop12CoffeesByOrderByPopularityDesc());
+                coffeeRepository.findAllById(ids));
     }
 
     private CurationElement findByCharacteristic(CurationType curation) {

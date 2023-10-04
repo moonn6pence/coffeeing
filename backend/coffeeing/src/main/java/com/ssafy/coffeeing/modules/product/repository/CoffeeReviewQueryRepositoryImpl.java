@@ -67,7 +67,7 @@ public class CoffeeReviewQueryRepositoryImpl implements CoffeeReviewQueryReposit
                         coffeeReview.score.goe(3.5)
                 )
                 .offset(randomUtil.generate(count))
-                .fetchOne();
+                .fetchFirst();
     }
 
     private Long getPageCount(Coffee coffee, Member member) {

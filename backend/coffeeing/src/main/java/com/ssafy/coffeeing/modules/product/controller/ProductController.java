@@ -121,11 +121,11 @@ public class ProductController {
 
     @PostMapping("/coffee/{coffeeId}/review")
     @ApiOperation(value = "원두 리뷰 작성 요청")
-    public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long id,
+    public BaseResponse<CreationResponse> createCoffeeReview(@PathVariable @NumberFormat Long coffeeId,
                                                              @Valid @RequestBody ReviewRequest reviewRequest) {
 
         return BaseResponse.<CreationResponse>builder()
-                .data(coffeeReviewService.createReview(id, reviewRequest))
+                .data(coffeeReviewService.createReview(coffeeId, reviewRequest))
                 .build();
     }
 
