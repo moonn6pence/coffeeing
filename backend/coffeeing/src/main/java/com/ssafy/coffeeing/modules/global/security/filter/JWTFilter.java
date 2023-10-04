@@ -39,11 +39,11 @@ public class JWTFilter extends OncePerRequestFilter {
 			"/survey/recommend",
 			"/curation/open",
 			"/member/unique-nickname",
-			"/member/info/{memberId}",
-			"/member/experience/{memberId}",
-			"/member/coffee/bookmark/{memberId}",
-			"/member/capsule/bookmark/{memberId}",
-			"/feeds/{memberId}/list",
+			"/member/info/",
+			"/member/experience/",
+			"/member/coffee/bookmark/",
+			"/member/capsule/bookmark/",
+			"/feeds/list",
 			"/v1/api-docs",
 			"/v2/api-docs",
 			"/swagger-resources",
@@ -113,7 +113,9 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	private boolean isPermitAllRequest(HttpServletRequest request) {
 		String requestUri = request.getRequestURI();
+		log.info("WHYYYYYYYYYYYY : {}",requestUri);
 		String url = PERMIT_ALL_PATHS.stream().filter(requestUri::contains).findFirst().orElse(null);
+		log.info("ARRRRRRRRRGGGGGGG : {}",url);
 		return url != null;
 	}
 }
