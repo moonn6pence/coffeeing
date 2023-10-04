@@ -110,8 +110,8 @@ import highAcid from '../assets/survey/acidity/highAcid.png';
 export const SURVEY_ACID_ITEMS = [
 	{label:0.25, name:'없음', src:noAcid},
 	{label:0.5, name:'낮음', src:lowAcid},
-	{label:0.75, name:'중간', src:mediumAcid},
-	{label:1, name:'높음', src:highAcid}
+	{label:0.75, name:'중간', src:highAcid},
+	{label:1, name:'높음', src:mediumAcid}
 ]
 
 import water from '../assets/survey/body/water.png';
