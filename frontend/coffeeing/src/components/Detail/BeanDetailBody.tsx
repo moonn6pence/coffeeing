@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BeanRating } from './BeanRating';
 import { BeanCard } from 'components/BeanCard';
 import bookmarkOn from 'assets/bookmark_on.png';
 import bookmarkOff from 'assets/detail/bookmark_off.png';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import { Toast } from 'components/Toast';
 
 type BeanDetailBodyProps = {
   roast: number;
@@ -35,31 +38,44 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
     id,
   } = props;
 
-  const [isBooked, setIsBooked] = useState(isBookmarked);
+  const [isBooked, setIsBooked] = useState<boolean>(false);
   const aromaList = aroma.split(', ');
+  const isLogin = useSelector((state: RootState) => state.member.isLogin);
+
+  useEffect(() => {
+    setIsBooked(isBookmarked);
+    console.log('help = ', isBookmarked);
+  }, [isBookmarked]);
 
   const handleBookmark = () => {
-    privateRequest
-      .post(`${API_URL}/product/${product}/${id}/bookmark`)
-      .then((res) => {
-        if (res.data.data.result) {
-          setIsBooked(false);
-        } else {
-          setIsBooked(true);
-        }
-      });
+    if (isLogin) {
+      privateRequest
+        .post(`${API_URL}/product/${product}/${id}/bookmark`)
+        .then((res) => {
+          console.log(res.data.data);
+          if (!res.data.data.result) {
+            setIsBooked(false);
+          } else {
+            setIsBooked(true);
+          }
+        });
+    } else {
+      Toast.fire('로그인 후 이용해주세요.', '', 'error');
+    }
   };
 
   return (
-    <div className="bg-light flex w-4/5 h-450px justify-around mx-auto mt-10 items-center">
-      <BeanCard
-        id={id}
-        subtitle={subtitle}
-        name={name}
-        imgLink={imageUrl}
-        isCapsule={product === 'capsule' ? true : false}
-        isSame={true}
-      />
+    <div className="bg-light flex w-4/5 h-fit py-6 justify-around mx-auto mt-10 items-center flex-wrap">
+      <div className="w-70.5">
+        <BeanCard
+          id={id}
+          subtitle={subtitle}
+          name={name}
+          imgLink={imageUrl}
+          isCapsule={product === 'capsule' ? true : false}
+          isSame={true}
+        />
+      </div>
       <div className="flex flex-col items-end space-y-6 w-532px">
         <img
           src={isBooked ? bookmarkOn : bookmarkOff}
