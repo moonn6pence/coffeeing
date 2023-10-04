@@ -23,7 +23,7 @@ public class RecommendCacheUtil {
         List<String> values = redisTemplate.opsForList()
                 .range(KEY_IDENTIFIER + key, 0, length);
 
-        if (values == null) {
+        if (values == null || values.isEmpty()) {
             throw new BusinessException(InfraErrorInfo.NO_CACHE);
         }
 

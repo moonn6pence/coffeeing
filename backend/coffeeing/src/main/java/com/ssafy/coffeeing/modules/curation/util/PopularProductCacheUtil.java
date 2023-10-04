@@ -15,25 +15,25 @@ public class PopularProductCacheUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    private static final String KEY_IDENTIFIER = "top12:";
-    private static final String KEY_CAPSULE = "capsule";
-    private static final String KEY_COFFEE = "coffee";
+    private static final String KEY_IDENTIFIER = "top12-";
+    private static final String KEY_CAPSULE = "capsule:";
+    private static final String KEY_COFFEE = "coffee:";
     private static final Long KEY_EXPIRATION = 1L;
 
 
-    public List<Long> getAll(Boolean isCapsule, Integer length) {
+    public List<Long> getAll(boolean isCapsule, Integer length) {
 
         List<String> values = redisTemplate.opsForList()
                 .range(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE), 0, length);
 
-        if (values == null) {
+        if (values == null || values.isEmpty()) {
             throw new BusinessException(InfraErrorInfo.NO_CACHE);
         }
 
         return values.stream().map(Long::valueOf).toList();
     }
 
-    public void pushAll(Boolean isCapsule, List<Long> ids) {
+    public void pushAll(boolean isCapsule, List<Long> ids) {
 
         redisTemplate.opsForList().rightPushAll(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE),
                 ids.stream().map(String::valueOf).toList());
