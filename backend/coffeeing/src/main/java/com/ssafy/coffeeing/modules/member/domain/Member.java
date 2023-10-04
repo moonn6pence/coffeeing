@@ -64,6 +64,9 @@ public class Member extends BaseEntity {
 			this.experience-=amount;
 		}
 	}
+	public void setExperience(int amount){
+		this.experience=amount;
+	}
 	public void levelUp(){
 		this.memberLevel+=1;
 	}

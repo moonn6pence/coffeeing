@@ -109,6 +109,22 @@ class MemberServiceTest extends ServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("멤버 최대 경험치 초과시 MAX LEVEL(3) 달성 및 최대 경험치 600을 유지한다.")
+    void Given_Member_When_GetExperienceToMax_Then_Success() {
+        // given
+        memberService.addExperience(new ExperienceEvent(4500, generalMember.getId()));
+        BDDMockito.given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+
+        // when
+        ExperienceInfoResponse experienceInfoResponse = memberService.getMemberExperience(generalMember.getId());
+        // then
+        assertAll(
+                () -> assertEquals(3, generalMember.getMemberLevel()),
+                () -> assertEquals(600, generalMember.getExperience())
+        );
+    }
+
     @DisplayName("멤버의 프로필 이미지를 변경한다.")
     @Test
     void Given_MemberProfileImageUrl_When_UpdateMemberProfileImage_Then_Success() {

@@ -31,6 +31,8 @@ public class MemberService {
     private final SecurityContextUtils securityContextUtils;
     private final MemberUtil memberUtil;
 
+    private static final int MAX_LEVEL = 3;
+
     @Transactional(readOnly = true)
     public ExistNickNameResponse checkDuplicateNickname(final String nickname) {
         return new ExistNickNameResponse(memberRepository.existsByNickname(nickname));
@@ -54,10 +56,15 @@ public class MemberService {
 
     public void addExperience(final ExperienceEvent eventRecord) {
         Member member = memberRepository.findById(eventRecord.memberId()).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        member.addExperience(eventRecord.experience());
-        while (isLevelUp(member.getMemberLevel(), member.getExperience())) {
+        if (member.getMemberLevel() < MAX_LEVEL) {
+            member.addExperience(eventRecord.experience());
+        }
+        while (isLevelUp(member.getMemberLevel(), member.getExperience()) && member.getMemberLevel() < MAX_LEVEL) {
             member.subtractExperience(memberUtil.calculateLevelUpExperience(member.getMemberLevel()));
             member.levelUp();
+        }
+        if (member.getMemberLevel() == MAX_LEVEL) {
+            member.setExperience(memberUtil.calculateLevelUpExperience(MAX_LEVEL));
         }
         memberRepository.save(member);
     }
