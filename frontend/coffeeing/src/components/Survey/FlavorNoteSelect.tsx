@@ -59,7 +59,7 @@ export const FlavorNoteSelect = () => {
     const flavor = myFlavor.toString()
     console.log(flavor)
     dispatch(saveFlavorNote(flavor))
-    navigate('/recommend-result')
+    navigate('/recommend-result', {replace:true})
   }
   return(
     <div className='flex flex-col items-center gap-10 mt-10'>
