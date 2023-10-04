@@ -49,7 +49,7 @@ export const FeedSubPage = () => {
 
   const queryFeeds = async () => {
     return await privateRequest
-      .get(`${API_URL}/feeds/${memberId}/list`, {
+      .get(`${API_URL}/feeds/list/${memberId}`, {
         params: {
           cursor: cursor,
           memberId: memberId,
