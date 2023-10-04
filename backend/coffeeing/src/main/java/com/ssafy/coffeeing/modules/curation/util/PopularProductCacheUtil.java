@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -17,6 +18,8 @@ public class PopularProductCacheUtil {
     private static final String KEY_IDENTIFIER = "top12:";
     private static final String KEY_CAPSULE = "capsule";
     private static final String KEY_COFFEE = "coffee";
+    private static final Long KEY_EXPIRATION = 1L;
+
 
     public List<Long> getAll(Boolean isCapsule, Integer length) {
 
@@ -34,6 +37,8 @@ public class PopularProductCacheUtil {
 
         redisTemplate.opsForList().rightPushAll(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE),
                 ids.stream().map(String::valueOf).toList());
+        redisTemplate.expire(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE), KEY_EXPIRATION, TimeUnit.HOURS);
+
     }
 
 

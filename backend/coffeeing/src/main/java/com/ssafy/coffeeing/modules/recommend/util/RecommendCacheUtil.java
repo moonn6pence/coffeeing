@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class RecommendCacheUtil {
     private final RedisTemplate<String, String> redisTemplate;
 
     private static final String KEY_IDENTIFIER = "rec_sys:";
+    private static final Long KEY_EXPIRATION = 12L;
 
     public List<Long> getAll(String key, Integer length) {
 
@@ -31,5 +33,6 @@ public class RecommendCacheUtil {
     public void pushAll(String key, List<Long> ids) {
 
         redisTemplate.opsForList().rightPushAll(KEY_IDENTIFIER + key, ids.stream().map(String::valueOf).toList());
+        redisTemplate.expire(KEY_IDENTIFIER + key, KEY_EXPIRATION, TimeUnit.HOURS);
     }
 }
