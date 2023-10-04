@@ -100,7 +100,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
             </div>
 
             <div className="feed-content-wrapper flex flex-col mt-2">
-                <div className="feed-like-wrapper w-full mx-1 flex items-center">
+                <div className="feed-like-wrapper w-full px-1 flex items-center">
                     <div className="cursor-pointer w-fit rounded-xl"  onClick={toggleLike}>
                         { liked ? <IonIcon size="large" name="heart"></IonIcon> :<IonIcon size="large" name="heart-outline"></IonIcon>}
                     </div>
@@ -109,7 +109,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                     </div>
                 </div>
 
-                <div className="feed-text-wrapper flex flex-row w-full min-h-max mt-2 mb-5 ml-2">
+                <div className="feed-text-wrapper flex flex-row w-full min-h-max pt-2 pb-5 pl-2">
                     <p className="break-all"> 
                         { feedDetail.content }
                     </p>

@@ -12,14 +12,14 @@ export const MainPage = () => {
 
   return (
     <div>
-      <div className="w-screen min-w-50% h-[620px] bg-main-page bg-cover flex justify-center">
+      <div className="w-full min-w-50% h-[620px] bg-main-page bg-cover flex justify-center">
         <div className="flex flex-col items-center mt-30 h-[210px] justify-between">
           <p className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#4A2F23]">당신을 위한 특별한 한 잔</p>
           <p className="text-xl text-[#784C3A]">Coffeeing 과 함께하세요</p>
           <NavBarButton value="나에게 맞는 원두/캡슐 추천 받으러 가기" navLink="/recommend-main" />
         </div>
       </div>
-      <div className="w-screen h-[750px] bg-light flex justify-evenly items-center">
+      <div className="w-full h-[750px] bg-light flex justify-evenly items-center">
         <div className="space-y-8">
           <p className="font-bold text-[42px] leading-[50px]">
             인기 커피와
@@ -39,7 +39,7 @@ export const MainPage = () => {
         </div>
         <img src={listImg} alt="리스트페이지" className="w-96 h-[590px] hidden lg:block" />
       </div>
-      <div className="w-screen h-[750px] flex justify-evenly items-center">
+      <div className="w-full h-[750px] flex justify-evenly items-center">
         <img src={tasteImg} alt="취향분석" className='hidden lg:block' />
         <div className="space-y-8">
           <p className="font-bold text-[42px] leading-[50px]">
@@ -55,7 +55,7 @@ export const MainPage = () => {
           <NavBarButton value="내 취향 보러가기" navLink={isLogin?`/member/${myInfo.memberId}`:'/login'} />
         </div>
       </div>
-      <div className="w-screen h-[750px] bg-light flex justify-evenly items-center">
+      <div className="w-full h-[750px] bg-light flex justify-evenly items-center">
         <div className="space-y-8">
           <p className="font-bold text-[42px] leading-[50px]">
             나만의
