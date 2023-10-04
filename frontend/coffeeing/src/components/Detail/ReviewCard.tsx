@@ -26,6 +26,7 @@ export const ReviewCard = ({ memberReview }: MemberReviewProps) => {
         <img
           src={profileImageUrl || noProfile}
           alt="사진"
+          className="w-9 h-9 rounded-full cursor-pointer"
           onClick={() => {
             navigate(`/member/${memberId}`);
           }}

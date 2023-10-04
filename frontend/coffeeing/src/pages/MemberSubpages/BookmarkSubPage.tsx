@@ -3,11 +3,13 @@ import { PaginationNew } from 'components/PaginationNew';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
+import noBookmark from 'assets/nobookmark.png'
 
 export const BookmarkSubPage = () => {
   const [isCapsule, setIsCapsule] = useState(false);
   const { id } = useParams();
-  const commonClass = 'font-bold text-base hover:brightness-125 p-3';
+  const commonClass =
+    'font-bold text-base hover:brightness-125 p-3 cursor-pointer';
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(-1);
   const [bookmarkList, setBookmarkList] = useState([]);
@@ -58,16 +60,22 @@ export const BookmarkSubPage = () => {
           캡슐
         </span>
       </div>
-      <PaginationNew
-        currentPage={currentPage}
-        totalPage={totalPage}
-        isCapsule={isCapsule}
-        setCurrentPage={() => {
-          return;
-        }}
-        products={bookmarkList}
-        isProfile={true}
-      />
+      {bookmarkList[0] ? (
+        <PaginationNew
+          currentPage={currentPage}
+          totalPage={totalPage}
+          isCapsule={isCapsule}
+          setCurrentPage={() => {
+            return;
+          }}
+          products={bookmarkList}
+          isProfile={true}
+        />
+      )
+    : (<div className='flex flex-col items-center space-y-12'>
+        <img src={noBookmark} alt='북마크 없음' className='w-1/3' />
+        <p>찜한 {isCapsule?'캡슐이':'원두가'} 없어요</p>
+      </div>)}
     </div>
   );
 };

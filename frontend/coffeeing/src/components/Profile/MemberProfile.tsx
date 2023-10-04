@@ -11,6 +11,7 @@ import { ValidateNicknameResult, validateNickname } from 'util/regexUtils';
 import { UserData } from 'pages/MemberPage';
 import { CoffeeCriteria } from 'service/member/types';
 import { BeanRating } from 'components/Detail/BeanRating';
+import { NavBarButton } from 'components/NavBar/NavBarButton';
 
 type ProfileProps = {
   id: number | undefined;
@@ -156,7 +157,7 @@ export const MemberProfile = (props: ProfileProps) => {
   };
 
   return (
-    <div className="w-full flex flex-row ">
+    <div className="w-full flex flex-row flex-wrap items-center py-6 space-y-8 justify-around">
       <div className="flex flex-col items-center">
         <div
           className={`img-wrapper rounded-full ${
@@ -232,24 +233,21 @@ export const MemberProfile = (props: ProfileProps) => {
           </div>
         )}
       </div>
-      <div className="grow">
-        {preference ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="w-96">
-              <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
-              <BeanRating
-                acidity={preference.acidity * 5}
-                roast={preference.roast * 5}
-                body={preference.body * 5}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <h2>취향 데이터가 아직 없습니다...</h2>
-          </div>
-        )}
-      </div>
+      {preference ? (
+        <div className="w-fit h-full w-1/2">
+          <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
+          <BeanRating
+            acidity={preference.acidity * 5}
+            roast={preference.roast * 5}
+            body={preference.body * 5}
+          />
+        </div>
+      ) : (
+        <div className="w-fit h-full flex flex-col items-center items-around space-y-6">
+          <h2>취향 데이터가 아직 없습니다...</h2>
+          <NavBarButton navLink='/recommend-main' value='취향분석하러 가기' dark={true} />
+        </div>
+      )}
     </div>
   );
 };

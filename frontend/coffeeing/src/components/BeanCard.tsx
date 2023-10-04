@@ -32,6 +32,8 @@ export const BeanCard = (props: ICardProps) => {
     navigate(`/detail/${beans}/${id}`, {
       state: { id: `${id}` },
     });
+
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -58,7 +60,13 @@ export const BeanCard = (props: ICardProps) => {
       <p className="text-sm text-center text-font-gray mb-2 h-5">
         {subtitle || '  '}
       </p>
-      <p className="text-base text-center mb-12 truncate">{name}</p>
+      <p
+        className={`text-base text-center mb-12 ${
+          isSame ? 'break-words' : 'truncate'
+        }`}
+      >
+        {name}
+      </p>
     </div>
   );
 };
