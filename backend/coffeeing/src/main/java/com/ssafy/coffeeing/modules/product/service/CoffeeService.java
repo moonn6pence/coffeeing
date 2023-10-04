@@ -6,7 +6,9 @@ import com.ssafy.coffeeing.modules.global.exception.info.MemberErrorInfo;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
 import com.ssafy.coffeeing.modules.global.security.util.SecurityContextUtils;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
 import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
@@ -22,6 +24,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -100,8 +105,13 @@ public class CoffeeService {
     @Transactional(readOnly = true)
     public BookmarkResponse getBookmarkedCoffees(Long id, PageInfoRequest pageInfoRequest) {
         Pageable pageable = pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE);
-        Member member = memberRepository.findById(id).orElseThrow(()-> new BusinessException(MemberErrorInfo.NOT_FOUND));
-        Page<SimpleProductElement> bookmarkedCoffeeElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
-        return ProductMapper.supplyBookmarkedResponseOf(bookmarkedCoffeeElements,IS_CAPSULE);
+        Member member = memberRepository.findById(id).orElseThrow(() -> new BusinessException(MemberErrorInfo.NOT_FOUND));
+        Page<BookmarkProductElement> coffeeBookmarkElements = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(member, pageable);
+        return ProductMapper.supplyBookmarkedResponseOf(
+                coffeeBookmarkElements.getNumber(),
+                coffeeBookmarkElements.getTotalPages(),
+                coffeeBookmarkElements.getContent(),
+                IS_CAPSULE
+        );
     }
 }

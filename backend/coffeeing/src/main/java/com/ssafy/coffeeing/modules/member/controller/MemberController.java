@@ -78,12 +78,12 @@ public class MemberController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(
-                    name = "page"
-                    , value = "페이지 번호"
-                    , required = true
-                    , dataType = "Integer"
-                    , paramType = "query"
-                    , defaultValue = ""
+                    name = "page",
+                    value = "페이지 번호",
+                    required = true,
+                    dataType = "Integer",
+                    paramType = "query",
+                    defaultValue = ""
             )
     })
     @GetMapping("/coffee/bookmark/{memberId}")
@@ -97,12 +97,12 @@ public class MemberController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(
-                    name = "page"
-                    , value = "페이지 번호"
-                    , required = true
-                    , dataType = "Integer"
-                    , paramType = "query"
-                    , defaultValue = ""
+                    name = "page",
+                    value = "페이지 번호",
+                    required = true,
+                    dataType = "Integer",
+                    paramType = "query",
+                    defaultValue = ""
             )
     })
     @GetMapping("/capsule/bookmark/{memberId}")

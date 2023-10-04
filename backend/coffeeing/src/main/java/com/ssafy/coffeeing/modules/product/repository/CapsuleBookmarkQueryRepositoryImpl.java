@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.product.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
@@ -23,7 +24,7 @@ public class CapsuleBookmarkQueryRepositoryImpl implements CapsuleBookmarkQueryR
 
 
     @Override
-    public Page<SimpleProductElement> findBookmarkedCapsuleElements(Member member, Pageable pageable) {
+    public Page<BookmarkProductElement> findBookmarkedCapsuleElements(Member member, Pageable pageable) {
         List<Capsule> queryResult = jpaQueryFactory
                 .select(
                         capsuleBookmark.capsule
@@ -39,9 +40,9 @@ public class CapsuleBookmarkQueryRepositoryImpl implements CapsuleBookmarkQueryR
                 .orderBy(capsuleBookmark.id.desc())
                 .fetch();
 
-        List<SimpleProductElement> simpleProductElements = queryResult
+        List<BookmarkProductElement> capsuleBookmarkElements = queryResult
                 .stream()
-                .map((item) -> ProductMapper.supplySimpleProductElementOf(
+                .map((item) -> ProductMapper.supplyCoffeeBookmarkElementOf(
                                 item.getId(),
                                 item.getBrandKr(),
                                 item.getCapsuleNameKr(),
@@ -50,7 +51,7 @@ public class CapsuleBookmarkQueryRepositoryImpl implements CapsuleBookmarkQueryR
                 )
                 .toList();
 
-        return new PageImpl<>(simpleProductElements, pageable, getCount(member));
+        return new PageImpl<>(capsuleBookmarkElements, pageable, getCount(member));
     }
 
     private Long getCount(Member member) {

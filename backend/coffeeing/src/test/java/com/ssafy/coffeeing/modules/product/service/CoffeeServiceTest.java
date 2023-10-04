@@ -5,6 +5,7 @@ import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
+import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.member.dto.BookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
@@ -19,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -164,11 +166,14 @@ class CoffeeServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
+        Page<BookmarkProductElement> queryResult = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
+                generalMember,
+                pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
+        );
         BookmarkResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
-                coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
-                        generalMember,
-                        pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
-                ),
+                queryResult.getNumber(),
+                queryResult.getTotalPages(),
+                queryResult.getContent(),
                 false
         );
 
