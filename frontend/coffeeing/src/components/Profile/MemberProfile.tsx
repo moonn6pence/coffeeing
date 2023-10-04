@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useRef, useState } from 'react';
-import noImage from 'assets/no_image.png';
+import noImage from 'assets/noprofile.png';
 import editIcon from 'assets/edit.svg';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
@@ -236,7 +236,7 @@ export const MemberProfile = (props: ProfileProps) => {
         {preference ? (
           <div className="w-full h-full flex items-center justify-center">
             <div className="w-96">
-              <h3 className='text-2xl font-bold mb-5'>사용자 취향 분석</h3>
+              <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
               <BeanRating
                 acidity={preference.acidity * 5}
                 roast={preference.roast * 5}
