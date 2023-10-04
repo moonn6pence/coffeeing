@@ -113,9 +113,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 	private boolean isPermitAllRequest(HttpServletRequest request) {
 		String requestUri = request.getRequestURI();
-		log.info("WHYYYYYYYYYYYY : {}",requestUri);
 		String url = PERMIT_ALL_PATHS.stream().filter(requestUri::contains).findFirst().orElse(null);
-		log.info("ARRRRRRRRRGGGGGGG : {}",url);
 		return url != null;
 	}
 }
