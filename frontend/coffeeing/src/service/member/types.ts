@@ -3,6 +3,7 @@ export interface MyInfo {
     state: MemberState,
     nickname: string,
     profileImage: string,
+    isAfterSurvey: boolean
 }
 
 export interface UniqueNickname {
@@ -23,7 +24,6 @@ export interface OnboardResult{
 export enum MemberState {
     DEFAULT = "DEFAULT",
     BEFORE_ADDITIONAL_DATA = "BEFORE_ADDITIONAL_DATA",
-    BEFORE_RESEARCH = "BEFORE_RESEARCH",
     NORMAL = "NORMAL"
 }
 
