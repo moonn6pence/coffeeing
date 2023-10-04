@@ -18,12 +18,11 @@ import { BookmarkSubPage } from 'pages/MemberSubpages/BookmarkSubPage';
 import { FeedSubPage } from 'pages/MemberSubpages/FeedSubPage';
 import { ExperienceSubPage } from 'pages/MemberSubpages/ExperienceSubPage';
 import { NoPage } from 'pages/NoPage';
-
 function App() {
   return (
     <div className='font-Pretendard-Regular'>
       <NavBarBody />
-
+      
       {/* Routes */}
       <Routes>
         <Route path="/signup" element={<SignupPage />}></Route>
@@ -51,6 +50,8 @@ function App() {
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/*" element={<NoPage />}></Route>
       </Routes>
+
+      {/* <Footer/> */}
     </div>
   );
 }
