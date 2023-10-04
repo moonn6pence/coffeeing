@@ -7,7 +7,8 @@ import { useParams } from 'react-router-dom';
 export const BookmarkSubPage = () => {
   const [isCapsule, setIsCapsule] = useState(false);
   const { id } = useParams();
-  const commonClass = 'font-bold text-base hover:brightness-125 p-3';
+  const commonClass =
+    'font-bold text-base hover:brightness-125 p-3 cursor-pointer';
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(-1);
   const [bookmarkList, setBookmarkList] = useState([]);

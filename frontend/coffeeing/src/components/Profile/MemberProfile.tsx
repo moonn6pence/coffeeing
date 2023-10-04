@@ -156,7 +156,7 @@ export const MemberProfile = (props: ProfileProps) => {
   };
 
   return (
-    <div className="w-full flex flex-row ">
+    <div className="w-full flex flex-row flex-wrap justify-center py-6 space-y-8 justify-around">
       <div className="flex flex-col items-center">
         <div
           className={`img-wrapper rounded-full ${
@@ -232,24 +232,20 @@ export const MemberProfile = (props: ProfileProps) => {
           </div>
         )}
       </div>
-      <div className="grow">
-        {preference ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="w-96">
-              <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
-              <BeanRating
-                acidity={preference.acidity * 5}
-                roast={preference.roast * 5}
-                body={preference.body * 5}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <h2>취향 데이터가 아직 없습니다...</h2>
-          </div>
-        )}
-      </div>
+      {preference ? (
+        <div className="w-fit h-full w-1/2">
+          <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
+          <BeanRating
+            acidity={preference.acidity * 5}
+            roast={preference.roast * 5}
+            body={preference.body * 5}
+          />
+        </div>
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <h2>취향 데이터가 아직 없습니다...</h2>
+        </div>
+      )}
     </div>
   );
 };

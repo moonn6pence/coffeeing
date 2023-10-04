@@ -44,7 +44,7 @@ export const MemberPage = () => {
   if (userExists) {
     return (
       <div className="wrapper w-4/5 flex items-stretch flex-col m-auto mt-10">
-        <div className="w-full bg-light h-80 flex items-center">
+        <div className="w-full bg-light h-fit flex items-center">
           <MemberProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
             nickname={userData.nickname}
