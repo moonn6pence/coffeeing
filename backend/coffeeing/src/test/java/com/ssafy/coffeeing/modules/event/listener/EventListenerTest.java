@@ -14,7 +14,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RecordApplicationEvents
-public class EventListenerTest extends ServiceTest {
+class EventListenerTest extends ServiceTest {
 
     @MockBean
     private MemberEventListener memberEventListener;
@@ -35,7 +35,8 @@ public class EventListenerTest extends ServiceTest {
         // when
         applicationEventPublisher.publishEvent(activityConductedEvent);
         // then
-        assertEquals(1,(int)applicationEvents.stream(ExperienceEvent.class).count());
+        assertTrue(applicationEvents.stream(ExperienceEvent.class).allMatch(experienceEvent -> experienceEvent.experience() == experience && experienceEvent.memberId() == memberId));
+        assertEquals(1, (int) applicationEvents.stream(ExperienceEvent.class).count());
     }
 
 }
