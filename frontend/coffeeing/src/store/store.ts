@@ -7,7 +7,7 @@ import memberSlice from "./memberSlice";
 const persistConfig = {
   key: 'root',
   storage: storageSession,
-  whitelist: ["member"]
+  whitelist: ["member", "survey"]
 };
 
 const reducers = combineReducers({
