@@ -7,15 +7,7 @@ import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
-import com.ssafy.coffeeing.modules.feed.dto.FeedDetailResponse;
-import com.ssafy.coffeeing.modules.feed.dto.FeedElement;
-import com.ssafy.coffeeing.modules.feed.dto.FeedPageResponse;
-import com.ssafy.coffeeing.modules.feed.dto.FeedsRequest;
-import com.ssafy.coffeeing.modules.feed.dto.MemberFeedsRequest;
-import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.feed.util.FeedRedisUtil;
@@ -357,7 +349,7 @@ class FeedServiceTest extends ServiceTest {
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        Integer beforeLikeCount = feed.getLikeCount();
+        int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
@@ -366,7 +358,7 @@ class FeedServiceTest extends ServiceTest {
         //then
         assertAll(
                 () -> assertThat(toggleResponse.result()).isTrue(),
-                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount + 1),
+                () -> assertThat(feedRedisUtil.getFeedLikeCount(feed)).isEqualTo(beforeLikeCount + 1),
                 () -> assertThat(isLikeFeed).isTrue()
         );
 
@@ -382,8 +374,8 @@ class FeedServiceTest extends ServiceTest {
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         feedRedisUtil.likeFeedInRedis(feed, generalMember);
-        feed.increaseLikeCount();
-        Integer beforeLikeCount = feed.getLikeCount();
+        feedRedisUtil.increaseLikeCount(feed);
+        int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
@@ -392,7 +384,7 @@ class FeedServiceTest extends ServiceTest {
         //then
         assertAll(
                 () -> assertThat(toggleResponse.result()).isFalse(),
-                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount - 1),
+                () -> assertThat(feedRedisUtil.getFeedLikeCount(feed)).isEqualTo(beforeLikeCount - 1),
                 () -> assertThat(isNotLikeFeed).isTrue()
         );
 
