@@ -140,13 +140,14 @@ public class FeedService {
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
         List<ImageElement> images = feedUtil.makeJsonStringToImageElement(feed.getImageUrl());
+        int likeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         if (Objects.isNull(viewer)) {
-            return getFeedDetailResponse(null, feed, false, images);
+            return getFeedDetailResponse(null, feed, likeCount, false, images);
         }
         boolean isLikeFeed = feedRedisUtil.isLikedFeedInRedis(feed, viewer);
 
-        return getFeedDetailResponse(viewer, feed, isLikeFeed, images);
+        return getFeedDetailResponse(viewer, feed, likeCount, isLikeFeed, images);
     }
 
     @Transactional(readOnly = true)
@@ -176,21 +177,22 @@ public class FeedService {
 
     private FeedDetailResponse getFeedDetailResponse(
             Member viewer, Feed feed,
+            int likeCount,
             boolean isLikeFeed,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
         Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
         if (Objects.isNull(viewer)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
         } else if (isLikeFeed && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, true);
         } else if (isLikeFeed) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, false);
         } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, true);
         } else {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
         }
     }
 

@@ -51,6 +51,7 @@ public class FeedMapper {
             Feed feed,
             Tag tag,
             List<ImageElement> images,
+            int likeCount,
             Boolean isLike,
             Boolean isMine) {
         return new FeedDetailResponse(
@@ -59,7 +60,7 @@ public class FeedMapper {
                 feed.getContent() == null ? "" : feed.getContent(),
                 tag,
                 feed.getMember().getId(),
-                feed.getLikeCount(),
+                likeCount,
                 feed.getMember().getNickname(),
                 feed.getMember().getProfileImage(),
                 isLike,
