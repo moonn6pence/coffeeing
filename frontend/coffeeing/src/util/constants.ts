@@ -69,7 +69,7 @@ export const BODY_ITEMS = [
 export const FLAVOR_NOTE_ITEMS = [
     {label:'fruity', name:'과일'},
     {label:'sweety', name:'달콤'},
-    {label:'chocolaty', name:'초콜릿'},
+    {label:'chocolate', name:'초콜릿'},
     {label:'nutty', name:'견과류'},
     {label:'spicy', name:'매콤함'},
     {label:'floral', name:'꽃향'},
