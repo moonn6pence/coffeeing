@@ -68,7 +68,9 @@ function SignupPage() {
   }
   // enter key event 추가
   const handleEnter = (e:KeyboardEvent<HTMLElement>)=>{
-    handleSubmit()
+    if(e.key === 'Enter') {
+      handleSubmit()
+    }
   }
 
   return (
