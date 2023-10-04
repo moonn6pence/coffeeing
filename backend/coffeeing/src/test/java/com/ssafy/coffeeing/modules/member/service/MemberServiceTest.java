@@ -118,8 +118,6 @@ class MemberServiceTest extends ServiceTest {
 
         // when
         ExperienceInfoResponse experienceInfoResponse = memberService.getMemberExperience(generalMember.getId());
-        System.out.println(generalMember.getMemberLevel());
-        System.out.println(memberUtil.calculateLevelUpExperience(generalMember.getMemberLevel()));
         // then
         assertAll(
                 () -> assertEquals(3, generalMember.getMemberLevel()),
