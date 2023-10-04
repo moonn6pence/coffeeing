@@ -71,7 +71,7 @@ export const MemberPage = () => {
   } else {
     return (
       <div className="flex justify-center">
-        <div className="w-300 bg-light h-80 flex items-center">
+        <div className="w-4/5 mt-10 bg-light h-80 flex items-center">
           <div className="text-center w-screen">
             <h3>해당 유저가 존재하지 않습니다.</h3>
           </div>
