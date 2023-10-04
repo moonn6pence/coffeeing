@@ -213,12 +213,12 @@ public class FeedService {
     }
 
     private boolean decreaseFeedLikeCount(Feed feed) {
-        feed.decreaseLikeCount();
+        feedRedisUtil.decreaseLikeCount(feed);
         return false;
     }
 
     private boolean increaseFeedLikeCount(Feed feed) {
-        feed.increaseLikeCount();
+        feedRedisUtil.increaseLikeCount(feed);
         return true;
     }
 
