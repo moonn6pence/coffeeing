@@ -17,6 +17,7 @@ import { MainPage } from 'pages/MainPage';
 import { BookmarkSubPage } from 'pages/MemberSubpages/BookmarkSubPage';
 import { FeedSubPage } from 'pages/MemberSubpages/FeedSubPage';
 import { ExperienceSubPage } from 'pages/MemberSubpages/ExperienceSubPage';
+import { NoPage } from 'pages/NoPage';
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         </Route>
         <Route path="/feeds" element={<FeedPage />}></Route>
         <Route path="/" element={<MainPage />}></Route>
+        <Route path="/*" element={<NoPage />}></Route>
       </Routes>
     </div>
   );
