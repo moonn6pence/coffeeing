@@ -21,6 +21,7 @@ public class MemberEventListener {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     // When testing this EventListener method, count how many times it was called
     public void addExperience(final ExperienceEvent event) {
+        log.info("ADDED Experience = {} FOR Member = {}",event.experience(),event.memberId());
         memberService.addExperience(event);
     }
 
