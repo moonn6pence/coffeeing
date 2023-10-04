@@ -53,7 +53,7 @@ export const DragDropUploader = ( {setImage}: DragDropUploaderProps ) => {
         
         <label htmlFor="imageInput">
           <div className="w-fit justify-center mt-6 px-12 py-3  rounded-md bg-light-roasting text-sm font-semibold text-white shadow-sm hover:bg-cinamon-roasting">
-                컴퓨터에서 선택
+                이미지 업로드
           </div>
         </label>
         <input id="imageInput" className="hidden" type="file" accept="image/*" onChange={handleUpload}/>
