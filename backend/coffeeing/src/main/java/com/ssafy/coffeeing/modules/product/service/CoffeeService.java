@@ -18,6 +18,8 @@ import com.ssafy.coffeeing.modules.product.dto.SimilarProductResponse;
 import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import com.ssafy.coffeeing.modules.product.repository.*;
+import com.ssafy.coffeeing.modules.recommend.dto.RecommendResponse;
+import com.ssafy.coffeeing.modules.recommend.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,8 +44,10 @@ public class CoffeeService {
     private final MemberRepository memberRepository;
 
     private final CoffeeBookmarkQueryRepository coffeeBookmarkQueryRepository;
+    private final RecommendService recommendService;
 
     private static final Integer BOOKMARK_PAGE_SIZE = 8;
+    private static final Integer SIMILAR_PRODUCT_SIZE = 4;
     private static final Boolean IS_CAPSULE = false;
 
     @Transactional(readOnly = true)
@@ -98,7 +102,11 @@ public class CoffeeService {
 
     @Transactional(readOnly = true)
     public SimilarProductResponse getSimilarCoffees(Long id) {
-        return null;
+        RecommendResponse recommendResponse = recommendService.pickBySimilarity(SIMILAR_PRODUCT_SIZE, false, id);
+        List<Coffee> coffees = coffeeRepository.findAllById(recommendResponse.results());
+
+        return new SimilarProductResponse(true, coffees.stream()
+                .map(ProductMapper::supplySimpleProductElementFrom).toList());
     }
 
     @Transactional(readOnly = true)
