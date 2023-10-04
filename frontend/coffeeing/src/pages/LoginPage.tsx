@@ -33,7 +33,7 @@ function LoginPage() {
         window.location.replace('/signup/additonal-info');
       }
 
-      if (myInfo && myInfo.state == MemberState.BEFORE_RESEARCH) {
+      if (myInfo && myInfo.state == MemberState.NORMAL) {
         window.location.replace('/recommend-main');
       }
     } else {
@@ -53,8 +53,8 @@ function LoginPage() {
         window.location.replace('/signup/additonal-info');
       }
 
-      if (result && result.state == MemberState.BEFORE_RESEARCH) {
-        window.location.replace('/');
+      if (result && result.state == MemberState.NORMAL) {
+        window.location.replace('/recommend-main');
       }
     };
     checkMemberInfo();

@@ -24,16 +24,20 @@ export const OauthPage = () => {
             const result = await getMyInfo();
             if(result) {
                 dispatch(setMyInfo(result));
-                switch(result.state) {
-                    case MemberState.BEFORE_ADDITIONAL_DATA:
-                        window.location.replace("/signup/additonal-info");
-                        break;
-                    case MemberState.BEFORE_RESEARCH:
-                        window.location.replace("/recommend-main");
-                        break;
-                    default:
-                        window.location.replace("/beans");
+
+                if(result.state === MemberState.BEFORE_ADDITIONAL_DATA) {
+                    window.location.replace("/signup/additonal-info");
+                    return;
                 }
+
+                if(result.isAfterSurvey) {
+                    window.location.replace("/beans");
+                    return;
+                } else {
+                    window.location.replace("/recommend-main");
+                    return;
+                }
+
             }
             window.location.replace("/login");
         }
