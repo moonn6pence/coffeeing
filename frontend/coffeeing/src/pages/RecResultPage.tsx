@@ -109,7 +109,7 @@ export const RecResultPage  = ()=>{
             </p>
           </div>
           {/* 하단부 */}
-          <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-center">
+          <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-around">
             {isLogin&&(
               <div className=" flex flex-col gap-3 items-center w-0 md:w-70.5">
                 <img src={profile} alt="Profile" className="hidden md:block w-44 h-44 rounded-full border-2" />
