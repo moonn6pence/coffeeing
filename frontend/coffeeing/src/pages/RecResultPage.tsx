@@ -118,12 +118,12 @@ export const RecResultPage  = ()=>{
           {/* 하단부 */}
           <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-around">
             {isLogin&&(
-              <div className=" flex flex-col gap-3 items-center w-0 md:w-70.5">
-                <img src={userInfo.imageUrl} alt="Profile" className="hidden md:block w-44 h-44 rounded-full border-2" />
-                <p className="hidden md:block">{userInfo.nickname}</p>
+              <div className=" flex flex-col gap-3 items-center w-0 lg:w-70.5">
+                <img src={userInfo.imageUrl} alt="Profile" className="hidden lg:block w-44 h-44 rounded-full border-2" />
+                <p className="hidden lg:block">{userInfo.nickname}</p>
               </div>
             )}
-            <div className="space-y-3 w-1/2">
+            <div className="space-y-3 w-2/3 lg:w-1/2">
               <div className="flex flex-row">
                 <p className="text-xl font-black mb-10">내 취향 분석</p>
 
@@ -133,7 +133,7 @@ export const RecResultPage  = ()=>{
           </div>
           {/* 취향 분석 저장하기 버튼 */}
           {isLogin&&(
-            <div className="w-full flex justify-center my-2">
+            <div className="w-full flex justify-center my-2 mb-20">
               <p
                 className="bg-half-light text-white p-3 rounded-full cursor-pointer"
                 onClick={()=>sendPreference()}

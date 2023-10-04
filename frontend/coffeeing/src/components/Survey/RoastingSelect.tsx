@@ -57,7 +57,7 @@ export const RoastingSelect = () => {
         />
       </div>
       {/* 버튼 */}
-      <div className='flex flex-row gap-10'>
+      <div className='flex flex-row gap-10 mb-20'>
         <BackButton/>
         <NextButton handleClick={handleRoastSubmit} label='다음' />
       </div>
