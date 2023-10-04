@@ -13,6 +13,7 @@ def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
         member_product_matrix = loader.load_member_capsule_matrix()
     else:
         member_product_matrix = loader.load_member_coffee_matrix()
+    
     return ""
 
 def RecommendByCriteria(count: int, is_capsule: bool, criteria: str, attribute:str, db: Session):

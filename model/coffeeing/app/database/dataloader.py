@@ -62,14 +62,17 @@ class DataLoader:
     
     def load_member_coffee_matrix(self):
         db_items = get_member_coffee_matrix(self.db)
-        db_df = pd.DataFrame(columns=['member_id', 'product_id', 'score'])
+        items = []
         for row in db_items:
-            db_df = pd.concat([db_df, pd.DataFrame([row._mapping])], ignore_index=True)
+            items.append(row._mapping)
+        db_df = pd.DataFrame(data=items, columns=['member_id', 'product_id', 'score'])
         return db_df
     
     def load_member_capsule_matrix(self):
         db_items = get_member_capsule_matrix(self.db)
         db_df = pd.DataFrame(columns=['member_id', 'product_id', 'score'])
+        items = []
         for row in db_items:
-            db_df = pd.concat([db_df, pd.DataFrame([row._mapping])], ignore_index=True)
+            items.append(row._mapping)
+        db_df = pd.DataFrame(data=items, columns=['member_id', 'product_id', 'score'])
         return db_df
