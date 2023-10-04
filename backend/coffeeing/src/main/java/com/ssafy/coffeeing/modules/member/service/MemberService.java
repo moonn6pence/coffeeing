@@ -108,7 +108,7 @@ public class MemberService {
     @Transactional(readOnly = true)
     public MyInfoResponse getCurrentMemberInfo() {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
-        boolean isAfterSurvey = preferenceRepository.findByMemberId(member.getId()) == null;
+        boolean isAfterSurvey = preferenceRepository.findByMemberId(member.getId()) != null;
         return MemberMapper.supplyMyInfoResponseOf(member, isAfterSurvey);
     }
 }
