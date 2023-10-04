@@ -2,10 +2,8 @@ package com.ssafy.coffeeing.modules.product.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkElement;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
-import com.ssafy.coffeeing.modules.product.dto.SimpleProductElement;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

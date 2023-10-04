@@ -5,6 +5,8 @@ import com.ssafy.coffeeing.dummy.CoffeeTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.domain.CoffeeBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CoffeeResponse;
@@ -164,11 +166,11 @@ class CoffeeServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
-        Page<BookmarkProductElement> queryResult = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
+        Page<CoffeeBookmarkElement> queryResult = coffeeBookmarkQueryRepository.findBookmarkedCoffeeElements(
                 generalMember,
                 pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
         );
-        BookmarkResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+        CoffeeBookmarkResponse expectedCoffeeBookmarkResponse = ProductMapper.supplyCoffeeBookmarkResponseOf(
                 queryResult.getNumber(),
                 queryResult.getTotalPages(),
                 queryResult.getContent(),
@@ -177,7 +179,7 @@ class CoffeeServiceTest extends ServiceTest {
 
         // when
 
-        BookmarkResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
+        CoffeeBookmarkResponse actualCoffeeBookmarkResponse = coffeeService.getBookmarkedCoffees(
                 memberId,
                 pageInfoRequest
         );

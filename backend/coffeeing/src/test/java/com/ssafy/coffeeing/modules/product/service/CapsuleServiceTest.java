@@ -5,6 +5,8 @@ import com.ssafy.coffeeing.dummy.CapsuleTestDummy;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
 import com.ssafy.coffeeing.modules.global.exception.info.ProductErrorInfo;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkElement;
+import com.ssafy.coffeeing.modules.member.dto.CapsuleBookmarkResponse;
 import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.CapsuleBookmark;
 import com.ssafy.coffeeing.modules.product.dto.CapsuleResponse;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -162,11 +165,11 @@ class CapsuleServiceTest extends ServiceTest {
         Long memberId = generalMember.getId();
         int pageNo = 1;
         PageInfoRequest pageInfoRequest = new PageInfoRequest(pageNo);
-        Page<BookmarkProductElement> queryResult = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
+        Page<CapsuleBookmarkElement> queryResult = capsuleBookmarkQueryRepository.findBookmarkedCapsuleElements(
                 generalMember,
                 pageInfoRequest.getPageableWithSize(BOOKMARK_PAGE_SIZE)
         );
-        BookmarkResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyBookmarkedResponseOf(
+        CapsuleBookmarkResponse expectedCapsuleBookmarkResponse = ProductMapper.supplyCapsuleBookmarkResponseOf(
                 queryResult.getNumber(),
                 queryResult.getTotalPages(),
                 queryResult.getContent(),
@@ -174,7 +177,7 @@ class CapsuleServiceTest extends ServiceTest {
         );
 
         // when
-        BookmarkResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
+        CapsuleBookmarkResponse actualCapsuleBookmarkResponse = capsuleService.getBookmarkedCapsule(memberId, pageInfoRequest);
 
         // then
         assertEquals(expectedCapsuleBookmarkResponse, actualCapsuleBookmarkResponse);

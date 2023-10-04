@@ -2,7 +2,6 @@ package com.ssafy.coffeeing.modules.product.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.coffeeing.modules.member.domain.Member;
-import com.ssafy.coffeeing.modules.member.dto.BookmarkProductElement;
 import com.ssafy.coffeeing.modules.member.dto.CoffeeBookmarkElement;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.mapper.ProductMapper;
