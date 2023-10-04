@@ -33,6 +33,7 @@ export const DetailPage = () => {
         : publicRequest.get(`${API_URL}/product/${beans}/${id}`));
 
       const data = response.data.data;
+      console.log(data);
       setCapsule(data);
     } catch (error) {
       console.error(error);
@@ -136,7 +137,6 @@ export const DetailPage = () => {
     acidity: capsule.acidity * 5,
     subtitle: capsule.brand,
     name: capsule.nameKr,
-    isBookmarked: capsule.isBookmarked,
     imageUrl: capsule.imageUrl,
     description: capsule.description,
     aroma: capsule.aroma,
@@ -146,7 +146,7 @@ export const DetailPage = () => {
 
   return (
     <div>
-      <BeanDetailBody {...beanDetail} />
+      <BeanDetailBody {...beanDetail} isBookmarked={capsule.isBookmarked} />
       {isLogin ? (
         <div className="w-4/5 mt-10 mx-auto">
           <p className="text-2xl font-bold mb-3">리뷰 남기기</p>
@@ -172,7 +172,7 @@ export const DetailPage = () => {
         </div>
       ) : (
         <div className="relative w-4/5 mx-auto">
-          <div className="bg-review-blur w-300 h-72 blur-sm mt-10"></div>
+          <div className="bg-review-blur w-full h-72 blur-sm mt-10"></div>
           <button
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-my-black text-white rounded-3xl px-22px py-3"
             onClick={() => {
@@ -207,11 +207,11 @@ export const DetailPage = () => {
           )}
         </div>
       </div>
-      <div className="w-fit mt-10 mx-auto">
+      <div className="w-4/5 mt-10 mx-auto">
         <p className="text-2xl font-bold mb-3">
           비슷한 {beans === 'capsule' ? '캡슐' : '원두'}
         </p>
-        <div className="flex w-300 justify-between">
+        <div className="flex w-full justify-between">
           {similarList.map((item, index) => (
             <BeanCard
               subtitle={item.subtitle}
