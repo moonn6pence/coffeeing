@@ -47,7 +47,7 @@ public class MemberService {
             throw new BusinessException(MemberErrorInfo.NOT_VALID_STATE);
         }
 
-        member.updateMemberState(MemberState.BEFORE_RESEARCH);
+        member.updateMemberState(MemberState.NORMAL);
         member.updateByOnboardResult(onboardRequest.nickname(), onboardRequest.ageIdx(), onboardRequest.genderIdx());
         return new OnboardResponse(member.getId(), member.getNickname());
     }
