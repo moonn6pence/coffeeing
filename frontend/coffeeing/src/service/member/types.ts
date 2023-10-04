@@ -3,6 +3,7 @@ export interface MyInfo {
     state: MemberState,
     nickname: string,
     profileImage: string,
+    isAfterSurvey: boolean
 }
 
 export interface UniqueNickname {
