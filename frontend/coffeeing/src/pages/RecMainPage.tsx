@@ -4,7 +4,6 @@ import recBgImg from '../assets/surveyMainImg.png'
 import {AppDispatch} from 'store/store'
 import { useDispatch } from 'react-redux';
 import { resetSurvey } from 'store/surveySlice';
-import { Toast } from 'components/Toast';
 
 export const RecMainPage = () => {
   const dispatch = useDispatch<AppDispatch>();

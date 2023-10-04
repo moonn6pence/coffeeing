@@ -1,4 +1,4 @@
-import React, { useState, useEffect, MouseEvent, KeyboardEvent } from 'react';
+import React, { useState, useEffect, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from 'components/InputField';
 import Button from 'components/Button';

@@ -1,5 +1,4 @@
 import React from 'react';
-import recImg from 'assets/main/추천페이지.png';
 import listImg from 'assets/main/리스트페이지.png';
 import tasteImg from 'assets/main/취향분석페이지.png';
 import treeImg from 'assets/main/커피성장.png';
