@@ -6,6 +6,7 @@ import { NextButton } from './SurveyButton';
 import { RadioGroupSingle } from './RadioGroup';
 import { SURVEY_ROAST_ITEMS } from 'util/constants';
 import { BackButton } from './SurveyButton';
+import { Toast } from 'components/Toast';
 export const RoastingSelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +19,7 @@ export const RoastingSelect = () => {
   const handleRoastSubmit = () => {
     // 선택 안 했을 때
     if (selectedRoast === -2) {
-      alert('선호하는 로스팅 단계를 하나 선택해주세요');
+      Toast.fire('선호하는 로스팅 단계를 하나 선택해주세요','','warning')
     }
     // 선택 했을 때 - 다음 페이지로 & 로스팅 정보 저장
     else {

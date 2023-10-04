@@ -10,6 +10,7 @@ import { AppDispatch, RootState } from 'store/store';
 import { addCurrentPage, saveFlavorNote } from "store/surveySlice"
 import { useNavigate } from 'react-router-dom';
 import { NextButton, BackButton } from "./SurveyButton"
+import { Toast } from "components/Toast"
 
 export const FlavorNoteSelect = () => {
   const navigate = useNavigate();
@@ -50,16 +51,24 @@ export const FlavorNoteSelect = () => {
 
   // 캡슐 일 때 -> 머신으로 이동시키기
   const handleFlavorSubmit = ()=>{
-    const flavor = myFlavor.toString()
-    dispatch(addCurrentPage())
-    dispatch(saveFlavorNote(flavor))
+    if (myFlavor.length>0) {
+      const flavor = myFlavor.toString()
+      dispatch(addCurrentPage())
+      dispatch(saveFlavorNote(flavor))
+    } else {
+      Toast.fire('선호하는 맛이나 향을 선택해주세요','','warning')
+    }
   }
   // 원두 일 때 -> 결과 받기
   const handleSurveySubmit = ()=>{
-    const flavor = myFlavor.toString()
-    console.log(flavor)
-    dispatch(saveFlavorNote(flavor))
-    navigate('/recommend-result', {replace:true})
+    if (myFlavor.length>0) {
+      const flavor = myFlavor.toString()
+      console.log(flavor)
+      dispatch(saveFlavorNote(flavor))
+      navigate('/recommend-result', {replace:true})
+    } else {
+      Toast.fire('선호하는 맛이나 향을 선택해주세요','','warning')
+    }
   }
   return(
     <div className='flex flex-col items-center gap-10 mt-10'>
