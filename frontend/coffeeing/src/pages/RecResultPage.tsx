@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import again from '../assets/again.png'
 import loadingGif from '../assets/survey/loading.gif'
 import { Toast } from "components/Toast";
+import { checkPrimeSync } from "crypto";
 
 export const RecResultPage  = ()=>{
   const navigate = useNavigate();
@@ -55,9 +56,16 @@ export const RecResultPage  = ()=>{
     }
   }
 
-  useEffect( ()=>{
-    getPreference();
-  },[])
+  useEffect(() => {
+    const delay = 2000; 
+    const timerId = setTimeout(() => {
+      getPreference();
+    }, delay);
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, []);
+  
 
   return(
     <div className="flex flex-col items-center">
