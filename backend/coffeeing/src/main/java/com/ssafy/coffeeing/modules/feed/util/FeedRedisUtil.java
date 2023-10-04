@@ -17,41 +17,55 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class FeedRedisUtil {
 
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
     private final FeedLikeRepository feedLikeRepository;
 
     private final String KEY = "feedLike";
 
-    public FeedRedisUtil(RedisTemplate redisTemplate, FeedLikeRepository feedLikeRepository) {
+    public FeedRedisUtil(RedisTemplate<String, String> redisTemplate, FeedLikeRepository feedLikeRepository) {
         this.redisTemplate = redisTemplate;
         this.redisTemplate.setHashKeySerializer(new Jackson2JsonRedisSerializer<>(Long.class));
         this.feedLikeRepository = feedLikeRepository;
     }
 
     public boolean isLikedFeedInRedis(Feed feed, Member member) {
-        HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations = redisTemplate.opsForHash();
         HashMap<Long, Boolean> feedLikeCache;
 
         if (hashOperations.hasKey(KEY, feed.getId())) {
             feedLikeCache = hashOperations.get(KEY, feed.getId());
-            if (!feedLikeCache.containsKey(member.getId())) {
-                setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
+            if(Objects.nonNull(feedLikeCache)) {
+                if (!feedLikeCache.containsKey(member.getId())) {
+                    setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
+                }
+            } else {
+                feedLikeCache = makeNewHashMap(feed, member, hashOperations);
             }
         } else { // Read Through 전략
-            feedLikeCache = new HashMap<>();
-            setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
-
-            if (isNotSetExpireTime()) {
-                redisTemplate.expire(KEY, 8, TimeUnit.HOURS);
-            }
+            feedLikeCache = makeNewHashMap(feed, member, hashOperations);
         }
         return feedLikeCache.get(member.getId());
+    }
+
+    private HashMap<Long, Boolean> makeNewHashMap(
+            Feed feed,
+            Member member,
+            HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations) {
+        HashMap<Long, Boolean> feedLikeCache;
+        feedLikeCache = new HashMap<>();
+
+        setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
+
+        if (isNotSetExpireTime()) {
+            redisTemplate.expire(KEY, 8, TimeUnit.HOURS);
+        }
+        return feedLikeCache;
     }
 
     private void setFeedLikeStatus(
             Feed feed,
             Member member,
-            HashOperations<String, Long, HashMap> hashOperations,
+            HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations,
             HashMap<Long, Boolean> feedLikeCache) {
         Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, member);
 
@@ -68,7 +82,7 @@ public class FeedRedisUtil {
     }
 
     public void disLikeFeedInRedis(Feed feed, Member member) {
-        HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations = redisTemplate.opsForHash();
 
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
@@ -80,7 +94,7 @@ public class FeedRedisUtil {
     }
 
     public void disLikeFeedInRedis(Feed feed) {
-        HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations = redisTemplate.opsForHash();
 
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
@@ -91,7 +105,7 @@ public class FeedRedisUtil {
     }
 
     public void likeFeedInRedis(Feed feed, Member member) {
-        HashOperations<String, Long, HashMap> hashOperations = redisTemplate.opsForHash();
+        HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations = redisTemplate.opsForHash();
 
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
