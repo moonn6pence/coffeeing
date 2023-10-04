@@ -32,12 +32,18 @@ public class JWTFilter extends OncePerRequestFilter {
 	private final String GRANT_TYPE;
 	private final JWTUtils jwtUtils;
 
-	private static final List<String> PERMIT_ALL_PATHS = List.of("/auth",
+	private static final List<String> PERMIT_ALL_PATHS = List.of(
+			"/auth",
 			"/favicon.ico",
 			"/product",
 			"/survey/recommend",
 			"/curation/open",
-			"/survey/recommend",
+			"/member/unique-nickname",
+			"/member/info/",
+			"/member/experience/",
+			"/member/coffee/bookmark/",
+			"/member/capsule/bookmark/",
+			"/feeds/list",
 			"/v1/api-docs",
 			"/v2/api-docs",
 			"/swagger-resources",
@@ -49,7 +55,6 @@ public class JWTFilter extends OncePerRequestFilter {
 			/* swagger v3 */
 			"/v3/api-docs",
 			"/swagger-ui",
-			"/member/unique-nickname",
 			"/health",
 			/* OAuth */
 			"/oauth2/authorization/google",

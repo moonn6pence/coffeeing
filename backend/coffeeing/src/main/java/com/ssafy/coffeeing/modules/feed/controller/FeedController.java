@@ -110,7 +110,7 @@ public class FeedController {
                             , defaultValue = "10"
                     )
             })
-    @GetMapping("/{memberId}/list")
+    @GetMapping("/list/{memberId}")
     @ApiOperation(value = "다른 멤버의 피드 리스트 조회 요청")
     public BaseResponse<ProfileFeedsResponse> getFeedsByMemberId(@Valid MemberFeedsRequest memberFeedsRequest) {
         return BaseResponse.<ProfileFeedsResponse>builder()
