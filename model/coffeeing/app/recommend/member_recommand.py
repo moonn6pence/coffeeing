@@ -5,6 +5,9 @@ from ..database.model import Model
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 import random
+from surprise import SVD, Reader, Dataset
+from surprise.model_selection import cross_validate
+
 
 def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
     loader = DataLoader(db)
@@ -13,7 +16,12 @@ def RecommandBySVD(count: int, is_capsule: bool, memberId: int, db: Session):
         member_product_matrix = loader.load_member_capsule_matrix()
     else:
         member_product_matrix = loader.load_member_coffee_matrix()
-    
+
+    reader = Reader()
+    data = Dataset.load_from_df(member_product_matrix[['member_id', 'product_id', 'score']], reader)
+
+    algo = SVD()
+    cross_validate(algo, data, measures=["RMSE", "MAE"], cv=5, verbose=True)
     return ""
 
 def RecommendByCriteria(count: int, is_capsule: bool, criteria: str, attribute:str, db: Session):
