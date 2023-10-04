@@ -119,7 +119,8 @@ public class CurationService {
             } catch (BusinessException e) {
                 List<Capsule> capsules = capsuleRepository.findTop12CapsulesByOrderByPopularityDesc();
 
-                popularProductCacheUtil.pushAll(true, capsules.stream().map(Capsule::getId).toList());
+                popularProductCacheUtil.pushAll(true,
+                        capsules.stream().map(capsule -> String.valueOf(capsule.getId())).toList());
 
                 return CurationMapper.supplyCapsuleCurationElementOf(true, curation.getTitle(), capsules);
             }
@@ -133,7 +134,8 @@ public class CurationService {
         } catch (BusinessException e) {
             List<Coffee> coffees = coffeeRepository.findTop12CoffeesByOrderByPopularityDesc();
 
-            popularProductCacheUtil.pushAll(false, coffees.stream().map(Coffee::getId).toList());
+            popularProductCacheUtil.pushAll(false,
+                    coffees.stream().map(coffee -> String.valueOf(coffee.getId())).toList());
 
             return CurationMapper.supplyCoffeeCurationElementOf(false, curation.getTitle(), coffees);
         }

@@ -23,21 +23,26 @@ public class PopularProductCacheUtil {
 
     public List<Long> getAll(boolean isCapsule, Integer length) {
 
-        List<String> values = redisTemplate.opsForList()
-                .range(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE), 0, length);
+        String key = KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE);
 
-        if (values == null || values.isEmpty()) {
+        Long size = redisTemplate.opsForList().size(key);
+
+        if (size == null || size == 0) {
             throw new BusinessException(InfraErrorInfo.NO_CACHE);
         }
+
+        List<String> values = redisTemplate.opsForList()
+                .range(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE), 0, Long.min(size, length));
 
         return values.stream().map(Long::valueOf).toList();
     }
 
-    public void pushAll(boolean isCapsule, List<Long> ids) {
+    public void pushAll(boolean isCapsule, List<String> ids) {
 
-        redisTemplate.opsForList().rightPushAll(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE),
-                ids.stream().map(String::valueOf).toList());
-        redisTemplate.expire(KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE), KEY_EXPIRATION, TimeUnit.HOURS);
+        String key = KEY_IDENTIFIER + (isCapsule ? KEY_CAPSULE : KEY_COFFEE);
+
+        redisTemplate.opsForList().rightPushAll(key, ids);
+        redisTemplate.expire(key, KEY_EXPIRATION, TimeUnit.HOURS);
 
     }
 

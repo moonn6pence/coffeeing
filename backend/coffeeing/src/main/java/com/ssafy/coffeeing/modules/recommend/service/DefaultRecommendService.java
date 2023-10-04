@@ -45,19 +45,7 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try{
-            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
-        } catch (BusinessException e) {
-            recommendCacheUtil.pushAll(uri.toString(),
-                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
-            );
-
-            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
-        } catch (HttpClientErrorException e) {
-            throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
-        } catch (HttpServerErrorException e) {
-            throw new BusinessException(SurveyErrorInfo.EXTERNAL_SERVER_ERROR);
-        }
+        return getRecSysResponse(count, uri);
     }
 
     @Override
@@ -72,19 +60,7 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try{
-            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
-        } catch (BusinessException e) {
-            recommendCacheUtil.pushAll(uri.toString(),
-                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
-            );
-
-            return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
-        } catch (HttpClientErrorException e) {
-            throw new BusinessException(SurveyErrorInfo.BAD_API_SERVER_REQUEST);
-        } catch (HttpServerErrorException e) {
-            throw new BusinessException(SurveyErrorInfo.EXTERNAL_SERVER_ERROR);
-        }
+        return getRecSysResponse(count, uri);
     }
 
     @Override
@@ -100,11 +76,17 @@ public class DefaultRecommendService implements RecommendService {
                 .build()
                 .toUri();
 
-        try{
+        return getRecSysResponse(count, uri);
+    }
+
+    private RecommendResponse getRecSysResponse(Integer count, URI uri) {
+
+        try {
             return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));
         } catch (BusinessException e) {
             recommendCacheUtil.pushAll(uri.toString(),
-                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class)).results()
+                    Objects.requireNonNull(restTemplate.getForObject(uri, RecommendResponse.class))
+                            .results().stream().map(String::valueOf).toList()
             );
 
             return new RecommendResponse(recommendCacheUtil.getAll(uri.toString(), count));

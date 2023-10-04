@@ -20,19 +20,24 @@ public class RecommendCacheUtil {
 
     public List<Long> getAll(String key, Integer length) {
 
-        List<String> values = redisTemplate.opsForList()
-                .range(KEY_IDENTIFIER + key, 0, length);
+        key = KEY_IDENTIFIER + key;
 
-        if (values == null || values.isEmpty()) {
+        Long size = redisTemplate.opsForList().size(key);
+
+        if (size == null || size == 0) {
             throw new BusinessException(InfraErrorInfo.NO_CACHE);
         }
+
+        List<String> values = redisTemplate.opsForList().range(key, 0, Long.min(size, length));
 
         return values.stream().map(Long::valueOf).toList();
     }
 
-    public void pushAll(String key, List<Long> ids) {
+    public void pushAll(String key, List<String> ids) {
 
-        redisTemplate.opsForList().rightPushAll(KEY_IDENTIFIER + key, ids.stream().map(String::valueOf).toList());
-        redisTemplate.expire(KEY_IDENTIFIER + key, KEY_EXPIRATION, TimeUnit.HOURS);
+        key = KEY_IDENTIFIER + key;
+
+        redisTemplate.opsForList().rightPushAll(key, ids);
+        redisTemplate.expire(key, KEY_EXPIRATION, TimeUnit.HOURS);
     }
 }
