@@ -43,6 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
 			"/member/experience/{memberId}",
 			"/member/coffee/bookmark/{memberId}",
 			"/member/capsule/bookmark/{memberId}",
+			"/feeds/{memberId}/list",
 			"/v1/api-docs",
 			"/v2/api-docs",
 			"/swagger-resources",
