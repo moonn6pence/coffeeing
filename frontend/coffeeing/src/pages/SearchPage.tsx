@@ -11,10 +11,8 @@ import { requestFilterResult } from "service/filter/request";
 import { FilterProps } from "service/filter/types";
 import { PaginationNew } from "components/PaginationNew";
 import { NoResult } from "components/NoResult";
-import { useDispatch } from "react-redux";
 
 export const SearchPage = () =>{
-  const dispatch = useDispatch();
   const [selectedRoast, setSelectedRoast] = useState([{label:'미선택', name:'미선택'}])
   const [selectedAcid, setSelectedAcid] = useState([{label:'미선택', name:'미선택'}])
   const [selectedBody, setSelectedBody] = useState([{label:'미선택', name:'미선택'}])
@@ -48,7 +46,7 @@ export const SearchPage = () =>{
       size: 8,
     };
     const result = await requestFilterResult(filterProps);
-    console.log('filtered result',result)
+    // console.log('filtered result',result)
     if (result.totalPage===-1) {
       setShowResult(false)
     } else {
@@ -171,8 +169,6 @@ export const SearchPage = () =>{
             setCurrentPage={setCurrentPage} 
           />
         )}
-      {/* </div> */}
-
     </div>
   )
 }

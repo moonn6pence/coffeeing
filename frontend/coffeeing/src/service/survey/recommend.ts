@@ -1,6 +1,5 @@
 import { publicRequest, privateRequest } from "util/axios";
 import { API_URL } from "util/constants";
-import { surveyResult, mySurvey } from "./types";
 
 export const getSurveyResult = async (survey:any)=>{
   try {
@@ -15,6 +14,7 @@ export const getSurveyResult = async (survey:any)=>{
         machineType:survey.machine,
       }
     })
+    console.log(res.data.data)
     return res.data.data
   } catch (error) {
     console.log('[fail to get recommendation]', error)

@@ -5,6 +5,7 @@ import { addCurrentPage, setTotalPage, saveIsCapsule } from 'store/surveySlice';
 import { NextButton } from './SurveyButton';
 import { RadioGroupSingle } from './RadioGroup';
 import { COFFEE_ITEMS } from 'util/constants';
+import { Toast } from 'components/Toast';
 
 export const CoffeeSelect = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,7 +14,7 @@ export const CoffeeSelect = () => {
   // 다음 버튼 클릭 시
   const handleCoffeeSubmit = () => {
     if (selectedCoffee === '') {
-      alert('추천받고 싶은 대상을 하나 선택해주세요.');
+      Toast.fire('추천받고 싶은 대상을 하나 <br>선택해주세요.','','warning')
     }
     // 원두 일 때
     else if (selectedCoffee === 'bean') {

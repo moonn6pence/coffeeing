@@ -36,7 +36,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
           {itemList.map((item) => (
             <Listbox.Option key={item.name} value={item}>
               {({ selected }) => (
-                <li
+                <div
                   className={`${
                     selected
                       ? 'bg-drop-down text-black'
@@ -51,7 +51,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
                     )}
                     {item.name}
                   </div>
-                </li>
+                </div>
               )}
             </Listbox.Option>
           ))}

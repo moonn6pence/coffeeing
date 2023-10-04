@@ -13,7 +13,7 @@ export const RadioGroupSingle = ({selectedItem, setSelectedItem, itemList,pageNu
   return(
     <RadioGroup 
       className={
-        `${pageNum===5?'gap-3':'gap-10'} 
+        `${pageNum===5?'gap-3 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-5':'gap-10'} 
         ${pageNum==0?'grid grid-cols-1 md:grid-cols-2':'grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'}
         `} 
       value={selectedItem} 

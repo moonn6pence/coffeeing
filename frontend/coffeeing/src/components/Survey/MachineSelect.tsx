@@ -15,7 +15,7 @@ export const MachineSelect = () => {
 
   const handleSurveySubmit = ()=>{
     dispatch(saveMachineType(selectedMachine))  
-    navigate('/recommend-result')
+    navigate('/recommend-result', {replace:true})
   }
 
   return(
