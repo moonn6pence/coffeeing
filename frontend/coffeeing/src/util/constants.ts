@@ -98,7 +98,7 @@ import unknownRoast from '../assets/survey/unknownRoast.png';
 export const SURVEY_ROAST_ITEMS = [
 	{label:0.3, name:'라이트 로스팅',src:lightRoast,toolTipDesc:'강한 신맛이 나고 품종의 특성이 잘 나타납니다.'},
 	{label:0.6, name:'미디엄 로스팅',src:mediumRoast,toolTipDesc:'산뜻한 신맛이 나고 품종의 특성이 약하게 나타납니다.'},
-	{label:0.9, name:'라이트 로스팅',src:darkRoast,toolTipDesc:'신맛이 약해지고 단맛과 쓴맛이 강해집니다.'},
+	{label:0.9, name:'다크 로스팅',src:darkRoast,toolTipDesc:'신맛이 약해지고 단맛과 쓴맛이 강해집니다.'},
 	{label:-1, name:'잘 모르겠어요',src:unknownRoast},
 ]
 
