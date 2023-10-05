@@ -112,6 +112,8 @@ public class FeedService {
                 });
             }
         }
+
+        feedRedisUtil.deleteFeedLikeKey();
     }
 
     @Transactional

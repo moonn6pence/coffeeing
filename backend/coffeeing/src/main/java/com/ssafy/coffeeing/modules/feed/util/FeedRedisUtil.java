@@ -118,7 +118,12 @@ public class FeedRedisUtil {
         if(Objects.nonNull(value)) {
             Integer likeCount = Integer.valueOf(value);
             feed.updateLikeCount(likeCount);
+            redisTemplate.delete(KEY + feed.getId());
         }
+    }
+
+    public void deleteFeedLikeKey() {
+        redisTemplate.delete(KEY);
     }
 
     private boolean isNotSetExpireTime() {
