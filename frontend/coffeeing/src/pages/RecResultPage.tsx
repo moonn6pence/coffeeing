@@ -64,16 +64,20 @@ export const RecResultPage  = ()=>{
   }
 
   useEffect(() => {
-    const delay = 2000; 
-    const timerId = setTimeout(() => {
-      getPreference();
-    }, delay);
-    return () => {
-      clearTimeout(timerId);
-    };
+    if (survey.acidity===0) {
+      navigate('/')
+      Toast.fire('올바르지 않는 경로입니다.', '', 'warning')
+    } else {
+      const delay = 2000; 
+      const timerId = setTimeout(() => {
+        getPreference();
+      }, delay);
+      return () => {
+        clearTimeout(timerId);
+      };
+    }
   }, []);
   
-
   return(
     <div className="flex flex-col items-center">
       {loading 
@@ -99,6 +103,7 @@ export const RecResultPage  = ()=>{
                   imgLink={item.imageUrl}
                   isCapsule={userInfo.isCapsule}
                   key={index}
+                  replace={true}
                 />
               ))}
             </div>
