@@ -7,7 +7,15 @@ import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
-import com.ssafy.coffeeing.modules.feed.dto.*;
+import com.ssafy.coffeeing.modules.feed.dto.FeedDetailResponse;
+import com.ssafy.coffeeing.modules.feed.dto.FeedElement;
+import com.ssafy.coffeeing.modules.feed.dto.FeedPageResponse;
+import com.ssafy.coffeeing.modules.feed.dto.FeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.MemberFeedsRequest;
+import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
+import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
+import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
 import com.ssafy.coffeeing.modules.feed.util.FeedRedisUtil;
@@ -148,10 +156,11 @@ class FeedServiceTest extends ServiceTest {
         feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
         feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, beforeResearchMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
+        long feedId = feed.getId();
 
         //when
         em.flush();
-        feedService.deleteFeedById(feed.getId());
+        feedService.deleteFeedById(feedId);
 
         //then
         assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
@@ -171,10 +180,11 @@ class FeedServiceTest extends ServiceTest {
         UploadFeedResponse uploadFeedResponse = feedService.uploadFeedByMember(FeedTestDummy.createUploadFeedRequestWithTag(capsule));
         Feed feed = feedRepository.getReferenceById(uploadFeedResponse.feedId());
         Integer previousPopularity = capsule.getPopularity();
+        long feedId = feed.getId();
 
         //when
         em.flush();
-        feedService.deleteFeedById(feed.getId());
+        feedService.deleteFeedById(feedId);
 
         //then
         assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
@@ -191,9 +201,10 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
+        long feedId = feed.getId();
 
         //when
-        feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        feedService.updateFeedById(feedId, updateFeedRequest);
         em.flush();
 
         //then
@@ -212,9 +223,10 @@ class FeedServiceTest extends ServiceTest {
         Coffee coffee = coffeeRepository.save(CoffeeTestDummy.createMockCoffeeRoma());
         Integer previousPopularity = coffee.getPopularity();
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(coffee);
+        long feedId = feed.getId();
 
         //when
-        feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        feedService.updateFeedById(feedId, updateFeedRequest);
         em.flush();
 
         //then
@@ -241,9 +253,10 @@ class FeedServiceTest extends ServiceTest {
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(capsule);
         Integer previousCoffeePopularity = coffee.getPopularity();
         Integer previousCapsulePopularity = capsule.getPopularity();
+        long feedId = feed.getId();
 
         //when
-        feedService.updateFeedById(feed.getId(), updateFeedRequest);
+        feedService.updateFeedById(feedId, updateFeedRequest);
         em.flush();
 
         //then
@@ -265,13 +278,14 @@ class FeedServiceTest extends ServiceTest {
     void Given_UpdateFeedWithNotExistTag_When_UpdateFeed_Then_Fail() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        long feedId = feed.getId();
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         Coffee coffee = CoffeeTestDummy.createMockCoffeeRomaWithInvalidId();
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithTag(coffee);
 
         //when, then
         assertEquals(ProductErrorInfo.NOT_FOUND_PRODUCT, assertThrows(BusinessException.class,
-                () -> feedService.updateFeedById(feed.getId(), updateFeedRequest)).getInfo());
+                () -> feedService.updateFeedById(feedId, updateFeedRequest)).getInfo());
 
 
         //verify
@@ -285,10 +299,10 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(generalMember);
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
-
+        long feedId = feed.getId();
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.updateFeedById(feed.getId() + 1, updateFeedRequest)).getInfo());
+                () -> feedService.updateFeedById(feedId + 1, updateFeedRequest)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -302,10 +316,11 @@ class FeedServiceTest extends ServiceTest {
         UpdateFeedRequest updateFeedRequest = FeedTestDummy.createUpdateFeedRequestWithoutTag();
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(beforeResearchMember);
+        long feedId = feed.getId();
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.updateFeedById(feed.getId(), updateFeedRequest)).getInfo());
+                () -> feedService.updateFeedById(feedId, updateFeedRequest)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -316,11 +331,12 @@ class FeedServiceTest extends ServiceTest {
     void Given_DeleteRequest_When_DeleteFeed_Then_Fail() {
         //given
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        long feedId = feed.getId();
         given(securityContextUtils.getCurrnetAuthenticatedMember()).willReturn(beforeResearchMember);
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.deleteFeedById(feed.getId() + 1)).getInfo());
+                () -> feedService.deleteFeedById(feedId + 1)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -333,10 +349,11 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(beforeResearchMember);
+        long feedId = feed.getId();
 
         //when, then
         assertEquals(FeedErrorInfo.NOT_FOUND, assertThrows(BusinessException.class,
-                () -> feedService.deleteFeedById(feed.getId())).getInfo());
+                () -> feedService.deleteFeedById(feedId)).getInfo());
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -350,9 +367,10 @@ class FeedServiceTest extends ServiceTest {
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
+        long feedId = feed.getId();
 
         //when
-        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feedId);
         Boolean isLikeFeed = feedRedisUtil.isLikedFeedInRedis(feed, generalMember);
 
         //then
@@ -375,10 +393,11 @@ class FeedServiceTest extends ServiceTest {
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
         feedRedisUtil.likeFeedInRedis(feed, generalMember);
         feedRedisUtil.increaseLikeCount(feed);
+        long feedId = feed.getId();
         int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         //when
-        ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
+        ToggleResponse toggleResponse = feedService.toggleFeedLike(feedId);
         Boolean isNotLikeFeed = feedRedisUtil.isNotLikedFeedInRedis(feed, generalMember);
 
         //then
@@ -404,7 +423,11 @@ class FeedServiceTest extends ServiceTest {
         feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
         List<FeedElement> expectFeedElements = feeds.stream()
-                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .map(feed -> {
+                    long feedId = feed.getId();
+                    String imageUrl = feed.getImageUrl();
+                    return new FeedElement(feedId, feedUtil.makeJsonStringToImageElement(imageUrl));
+                })
                 .collect(Collectors.toList());
 
         //when
@@ -430,7 +453,11 @@ class FeedServiceTest extends ServiceTest {
         feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
         List<FeedElement> expectFeedElements = feeds.stream()
-                .map(feed -> new FeedElement(feed.getId(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())))
+                .map(feed -> {
+                    long feedId = feed.getId();
+                    String imageUrl = feed.getImageUrl();
+                    return new FeedElement(feedId, feedUtil.makeJsonStringToImageElement(imageUrl));
+                })
                 .collect(Collectors.toList());
 
         //when
@@ -446,24 +473,24 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_FeedId_When_Request_FeedDetail_Then_Success() {
         //given
-        Feed feed = FeedTestDummy.createFeed(generalMember);
-        feedRepository.save(feed);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        long feedId = feed.getId();
 
         //when
-        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feedId);
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
-                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
-                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
-                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
-                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
-                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
-                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
+                () -> assertEquals(feed.getId(), feedDetailResponse.feedId()),
+                () -> assertEquals(feed.getLikeCount(), feedDetailResponse.likeCount()),
+                () -> assertEquals(feed.getContent(), feedDetailResponse.content()),
+                () -> assertEquals(feedUtil.makeJsonStringToImageElement(feed.getImageUrl()), feedDetailResponse.images()),
+                () -> assertEquals(feed.getMember().getId(), feedDetailResponse.registerId()),
+                () -> assertEquals(feed.getMember().getNickname(), feedDetailResponse.registerName()),
+                () -> assertEquals(feed.getMember().getProfileImage(), feedDetailResponse.registerProfileImg()),
                 () -> assertNull(feedDetailResponse.tag()),
-                () -> assertEquals(feedDetailResponse.isLike(), false),
-                () -> assertEquals(feedDetailResponse.isMine(), false)
+                () -> assertEquals(false, feedDetailResponse.isLike()),
+                () -> assertEquals(false, feedDetailResponse.isMine())
         );
     }
 
@@ -471,14 +498,13 @@ class FeedServiceTest extends ServiceTest {
     @Test
     void Given_FeedIdWithFeedLikedMember_When_Request_FeedDetail_Then_Success() {
         //given
-        Feed feed = FeedTestDummy.createFeed(generalMember);
-        FeedLike feedLike = FeedTestDummy.createFeedLike(feed, beforeResearchMember);
-        feedRepository.save(feed);
-        feedLikeRepository.save(feedLike);
+        Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
+        feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, beforeResearchMember));
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(beforeResearchMember);
+        long feedId = feed.getId();
 
         //when
-        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feed.getId());
+        FeedDetailResponse feedDetailResponse = feedService.getFeedDetailById(feedId);
 
         //then
         assertAll(
