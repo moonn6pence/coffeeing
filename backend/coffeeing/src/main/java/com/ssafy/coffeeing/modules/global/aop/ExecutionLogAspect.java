@@ -103,7 +103,7 @@ public class ExecutionLogAspect {
         Map<String, String> object = new HashMap<>();
         while (params.hasMoreElements()) {
             String param = params.nextElement();
-            String replaceParam = param.replaceAll("\\.", "-");
+            String replaceParam = param.replace("\\.", "-");
             object.put(replaceParam, request.getParameter(param));
         }
 
