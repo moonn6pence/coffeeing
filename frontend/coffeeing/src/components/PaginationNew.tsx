@@ -53,7 +53,11 @@ export const PaginationNew = ({
           })}
         </div>
       ) : (
-        <div className=" mx-20 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4">
+        <div
+          className={`${
+            !isProfile && 'mx-20'
+          } grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 lg:grid-cols-4`}
+        >
           {products &&
             products.map((item) => {
               return (

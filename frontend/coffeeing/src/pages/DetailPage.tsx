@@ -41,8 +41,21 @@ export const DetailPage = () => {
     }
   };
 
+  const getSimilarList = () => {
+    publicRequest
+      .get(`${API_URL}/product/${beans}/${id}/similar`)
+      .then((res) => {
+        console.log(res.data.data);
+        setSimilarList(res.data.data.products);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     fetchData();
+    getSimilarList();
   }, [id]);
 
   const [capsule, setCapsule] = useState({
@@ -103,20 +116,7 @@ export const DetailPage = () => {
   };
   useEffect(() => {
     getReview();
-  }, [currentPage]);
-
-  useEffect(() => {
-    // 비슷한 상품 받아오기
-    privateRequest
-      .get(`${API_URL}/product/${beans}/${id}/similar`)
-      .then((res) => {
-        console.log(res.data.data);
-        setSimilarList(res.data.data.products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
+  }, [currentPage, id]);
 
   const [reviews, setReviews] = useState([
     {
@@ -147,7 +147,7 @@ export const DetailPage = () => {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <BeanDetailBody {...beanDetail} isBookmarked={capsule.isBookmarked} />
       {isLogin ? (
         <div className="w-4/5 mt-10 mx-auto">
