@@ -33,9 +33,6 @@ public class ServiceTest {
     @Autowired
     protected EntityManager em;
 
-    @Autowired
-    protected RedisTemplate redisTemplate;
-
     @MockBean
     protected SecurityContextUtils securityContextUtils;
 
