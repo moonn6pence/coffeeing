@@ -229,7 +229,7 @@ export const MemberProfile = (props: ProfileProps) => {
           </div>
         )}
       </div>
-      {preference && id === myId ? (
+      {preference ? (
         <div className="w-1/2 h-full flex flex-col space-y-12">
           <h3 className="text-2xl font-bold">사용자 취향 분석</h3>
           <BeanRating
@@ -238,7 +238,7 @@ export const MemberProfile = (props: ProfileProps) => {
             body={preference.body * 5}
           />
         </div>
-      ) : (
+      ) : memberId === id ? (
         <div className="w-fit h-full flex flex-col items-center items-around space-y-6">
           <h2>취향 데이터가 아직 없습니다...</h2>
           <NavBarButton
@@ -247,7 +247,7 @@ export const MemberProfile = (props: ProfileProps) => {
             dark={true}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
