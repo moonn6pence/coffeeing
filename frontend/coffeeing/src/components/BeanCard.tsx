@@ -46,15 +46,6 @@ export const BeanCard = (props: ICardProps) => {
       className={`h-94 w-full max-w-[282px] flex flex-col justify-center ${!isSame && 'cursor-pointer'}`}
       onClick={goDetail}
     >
-      {isProfile ? (
-        <div className="flex flex-row justify-end">
-          <button onClick={() => onBookmarkChange && onBookmarkChange(id)}>
-            <img src={bookmarkOn} alt="북마크" className="w-6 h-6 mt-6 mr-6" />
-          </button>
-        </div>
-      ) : (
-        ''
-      )}
       <img
         src={imgLink}
         alt="사진"
