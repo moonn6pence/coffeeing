@@ -32,7 +32,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -179,7 +184,7 @@ public class FeedService {
 
         FeedPage feedPage = new FeedPage(feeds.getContent(), feedRedisUtil, viewer, feedUtil);
 
-        return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+        return FeedMapper.supplyFeedPageEntityOf(feedPage.getFeedPageElements(), feeds.hasNext(), nextCursor);
     }
 
     private void validateMemberWithWriteDatabase(HashMap<Long, Boolean> feedLikeMap, Feed feed) {
@@ -198,7 +203,9 @@ public class FeedService {
             Member member) {
         List<FeedLike> insertFeedLikes = new ArrayList<>();
         List<FeedLike> deleteFeedLikes = new ArrayList<>();
-        if (feedLikeMap.get(memberId)) {
+        boolean isLike = feedLikeMap.get(memberId);
+
+        if (isLike) {
             if (feedLikeRepository.findFeedLikeByFeedAndMember(feed, member).isEmpty()) {
                 insertFeedLikes.add(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
             }
@@ -231,14 +238,9 @@ public class FeedService {
 
         if (Objects.isNull(viewer)) {
             return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
-        } else if (isLikeFeed && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, true);
-        } else if (isLikeFeed) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, false);
-        } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, true);
         } else {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
+            boolean isMine = isFeedWrittenByViewer(feedWriter.getId(), viewer.getId());
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, isLikeFeed, isMine);
         }
     }
 

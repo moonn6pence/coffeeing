@@ -22,24 +22,18 @@ public class FeedRedisUtil {
     private final RedisTemplate<String, String> redisTemplate;
     private final HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations;
     private final FeedLikeRepository feedLikeRepository;
-
-    private final String KEY = "feedLike";
+    private static final String KEY = "feedLike";
 
     public boolean isLikedFeedInRedis(Feed feed, Member member) {
-        HashMap<Long, Boolean> feedLikeCache;
+        HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
+        if(Objects.isNull(feedLikeCache)) feedLikeCache = new HashMap<>();
 
-        if (hashOperations.hasKey(KEY, feed.getId())) {
-            feedLikeCache = hashOperations.get(KEY, feed.getId());
-            if(Objects.nonNull(feedLikeCache)) {
-                if (!feedLikeCache.containsKey(member.getId())) {
-                    setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
-                }
-            } else {
-                feedLikeCache = makeNewHashMap(feed, member, hashOperations);
-            }
-        } else { // Read Through 전략
-            feedLikeCache = makeNewHashMap(feed, member, hashOperations);
+        if(feedLikeCache.containsKey(member.getId())) {
+            return feedLikeCache.get(member.getId());
         }
+
+        setFeedLikeStatus(feed, member, feedLikeCache);
+
         return feedLikeCache.get(member.getId());
     }
 
@@ -50,9 +44,8 @@ public class FeedRedisUtil {
     public void disLikeFeedInRedis(Feed feed, Member member) {
         HashMap<Long, Boolean> feedLikeCache = hashOperations.get(KEY, feed.getId());
 
-        if (!Objects.nonNull(feedLikeCache)) {
-            feedLikeCache = new HashMap<>();
-        }
+        if (Objects.isNull(feedLikeCache)) feedLikeCache = new HashMap<>();
+
         feedLikeCache.put(member.getId(), false);
         hashOperations.put(KEY, feed.getId(), feedLikeCache);
     }
@@ -133,33 +126,14 @@ public class FeedRedisUtil {
         return false;
     }
 
-    private HashMap<Long, Boolean> makeNewHashMap(
-            Feed feed,
-            Member member,
-            HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations) {
-        HashMap<Long, Boolean> feedLikeCache;
-        feedLikeCache = new HashMap<>();
+    private void setFeedLikeStatus(Feed feed, Member member, HashMap<Long, Boolean> feedLikeCache) {
+        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, member);
 
-        setFeedLikeStatus(feed, member, hashOperations, feedLikeCache);
+        feedLikeCache.put(member.getId(), feedLike.isPresent() ? Boolean.TRUE : Boolean.FALSE);
+        hashOperations.put(KEY, feed.getId(), feedLikeCache);
 
         if (isNotSetExpireTime()) {
             redisTemplate.expire(KEY, 8, TimeUnit.HOURS);
         }
-        return feedLikeCache;
-    }
-
-    private void setFeedLikeStatus(
-            Feed feed,
-            Member member,
-            HashOperations<String, Long, HashMap<Long, Boolean>> hashOperations,
-            HashMap<Long, Boolean> feedLikeCache) {
-        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, member);
-
-        if (feedLike.isPresent()) {
-            feedLikeCache.put(member.getId(), true);
-        } else {
-            feedLikeCache.put(member.getId(), false);
-        }
-        hashOperations.put(KEY, feed.getId(), feedLikeCache);
     }
 }

@@ -7,7 +7,11 @@ import com.ssafy.coffeeing.modules.product.domain.Capsule;
 import com.ssafy.coffeeing.modules.product.domain.Coffee;
 import com.ssafy.coffeeing.modules.product.repository.CapsuleRepository;
 import com.ssafy.coffeeing.modules.product.repository.CoffeeRepository;
-import com.ssafy.coffeeing.modules.search.dto.*;
+import com.ssafy.coffeeing.modules.search.dto.SearchBeanResponse;
+import com.ssafy.coffeeing.modules.search.dto.SearchCapsuleResponse;
+import com.ssafy.coffeeing.modules.search.dto.SearchProductRequest;
+import com.ssafy.coffeeing.modules.search.dto.SearchTagRequest;
+import com.ssafy.coffeeing.modules.search.dto.TagsResponse;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +50,7 @@ class SearchServiceTest extends ServiceTest {
         TagsResponse tagsResponse = searchService.getProductsBySuggestion(searchTagRequest);
 
         //then
-        assertEquals(tagsResponse.tags().size(), 2);
+        assertEquals(2, tagsResponse.tags().size());
     }
 
     @DisplayName("캡슐 검색 시, 캡슐 검색 결과를 제공한다.")
@@ -68,8 +72,7 @@ class SearchServiceTest extends ServiceTest {
         SearchCapsuleResponse searchCapsuleResponse = searchService.getProductsBySearchCapsule(searchProductRequest);
 
         //then
-        assertThat(searchCapsuleResponse.products().size())
-                .isEqualTo(CapsuleTestDummy.expectedSearchCount(index));
+        assertThat(searchCapsuleResponse.products()).hasSize(CapsuleTestDummy.expectedSearchCount(index));
     }
 
     @DisplayName("원두 검색 시, 검색에 성공한다.")
@@ -91,8 +94,7 @@ class SearchServiceTest extends ServiceTest {
         SearchBeanResponse searchBeanResponse = searchService.getProductsBySearchBean(searchProductRequest);
 
         //then
-        assertThat(searchBeanResponse.products().size())
-                .isEqualTo(8);
+        assertThat(searchBeanResponse.products()).hasSize(8);
     }
 
     private static Stream<Arguments> provideSearchProductRequestAboutBean(

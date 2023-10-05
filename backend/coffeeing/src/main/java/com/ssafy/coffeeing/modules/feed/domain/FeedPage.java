@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class FeedPage {
-    public List<FeedPageElement> feedPageElements;
+    private List<FeedPageElement> feedPageElements;
 
     public FeedPage(List<Feed> feeds, FeedRedisUtil feedRedisUtil, Member viewer, FeedUtil feedUtil) {
         feedPageElements = new ArrayList<>();
@@ -30,7 +30,7 @@ public class FeedPage {
                     feed.getContent(),
                     tag,
                     member.getId(),
-                    feed.getLikeCount(),
+                    feedRedisUtil.getFeedLikeCount(feed),
                     member.getNickname(),
                     member.getProfileImage(),
                     isLiked));
@@ -45,5 +45,9 @@ public class FeedPage {
                 feedPageElement.updateIsMineStatus();
             }
         });
+    }
+
+    public List<FeedPageElement> getFeedPageElements() {
+        return feedPageElements;
     }
 }
