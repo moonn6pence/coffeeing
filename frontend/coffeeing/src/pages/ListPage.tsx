@@ -20,22 +20,23 @@ export const ListPage = () => {
   const isAfterSurvey = useSelector(
     (state: RootState) => state.member.isAfterSurvey,
   );
+  const isLogin = useSelector((state: RootState) => state.member.isLogin);
 
   // 공통 CSS
   const commonClass = 'font-bold text-base hover:brightness-125 p-3';
 
   const getCuration = async () => {
     try {
-      console.log('설문조사를 ', isAfterSurvey);
       publicRequest
         .get(`${API_URL}/curation/open`, {
           params: { isCapsule: isCapsule },
         })
         .then((res) => {
+          console.log(res.data.data);
           setCurationLists(res.data.data.curations);
         });
 
-      if (isAfterSurvey) {
+      if (isLogin && isAfterSurvey) {
         privateRequest
           .get(`${API_URL}/curation/custom`, {
             params: { isCapsule: isCapsule },
