@@ -30,14 +30,16 @@ export const BeanCard = (props: ICardProps) => {
 
   // 디테일 페이지로 이동
   const goDetail = () => {
-    const beans = isCapsule ? 'capsule' : 'coffee';
-    navigate(`/detail/${beans}/${id}`, {
-      replace:replace,
-      state: { id: `${id}` },
-    });
-
-    window.scrollTo(0, 0);
-  };
+    if (!isSame) {
+      const beans = isCapsule ? 'capsule' : 'coffee';
+      navigate(`/detail/${beans}/${id}`, {
+        replace:replace,
+        state: { id: `${id}` },
+      });
+  
+      window.scrollTo(0, 0);
+    } 
+    }
 
   return (
     <div
