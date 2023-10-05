@@ -12,6 +12,8 @@ import { UserData } from 'pages/MemberPage';
 import { CoffeeCriteria } from 'service/member/types';
 import { BeanRating } from 'components/Detail/BeanRating';
 import { NavBarButton } from 'components/NavBar/NavBarButton';
+import closeImg from 'assets/quit-modal-icon.svg';
+import checkImg from 'assets/checkmark.svg';
 
 type ProfileProps = {
   id: number | undefined;
@@ -197,21 +199,14 @@ export const MemberProfile = (props: ProfileProps) => {
         />
 
         {edit ? (
-          <div className="flex flex-col h-7 mt-6">
-            <div>
+          <div className="flex flex-col mt-6">
+            <div className="flex content-center space-x-1">
               <input type="text" onChange={onChangeNickname} maxLength={10} />
-              <button
-                onClick={editNickname}
-                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-                disabled={!nicknameUseable}
-              >
-                변경하기
+              <button onClick={editNickname} disabled={!nicknameUseable}>
+                <img className="w-6 h-6" src={checkImg} alt="취소" />
               </button>
-              <button
-                onClick={() => setEdit(false)}
-                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-              >
-                취소하기
+              <button onClick={() => setEdit(false)}>
+                <img className="w-6 h-6" src={closeImg} alt="취소" />
               </button>
             </div>
             {!nicknameUseable ? <p className="text-red-600">{message}</p> : ''}
@@ -245,7 +240,11 @@ export const MemberProfile = (props: ProfileProps) => {
       ) : (
         <div className="w-fit h-full flex flex-col items-center items-around space-y-6">
           <h2>취향 데이터가 아직 없습니다...</h2>
-          <NavBarButton navLink='/recommend-main' value='취향분석하러 가기' dark={true} />
+          <NavBarButton
+            navLink="/recommend-main"
+            value="취향분석하러 가기"
+            dark={true}
+          />
         </div>
       )}
     </div>
