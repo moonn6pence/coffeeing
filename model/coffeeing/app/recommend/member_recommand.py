@@ -114,6 +114,23 @@ def _get_similar_data(count, roast, acidity, body, flavor_note, data):
     input_body = body
     input_flavor_notes= set(flavor_note.split(','))
 
+    # 가중치 설정 (임의로 지정)
+    weight_cosine = 0.7  # 코사인 유사도의 가중치
+    weight_jaccard = 0.3  # 자카드 유사도의 가중치
+
+    # '잘 모르겠어요' 처리 (가중치 수정 + 평균값으로 값 처리)
+    if roast==0 or body==0:
+        weight_cosine=0.3
+        weight_jaccard=0.7
+        
+    if roast == 0:
+        roast_avg = data['roast'].mean()
+        roast = roast_avg
+    
+    if body == 0:
+        body_avg = data['body'].mean()
+        body = body_avg
+
     # 입력값을 데이터 프레임으로 변환
     input_data = pd.DataFrame({'roast': [input_roast], 'acidity': [input_acid], 'body': [input_body]})
 
@@ -129,9 +146,6 @@ def _get_similar_data(count, roast, acidity, body, flavor_note, data):
     
     data.loc[:, 'jaccard_sim'] = jaccard_sim
 
-    # # 가중치 설정 (임의로 지정)
-    weight_cosine = 0.7  # 코사인 유사도의 가중치
-    weight_jaccard = 0.3  # 자카드 유사도의 가중치
 
     # 유사도를 결합
     combined_sim = (weight_cosine * data['cosine_sim'].values + weight_jaccard * data['jaccard_sim'].values)
