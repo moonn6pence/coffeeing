@@ -203,8 +203,8 @@ export const DetailPage = () => {
             />
           ) : (
             <div className="w-300 flex flex-col h-30 items-center justify-center space-y-6">
-              <IonIcon name="chatbubble-ellipses-outline" size="large" />
-              <p>첫 리뷰를 남겨보세요</p>
+                <IonIcon name="chatbubble-ellipses-outline" size="large" />
+                {capsule.isReviewed ? <p>다른 사람들 리뷰가 없어요</p>:<p>첫 리뷰를 남겨보세요</p>}
             </div>
           )}
         </div>
