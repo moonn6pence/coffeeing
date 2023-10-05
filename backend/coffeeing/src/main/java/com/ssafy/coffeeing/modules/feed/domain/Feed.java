@@ -62,13 +62,7 @@ public class Feed extends BaseEntity {
         this.tagName = tag.name();
     }
 
-    public void increaseLikeCount() {
-        this.likeCount++;
-    }
-
-    public void decreaseLikeCount() {
-        if(this.likeCount > 0) {
-            this.likeCount--;
-        }
+    public void updateLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 }

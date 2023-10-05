@@ -9,6 +9,7 @@ import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedMapper;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedRedisUtil;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
@@ -31,10 +32,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -49,7 +47,7 @@ public class FeedService {
     private final SecurityContextUtils securityContextUtils;
     private final FeedUtil feedUtil;
     private final ApplicationEventPublisher applicationEventPublisher;
-
+    private final FeedRedisUtil feedRedisUtil;
     private static final int FEED_UPLOAD_EXPERIENCE = 75;
 
 
@@ -81,6 +79,7 @@ public class FeedService {
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
         detachFeedTagWithValidation(feed);
         feedLikeRepository.deleteFeedLikesByFeed(feed);
+        feedRedisUtil.disLikeFeedInRedis(feed);
         feedRepository.delete(feed);
     }
 
@@ -100,20 +99,39 @@ public class FeedService {
     }
 
     @Transactional
+    public void writeBackFeedLikeInRedis() {
+        Set<Long> feedKeys = feedRedisUtil.getFeedKeys();
+
+        if(Objects.nonNull(feedKeys)) {
+            for(Long feedId : feedKeys) {
+                HashMap<Long, Boolean> feedLikeMap = feedRedisUtil.getHashMap(feedId);
+                Optional<Feed> feed = feedRepository.findById(feedId);
+                feed.ifPresent(value -> {
+                    feedRedisUtil.updateFeedLikeCount(value);
+                    validateMemberWithWriteDatabase(feedLikeMap, value);
+                });
+            }
+        }
+
+        feedRedisUtil.deleteFeedLikeKey();
+    }
+
+    @Transactional
     public ToggleResponse toggleFeedLike(Long feedId) {
         Member member = securityContextUtils.getCurrnetAuthenticatedMember();
         Feed feed = feedRepository.findById(feedId)
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
+        boolean feedLikeResponse = false;
 
-        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, member);
-
-        if(feedLike.isPresent()) {
-            feedLikeRepository.delete(feedLike.get());
-            return decreaseFeedLikeCount(feed);
-        } else {
-            feedLikeRepository.save(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
-            return increaseFeedLikeCount(feed);
+        if(feedRedisUtil.isLikedFeedInRedis(feed, member)) {
+            feedRedisUtil.disLikeFeedInRedis(feed, member);
+            feedLikeResponse = decreaseFeedLikeCount(feed);
+        } else if(feedRedisUtil.isNotLikedFeedInRedis(feed, member)) {
+            feedRedisUtil.likeFeedInRedis(feed, member);
+            feedLikeResponse = increaseFeedLikeCount(feed);
         }
+
+        return FeedLikeMapper.supplyFeedLikeResponseBy(feedLikeResponse);
     }
 
     @Transactional(readOnly = true)
@@ -140,30 +158,56 @@ public class FeedService {
                 .orElseThrow(() -> new BusinessException(FeedErrorInfo.NOT_FOUND));
 
         List<ImageElement> images = feedUtil.makeJsonStringToImageElement(feed.getImageUrl());
+        int likeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         if (Objects.isNull(viewer)) {
-            return getFeedDetailResponse(null, feed, Optional.empty(), images);
+            return getFeedDetailResponse(null, feed, likeCount, false, images);
         }
-        Optional<FeedLike> feedLike = feedLikeRepository.findFeedLikeByFeedAndMember(feed, viewer);
-        return getFeedDetailResponse(viewer, feed, feedLike, images);
+        boolean isLikeFeed = feedRedisUtil.isLikedFeedInRedis(feed, viewer);
+
+        return getFeedDetailResponse(viewer, feed, likeCount, isLikeFeed, images);
     }
 
     @Transactional(readOnly = true)
     public FeedPageResponse getFeedsByFeedPage(FeedsRequest feedsRequest) {
         Member viewer = securityContextUtils.getMemberIdByTokenOptionalRequest();
-        List<FeedLike> feedLikes = new ArrayList<>();
         Long cursor = feedsRequest.cursor();
         Integer size = feedsRequest.size();
 
         Slice<Feed> feeds = feedRepository.findFeedsByFeedPage(cursor, PageRequest.of(0, size));
-        if (!feeds.getContent().isEmpty()) {
-            feedLikes = feedLikeRepository.findFeedLikesByFeedsAndMember(feeds.getContent(), viewer);
-        }
         Long nextCursor = feeds.hasNext() ? feeds.getContent().get(size - 1).getId() : null;
 
-        FeedPage feedPage = new FeedPage(feeds.getContent(), feedLikes, viewer, feedUtil);
+        FeedPage feedPage = new FeedPage(feeds.getContent(), feedRedisUtil, viewer, feedUtil);
 
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+    }
+
+    private void validateMemberWithWriteDatabase(HashMap<Long, Boolean> feedLikeMap, Feed feed) {
+        if (Objects.nonNull(feedLikeMap)) {
+            for (Long memberId : feedLikeMap.keySet()) {
+                Optional<Member> member = memberRepository.findById(memberId);
+                member.ifPresent(value -> insertToListByFeedLikeStatus(feedLikeMap, feed, memberId, value));
+            }
+        }
+    }
+
+    private void insertToListByFeedLikeStatus(
+            HashMap<Long, Boolean> feedLikeMap,
+            Feed feed,
+            Long memberId,
+            Member member) {
+        List<FeedLike> insertFeedLikes = new ArrayList<>();
+        List<FeedLike> deleteFeedLikes = new ArrayList<>();
+        if (feedLikeMap.get(memberId)) {
+            if (feedLikeRepository.findFeedLikeByFeedAndMember(feed, member).isEmpty()) {
+                insertFeedLikes.add(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
+            }
+        } else {
+            deleteFeedLikes.add(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
+        }
+
+        feedLikeRepository.saveAll(insertFeedLikes);
+        feedLikeRepository.deleteAll(deleteFeedLikes);
     }
 
     private void compareTagInformationByNewTag(Feed feed, Tag tag) {
@@ -179,26 +223,23 @@ public class FeedService {
 
     private FeedDetailResponse getFeedDetailResponse(
             Member viewer, Feed feed,
-            Optional<FeedLike> feedLike,
+            int likeCount,
+            boolean isLikeFeed,
             List<ImageElement> images) {
         Member feedWriter = feed.getMember();
         Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
 
         if (Objects.isNull(viewer)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
-        } else if (viewerLikedFeed(feedLike) && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, true);
-        } else if (viewerLikedFeed(feedLike)) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, true, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
+        } else if (isLikeFeed && isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, true);
+        } else if (isLikeFeed) {
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, true, false);
         } else if (isFeedWrittenByViewer(feedWriter.getId(), viewer.getId())) {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, true);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, true);
         } else {
-            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, false, false);
+            return FeedMapper.supplyFeedDetailEntityOf(feed, tag, images, likeCount, false, false);
         }
-    }
-
-    private boolean viewerLikedFeed(Optional<FeedLike> feedLike) {
-        return feedLike.isPresent();
     }
 
     private boolean isFeedWrittenByViewer(Long feedWriterId, Long viewerId) {
@@ -219,14 +260,14 @@ public class FeedService {
         return FeedMapper.supplyFeedEntityOf(feedElements, feeds.hasNext(), nextCursor);
     }
 
-    private ToggleResponse decreaseFeedLikeCount(Feed feed) {
-        feed.decreaseLikeCount();
-        return FeedLikeMapper.supplyFeedLikeResponseBy(false);
+    private boolean decreaseFeedLikeCount(Feed feed) {
+        feedRedisUtil.decreaseLikeCount(feed);
+        return false;
     }
 
-    private ToggleResponse increaseFeedLikeCount(Feed feed) {
-        feed.increaseLikeCount();
-        return FeedLikeMapper.supplyFeedLikeResponseBy(true);
+    private boolean increaseFeedLikeCount(Feed feed) {
+        feedRedisUtil.increaseLikeCount(feed);
+        return true;
     }
 
     private Capsule getCapsule(Long tagId) {

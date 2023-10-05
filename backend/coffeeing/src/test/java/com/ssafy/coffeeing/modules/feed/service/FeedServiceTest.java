@@ -7,17 +7,10 @@ import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
 import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
-import com.ssafy.coffeeing.modules.feed.dto.FeedDetailResponse;
-import com.ssafy.coffeeing.modules.feed.dto.FeedElement;
-import com.ssafy.coffeeing.modules.feed.dto.FeedPageResponse;
-import com.ssafy.coffeeing.modules.feed.dto.FeedsRequest;
-import com.ssafy.coffeeing.modules.feed.dto.MemberFeedsRequest;
-import com.ssafy.coffeeing.modules.feed.dto.ProfileFeedsResponse;
-import com.ssafy.coffeeing.modules.feed.dto.UpdateFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedRequest;
-import com.ssafy.coffeeing.modules.feed.dto.UploadFeedResponse;
+import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.repository.FeedLikeRepository;
 import com.ssafy.coffeeing.modules.feed.repository.FeedRepository;
+import com.ssafy.coffeeing.modules.feed.util.FeedRedisUtil;
 import com.ssafy.coffeeing.modules.feed.util.FeedUtil;
 import com.ssafy.coffeeing.modules.global.dto.ToggleResponse;
 import com.ssafy.coffeeing.modules.global.exception.BusinessException;
@@ -38,7 +31,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +50,9 @@ class FeedServiceTest extends ServiceTest {
 
     @Autowired
     private FeedLikeRepository feedLikeRepository;
+
+    @Autowired
+    private FeedRedisUtil feedRedisUtil;
 
     @Autowired
     private CapsuleRepository capsuleRepository;
@@ -119,7 +114,7 @@ class FeedServiceTest extends ServiceTest {
                 () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
                 () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
                 () -> assertThat(response.getId()).isPositive(),
-                () -> assertThat(response.getLikeCount()).isEqualTo(0L),
+                () -> assertThat(response.getLikeCount()).isEqualTo(0),
                 () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
                 () -> assertThat(response.getProductType()).isEqualTo(ProductType.COFFEE_CAPSULE),
                 () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr()),
@@ -354,17 +349,17 @@ class FeedServiceTest extends ServiceTest {
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        Integer beforeLikeCount = feed.getLikeCount();
+        int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
-        Optional<FeedLike> result = feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember);
+        Boolean isLikeFeed = feedRedisUtil.isLikedFeedInRedis(feed, generalMember);
 
         //then
         assertAll(
                 () -> assertThat(toggleResponse.result()).isTrue(),
-                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount + 1),
-                () -> assertThat(result.isPresent()).isTrue()
+                () -> assertThat(feedRedisUtil.getFeedLikeCount(feed)).isEqualTo(beforeLikeCount + 1),
+                () -> assertThat(isLikeFeed).isTrue()
         );
 
         //verify
@@ -378,19 +373,19 @@ class FeedServiceTest extends ServiceTest {
         given(securityContextUtils.getCurrnetAuthenticatedMember())
                 .willReturn(generalMember);
         Feed feed = feedRepository.save(FeedTestDummy.createFeed(generalMember));
-        FeedLike feedLike = feedLikeRepository.save(FeedTestDummy.createFeedLike(feed, generalMember));
-        feed.increaseLikeCount();
-        Integer beforeLikeCount = feed.getLikeCount();
+        feedRedisUtil.likeFeedInRedis(feed, generalMember);
+        feedRedisUtil.increaseLikeCount(feed);
+        int beforeLikeCount = feedRedisUtil.getFeedLikeCount(feed);
 
         //when
         ToggleResponse toggleResponse = feedService.toggleFeedLike(feed.getId());
-        Optional<FeedLike> result = feedLikeRepository.findById(feedLike.getId());
+        Boolean isNotLikeFeed = feedRedisUtil.isNotLikedFeedInRedis(feed, generalMember);
 
         //then
         assertAll(
                 () -> assertThat(toggleResponse.result()).isFalse(),
-                () -> assertThat(feed.getLikeCount()).isEqualTo(beforeLikeCount - 1),
-                () -> assertThat(result.isEmpty()).isTrue()
+                () -> assertThat(feedRedisUtil.getFeedLikeCount(feed)).isEqualTo(beforeLikeCount - 1),
+                () -> assertThat(isNotLikeFeed).isTrue()
         );
 
         //verify
@@ -514,7 +509,7 @@ class FeedServiceTest extends ServiceTest {
         feedLikeRepository.saveAll(feedLikes);
         feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
-        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedRedisUtil, generalMember, feedUtil);
 
         //when
         FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
@@ -535,12 +530,11 @@ class FeedServiceTest extends ServiceTest {
         //given
         given(securityContextUtils.getMemberIdByTokenOptionalRequest()).willReturn(generalMember);
         List<Feed> feeds = FeedTestDummy.createFeeds(beforeResearchMember);
-        List<FeedLike> feedLikes = new ArrayList<>();
         feedRepository.saveAll(feeds);
         FeedsRequest feedsRequest = FeedTestDummy.createFeedsRequest(null, null);
         feeds = feeds.stream().sorted(Comparator.comparing(Feed::getId).reversed())
                 .collect(Collectors.toList());
-        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedLikes, generalMember, feedUtil);
+        FeedPage expectResponse = new FeedPage(feeds.subList(0, 10), feedRedisUtil, generalMember, feedUtil);
 
         //when
         FeedPageResponse feedPageResponse = feedService.getFeedsByFeedPage(feedsRequest);
