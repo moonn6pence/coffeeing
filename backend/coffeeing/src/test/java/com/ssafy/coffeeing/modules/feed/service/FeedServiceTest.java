@@ -508,15 +508,15 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertEquals(feedDetailResponse.feedId(), feed.getId()),
-                () -> assertEquals(feedDetailResponse.likeCount(), feed.getLikeCount()),
-                () -> assertEquals(feedDetailResponse.content(), feed.getContent()),
-                () -> assertEquals(feedDetailResponse.images(), feedUtil.makeJsonStringToImageElement(feed.getImageUrl())),
-                () -> assertEquals(feedDetailResponse.registerId(), feed.getMember().getId()),
-                () -> assertEquals(feedDetailResponse.registerName(), feed.getMember().getNickname()),
-                () -> assertEquals(feedDetailResponse.registerProfileImg(), feed.getMember().getProfileImage()),
-                () -> assertEquals(feedDetailResponse.isLike(), true),
-                () -> assertEquals(feedDetailResponse.isMine(), false)
+                () -> assertEquals(feed.getId(), feedDetailResponse.feedId()),
+                () -> assertEquals(feed.getLikeCount(), feedDetailResponse.likeCount()),
+                () -> assertEquals(feed.getContent(), feedDetailResponse.content()),
+                () -> assertEquals(feedUtil.makeJsonStringToImageElement(feed.getImageUrl()), feedDetailResponse.images()),
+                () -> assertEquals(feed.getMember().getId(), feedDetailResponse.registerId()),
+                () -> assertEquals(feed.getMember().getNickname(), feedDetailResponse.registerName()),
+                () -> assertEquals(feed.getMember().getProfileImage(), feedDetailResponse.registerProfileImg()),
+                () -> assertEquals( true, feedDetailResponse.isLike()),
+                () -> assertEquals( false, feedDetailResponse.isMine())
         );
         //verify
         verify(securityContextUtils, times(1)).getMemberIdByTokenOptionalRequest();
