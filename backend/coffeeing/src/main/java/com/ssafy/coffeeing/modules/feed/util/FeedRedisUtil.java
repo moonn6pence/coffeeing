@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
@@ -101,6 +102,23 @@ public class FeedRedisUtil {
         }
 
         return likeCount;
+    }
+
+    public Set<Long> getFeedKeys() {
+        return hashOperations.keys(KEY);
+    }
+
+    public HashMap<Long, Boolean> getHashMap(Long feedId) {
+        return hashOperations.get(KEY, feedId);
+    }
+
+    public void updateFeedLikeCount(Feed feed) {
+        String value = redisTemplate.opsForValue().get(KEY + feed.getId());
+
+        if(Objects.nonNull(value)) {
+            Integer likeCount = Integer.valueOf(value);
+            feed.updateLikeCount(likeCount);
+        }
     }
 
     private boolean isNotSetExpireTime() {

@@ -2,6 +2,7 @@ package com.ssafy.coffeeing.modules.feed.service;
 
 import com.ssafy.coffeeing.modules.event.eventer.ExperienceEvent;
 import com.ssafy.coffeeing.modules.feed.domain.Feed;
+import com.ssafy.coffeeing.modules.feed.domain.FeedLike;
 import com.ssafy.coffeeing.modules.feed.domain.FeedPage;
 import com.ssafy.coffeeing.modules.feed.dto.*;
 import com.ssafy.coffeeing.modules.feed.mapper.FeedLikeMapper;
@@ -31,8 +32,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -95,6 +95,22 @@ public class FeedService {
             feed.updateContent(updateFeedRequest.content());
         } else {
             feed.updateContent(updateFeedRequest.content());
+        }
+    }
+
+    @Transactional
+    public void writeBackFeedLikeInRedis() {
+        Set<Long> feedKeys = feedRedisUtil.getFeedKeys();
+
+        if(Objects.nonNull(feedKeys)) {
+            for(Long feedId : feedKeys) {
+                HashMap<Long, Boolean> feedLikeMap = feedRedisUtil.getHashMap(feedId);
+                Optional<Feed> feed = feedRepository.findById(feedId);
+                feed.ifPresent(value -> {
+                    feedRedisUtil.updateFeedLikeCount(value);
+                    validateMemberWithWriteDatabase(feedLikeMap, value);
+                });
+            }
         }
     }
 
@@ -162,6 +178,34 @@ public class FeedService {
         FeedPage feedPage = new FeedPage(feeds.getContent(), feedRedisUtil, viewer, feedUtil);
 
         return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+    }
+
+    private void validateMemberWithWriteDatabase(HashMap<Long, Boolean> feedLikeMap, Feed feed) {
+        if (Objects.nonNull(feedLikeMap)) {
+            for (Long memberId : feedLikeMap.keySet()) {
+                Optional<Member> member = memberRepository.findById(memberId);
+                member.ifPresent(value -> insertToListByFeedLikeStatus(feedLikeMap, feed, memberId, value));
+            }
+        }
+    }
+
+    private void insertToListByFeedLikeStatus(
+            HashMap<Long, Boolean> feedLikeMap,
+            Feed feed,
+            Long memberId,
+            Member member) {
+        List<FeedLike> insertFeedLikes = new ArrayList<>();
+        List<FeedLike> deleteFeedLikes = new ArrayList<>();
+        if (feedLikeMap.get(memberId)) {
+            if (feedLikeRepository.findFeedLikeByFeedAndMember(feed, member).isEmpty()) {
+                insertFeedLikes.add(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
+            }
+        } else {
+            deleteFeedLikes.add(FeedLikeMapper.supplyFeedLikeEntityBy(feed, member));
+        }
+
+        feedLikeRepository.saveAll(insertFeedLikes);
+        feedLikeRepository.deleteAll(deleteFeedLikes);
     }
 
     private void compareTagInformationByNewTag(Feed feed, Tag tag) {
