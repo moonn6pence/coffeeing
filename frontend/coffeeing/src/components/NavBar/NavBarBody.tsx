@@ -33,6 +33,7 @@ export const NavBarBody = () => {
                 }
               }}
             />
+            <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
           </div>
         ) : (
           <div className="flex space-x-3">
