@@ -30,7 +30,7 @@ public class FeedPage {
                     feed.getContent(),
                     tag,
                     member.getId(),
-                    feed.getLikeCount(),
+                    feedRedisUtil.getFeedLikeCount(feed),
                     member.getNickname(),
                     member.getProfileImage(),
                     isLiked));
