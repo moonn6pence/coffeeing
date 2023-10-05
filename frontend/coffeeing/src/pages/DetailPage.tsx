@@ -103,7 +103,7 @@ export const DetailPage = () => {
   };
   useEffect(() => {
     getReview();
-  }, [currentPage]);
+  }, [currentPage, id]);
 
   useEffect(() => {
     // 비슷한 상품 받아오기
