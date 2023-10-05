@@ -97,7 +97,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
 
         <div className="feed-body flex flex-col w-full py-1">
             <div className="feed-image-wrapper flex w-full">
-                <img src = {feedDetail.images[0].imageUrl} className="w-full h-96"/>
+                <img src = {feedDetail.images[0].imageUrl} className="w-full h-[585px]"/>
             </div>
 
             <div className="feed-content-wrapper flex flex-col mt-2">
