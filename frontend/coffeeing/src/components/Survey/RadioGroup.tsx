@@ -31,7 +31,7 @@ export const RadioGroupSingle = ({selectedItem, setSelectedItem, itemList,pageNu
               <img
                 className={
                   `${pageNum===0?'w-80 h-72':pageNum===1?'w-48 h-48':'w-52 h-52'} 
-                  origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
+                  origin-center transform hover:scale-105 hover:translate-y-[-10px] cursor-pointer`}
                 src={item.src}
               />
               <div className="flex flex-row items-baseline gap-1">

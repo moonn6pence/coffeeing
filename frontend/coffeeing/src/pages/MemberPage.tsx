@@ -68,11 +68,6 @@ export const MemberPage = () => {
           </nav>
           <Outlet context={{ id }} />
         </div>
-        {isLogin && userId == myId ? (
-          <div className="spacer flex justify-center pt-10">
-            <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
-          </div>
-        ) : null}
       </div>
     );
   } else {

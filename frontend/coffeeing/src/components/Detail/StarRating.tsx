@@ -34,7 +34,7 @@ export const StarRating: React.FC<StarRatingProps> = ({
         const num = index + 1;
         return (
           <img
-            className="w-9 h-9"
+            className="w-9 h-9 cursor-pointer"
             src={num <= (hoveredRating || rating) ? starOn : starOff}
             key={num}
             onMouseEnter={() => handleMouseEnter(num)}

@@ -11,7 +11,6 @@ interface ICardProps {
   isProfile?: boolean;
   isSame?: boolean;
   replace?:boolean;
-  onBookmarkChange?: (id: number) => void;
 }
 
 export const BeanCard = (props: ICardProps) => {
@@ -21,44 +20,33 @@ export const BeanCard = (props: ICardProps) => {
     name,
     imgLink,
     isCapsule,
-    isProfile = false,
     isSame = false,
-    onBookmarkChange,
     replace,
   } = props;
   const navigate = useNavigate();
 
   // 디테일 페이지로 이동
   const goDetail = () => {
-    const beans = isCapsule ? 'capsule' : 'coffee';
-    navigate(`/detail/${beans}/${id}`, {
-      replace:replace,
-      state: { id: `${id}` },
-    });
-
-    window.scrollTo(0, 0);
-  };
+    if (!isSame) {
+      const beans = isCapsule ? 'capsule' : 'coffee';
+      navigate(`/detail/${beans}/${id}`, {
+        replace:replace,
+        state: { id: `${id}` },
+      });
+  
+      window.scrollTo(0, 0);
+    } 
+    }
 
   return (
     <div
-      className="h-94 w-full max-w-[282px] flex flex-col justify-center"
+      className={`h-94 w-full max-w-[282px] flex flex-col justify-center ${!isSame && 'cursor-pointer hover:scale-110'}`}
       onClick={goDetail}
     >
-      {isProfile ? (
-        <div className="flex flex-row justify-end">
-          <button onClick={() => onBookmarkChange && onBookmarkChange(id)}>
-            <img src={bookmarkOn} alt="북마크" className="w-6 h-6 mt-6 mr-6" />
-          </button>
-        </div>
-      ) : (
-        ''
-      )}
       <img
         src={imgLink}
         alt="사진"
-        className={`w-36 h-36 m-auto mb-16 ${
-          isSame ? '' : 'hover:scale-110 cursor-pointer'
-        }`}
+        className={`w-36 h-36 m-auto mb-16`}
       />
       <p className="text-sm text-center text-font-gray mb-2 h-5">
         {subtitle || '  '}
