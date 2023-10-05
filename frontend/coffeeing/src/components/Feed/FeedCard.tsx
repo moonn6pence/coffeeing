@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import DefaultProfile from 'assets/feed/default-profile.svg'
+import DefaultProfile from 'assets/noprofile.png'
 import WriteIcon from 'assets/feed/write-icon.svg';
 import DeleteIcon from 'assets/feed/delete-icon.svg';
 import { FeedDetail } from "service/feed/types";
@@ -10,6 +10,7 @@ import { RootState } from 'store/store';
 import { Toast } from 'components/Toast';
 import { DeleteAlert } from 'components/DeleteAlert'
 import IonIcon from "@reacticons/ionicons";
+
 interface FeedCardProps {
     feedDetail: FeedDetail,
     deleteEventHandler: (feedId: number)=>void,
@@ -52,7 +53,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
                     {
                         feedDetail.registerProfileImg ? 
                         <img src={feedDetail.registerProfileImg} className="w-12 h-12 rounded-full border-2"/> : 
-                        <img src={DefaultProfile} />
+                        <img src={DefaultProfile} className="w-12 h-12 rounded-full border-2" />
                     }
                     </NavLink>
                 </div>
