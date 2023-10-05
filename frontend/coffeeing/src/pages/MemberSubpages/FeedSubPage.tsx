@@ -16,7 +16,10 @@ type FeedItem = {
 
 type FeedItemResponse = {
   feedId: number;
-  images: Array<string>;
+  images: Array<ImageItem>;
+};
+type ImageItem = {
+  imageUrl: string;
 };
 
 export const FeedSubPage = () => {
@@ -27,9 +30,8 @@ export const FeedSubPage = () => {
   const [feedList, setFeedList] = useState<Array<FeedItem>>([]);
   const [feedSet, setFeedSet] = useState<Set<number>>(new Set());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
- 
+
   const [feedDetail, setFeedDetail] = useState<FeedDetail | null>(null);
-  
 
   const feedComponents = useCallback(() => {
     return feedList.map((item: FeedItem) => {
@@ -82,7 +84,7 @@ export const FeedSubPage = () => {
           ...newFeeds.map((item: FeedItemResponse) => {
             return {
               feedId: item.feedId,
-              imageUrl: item.images[0],
+              imageUrl: item.images[0].imageUrl,
             };
           }),
         ];
@@ -96,8 +98,6 @@ export const FeedSubPage = () => {
   useEffect(() => {
     loadFeeds();
   }, []);
-
-
 
   return (
     <div className="w-full h-60 bg-light">
