@@ -63,7 +63,7 @@ export const FlavorNoteSelect = () => {
   const handleSurveySubmit = ()=>{
     if (myFlavor.length>0) {
       const flavor = myFlavor.toString()
-      console.log(flavor)
+      // console.log(flavor)
       dispatch(saveFlavorNote(flavor))
       navigate('/recommend-result', {replace:true})
     } else {
