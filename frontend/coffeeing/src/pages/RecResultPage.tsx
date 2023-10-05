@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { getSurveyResult, savePreference } from "service/survey/recommend";
 import { RootState } from "store/store";
 import { BeanCard } from "components/BeanCard";
@@ -9,8 +9,12 @@ import again from '../assets/again.png'
 import loadingGif from '../assets/survey/loading.gif'
 import { Toast } from "components/Toast";
 import NoImg from '../assets/noprofile.png'
+import { AppDispatch  } from 'store/store';
+import { setMyInfo } from "store/memberSlice";
+import { getMyInfo } from "service/member/member"
 
 export const RecResultPage  = ()=>{
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const survey =useSelector((state:RootState)=>state.survey);
   const {isLogin,profileImage} = useSelector((state:RootState)=>state.member)
@@ -34,6 +38,10 @@ export const RecResultPage  = ()=>{
     const result = await savePreference(survey);
     if (result) {
       Toast.fire('저장되었습니다','','success')
+      const myInfo = await getMyInfo();
+      if(myInfo) {
+          dispatch(setMyInfo(myInfo));
+      }
     }
   }
   const getPreference = async ()=>{

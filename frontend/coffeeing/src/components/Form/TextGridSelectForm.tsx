@@ -13,14 +13,16 @@ type TextGridSelectorProps = {
 };
 
 export const TextGridSelector = ({label, selectedItem, setSelectedItem, itemList, containerWidth="w-96", gridColumnStyle="grid-cols-3"}: TextGridSelectorProps) => {
-
+    
     return (
         <div className={`flex flex-col gap-1 items-left ${containerWidth}`}>
             <div >
                 <label className="w-full text-base text-gray-800 font-medium">{label}</label>
             </div>
 
-            <RadioGroup value={selectedItem} onChange={setSelectedItem}>
+            <RadioGroup value={selectedItem.value} onChange={(idx: number)=>
+                setSelectedItem(itemList[idx])
+            }>
             <div className={`grid gap-2 ${gridColumnStyle}`}>
                 {itemList.map((item) => (
                 <RadioGroup.Option
