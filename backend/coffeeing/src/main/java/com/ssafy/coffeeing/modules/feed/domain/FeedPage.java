@@ -23,6 +23,7 @@ public class FeedPage {
         feeds.forEach(feed -> {
             Member member = feed.getMember();
             Tag tag = feed.getTagId() == null ? null : new Tag(feed.getTagId(), feed.getProductType(), feed.getTagName());
+            boolean isLiked = viewer != null && feedRedisUtil.isLikedFeedInRedis(feed, viewer);
 
             feedPageElements.add(new FeedPageElement(feed.getId(),
                     feedUtil.makeJsonStringToImageElement(feed.getImageUrl()),
@@ -32,7 +33,7 @@ public class FeedPage {
                     feed.getLikeCount(),
                     member.getNickname(),
                     member.getProfileImage(),
-                    feedRedisUtil.isLikedFeedInRedis(feed, viewer)));
+                    isLiked));
         });
     }
 
