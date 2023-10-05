@@ -72,8 +72,7 @@ class SearchServiceTest extends ServiceTest {
         SearchCapsuleResponse searchCapsuleResponse = searchService.getProductsBySearchCapsule(searchProductRequest);
 
         //then
-        assertThat(searchCapsuleResponse.products().size())
-                .isEqualTo(CapsuleTestDummy.expectedSearchCount(index));
+        assertThat(searchCapsuleResponse.products()).hasSize(CapsuleTestDummy.expectedSearchCount(index));
     }
 
     @DisplayName("원두 검색 시, 검색에 성공한다.")
@@ -95,8 +94,7 @@ class SearchServiceTest extends ServiceTest {
         SearchBeanResponse searchBeanResponse = searchService.getProductsBySearchBean(searchProductRequest);
 
         //then
-        assertThat(searchBeanResponse.products().size())
-                .isEqualTo(8);
+        assertThat(searchBeanResponse.products()).hasSize(8);
     }
 
     private static Stream<Arguments> provideSearchProductRequestAboutBean(

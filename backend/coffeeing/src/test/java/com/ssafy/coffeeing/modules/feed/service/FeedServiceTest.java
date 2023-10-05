@@ -89,13 +89,13 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
+                () -> assertThat(response.getImageUrl()).isNotNull(),
                 () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
                 () -> assertThat(response.getId()).isPositive(),
-                () -> assertThat(response.getLikeCount()).isEqualTo(0),
-                () -> assertThat(response.getTagId()).isEqualTo(null),
-                () -> assertThat(response.getProductType()).isEqualTo(null),
-                () -> assertThat(response.getTagName()).isEqualTo(null)
+                () -> assertThat(response.getLikeCount()).isZero(),
+                () -> assertThat(response.getTagId()).isNull(),
+                () -> assertThat(response.getProductType()).isNull(),
+                () -> assertThat(response.getTagName()).isNull()
         );
 
         //verify
@@ -119,10 +119,10 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertThat(response.getImageUrl()).isNotEqualTo(null),
+                () -> assertThat(response.getImageUrl()).isNotNull(),
                 () -> assertThat(response.getContent()).isEqualTo(uploadFeedRequest.content()),
                 () -> assertThat(response.getId()).isPositive(),
-                () -> assertThat(response.getLikeCount()).isEqualTo(0),
+                () -> assertThat(response.getLikeCount()).isZero(),
                 () -> assertThat(response.getTagId()).isEqualTo(capsule.getId()),
                 () -> assertThat(response.getProductType()).isEqualTo(ProductType.COFFEE_CAPSULE),
                 () -> assertThat(response.getTagName()).isEqualTo(capsule.getCapsuleNameKr()),
@@ -163,8 +163,8 @@ class FeedServiceTest extends ServiceTest {
         feedService.deleteFeedById(feedId);
 
         //then
-        assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
-        assertThat(feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember).isEmpty()).isTrue();
+        assertThat(feedRepository.findById(feed.getId())).isNotPresent();
+        assertThat(feedLikeRepository.findFeedLikeByFeedAndMember(feed, generalMember)).isNotPresent();
 
         //verify
         verify(securityContextUtils, times(1)).getCurrnetAuthenticatedMember();
@@ -187,7 +187,7 @@ class FeedServiceTest extends ServiceTest {
         feedService.deleteFeedById(feedId);
 
         //then
-        assertThat(feedRepository.findById(feed.getId()).isEmpty()).isTrue();
+        assertThat(feedRepository.findById(feed.getId())).isNotPresent();
         assertThat(capsule.getPopularity()).isEqualTo(previousPopularity - 10);
 
         //verify
@@ -434,7 +434,7 @@ class FeedServiceTest extends ServiceTest {
         ProfileFeedsResponse profileFeedsResponse = feedService.getMyFeeds(feedsRequest);
 
         //then
-        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(profileFeedsResponse.feeds()).hasSizeLessThanOrEqualTo(10);
         assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
                 .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
 
@@ -464,7 +464,7 @@ class FeedServiceTest extends ServiceTest {
         ProfileFeedsResponse profileFeedsResponse = feedService.getFeedsByMemberId(memberFeedsRequest);
 
         //then
-        assertThat(profileFeedsResponse.feeds().size()).isLessThanOrEqualTo(10);
+        assertThat(profileFeedsResponse.feeds()).hasSizeLessThanOrEqualTo(10);
         assertThat(expectFeedElements.subList(0, profileFeedsResponse.feeds().size()))
                 .usingRecursiveComparison().isEqualTo(profileFeedsResponse.feeds());
     }
@@ -542,7 +542,7 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(feedPageResponse.feeds()).hasSizeLessThanOrEqualTo(10),
                 () -> assertThat(expectResponse.getFeedPageElements()).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
         );
 
@@ -567,7 +567,7 @@ class FeedServiceTest extends ServiceTest {
 
         //then
         assertAll(
-                () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
+                () -> assertThat(feedPageResponse.feeds()).hasSizeLessThanOrEqualTo(10),
                 () -> assertThat(expectResponse.getFeedPageElements()).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
         );
 
