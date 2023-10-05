@@ -1,7 +1,7 @@
 import { StarIcons } from 'components/StarIcons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import noProfile from 'assets/profile.svg';
+import noProfile from 'assets/noprofile.png';
 
 export type ReviewProps = {
   content: string;
