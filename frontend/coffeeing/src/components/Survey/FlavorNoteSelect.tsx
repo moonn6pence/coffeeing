@@ -91,7 +91,7 @@ export const FlavorNoteSelect = () => {
             return (
               <div className={`w-64 h-60 flex flex-col items-center ${isSelected ? 'bg-select-img' : ''} rounded-xl`} key={src}>
                 <img
-                  className={`w-52 h-52 origin-center transform hover:scale-105 hover:translate-y-[-10px] `}
+                  className={`w-52 h-52 origin-center transform hover:scale-105 hover:translate-y-[-10px] cursor-pointer`}
                   src={src}
                   onClick={()=>handleFlavorSelect(isSelected, setIsSelected, keyword)}
                 />
