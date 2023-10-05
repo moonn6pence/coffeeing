@@ -23,7 +23,8 @@ export const ListPage = () => {
   const isLogin = useSelector((state: RootState) => state.member.isLogin);
 
   // 공통 CSS
-  const commonClass = 'font-bold text-base hover:brightness-125 p-3';
+  const commonClass =
+    'font-bold text-base hover:brightness-125 p-3 cursor-pointer';
 
   const getCuration = async () => {
     try {
