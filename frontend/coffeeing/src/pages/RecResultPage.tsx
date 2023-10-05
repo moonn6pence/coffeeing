@@ -121,7 +121,7 @@ export const RecResultPage  = ()=>{
             </p>
           </div>
           {/* 하단부 */}
-          <div className="mt-2 bg-light mx-15 h-80 flex items-center justify-around">
+          <div className={`mt-2 bg-light mx-15 h-80 flex items-center justify-around ${!isLogin?'mb-20':''}`}>
             {isLogin&&(
               <div className=" flex flex-col gap-3 items-center w-0 lg:w-70.5">
                 <img src={userInfo.imageUrl} alt="Profile" className="hidden lg:block w-44 h-44 rounded-full border-2" />
