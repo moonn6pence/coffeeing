@@ -37,6 +37,7 @@ export const MemberProfile = (props: ProfileProps) => {
   const imageRef = useRef<HTMLInputElement>(null);
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const dispatch = useDispatch();
+  const myId = useSelector((state: RootState) => state.member.memberId);
 
   // 닉네임 변경상태 받기
   const onChangeNickname = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -228,7 +229,7 @@ export const MemberProfile = (props: ProfileProps) => {
           </div>
         )}
       </div>
-      {preference ? (
+      {preference && id === myId ? (
         <div className="w-1/2 h-full flex flex-col space-y-12">
           <h3 className="text-2xl font-bold">사용자 취향 분석</h3>
           <BeanRating
