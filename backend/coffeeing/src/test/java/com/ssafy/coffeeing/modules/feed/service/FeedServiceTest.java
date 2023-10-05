@@ -543,7 +543,7 @@ class FeedServiceTest extends ServiceTest {
         //then
         assertAll(
                 () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
-                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+                () -> assertThat(expectResponse.getFeedPageElements()).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
         );
 
         //verify
@@ -568,7 +568,7 @@ class FeedServiceTest extends ServiceTest {
         //then
         assertAll(
                 () -> assertThat(feedPageResponse.feeds().size()).isLessThanOrEqualTo(10),
-                () -> assertThat(expectResponse.feedPageElements).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
+                () -> assertThat(expectResponse.getFeedPageElements()).usingRecursiveComparison().isEqualTo(feedPageResponse.feeds())
         );
 
         //verify

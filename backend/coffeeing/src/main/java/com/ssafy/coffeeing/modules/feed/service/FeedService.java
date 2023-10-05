@@ -179,7 +179,7 @@ public class FeedService {
 
         FeedPage feedPage = new FeedPage(feeds.getContent(), feedRedisUtil, viewer, feedUtil);
 
-        return FeedMapper.supplyFeedPageEntityOf(feedPage.feedPageElements, feeds.hasNext(), nextCursor);
+        return FeedMapper.supplyFeedPageEntityOf(feedPage.getFeedPageElements(), feeds.hasNext(), nextCursor);
     }
 
     private void validateMemberWithWriteDatabase(HashMap<Long, Boolean> feedLikeMap, Feed feed) {
