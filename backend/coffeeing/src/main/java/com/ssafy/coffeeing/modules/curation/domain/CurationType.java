@@ -22,7 +22,6 @@ public enum CurationType {
 
     COFFEE_ROAST_LIGHT(false, "로스팅이 약한 원두", CriteriaType.ROAST.getName(), "low"),
     COFFEE_ROAST_DARK(false, "로스팅이 강한 원두", CriteriaType.ROAST.getName(), "high"),
-    COFFEE_BODY_LIGHT(false, "바디감이 약한 원두", CriteriaType.BODY.getName(), "low"),
     COFFEE_BODY_HEAVY(false, "바디감이 강한 원두", CriteriaType.BODY.getName(), "high"),
     COFFEE_ACIDITY_LOW(false, "산미가 약한 원두", CriteriaType.ACIDITY.getName(), "low"),
     COFFEE_ACIDITY_HIGH(false, "산미가 강한 원두", CriteriaType.ACIDITY.getName(), "high"),
