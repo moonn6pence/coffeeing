@@ -41,8 +41,21 @@ export const DetailPage = () => {
     }
   };
 
+  const getSimilarList = () => {
+    publicRequest
+      .get(`${API_URL}/product/${beans}/${id}/similar`)
+      .then((res) => {
+        console.log(res.data.data);
+        setSimilarList(res.data.data.products);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     fetchData();
+    getSimilarList();
   }, [id]);
 
   const [capsule, setCapsule] = useState({
@@ -104,19 +117,6 @@ export const DetailPage = () => {
   useEffect(() => {
     getReview();
   }, [currentPage, id]);
-
-  useEffect(() => {
-    // 비슷한 상품 받아오기
-    privateRequest
-      .get(`${API_URL}/product/${beans}/${id}/similar`)
-      .then((res) => {
-        console.log(res.data.data);
-        setSimilarList(res.data.data.products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [id]);
 
   const [reviews, setReviews] = useState([
     {
