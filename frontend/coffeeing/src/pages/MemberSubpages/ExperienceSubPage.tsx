@@ -27,7 +27,7 @@ export const ExperienceSubPage = () => {
     privateRequest
       .get(`${API_URL}/member/experience/${id}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setExperienceInfo(data.data);
       });
   }, []);

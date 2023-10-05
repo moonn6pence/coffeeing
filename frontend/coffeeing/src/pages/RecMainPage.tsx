@@ -11,7 +11,7 @@ export const RecMainPage = () => {
   // survey 선택 초기화
   useEffect(()=>{
     dispatch(resetSurvey())
-    console.log('reset하기')
+    // console.log('reset하기')
 
   },[])
 

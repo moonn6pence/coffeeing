@@ -34,7 +34,7 @@ export const ListPage = () => {
           params: { isCapsule: isCapsule },
         })
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           setCurationLists(res.data.data.curations);
         });
 

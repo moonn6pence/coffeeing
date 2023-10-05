@@ -33,7 +33,7 @@ export const DetailPage = () => {
         : publicRequest.get(`${API_URL}/product/${beans}/${id}`));
 
       const data = response.data.data;
-      console.log(data);
+      // console.log(data);
       setCapsule(data);
     } catch (error) {
       console.error(error);
@@ -45,7 +45,7 @@ export const DetailPage = () => {
     publicRequest
       .get(`${API_URL}/product/${beans}/${id}/similar`)
       .then((res) => {
-        console.log(res.data.data);
+        // console.log(res.data.data);
         setSimilarList(res.data.data.products);
       })
       .catch((error) => {
@@ -106,7 +106,7 @@ export const DetailPage = () => {
         params: { page: currentPage },
       })
       .then((res) => {
-        console.log(res.data.data.reviews);
+        // console.log(res.data.data.reviews);
         setReviews(res.data.data.reviews);
         setTotalPage(res.data.data.totalCount - 1);
       })

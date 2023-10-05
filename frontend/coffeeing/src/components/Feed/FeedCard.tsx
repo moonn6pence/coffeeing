@@ -47,7 +47,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
     {/* <div className="feed-card flex flex-col w-full border-b-2 border-light-roasting"> */}
         <div className="feed-header flex flew-row w-full px-22px py-3 justify-between">
             <div className="flex flex-row">
-                <div className="feed-avater flex mr-10 justify-center items-center">
+                <div className="feed-avater flex mr-4 justify-center items-center">
                     <NavLink
                         to={`/member/${feedDetail.registerId}`}>
                     {
@@ -78,7 +78,7 @@ function FeedCard ({ feedDetail, deleteEventHandler, likeToggleEventHandler, edi
             </div>
             {
                 feedDetail.isMine ?
-                <div className="feed-control-button flex flex-row gap-4">
+                <div className="feed-control-button flex flex-row">
                     <div className="write-icon-wrapper cursor-pointer rounded-xl" onClick={editEventHandler}>
                         <img src = {WriteIcon} />
                     </div>

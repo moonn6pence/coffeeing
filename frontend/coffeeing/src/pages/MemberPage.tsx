@@ -36,7 +36,7 @@ export const MemberPage = () => {
     privateRequest
       .get(`${API_URL}/member/info/${id}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setUserData(data.data);
         setUserExists(true);
       })

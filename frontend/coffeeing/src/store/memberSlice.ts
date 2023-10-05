@@ -49,7 +49,7 @@ const memberSlice = createSlice({
     setMyInfo(state, action: PayloadAction<MyInfo>) {
       const { payload } = action;
       
-      console.log(payload);
+      // console.log(payload);
       return {
         ...state,
         ...payload,

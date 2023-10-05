@@ -45,7 +45,7 @@ export const MemberProfile = (props: ProfileProps) => {
     // check valid format
     const validCheckResult = validateNickname(nicknameCandidate);
     if (!validCheckResult.isValid) {
-      console.log('invalid by regex');
+      // console.log('invalid by regex');
       setMessage(validCheckResult.message);
       setNicknameUsable(false);
       return;
@@ -127,7 +127,7 @@ export const MemberProfile = (props: ProfileProps) => {
         // generate new AWS S3 image url
         const awsData = await privateRequest.get(`${API_URL}/aws/img`);
         const awsS3Urls = awsData.data.data;
-        console.log(awsS3Urls);
+        // console.log(awsS3Urls);
         const imageUrl = awsS3Urls.imageUrl;
         uploadImage(reader.result, imageUrl, callbackProfileImageUpload);
       }
@@ -147,7 +147,7 @@ export const MemberProfile = (props: ProfileProps) => {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const callbackProfileImageUpload = async (aws: string, _local: string) => {
-    console.log('Callback called!!');
+    // console.log('Callback called!!');
     dispatch(setMyProfileImage(aws));
     await privateRequest.put(`${API_URL}/member/profile`, {
       profileImageUrl: aws,
@@ -161,7 +161,7 @@ export const MemberProfile = (props: ProfileProps) => {
 
   return (
     <div className="w-full flex flex-row flex-wrap items-center py-12 justify-around">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center w-fit">
         <div
           className={`img-wrapper rounded-full ${
             memberId === id ? 'hover:cursor-pointer' : ''
@@ -193,7 +193,7 @@ export const MemberProfile = (props: ProfileProps) => {
           id="profile"
           accept="image/png, image/jpeg, image/jpg"
           ref={imageRef}
-          className="collapse"
+          className="collapse w-1"
           onInput={() => {
             handleImageOnInput();
           }}

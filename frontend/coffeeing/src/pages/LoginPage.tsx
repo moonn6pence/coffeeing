@@ -25,7 +25,7 @@ function LoginPage() {
       dispatch(setMemberToken(result));
       const myInfo = await getMyInfo();
       if (myInfo) {
-        console.log('login myinfo = ', myInfo);
+        // console.log('login myinfo = ', myInfo);
         dispatch(setMyInfo(myInfo));
       }
 
