@@ -161,7 +161,7 @@ export const MemberProfile = (props: ProfileProps) => {
 
   return (
     <div className="w-full flex flex-row flex-wrap items-center py-12 justify-around">
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center w-fit">
         <div
           className={`img-wrapper rounded-full ${
             memberId === id ? 'hover:cursor-pointer' : ''
@@ -193,7 +193,7 @@ export const MemberProfile = (props: ProfileProps) => {
           id="profile"
           accept="image/png, image/jpeg, image/jpg"
           ref={imageRef}
-          className="collapse"
+          className="collapse w-1"
           onInput={() => {
             handleImageOnInput();
           }}
