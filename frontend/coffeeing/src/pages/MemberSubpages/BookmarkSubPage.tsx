@@ -3,7 +3,7 @@ import { PaginationNew } from 'components/PaginationNew';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useParams } from 'react-router-dom';
-import noBookmark from 'assets/nobookmark.png'
+import noBookmark from 'assets/nobookmark.png';
 
 export const BookmarkSubPage = () => {
   const [isCapsule, setIsCapsule] = useState(false);
@@ -22,7 +22,7 @@ export const BookmarkSubPage = () => {
         const data = res.data.data;
         console.log(data);
         setCurrentPage(data.page);
-        setTotalPage(data.totalCount);
+        setTotalPage(data.totalCount - 1);
         setBookmarkList(data.bookmarkedElements);
         console.log(data.bookmarkedElements);
       });
@@ -71,11 +71,12 @@ export const BookmarkSubPage = () => {
           products={bookmarkList}
           isProfile={true}
         />
-      )
-    : (<div className='flex flex-col items-center space-y-12'>
-        <img src={noBookmark} alt='북마크 없음' className='w-1/3' />
-        <p>찜한 {isCapsule?'캡슐이':'원두가'} 없어요</p>
-      </div>)}
+      ) : (
+        <div className="flex flex-col items-center space-y-12">
+          <img src={noBookmark} alt="북마크 없음" className="w-1/3" />
+          <p>찜한 {isCapsule ? '캡슐이' : '원두가'} 없어요</p>
+        </div>
+      )}
     </div>
   );
 };
