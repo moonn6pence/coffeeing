@@ -5,6 +5,7 @@ import { API_URL } from 'util/constants';
 import { curationListProps } from 'components/Carousel';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
+import { BeanCard } from 'components/BeanCard';
 
 type curationProps = {
   title: string;
@@ -83,19 +84,64 @@ export const ListPage = () => {
           캡슐
         </span>
       </div>
-      {curationLists.map((item, index) => (
-        <div key={index}>
-          <p className="font-bold text-2xl">{item.title}</p>
-          <Carousel curationList={item.products} isCapsule={item.isCapsule} />
-        </div>
-      ))}
-      {isAfterSurvey &&
-        privateCurationLists.map((item, index) => (
+      {curationLists.map((item, index) => {
+        if (item.products.length < 4) {
+          return (
+            <div key={index}>
+              <p className="font-bold text-2xl">{item.title}</p>
+              <div className="grid grid-cols-4 w-full pl-10">
+                {item.products.map((product, index) => (
+                  <BeanCard
+                    id={product.id}
+                    imgLink={product.imageUrl}
+                    name={product.title}
+                    subtitle={product.subtitle}
+                    isCapsule={item.isCapsule}
+                    key={index}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        }
+        return (
           <div key={index}>
             <p className="font-bold text-2xl">{item.title}</p>
             <Carousel curationList={item.products} isCapsule={item.isCapsule} />
           </div>
-        ))}
+        );
+      })}
+      {isAfterSurvey &&
+        privateCurationLists.map((item, index) => {
+          if (item.products.length < 4) {
+            return (
+              <div key={index}>
+                <p className="font-bold text-2xl">{item.title}</p>
+                <div className="grid grid-cols-4 w-full pl-10">
+                  {item.products.map((product, index) => (
+                    <BeanCard
+                      id={product.id}
+                      imgLink={product.imageUrl}
+                      name={product.title}
+                      subtitle={product.subtitle}
+                      isCapsule={item.isCapsule}
+                      key={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div key={index}>
+              <p className="font-bold text-2xl">{item.title}</p>
+              <Carousel
+                curationList={item.products}
+                isCapsule={item.isCapsule}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 };
