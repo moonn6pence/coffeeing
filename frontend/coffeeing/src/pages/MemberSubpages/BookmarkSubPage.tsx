@@ -20,11 +20,11 @@ export const BookmarkSubPage = () => {
       .get(`${API_URL}/member/${beans}/bookmark/${id}`, { params: { page: 0 } })
       .then((res) => {
         const data = res.data.data;
-        console.log(data);
+        // console.log(data);
         setCurrentPage(data.page);
         setTotalPage(data.totalCount - 1);
         setBookmarkList(data.bookmarkedElements);
-        console.log(data.bookmarkedElements);
+        // console.log(data.bookmarkedElements);
       });
   };
 

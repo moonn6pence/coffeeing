@@ -11,7 +11,7 @@ export const uploadImage = (
   awsUrl: string,
   callback: void | ((awsUrl: string, localImageUrl: string) => unknown),
 ) => {
-  console.log('converttowebp');
+  // console.log('converttowebp');
   const img = new Image();
   if (typeof imgUrl === 'string') {
     img.src = imgUrl;
@@ -37,7 +37,7 @@ const convertToWebp = (
   const ctx = canvas.getContext('2d');
   ctx?.drawImage(img, 0, 0);
   const localImageUrl = canvas.toDataURL('image/webp');
-  console.log(localImageUrl);
+  // console.log(localImageUrl);
   sendToS3(localImageUrl, awsUrl, callback);
 };
 
@@ -46,17 +46,17 @@ const sendToS3 = async (
   awsUrl: string,
   callback: void | ((awsUrl: string, localImageUrl: string) => unknown),
 ) => {
-  console.log('do stuff like send to s3');
+  // console.log('do stuff like send to s3');
 
   // upload image to AWS S3
   fetch(localImageUrl)
     .then((response) => response.blob())
     .then((blob) => {
-      console.log('Convert url to blob');
+      // console.log('Convert url to blob');
       const imageFile = new File([blob], 'local-webp.webp', {
         type: blob.type,
       });
-      console.log(awsUrl);
+      // console.log(awsUrl);
       return publicRequest.put(
         // presignedUrl,
         awsUrl,
@@ -64,8 +64,8 @@ const sendToS3 = async (
       );
     })
     .then((imageUploadResponse) => {
-      console.log(imageUploadResponse);
-      console.log(callback);
+      // console.log(imageUploadResponse);
+      // console.log(callback);
       if (callback) {
         callback(awsUrl, localImageUrl);
       }

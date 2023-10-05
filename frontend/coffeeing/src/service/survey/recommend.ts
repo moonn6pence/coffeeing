@@ -15,7 +15,7 @@ export const getSurveyResult = async (survey:any, isLogin:boolean)=>{
           machineType:survey.machine,
         }
       })
-      console.log(res.data.data)
+      // console.log(res.data.data)
       return res.data.data
     } else {
       const res =  await publicRequest
@@ -29,7 +29,7 @@ export const getSurveyResult = async (survey:any, isLogin:boolean)=>{
           machineType:survey.machine,
         }
       })
-      console.log(res.data.data)
+      // console.log(res.data.data)
       return res.data.data
     }
     

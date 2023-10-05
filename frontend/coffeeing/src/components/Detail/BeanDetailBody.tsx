@@ -44,7 +44,7 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
 
   useEffect(() => {
     setIsBooked(isBookmarked);
-    console.log('help = ', isBookmarked);
+    // console.log('help = ', isBookmarked);
   }, [isBookmarked]);
 
   const handleBookmark = () => {
@@ -52,7 +52,7 @@ export const BeanDetailBody = (props: BeanDetailBodyProps) => {
       privateRequest
         .post(`${API_URL}/product/${product}/${id}/bookmark`)
         .then((res) => {
-          console.log(res.data.data);
+          // console.log(res.data.data);
           if (!res.data.data.result) {
             setIsBooked(false);
           } else {

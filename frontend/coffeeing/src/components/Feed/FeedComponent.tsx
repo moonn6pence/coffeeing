@@ -27,8 +27,8 @@ export const FeedComponent = ({
   const handleFeedClick = async () => {
     const data = await publicRequest(`${API_URL}/feeds/${feedId}`);
     const feedDetail: FeedDetail = data.data.data;
-    console.log('regiid = ', feedDetail.registerId);
-    console.log('memid = ', Number(memberId));
+    // console.log('regiid = ', feedDetail.registerId);
+    // console.log('memid = ', Number(memberId));
     // console.log(feedDetail.registerId === Number(memberId));
     if (feedDetail.registerId === Number(memberId)) {
       feedDetail.isMine = true;

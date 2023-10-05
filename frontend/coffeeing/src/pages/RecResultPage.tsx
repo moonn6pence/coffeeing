@@ -56,8 +56,8 @@ export const RecResultPage  = ()=>{
         }))
       }
       setLoading(false)
-      console.log(userInfo.imageUrl)
-      console.log(profileImage)
+      // console.log(userInfo.imageUrl)
+      // console.log(profileImage)
     } else {
       console.log(result)
     }

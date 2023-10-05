@@ -24,7 +24,7 @@ function SignupPage() {
   // validation check
   useEffect(() => {
     setIsValidEmail(/\S+@\S+\.\S+/.test(email));
-    console.log(/\S+@\S+\.\S+/.test(email));
+    // console.log(/\S+@\S+\.\S+/.test(email));
   }, [email]);
   useEffect(() => {
     const passwordPattern =

@@ -67,7 +67,7 @@ export const FeedSubPage = () => {
   };
   const loadFeeds = async () => {
     const data = await queryFeeds();
-    console.log('data called ', data);
+    // console.log('data called ', data);
     if (data) {
       const newFeeds = data.feeds.filter((item: FeedItemResponse) => {
         if (!feedSet.has(item.feedId)) {
@@ -90,7 +90,7 @@ export const FeedSubPage = () => {
         ];
       });
     }
-    console.log('data has next = ', data.hasNext);
+    // console.log('data has next = ', data.hasNext);
     setHasMore(data.hasNext);
     setCursor(data.nextCursor);
   };
