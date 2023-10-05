@@ -16,7 +16,7 @@ export const NavBarDropdown = () => {
         <Menu.Button className="p-2 w-fit">
           <IonIcon size="large" name="menu-outline"></IonIcon>
         </Menu.Button>
-        <Menu.Items className="absolute flex flex-col right-0 mt-2 w-56 divide-y">
+        <Menu.Items className="absolute flex flex-col right-0 mt-2 w-56 divide-y z-20 border shadow-md">
         {/* <Menu.Items className="flex flex-col"> */}
           {navigation.map((link) => (
             <Menu.Item key={link.href}>

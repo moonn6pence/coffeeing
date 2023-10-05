@@ -11,9 +11,9 @@ export const RoastingSelect = () => {
   const survey = useSelector((state: RootState) => state.survey);
   const dispatch = useDispatch<AppDispatch>();
   const [selectedRoast, setSelectedRoast] = useState(-2)
-  useEffect(()=>{
-    console.log(selectedRoast)
-  },[selectedRoast])
+  // useEffect(()=>{
+  //   console.log(selectedRoast)
+  // },[selectedRoast])
 
   // 다음 버튼 클릭 시
   const handleRoastSubmit = () => {
