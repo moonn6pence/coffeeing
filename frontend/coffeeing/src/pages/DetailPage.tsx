@@ -33,7 +33,7 @@ export const DetailPage = () => {
         : publicRequest.get(`${API_URL}/product/${beans}/${id}`));
 
       const data = response.data.data;
-      console.log(data);
+      // console.log(data);
       setCapsule(data);
     } catch (error) {
       console.error(error);
@@ -41,9 +41,22 @@ export const DetailPage = () => {
     }
   };
 
+  const getSimilarList = () => {
+    publicRequest
+      .get(`${API_URL}/product/${beans}/${id}/similar`)
+      .then((res) => {
+        // console.log(res.data.data);
+        setSimilarList(res.data.data.products);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   useEffect(() => {
     fetchData();
-  }, []);
+    getSimilarList();
+  }, [id]);
 
   const [capsule, setCapsule] = useState({
     acidity: 0,
@@ -103,19 +116,7 @@ export const DetailPage = () => {
   };
   useEffect(() => {
     getReview();
-  }, [currentPage]);
-
-  useEffect(() => {
-    // 비슷한 상품 받아오기
-    privateRequest
-      .get(`${API_URL}/product/${beans}/${id}/similar`)
-      .then((res) => {
-        setSimilarList(res.data.data.products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [capsule]);
+  }, [currentPage, id]);
 
   const [reviews, setReviews] = useState([
     {
@@ -146,7 +147,7 @@ export const DetailPage = () => {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <BeanDetailBody {...beanDetail} isBookmarked={capsule.isBookmarked} />
       {isLogin ? (
         <div className="w-4/5 mt-10 mx-auto">
@@ -212,7 +213,7 @@ export const DetailPage = () => {
         <p className="text-2xl font-bold mb-3">
           비슷한 {beans === 'capsule' ? '캡슐' : '원두'}
         </p>
-        <div className="flex w-full justify-between">
+        <div className="w-full justify-between grid grid-cols-2 md:grid-cols-4">
           {similarList.map((item, index) => (
             <BeanCard
               subtitle={item.subtitle}

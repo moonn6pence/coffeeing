@@ -22,28 +22,16 @@ export const FeedComponent = ({
   imageUrl,
   setters: { setIsModalOpen, setFeedDetail },
 }: FeedItemProps) => {
-  const {memberId} = useSelector((state:RootState) => state.member);
-  const [isImageUsable, setIsImageUsable] = useState<boolean>(false);
-  const checkImageAvailable = async (url: string) => {
-    const result = await fetch(url);
-    const buff = await result.blob();
-    if (buff.type.startsWith('image/')) {
-      setIsImageUsable(true);
-    }
-  };
-
-  useEffect(() => {
-    checkImageAvailable(imageUrl);
-  }, []);
+  const { memberId } = useSelector((state: RootState) => state.member);
 
   const handleFeedClick = async () => {
     const data = await publicRequest(`${API_URL}/feeds/${feedId}`);
     const feedDetail: FeedDetail = data.data.data;
-    console.log('regiid = ', feedDetail.registerId);
-    console.log('memid = ', Number(memberId));
+    // console.log('regiid = ', feedDetail.registerId);
+    // console.log('memid = ', Number(memberId));
     // console.log(feedDetail.registerId === Number(memberId));
     if (feedDetail.registerId === Number(memberId)) {
-      feedDetail.isMine=true;
+      feedDetail.isMine = true;
     }
     setIsModalOpen(true);
     setFeedDetail(feedDetail);
@@ -51,14 +39,10 @@ export const FeedComponent = ({
 
   return (
     <div
-      className="image-wrapper border w-[200px] h-[200px] m-2 rounded-lg cursor-pointer flex items-center justify-center"
+      className="image-wrapper border w-[200px] h-[200px] m-2 rounded-lg cursor-pointer flex items-center justify-center "
       onClick={handleFeedClick}
     >
-      {isImageUsable ? (
-        <img src={imageUrl} alt="이미지" />
-      ) : (
-        <img src={noImage} alt="이미지 실패" />
-      )}
+      <img src={imageUrl} alt="이미지" className='w-full h-full object-cover rounded'/>
     </div>
   );
 };

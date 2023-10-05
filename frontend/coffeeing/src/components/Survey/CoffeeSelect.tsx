@@ -28,7 +28,7 @@ export const CoffeeSelect = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-5 mt-10">
+    <div className="flex flex-col items-center gap-5 mt-10 mb-20">
       {/* 설문 상단 */}
       <p className="text-2xl font-bold">어떤 종류의 커피를 추천해 드릴까요? </p>
       {/* 설문 사진 */}

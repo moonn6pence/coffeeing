@@ -41,7 +41,7 @@ const surveySlice = createSlice({
     },
     saveBody(state, action:PayloadAction<number>){
       state.body=action.payload
-      console.log('body', state.body)
+      // console.log('body', state.body)
     },
     saveFlavorNote(state, action:PayloadAction<string>){
       state.flavorNote = action.payload

@@ -11,6 +11,9 @@ import { ValidateNicknameResult, validateNickname } from 'util/regexUtils';
 import { UserData } from 'pages/MemberPage';
 import { CoffeeCriteria } from 'service/member/types';
 import { BeanRating } from 'components/Detail/BeanRating';
+import { NavBarButton } from 'components/NavBar/NavBarButton';
+import closeImg from 'assets/quit-modal-icon.svg';
+import checkImg from 'assets/checkmark.svg';
 
 type ProfileProps = {
   id: number | undefined;
@@ -34,6 +37,7 @@ export const MemberProfile = (props: ProfileProps) => {
   const imageRef = useRef<HTMLInputElement>(null);
   const [imageRefreshKey, setImageRefreshKey] = useState(Date.now());
   const dispatch = useDispatch();
+  const myId = useSelector((state: RootState) => state.member.memberId);
 
   // 닉네임 변경상태 받기
   const onChangeNickname = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +45,7 @@ export const MemberProfile = (props: ProfileProps) => {
     // check valid format
     const validCheckResult = validateNickname(nicknameCandidate);
     if (!validCheckResult.isValid) {
-      console.log('invalid by regex');
+      // console.log('invalid by regex');
       setMessage(validCheckResult.message);
       setNicknameUsable(false);
       return;
@@ -123,7 +127,7 @@ export const MemberProfile = (props: ProfileProps) => {
         // generate new AWS S3 image url
         const awsData = await privateRequest.get(`${API_URL}/aws/img`);
         const awsS3Urls = awsData.data.data;
-        console.log(awsS3Urls);
+        // console.log(awsS3Urls);
         const imageUrl = awsS3Urls.imageUrl;
         uploadImage(reader.result, imageUrl, callbackProfileImageUpload);
       }
@@ -143,7 +147,7 @@ export const MemberProfile = (props: ProfileProps) => {
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const callbackProfileImageUpload = async (aws: string, _local: string) => {
-    console.log('Callback called!!');
+    // console.log('Callback called!!');
     dispatch(setMyProfileImage(aws));
     await privateRequest.put(`${API_URL}/member/profile`, {
       profileImageUrl: aws,
@@ -156,8 +160,8 @@ export const MemberProfile = (props: ProfileProps) => {
   };
 
   return (
-    <div className="w-full flex flex-row ">
-      <div className="flex flex-col items-center">
+    <div className="w-full flex flex-row flex-wrap items-center py-12 justify-around">
+      <div className="flex flex-col items-center w-fit">
         <div
           className={`img-wrapper rounded-full ${
             memberId === id ? 'hover:cursor-pointer' : ''
@@ -189,28 +193,21 @@ export const MemberProfile = (props: ProfileProps) => {
           id="profile"
           accept="image/png, image/jpeg, image/jpg"
           ref={imageRef}
-          className="collapse"
+          className="collapse w-1"
           onInput={() => {
             handleImageOnInput();
           }}
         />
 
         {edit ? (
-          <div className="flex flex-col h-7 mt-6">
-            <div>
+          <div className="flex flex-col mt-6">
+            <div className="flex content-center space-x-1">
               <input type="text" onChange={onChangeNickname} maxLength={10} />
-              <button
-                onClick={editNickname}
-                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-                disabled={!nicknameUseable}
-              >
-                변경하기
+              <button onClick={editNickname} disabled={!nicknameUseable}>
+                <img className="w-6 h-6" src={checkImg} alt="취소" />
               </button>
-              <button
-                onClick={() => setEdit(false)}
-                className="bg-my-black text-white font-bold text-base px-2 rounded-3xl"
-              >
-                취소하기
+              <button onClick={() => setEdit(false)}>
+                <img className="w-6 h-6" src={closeImg} alt="취소" />
               </button>
             </div>
             {!nicknameUseable ? <p className="text-red-600">{message}</p> : ''}
@@ -232,24 +229,25 @@ export const MemberProfile = (props: ProfileProps) => {
           </div>
         )}
       </div>
-      <div className="grow">
-        {preference ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <div className="w-96">
-              <h3 className="text-2xl font-bold mb-5">사용자 취향 분석</h3>
-              <BeanRating
-                acidity={preference.acidity * 5}
-                roast={preference.roast * 5}
-                body={preference.body * 5}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <h2>취향 데이터가 아직 없습니다...</h2>
-          </div>
-        )}
-      </div>
+      {preference && id === myId ? (
+        <div className="w-1/2 h-full flex flex-col space-y-12">
+          <h3 className="text-2xl font-bold">사용자 취향 분석</h3>
+          <BeanRating
+            acidity={preference.acidity * 5}
+            roast={preference.roast * 5}
+            body={preference.body * 5}
+          />
+        </div>
+      ) : (
+        <div className="w-fit h-full flex flex-col items-center items-around space-y-6">
+          <h2>취향 데이터가 아직 없습니다...</h2>
+          <NavBarButton
+            navLink="/recommend-main"
+            value="취향분석하러 가기"
+            dark={true}
+          />
+        </div>
+      )}
     </div>
   );
 };

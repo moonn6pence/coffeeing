@@ -99,7 +99,7 @@ export const SURVEY_ROAST_ITEMS = [
 	{label:0.3, name:'라이트 로스팅',src:lightRoast,toolTipDesc:'강한 신맛이 나고 품종의 특성이 잘 나타납니다.'},
 	{label:0.6, name:'미디엄 로스팅',src:mediumRoast,toolTipDesc:'산뜻한 신맛이 나고 품종의 특성이 약하게 나타납니다.'},
 	{label:0.9, name:'다크 로스팅',src:darkRoast,toolTipDesc:'신맛이 약해지고 단맛과 쓴맛이 강해집니다.'},
-	{label:-1, name:'잘 모르겠어요',src:unknownRoast},
+	{label:0, name:'잘 모르겠어요',src:unknownRoast},
 ]
 
 import noAcid from '../assets/survey/acidity/noAcid.png';
@@ -110,8 +110,8 @@ import highAcid from '../assets/survey/acidity/highAcid.png';
 export const SURVEY_ACID_ITEMS = [
 	{label:0.25, name:'없음', src:noAcid},
 	{label:0.5, name:'낮음', src:lowAcid},
-	{label:0.75, name:'중간', src:mediumAcid},
-	{label:1, name:'높음', src:highAcid}
+	{label:0.75, name:'중간', src:highAcid},
+	{label:1, name:'높음', src:mediumAcid}
 ]
 
 import water from '../assets/survey/body/water.png';
@@ -123,7 +123,7 @@ export const SURVEY_BODY_ITEMS = [
 	{label:0.3, name:'물 같은 가벼운 느낌',src:water},
 	{label:0.6,name:'우유 같은 묵직한 느낌', src:milk},
 	{label:0.9,name:'스무디 같은 꾸덕꾸덕한 느낌', src:smoothie},
-	{label:-1,name:'잘 모르겠어요', src:unknownBody}
+	{label:0,name:'잘 모르겠어요', src:unknownBody}
 ]
 
 import nespresso from '../assets/survey/machine/nespresso-removebg-preview.png'

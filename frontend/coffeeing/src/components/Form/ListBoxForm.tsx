@@ -32,7 +32,7 @@ export const ListBox = ({label, selectedItem, setSelectedItem, itemList, src}:Li
           </Listbox.Button>
         </Listbox.Label>
         {/* 드롭다운 */}
-        <Listbox.Options className="w-full absolute mt-2 py-2 bg-white border border-gray-300 rounded-xl">
+        <Listbox.Options className="w-32 absolute mt-2 py-2 bg-white border border-gray-300 rounded-xl">
           {itemList.map((item) => (
             <Listbox.Option key={item.name} value={item}>
               {({ selected }) => (

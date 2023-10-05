@@ -45,7 +45,7 @@ export const AciditySelect = () => {
         pageNum={2}
       />
       {/* 버튼 */}
-      <div className="flex gap-10">
+      <div className="flex gap-10 mb-20">
         <BackButton />
         <NextButton handleClick={handleAciditySubmit} label='다음' />
       </div>

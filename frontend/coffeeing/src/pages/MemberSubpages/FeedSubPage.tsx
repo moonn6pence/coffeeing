@@ -16,7 +16,10 @@ type FeedItem = {
 
 type FeedItemResponse = {
   feedId: number;
-  images: Array<string>;
+  images: Array<ImageItem>;
+};
+type ImageItem = {
+  imageUrl: string;
 };
 
 export const FeedSubPage = () => {
@@ -27,9 +30,8 @@ export const FeedSubPage = () => {
   const [feedList, setFeedList] = useState<Array<FeedItem>>([]);
   const [feedSet, setFeedSet] = useState<Set<number>>(new Set());
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
- 
+
   const [feedDetail, setFeedDetail] = useState<FeedDetail | null>(null);
-  
 
   const feedComponents = useCallback(() => {
     return feedList.map((item: FeedItem) => {
@@ -49,7 +51,7 @@ export const FeedSubPage = () => {
 
   const queryFeeds = async () => {
     return await privateRequest
-      .get(`${API_URL}/feeds/${memberId}/list`, {
+      .get(`${API_URL}/feeds/list/${memberId}`, {
         params: {
           cursor: cursor,
           memberId: memberId,
@@ -65,7 +67,7 @@ export const FeedSubPage = () => {
   };
   const loadFeeds = async () => {
     const data = await queryFeeds();
-    console.log('data called ', data);
+    // console.log('data called ', data);
     if (data) {
       const newFeeds = data.feeds.filter((item: FeedItemResponse) => {
         if (!feedSet.has(item.feedId)) {
@@ -82,13 +84,13 @@ export const FeedSubPage = () => {
           ...newFeeds.map((item: FeedItemResponse) => {
             return {
               feedId: item.feedId,
-              imageUrl: item.images[0],
+              imageUrl: item.images[0].imageUrl,
             };
           }),
         ];
       });
     }
-    console.log('data has next = ', data.hasNext);
+    // console.log('data has next = ', data.hasNext);
     setHasMore(data.hasNext);
     setCursor(data.nextCursor);
   };
@@ -97,10 +99,8 @@ export const FeedSubPage = () => {
     loadFeeds();
   }, []);
 
-
-
   return (
-    <div className="w-full h-60 bg-light">
+    <div className="w-full h-fit bg-light p-12">
       {feedDetail && (
         <MemberFeedModal
           isOpen={isModalOpen}

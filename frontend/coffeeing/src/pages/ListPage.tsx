@@ -5,6 +5,7 @@ import { API_URL } from 'util/constants';
 import { curationListProps } from 'components/Carousel';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
+import { BeanCard } from 'components/BeanCard';
 
 type curationProps = {
   title: string;
@@ -20,22 +21,24 @@ export const ListPage = () => {
   const isAfterSurvey = useSelector(
     (state: RootState) => state.member.isAfterSurvey,
   );
+  const isLogin = useSelector((state: RootState) => state.member.isLogin);
 
   // 공통 CSS
-  const commonClass = 'font-bold text-base hover:brightness-125 p-3';
+  const commonClass =
+    'font-bold text-base hover:brightness-125 p-3 cursor-pointer';
 
   const getCuration = async () => {
     try {
-      console.log('설문조사를 ', isAfterSurvey);
       publicRequest
         .get(`${API_URL}/curation/open`, {
           params: { isCapsule: isCapsule },
         })
         .then((res) => {
+          // console.log(res.data.data);
           setCurationLists(res.data.data.curations);
         });
 
-      if (isAfterSurvey) {
+      if (isLogin && isAfterSurvey) {
         privateRequest
           .get(`${API_URL}/curation/custom`, {
             params: { isCapsule: isCapsule },
@@ -54,7 +57,7 @@ export const ListPage = () => {
   }, [isCapsule]);
 
   return (
-    <div className="mt-10 flex flex-col w-4/5 mx-auto">
+    <div className="mt-10 flex flex-col w-4/5 mx-auto mb-20">
       <div className="w-full mb-10">
         <span
           className={
@@ -81,19 +84,64 @@ export const ListPage = () => {
           캡슐
         </span>
       </div>
-      {curationLists.map((item, index) => (
-        <div key={index}>
-          <p className="font-bold text-2xl">{item.title}</p>
-          <Carousel curationList={item.products} isCapsule={item.isCapsule} />
-        </div>
-      ))}
-      {isAfterSurvey &&
-        privateCurationLists.map((item, index) => (
+      {curationLists.map((item, index) => {
+        if (item.products.length < 4) {
+          return (
+            <div key={index}>
+              <p className="font-bold text-2xl">{item.title}</p>
+              <div className="grid grid-cols-4 w-full pl-10">
+                {item.products.map((product, index) => (
+                  <BeanCard
+                    id={product.id}
+                    imgLink={product.imageUrl}
+                    name={product.title}
+                    subtitle={product.subtitle}
+                    isCapsule={item.isCapsule}
+                    key={index}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        }
+        return (
           <div key={index}>
             <p className="font-bold text-2xl">{item.title}</p>
             <Carousel curationList={item.products} isCapsule={item.isCapsule} />
           </div>
-        ))}
+        );
+      })}
+      {isAfterSurvey &&
+        privateCurationLists.map((item, index) => {
+          if (item.products.length < 4) {
+            return (
+              <div key={index}>
+                <p className="font-bold text-2xl">{item.title}</p>
+                <div className="grid grid-cols-4 w-full pl-10">
+                  {item.products.map((product, index) => (
+                    <BeanCard
+                      id={product.id}
+                      imgLink={product.imageUrl}
+                      name={product.title}
+                      subtitle={product.subtitle}
+                      isCapsule={item.isCapsule}
+                      key={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div key={index}>
+              <p className="font-bold text-2xl">{item.title}</p>
+              <Carousel
+                curationList={item.products}
+                isCapsule={item.isCapsule}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 };

@@ -10,6 +10,7 @@ interface ICardProps {
   isCapsule: boolean;
   isProfile?: boolean;
   isSame?: boolean;
+  replace?:boolean;
   onBookmarkChange?: (id: number) => void;
 }
 
@@ -23,6 +24,7 @@ export const BeanCard = (props: ICardProps) => {
     isProfile = false,
     isSame = false,
     onBookmarkChange,
+    replace,
   } = props;
   const navigate = useNavigate();
 
@@ -30,8 +32,11 @@ export const BeanCard = (props: ICardProps) => {
   const goDetail = () => {
     const beans = isCapsule ? 'capsule' : 'coffee';
     navigate(`/detail/${beans}/${id}`, {
+      replace:replace,
       state: { id: `${id}` },
     });
+
+    window.scrollTo(0, 0);
   };
 
   return (
@@ -58,7 +63,13 @@ export const BeanCard = (props: ICardProps) => {
       <p className="text-sm text-center text-font-gray mb-2 h-5">
         {subtitle || '  '}
       </p>
-      <p className="text-base text-center mb-12 truncate">{name}</p>
+      <p
+        className={`text-base text-center mb-12 ${
+          isSame ? 'break-words' : 'truncate'
+        }`}
+      >
+        {name}
+      </p>
     </div>
   );
 };

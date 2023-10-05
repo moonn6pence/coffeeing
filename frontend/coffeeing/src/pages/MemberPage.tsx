@@ -6,6 +6,8 @@ import { Outlet, useParams } from 'react-router-dom';
 import { NavLinkWrapper } from 'components/NavLink/NavLinkWrapper';
 import { NavBarButton } from 'components/NavBar/NavBarButton';
 import { CoffeeCriteria } from 'service/member/types';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
 
 export type UserData = {
   nickname: string;
@@ -19,19 +21,22 @@ export type MemberId = {
 
 export const MemberPage = () => {
   const { id } = useParams();
+  const userId = id ? parseInt(id, 10) : undefined;
   const [userData, setUserData] = useState<UserData>({
     nickname: '',
     profileImage: '',
     preference: null,
   });
   const [userExists, setUserExists] = useState(false);
+  const isLogin = useSelector((state: RootState) => state.member.isLogin);
+  const myId = useSelector((state: RootState) => state.member.memberId);
 
   useEffect(() => {
     // get user data
     privateRequest
       .get(`${API_URL}/member/info/${id}`)
       .then(({ data }) => {
-        console.log(data);
+        // console.log(data);
         setUserData(data.data);
         setUserExists(true);
       })
@@ -39,12 +44,12 @@ export const MemberPage = () => {
         console.log(error);
         setUserExists(false);
       });
-  }, []);
+  }, [id]);
 
   if (userExists) {
     return (
-      <div className="wrapper w-4/5 flex items-stretch flex-col m-auto mt-10">
-        <div className="w-full bg-light h-80 flex items-center">
+      <div className="wrapper w-4/5 flex items-stretch flex-col m-auto mt-10 mb-20">
+        <div className="w-full bg-light h-fit flex items-center">
           <MemberProfile
             id={typeof id === 'string' ? Number.parseInt(id) : undefined}
             nickname={userData.nickname}
@@ -63,9 +68,11 @@ export const MemberPage = () => {
           </nav>
           <Outlet context={{ id }} />
         </div>
-        <div className="spacer mb-40 flex justify-center pt-10">
-          <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
-        </div>
+        {isLogin && userId == myId ? (
+          <div className="spacer flex justify-center pt-10">
+            <NavBarButton value="로그아웃" navLink="/" isLogout={true} />
+          </div>
+        ) : null}
       </div>
     );
   } else {
