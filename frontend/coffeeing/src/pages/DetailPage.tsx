@@ -147,7 +147,7 @@ export const DetailPage = () => {
   };
 
   return (
-    <div>
+    <div className="mb-20">
       <BeanDetailBody {...beanDetail} isBookmarked={capsule.isBookmarked} />
       {isLogin ? (
         <div className="w-4/5 mt-10 mx-auto">

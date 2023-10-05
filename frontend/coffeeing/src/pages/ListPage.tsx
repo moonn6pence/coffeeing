@@ -54,7 +54,7 @@ export const ListPage = () => {
   }, [isCapsule]);
 
   return (
-    <div className="mt-10 flex flex-col w-4/5 mx-auto">
+    <div className="mt-10 flex flex-col w-4/5 mx-auto mb-20">
       <div className="w-full mb-10">
         <span
           className={
