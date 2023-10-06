@@ -1,6 +1,6 @@
 export enum TagType {
-    BEAN = "BEAN",
-    CAPSULE = "CAPSULE",
+    COFFEE_BEAN = "COFFEE_BEAN",
+    COFFEE_CAPSULE = "COFFEE_CAPSULE",
 }
 
 export interface Tag {

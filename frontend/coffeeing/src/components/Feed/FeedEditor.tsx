@@ -27,7 +27,7 @@ export const FeedEditor = ({ fragment, preview, suggestions, debouncedSearch, fe
   const [selcetedTag, setSelectedTag] = useState<Tag>((feedDetail && feedDetail.tag) ? feedDetail.tag : {
     tagId: -1,
     name: "",
-    category: TagType.BEAN
+    category: TagType.COFFEE_BEAN
   });
 
   const toggleAccordianIcon = () => {
