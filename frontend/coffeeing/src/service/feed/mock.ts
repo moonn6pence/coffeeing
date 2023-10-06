@@ -10,7 +10,8 @@ export const getFeedDetailMock = ():FeedDetail => {
         tag: {
             tagId: Math.floor(Math.random()),
             name: generateRandomString(11),
-            category: TagType.BEAN
+            category: TagType.COFFEE_BEAN
+            // category: TagType.BEAN
         },
         registerId: Math.floor(Math.random()),
         likeCount: Math.floor(Math.random()),

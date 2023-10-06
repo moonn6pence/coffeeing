@@ -16,7 +16,7 @@ export const TagComboBox = ({selectedTag, changeSelectedTag, suggestions, onChan
     changeSelectedTag({
       tagId: -1,
       name: "",
-      category: TagType.BEAN
+      category: TagType.COFFEE_BEAN
     })
   }
 
