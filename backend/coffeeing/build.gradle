@@ -1,0 +1,196 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '2.7.15'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	// querydsl 플러그인 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id "org.sonarqube" version "4.3.1.3277"
+	id 'jacoco'
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+ext {
+	// QueryDsl Version
+	queryDslVersion = "5.0.0"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	implementation 'com.google.guava:guava:31.0.1-jre'
+
+	//	Spring Cloud AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// query dsl
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+
+	// swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+}
+
+jacoco {
+	toolVersion = '0.8.10'
+}
+
+jacocoTestReport {
+	dependsOn(test)
+	reports {
+		html.required = true
+		xml.required = true
+	}
+
+	// exclude query dsl QDomain Class
+	def QDomains=[]
+	for(qPattern in '**/QA'..'**/QZ') {
+		QDomains.add(qPattern+'*')
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [
+							'com/ssafy/coffeeing/dummy/**',
+							'com/ssafy/coffeeing/health/**',
+							'com/ssafy/coffeeing/infra/config/**',
+							'com/ssafy/coffeeing/modules/*/dto/**',
+							'com/ssafy/coffeeing/modules/*/domain/**',
+							'com/ssafy/coffeeing/modules/*/controller/**',
+							'com/ssafy/coffeeing/modules/global/security/**',
+							'com/ssafy/coffeeing/modules/global/dto/**',
+							'com/ssafy/coffeeing/modules/global/exception/**',
+							'com/ssafy/coffeeing/modules/recommend/**',
+							'com/ssafy/coffeeing/CoffeeingApplication'
+					] + QDomains)
+				})
+		)
+	}
+
+
+	finalizedBy(jacocoTestCoverageVerification)
+}
+
+jacocoTestCoverageVerification {
+	// exclude query dsl QDomain Class
+	def QDomains=[]
+	for(qPattern in '*.QA'..'*.QZ') {
+		QDomains.add(qPattern+'*')
+	}
+
+	violationRules {
+		rule {
+			enabled = true
+			element = 'CLASS'
+
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.00
+			}
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.00
+			}
+			excludes = [
+				'com.ssafy.coffeeing.dummy.**',
+				'com.ssafy.coffeeing.health.**',
+				'com.ssafy.coffeeing.infra.config.**',
+				'com.ssafy.coffeeing.modules.*.dto.**',
+				'com.ssafy.coffeeing.modules.*.domain.**',
+				'com.ssafy.coffeeing.modules.*.controller.**',
+				'com.ssafy.coffeeing.modules.global.security.**',
+				'com.ssafy.coffeeing.modules.global.dto.**',
+				'com.ssafy.coffeeing.modules.global.exception.**',
+				'com.ssafy.coffeeing.CoffeeingApplication'
+			] + QDomains
+		}
+	}
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+	finalizedBy(jacocoTestReport)
+}
+
+sonar {
+	properties {
+		property 'sonar.sources', 'src'
+		property 'sonar.language', 'java'
+		property 'sonar.projectVersion', '1.1.0-SNAPSHOT'
+		property 'sonar.sourceEncoding', 'UTF-8'
+		property 'sonar.java.binaries', "${buildDir}/classes"
+		property 'sonar.test.inclusions', '**/*Test.java'
+		property 'sonar.exclusions', '**/test/**, **/Q*.java, **/resources/**'
+		property 'sonar.coverage.exclusions', '**/test/**, **/Q*.java, **/resources/**, **/dummy/**, **/health/**, **/infra/config/**, **/modules/*/dto/**, **/modules/*/domain/**, **/modules/*/controller/**, **/modules/global/security/**, **/modules/global/dto/**, **/modules/global/exception/**, **/CoffeeingApplication.java'
+		property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+	}
+}
+
+bootJar {
+	// querydsl 사용할 경로 지정
+	def querydslDir = "build/generated"
+
+	// JPA 사용여부 및 사용 경로 설정
+	querydsl {
+		jpa = true
+		querydslSourcesDir = querydslDir
+	}
+
+	// build시 사용할 sourceSet 추가 설정
+	sourceSets {
+		main.java.srcDir querydslDir
+	}
+
+
+	// querydsl 컴파일 시 사용할 옵션 설정
+	compileQuerydsl {
+		options.annotationProcessorPath = configurations.querydsl
+	}
+
+	// querydsl이 compileClassPath를 상속하도록 설정
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+		querydsl.extendsFrom compileClasspath
+	}
+}
