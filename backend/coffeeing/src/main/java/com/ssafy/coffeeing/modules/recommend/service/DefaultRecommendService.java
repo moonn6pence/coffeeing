@@ -36,7 +36,7 @@ public class DefaultRecommendService implements RecommendService {
                 .fromUriString(recSysProperty.getPickByPreferenceUrl())
                 .queryParam(PARAM_COUNT, count)
                 .queryParam(PARAM_IS_CAPSULE, preferenceRequest.isCapsule())
-                .queryParamIfPresent("machineType", Optional.of(preferenceRequest.machineType()))
+                .queryParam("machineType", preferenceRequest.machineType() == null ? 0 : preferenceRequest.machineType())
                 .queryParam("roast", preferenceRequest.roast())
                 .queryParam("acidity", preferenceRequest.acidity())
                 .queryParam("body", preferenceRequest.body())
