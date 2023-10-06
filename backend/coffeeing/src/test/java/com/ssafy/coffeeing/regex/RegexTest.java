@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RegexTest {
     @Test
-    public void testNicknameRegex() {
+    void testNicknameRegex() {
         String input = "nickname";
         String regex = "^(?!\\s)(?!.*\\s$)(?!.*\\s{2}).*$";
         String regex2 = "^[\\w\\s가-힣ㄱ-ㅎ]*$";

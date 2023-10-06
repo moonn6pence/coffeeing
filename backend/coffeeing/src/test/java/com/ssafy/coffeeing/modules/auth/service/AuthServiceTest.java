@@ -15,7 +15,7 @@ import com.ssafy.coffeeing.modules.member.repository.MemberRepository;
 import com.ssafy.coffeeing.modules.util.ServiceTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-public class AuthServiceTest extends ServiceTest {
+class AuthServiceTest extends ServiceTest {
 
 	@Autowired
 	private MemberRepository memberRepository;

@@ -41,7 +41,7 @@ public class CapsuleBookmarkQueryRepositoryImpl implements CapsuleBookmarkQueryR
 
         List<CapsuleBookmarkElement> capsuleBookmarkElements = queryResult
                 .stream()
-                .map((item) -> ProductMapper.supplyCapsuleBookmarkElementOf(
+                .map(item -> ProductMapper.supplyCapsuleBookmarkElementOf(
                                 item.getId(),
                                 item.getBrandKr(),
                                 item.getCapsuleNameKr(),

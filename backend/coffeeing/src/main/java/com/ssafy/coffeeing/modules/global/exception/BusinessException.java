@@ -9,5 +9,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BusinessException extends RuntimeException{
 
-    private ErrorInfo info;
+    private final ErrorInfo info;
 }

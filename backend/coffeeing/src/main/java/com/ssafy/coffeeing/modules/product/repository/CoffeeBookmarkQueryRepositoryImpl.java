@@ -39,7 +39,7 @@ public class CoffeeBookmarkQueryRepositoryImpl implements CoffeeBookmarkQueryRep
 
         List<CoffeeBookmarkElement> coffeeBookmarkElements = queryResult
                 .stream()
-                .map((item) -> ProductMapper.supplyCoffeeBookmarkElementOf(
+                .map(item -> ProductMapper.supplyCoffeeBookmarkElementOf(
                                 item.getId(),
                                 item.getRegionKr(),
                                 item.getCoffeeNameKr(),
