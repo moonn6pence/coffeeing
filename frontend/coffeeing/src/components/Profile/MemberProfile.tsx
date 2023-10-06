@@ -4,7 +4,7 @@ import editIcon from 'assets/edit.svg';
 import { privateRequest } from 'util/axios';
 import { API_URL } from 'util/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { setMyProfileImage } from 'store/memberSlice';
+import { setMyNickname, setMyProfileImage } from 'store/memberSlice';
 import { RootState } from 'store/store';
 import { uploadImage } from 'util/imageUtils';
 import { ValidateNicknameResult, validateNickname } from 'util/regexUtils';
@@ -105,6 +105,7 @@ export const MemberProfile = (props: ProfileProps) => {
         nickname: nicknameInput,
         preference,
       });
+      dispatch(setMyNickname(nicknameInput));
     } else {
       alert('닉네임 변경에 실패했습니다!');
     }
