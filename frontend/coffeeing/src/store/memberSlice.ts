@@ -43,16 +43,23 @@ const memberSlice = createSlice({
         accessToken: '',
         refreshToken: '',
         grantType: '',
-        state: MemberState.DEFAULT
+        state: MemberState.DEFAULT,
       };
     },
     setMyInfo(state, action: PayloadAction<MyInfo>) {
       const { payload } = action;
-      
+
       // console.log(payload);
       return {
         ...state,
         ...payload,
+      };
+    },
+    setMyNickname(state, action: PayloadAction<string>) {
+      const { payload: newNickname } = action;
+      return {
+        ...state,
+        nickname: newNickname,
       };
     },
     setMyProfileImage(state, action: PayloadAction<string>) {
@@ -66,5 +73,10 @@ const memberSlice = createSlice({
 });
 
 export default memberSlice.reducer;
-export const { setMemberToken, logout, setMyInfo, setMyProfileImage } =
-  memberSlice.actions;
+export const {
+  setMemberToken,
+  logout,
+  setMyInfo,
+  setMyNickname,
+  setMyProfileImage,
+} = memberSlice.actions;
