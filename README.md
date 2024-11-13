@@ -15,10 +15,7 @@
 
 ## 🙌🏻 멤버
 
-|                                         Backend                                          |                                          Backend                                          |                                          Backend                                          |                                         Backend                                         |                                        Frontend                                         |                                         Frontend                                         |
-| :--------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: | 
-| <img src="https://avatars.githubusercontent.com/u/55014803?v=4" width=400px alt="한성"/> | <img src="https://avatars.githubusercontent.com/u/96672609?v=4" width=400px alt="승윤"/> | <img src="https://avatars.githubusercontent.com/u/65756225?v=4" width=400px alt="현철"/> | <img src="https://avatars.githubusercontent.com/u/86272688?v=4" width=400px alt="태용"> | <img src="https://avatars.githubusercontent.com/u/122499274?v=4" width=400px alt="현아"> | <img src="https://avatars.githubusercontent.com/u/122726684?v=4" width=400px alt="하늘"> |
-|                      [김한성(팀장)](https://github.com/khs960616)                      |                         [백승윤](https://github.com/inputTitleHere)                          |                         [신현철](https://github.com/moonn6pence)                          |                          [김태용](https://github.com/YongsHub)                          |                          [김현아](https://github.com/hyuna333)                           |                        [김하늘](https://github.com/hanulkimm)                        |
+Blind 처리
 
 <br><br>
 
@@ -93,12 +90,10 @@
 ### 🦊 원두와 캡슐 추천은 콘텐츠 기반 추천을 활용했습니다!
 <br>
 
-<details>
 <summary>콘텐츠 기반 추천</summary>
 <div markdown="1">
 <img src="./docs/contents_algorithm.png"/>
 </div>
-</details>
 
 <br>
 <br>
@@ -107,12 +102,10 @@
 
 나의 취향을 통해 `원두와 캡슐을 추천 받아보세요`
 
-<details>
 <summary>추천 알아보기</summary>
 <div markdown="1">
 <img src="./docs/선호도.gif"/>
 </div>
-</details>
 
 <br>
 <br>
@@ -121,12 +114,10 @@
 
 `로스팅, 바디감 산미, 나이 대 등등 나의 취향 분석 큐레이션을 제공 받을 수 있습니다!`
 
-<details>
 <summary>메인페이지 큐레이션 알아보기</summary>
 <div markdown="1">
 <img src="./docs/큐레이션.gif"/>
 </div>
-</details>
 
 <br>
 <br>
@@ -135,12 +126,10 @@
 
 `로스팅, 산미, 바디감, 테이스팅 노트, 검색어를 통해 원하는 정보를 확인할 수 있습니다!`
 
-<details>
 <summary>검색 알아보기</summary>
 <div markdown="1">
 <img src="./docs/검색.gif"/>
 </div>
-</details>
 
 <br>
 <br>
@@ -149,12 +138,10 @@
 
 `사람들이 즐겨 먹는 원두나 캡슐을 볼 수 있으며 일상을 나누는 즐거움을 느낄 수 있습니다!`
 
-<details>
 <summary>피드 알아보기</summary>
 <div markdown="1">
 <img src="./docs/피드.gif"/>
 </div>
-</details>
 
 <br>
 <br>
